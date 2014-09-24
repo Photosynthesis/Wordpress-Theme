@@ -18,7 +18,7 @@
  * One shortcode parameter is required: `listing_id`, which determines what
  * Edit Link is returned.
  *
- * @param array $atts The Shortcode Attributes
+ * @param array $atts The Shortcode Parameter
  *
  * @return string The Directory Listing's Edit Link in HTML
  */
@@ -35,6 +35,41 @@ function directory_show_edit_link_if_admin($atts)
 }
 add_shortcode(
     'directory_show_edit_link_if_admin', 'directory_show_edit_link_if_admin'
+);
+
+
+/** Show an additional 404 message if the URL is in the 'directory' sub-URI
+ * ("ic.org/directory/*").
+ *
+ * This is used to provide clarity because unapproved and hidden listings
+ * return 404 errors.
+ *
+ * No shortcode parameters are used.
+ *
+ * @param array $atts Shortcode attributes
+ *
+ * @return string The additional HTML message to display, or an empty string.
+ */
+function directory_show_message_if_404_in_directory($atts)
+{
+    $request_uri = $_SERVER['REQUEST_URI'];
+    $sub_uri = "/directory/";
+    $request_starts_with_sub_uri = strpos($request_uri, $sub_uri) === 0;
+
+    $message = "<p>If you are looking for a Community on the Directory which has " .
+        "not yet been approved, you may see this message. Contact " .
+        "<a href=\"mailto:directory@ic.org\">Directory@ic.org</a> with any " .
+        "questions.</p>";
+
+    if ($request_starts_with_sub_uri) {
+        return $message;
+    } else {
+        return "";
+    }
+}
+add_shortcode(
+    'directory_show_message_if_404_in_directory',
+    'directory_show_message_if_404_in_directory'
 );
 
 ?>
