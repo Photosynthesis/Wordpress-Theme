@@ -1,16 +1,15 @@
-
 <?php
 /** Separate WooCommerce Product Reviews
  *
  * WooCommerce comments are saved as Wordpress Comments, which means they end
  * up getting included in the Comments menu.
- * 
+ *
  * Including this file will cause Product Reviews to be removed from the
  * Comments page, moving them into a "Product Reviews" Sub-Menu under the
  * WooCommerce "Products" Menu.
  *
  * Based off of this thread http://wpquestions.com/question/showChrono/id/8687
- * 
+ *
  * @category FIC
  * @package  FIC_WooCommerce
  * @author   Pavan Rikhi <pavan@ic.org>
@@ -30,7 +29,7 @@ function check_current_page($screen)
                 'manage_edit-comments_columns', 'product_reviews_comment_columns'
             );
         }
-	}
+    }
 }
 add_action('current_screen', 'check_current_page', 10, 2);
 
@@ -38,7 +37,7 @@ add_action('current_screen', 'check_current_page', 10, 2);
 /** Add Product Reviews as a sub-menu of Products */
 function add_product_reviews()
 {
-	$post_type = 'product';
+    $post_type = 'product';
     add_submenu_page(
         "edit.php?post_type={$post_type}",
         __('Product Reviews'),
@@ -57,22 +56,22 @@ add_action('admin_menu', 'add_product_reviews');
 function separate_comments_and_review($clauses, $wp_comment_query)
 {
     global $wpdb;
-	if (! $clauses['join']) {
+    if (! $clauses['join']) {
         $clauses['join'] = "JOIN $wpdb->posts ON $wpdb->posts.ID = $wpdb->comments.comment_post_ID";
     }
-	if (!empty($_GET['post_type']) &&$_GET['post_type'] == 'product') {
-		if (! $wp_comment_query->query_vars['post_type']) {
+    if (!empty($_GET['post_type']) &&$_GET['post_type'] == 'product') {
+        if (! $wp_comment_query->query_vars['post_type']) {
             $clauses['where'] .= $wpdb->prepare(
                 " AND {$wpdb->posts}.post_type = %s", 'product'
             );
         }
-	} else {
-		if (! $wp_comment_query->query_vars['post_type' ]) {
+    } else {
+        if (! $wp_comment_query->query_vars['post_type' ]) {
             $clauses['where'] .= $wpdb->prepare(
                 " AND {$wpdb->posts}.post_type != %s", 'product'
             );
         }
-	}
+    }
     return $clauses;
 }
 
@@ -84,11 +83,11 @@ function change_comment_status_link($status_links)
 {
     if (isset($_GET['post_type'])) {
         $status_links['all'] = '<a href="edit-comments.php?post_type=product&comment_status=all">All</a>';
-		$status_links['moderated'] = '<a href="edit-comments.php?post_type=product&comment_status=moderated">Pending</a>';
-		$status_links['approved'] = '<a href="edit-comments.php?post_type=product&comment_status=approved">Approved</a>';
-		$status_links['spam'] = '<a href="edit-comments.php?post_type=product&comment_status=spam">Spam</a>';
-		$status_links['trash'] = '<a href="edit-comments.php?post_type=product&comment_status=trash">Trash</a>';
-	}
+        $status_links['moderated'] = '<a href="edit-comments.php?post_type=product&comment_status=moderated">Pending</a>';
+        $status_links['approved'] = '<a href="edit-comments.php?post_type=product&comment_status=approved">Approved</a>';
+        $status_links['spam'] = '<a href="edit-comments.php?post_type=product&comment_status=spam">Spam</a>';
+        $status_links['trash'] = '<a href="edit-comments.php?post_type=product&comment_status=trash">Trash</a>';
+    }
     return $status_links;
 }
 

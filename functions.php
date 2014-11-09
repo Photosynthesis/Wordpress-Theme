@@ -17,19 +17,19 @@
 // http://wphostreviews.com/forums/topic/custom-fields-and-mashup
 //  $wpq = new WP_Query('post_type=directory&posts_per_page=-1');
 //  foreach($wpq->posts as $postid)
-//  	do_action('mappress_update_meta', $postid);
+//      do_action('mappress_update_meta', $postid);
 
 // Add additional acceptable tags to author bios pages
 // http://wordpress.org/support/topic/how-to-add-and-tags-in-comments
 /*add_filter('pre_user_description','fa_allow_tags_in_comments');
 function fa_allow_tags_in_comments($data) {
-	global $allowedtags;
-//	$allowedtags['span'] = array('style'=>array());
-	$allowedtags['p'] = array();
-	$allowedtags['br'] = array();
+    global $allowedtags;
+//  $allowedtags['span'] = array('style'=>array());
+    $allowedtags['p'] = array();
+    $allowedtags['br'] = array();
         $allowedtags['ul'] = array();
         $allowedtags['li'] = array();
-	return $data;
+    return $data;
 }*/
 
 
@@ -67,95 +67,95 @@ add_filter('pre_user_description', 'wp_filter_post_kses');
 // shortcode to display login form
 add_shortcode('display_login_form', 'display_login_form');
 function display_login_form() {
-	$pre_text = "<h1>Please Log in</h1>\nYou must be logged in to view this page.\n<p>";
-	return $pre_text . wp_login_form( array( 'echo' => false ) ) . "\n" . wp_register('', '', false) . " | <a href=\"" . wp_lostpassword_url( get_permalink() ) . "\" title=\"Lost your password?\">Lost your password?</a>";
+    $pre_text = "<h1>Please Log in</h1>\nYou must be logged in to view this page.\n<p>";
+    return $pre_text . wp_login_form( array( 'echo' => false ) ) . "\n" . wp_register('', '', false) . " | <a href=\"" . wp_lostpassword_url( get_permalink() ) . "\" title=\"Lost your password?\">Lost your password?</a>";
 }
 //shortcode to display community name in contact a community form
 add_shortcode('frm_cmty_name', 'frm_cmty_name');
 function frm_cmty_name() {
-	if ( !empty($_GET["cmty"]) && is_numeric($_GET["cmty"]) ) {
-		return do_shortcode('[frm-field-value field_id="9" entry_id="' . $_GET["cmty"] . '"]');
-	}
-	else return "the community";
+    if ( !empty($_GET["cmty"]) && is_numeric($_GET["cmty"]) ) {
+        return do_shortcode('[frm-field-value field_id="9" entry_id="' . $_GET["cmty"] . '"]');
+    }
+    else return "the community";
 }
 //shortcode to display community link in contact a community form
 add_shortcode('frm_cmty_link', 'frm_cmty_link');
 function frm_cmty_link() {
         if ( !empty($_GET["cmty"]) && is_numeric($_GET["cmty"]) ) {
-		return 'Back to <a href="/directory/listings/?entry=' . $_GET["cmty"] . '">' . do_shortcode('[frm_cmty_name]') . '</a>';
+        return 'Back to <a href="/directory/listings/?entry=' . $_GET["cmty"] . '">' . do_shortcode('[frm_cmty_name]') . '</a>';
         }
 }
 
 // shortcode to display search terms when searching the directory
 add_shortcode('directory_search_terms', 'directory_search_terms');
 function directory_search_terms() {
-	if (!empty($_SERVER["QUERY_STRING"])) {
-		foreach ($_GET as $key => &$value) {
-			$value = str_replace('~',',',$value);
-		}
-		$search_output = '<div class="dir-search-results"><h2>Showing all communities that meet the following criteria:</h2><ul>';
-		isset( $_GET['frm-search'] ) ? $search_output .= '<li><span class="dir-search-fields">Search terms:</span> ' . $_GET['frm-search'] . '</li>' : '';
-		isset( $_GET['cmty-newviz'] ) ? $search_output .= '<li><span class="dir-search-fields">Open to visitors:</span> ' . $_GET['cmty-newviz'] . '</li>' : '';
-		isset( $_GET['cmty-newmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Open to new members:</span> ' . $_GET['cmty-newmemb'] . '</li>' : '';
-		isset( $_GET['cmty-forming'] ) ? $search_output .= '<li><span class="dir-search-fields">Community forming status:</span> ' . $_GET['cmty-forming'] . '</li>' : '';
-		isset( $_GET['cmty-housing'] ) ? $search_output .= '<li><span class="dir-search-fields">Housing provided by the community:</span> ' . $_GET['cmty-housing'] . '</li>' : '';
-		isset( $_GET['cmty-city'] ) ? $search_output .= '<li><span class="dir-search-fields">City:</span> ' . $_GET['cmty-city'] . '</li>' : '';
-		isset( $_GET['cmty-prov'] ) ? $search_output .= '<li><span class="dir-search-fields">State/Province:</span> ' . $_GET['cmty-prov'] . '</li>' : '';
-		isset( $_GET['cmty-state'] ) ? $search_output .= '<li><span class="dir-search-fields">State:</span> ' . $_GET['cmty-state'] . '</li>' : '';
-		isset( $_GET['cmty-country'] ) ? $search_output .= '<li><span class="dir-search-fields">Country:</span> ' . $_GET['cmty-country'] . '</li>' : '';
-		isset( $_GET['cmty-rural'] ) ? $search_output .= '<li><span class="dir-search-fields">Rural/Urban/Etc:</span> ' . $_GET['cmty-rural'] . '</li>' : '';
-		isset( $_GET['cmty-type'] ) ? $search_output .= '<li><span class="dir-search-fields">Community Type(s):</span> ' . $_GET['cmty-type'] . '</li>' : '';
-		isset( $_GET['cmty-diet'] ) ? $search_output .= '<li><span class="dir-search-fields">Dietary Preferences:</span> ' . $_GET['cmty-diet'] . '</li>' : '';
-		isset( $_GET['cmty-edu'] ) ? $search_output .= '<li><span class="dir-search-fields">Education Styles:</span> ' . $_GET['cmty-edu'] . '</li>' : '';
-		isset( $_GET['cmty-spirit'] ) ? $search_output .= '<li><span class="dir-search-fields">Shared religious/spiritual practice(s):</span> ' . $_GET['cmty-spirit'] . '</li>' : '';
-		isset( $_GET['cmty-decision'] ) ? $search_output .= '<li><span class="dir-search-fields">Decision making method:</span> ' . $_GET['cmty-decision'] . '</li>' : '';
-		isset( $_GET['cmty-foodprod'] ) ? $search_output .= '<li><span class="dir-search-fields">% of food currently produced:</span> ' . $_GET['cmty-foodprod'] . '</li>' : '';
-		isset( $_GET['cmty-localfood'] ) ? $search_output .= '<li><span class="dir-search-fields">% of local (within 150 miles) food:</span> ' . $_GET['cmty-localfood'] . '</li>' : '';
-		isset( $_GET['cmty-renewenergy'] ) ? $search_output .= '<li><span class="dir-search-fields">% of renewable energy currently generated:</span> ' . $_GET['cmty-renewenergy'] . '</li>' : '';
-		isset( $_GET['cmty-energy'] ) ? $search_output .= '<li><span class="dir-search-fields">Energy Sources:</span> ' . $_GET['cmty-energy'] . '</li>' : '';
-		isset( $_GET['cmty-landown'] ) ? $search_output .= '<li><span class="dir-search-fields">Community land owner:</span> ' . $_GET['cmty-landown'] . '</li>' : '';
-		isset( $_GET['cmty-network'] ) ? $search_output .= '<li><span class="dir-search-fields">Community Network or Organization Affiliations:</span> ' . $_GET['cmty-network'] . '</li>' : '';
-		isset( $_GET['cmty-sharedinc'] ) ? $search_output .= '<li><span class="dir-search-fields">% of shared income:</span> ' . $_GET['cmty-sharedinc'] . '</li>' : '';
-		isset( $_GET['cmty-sharedexp'] ) ? $search_output .= '<li><span class="dir-search-fields">% of shared expenses:</span> ' . $_GET['cmty-sharedexp'] . '</li>' : '';
-		isset( $_GET['cmty-alcohol'] ) ? $search_output .= '<li><span class="dir-search-fields">Alcohol Use:</span> ' . $_GET['cmty-alcohol'] . '</li>' : '';
-		isset( $_GET['cmty-tobacco'] ) ? $search_output .= '<li><span class="dir-search-fields">Tobacco Use:</span> ' . $_GET['cmty-tobacco'] . '</li>' : '';
-		isset( $_GET['cmty-healthcare'] ) ? $search_output .= '<li><span class="dir-search-fields">Healthcare Styles:</span> ' . $_GET['cmty-healthcare'] . '</li>' : '';
-		isset( $_GET['cmty-idleader'] ) ? $search_output .= '<li><span class="dir-search-fields">Identified leader:</span> ' . $_GET['cmty-idleader'] . '</li>' : '';
-		isset( $_GET['cmty-shareddiet'] ) ? $search_output .= '<li><span class="dir-search-fields">Importance of a shared diet:</span> ' . $_GET['cmty-shareddiet'] . '</li>' : '';
-		isset( $_GET['cmty-debt'] ) ? $search_output .= '<li><span class="dir-search-fields">Open to members with pre-existing debt:</span> ' . $_GET['cmty-debt'] . '</li>' : '';
-		isset( $_GET['cmty-sharedmeals'] ) ? $search_output .= '<li><span class="dir-search-fields">Frequency of shared meals:</span> ' . $_GET['cmty-sharedmeals'] . '</li>' : '';
-		isset( $_GET['cmty-sharedarea'] ) ? $search_output .= '<li><span class="dir-search-fields">Shared common area (house, building, or space):</span> ' . $_GET['cmty-sharedarea'] . '</li>' : '';
-		isset( $_GET['cmty-leadergroup'] ) ? $search_output .= '<li><span class="dir-search-fields">Core leadership group:</span> ' . $_GET['cmty-leadergroup'] . '</li>' : '';
-		isset( $_GET['cmty-minlabor'] ) ? $search_output .= '<li><span class="dir-search-fields">Min labor hours per week:</span> ' . $_GET['cmty-minlabor'] . '</li>' : '';
-		isset( $_GET['cmty-maxlabor'] ) ? $search_output .= '<li><span class="dir-search-fields">Max labor hours per week:</span> ' . $_GET['cmty-maxlabor'] . '</li>' : '';
-		isset( $_GET['cmty-minjoinfee'] ) ? $search_output .= '<li><span class="dir-search-fields">Max required join fee amount:</span> ' . $_GET['cmty-minjoinfee'] . '</li>' : '';
-		isset( $_GET['cmty-maxjoinfee'] ) ? $search_output .= '<li><span class="dir-search-fields">Min required join fee amount:</span> ' . $_GET['cmty-maxjoinfee'] . '</li>' : '';
-		isset( $_GET['cmty-minmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Min number of adult members:</span> ' . $_GET['cmty-minmemb'] . '</li>' : '';
-		isset( $_GET['cmty-maxmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Max number of adult members:</span> ' . $_GET['cmty-maxmemb'] . '</li>' : '';
-		isset( $_GET['cmty-minongoingfee'] ) ? $search_output .= '<li><span class="dir-search-fields">Min required ongoing fee amount:</span> ' . $_GET['cmty-minongoingfee'] . '</li>' : '';
-		isset( $_GET['cmty-maxongoingfee'] ) ? $search_output .= '<li><span class="dir-search-fields">Max required ongoing fee amount:</span> ' . $_GET['cmty-maxongoingfee'] . '</li>' : '';
-		isset( $_GET['cmty-minchildren'] ) ? $search_output .= '<li><span class="dir-search-fields">Min number of children:</span> ' . $_GET['cmty-minchildren'] . '</li>' : '';
-		isset( $_GET['cmty-maxchildren'] ) ? $search_output .= '<li><span class="dir-search-fields">Max number of children:</span> ' . $_GET['cmty-maxchildren'] . '</li>' : '';
-		isset( $_GET['cmty-minnonmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Min number of non-member residents:</span> ' . $_GET['cmty-minnonmemb'] . '</li>' : '';
-		isset( $_GET['cmty-maxnonmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Max number of non-member residents:</span> ' . $_GET['cmty-maxnonmemb'] . '</li>' : '';
-		$search_output .= '</ul></div>';
-		return $search_output;
-	}
+    if (!empty($_SERVER["QUERY_STRING"])) {
+        foreach ($_GET as $key => &$value) {
+            $value = str_replace('~',',',$value);
+        }
+        $search_output = '<div class="dir-search-results"><h2>Showing all communities that meet the following criteria:</h2><ul>';
+        isset( $_GET['frm-search'] ) ? $search_output .= '<li><span class="dir-search-fields">Search terms:</span> ' . $_GET['frm-search'] . '</li>' : '';
+        isset( $_GET['cmty-newviz'] ) ? $search_output .= '<li><span class="dir-search-fields">Open to visitors:</span> ' . $_GET['cmty-newviz'] . '</li>' : '';
+        isset( $_GET['cmty-newmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Open to new members:</span> ' . $_GET['cmty-newmemb'] . '</li>' : '';
+        isset( $_GET['cmty-forming'] ) ? $search_output .= '<li><span class="dir-search-fields">Community forming status:</span> ' . $_GET['cmty-forming'] . '</li>' : '';
+        isset( $_GET['cmty-housing'] ) ? $search_output .= '<li><span class="dir-search-fields">Housing provided by the community:</span> ' . $_GET['cmty-housing'] . '</li>' : '';
+        isset( $_GET['cmty-city'] ) ? $search_output .= '<li><span class="dir-search-fields">City:</span> ' . $_GET['cmty-city'] . '</li>' : '';
+        isset( $_GET['cmty-prov'] ) ? $search_output .= '<li><span class="dir-search-fields">State/Province:</span> ' . $_GET['cmty-prov'] . '</li>' : '';
+        isset( $_GET['cmty-state'] ) ? $search_output .= '<li><span class="dir-search-fields">State:</span> ' . $_GET['cmty-state'] . '</li>' : '';
+        isset( $_GET['cmty-country'] ) ? $search_output .= '<li><span class="dir-search-fields">Country:</span> ' . $_GET['cmty-country'] . '</li>' : '';
+        isset( $_GET['cmty-rural'] ) ? $search_output .= '<li><span class="dir-search-fields">Rural/Urban/Etc:</span> ' . $_GET['cmty-rural'] . '</li>' : '';
+        isset( $_GET['cmty-type'] ) ? $search_output .= '<li><span class="dir-search-fields">Community Type(s):</span> ' . $_GET['cmty-type'] . '</li>' : '';
+        isset( $_GET['cmty-diet'] ) ? $search_output .= '<li><span class="dir-search-fields">Dietary Preferences:</span> ' . $_GET['cmty-diet'] . '</li>' : '';
+        isset( $_GET['cmty-edu'] ) ? $search_output .= '<li><span class="dir-search-fields">Education Styles:</span> ' . $_GET['cmty-edu'] . '</li>' : '';
+        isset( $_GET['cmty-spirit'] ) ? $search_output .= '<li><span class="dir-search-fields">Shared religious/spiritual practice(s):</span> ' . $_GET['cmty-spirit'] . '</li>' : '';
+        isset( $_GET['cmty-decision'] ) ? $search_output .= '<li><span class="dir-search-fields">Decision making method:</span> ' . $_GET['cmty-decision'] . '</li>' : '';
+        isset( $_GET['cmty-foodprod'] ) ? $search_output .= '<li><span class="dir-search-fields">% of food currently produced:</span> ' . $_GET['cmty-foodprod'] . '</li>' : '';
+        isset( $_GET['cmty-localfood'] ) ? $search_output .= '<li><span class="dir-search-fields">% of local (within 150 miles) food:</span> ' . $_GET['cmty-localfood'] . '</li>' : '';
+        isset( $_GET['cmty-renewenergy'] ) ? $search_output .= '<li><span class="dir-search-fields">% of renewable energy currently generated:</span> ' . $_GET['cmty-renewenergy'] . '</li>' : '';
+        isset( $_GET['cmty-energy'] ) ? $search_output .= '<li><span class="dir-search-fields">Energy Sources:</span> ' . $_GET['cmty-energy'] . '</li>' : '';
+        isset( $_GET['cmty-landown'] ) ? $search_output .= '<li><span class="dir-search-fields">Community land owner:</span> ' . $_GET['cmty-landown'] . '</li>' : '';
+        isset( $_GET['cmty-network'] ) ? $search_output .= '<li><span class="dir-search-fields">Community Network or Organization Affiliations:</span> ' . $_GET['cmty-network'] . '</li>' : '';
+        isset( $_GET['cmty-sharedinc'] ) ? $search_output .= '<li><span class="dir-search-fields">% of shared income:</span> ' . $_GET['cmty-sharedinc'] . '</li>' : '';
+        isset( $_GET['cmty-sharedexp'] ) ? $search_output .= '<li><span class="dir-search-fields">% of shared expenses:</span> ' . $_GET['cmty-sharedexp'] . '</li>' : '';
+        isset( $_GET['cmty-alcohol'] ) ? $search_output .= '<li><span class="dir-search-fields">Alcohol Use:</span> ' . $_GET['cmty-alcohol'] . '</li>' : '';
+        isset( $_GET['cmty-tobacco'] ) ? $search_output .= '<li><span class="dir-search-fields">Tobacco Use:</span> ' . $_GET['cmty-tobacco'] . '</li>' : '';
+        isset( $_GET['cmty-healthcare'] ) ? $search_output .= '<li><span class="dir-search-fields">Healthcare Styles:</span> ' . $_GET['cmty-healthcare'] . '</li>' : '';
+        isset( $_GET['cmty-idleader'] ) ? $search_output .= '<li><span class="dir-search-fields">Identified leader:</span> ' . $_GET['cmty-idleader'] . '</li>' : '';
+        isset( $_GET['cmty-shareddiet'] ) ? $search_output .= '<li><span class="dir-search-fields">Importance of a shared diet:</span> ' . $_GET['cmty-shareddiet'] . '</li>' : '';
+        isset( $_GET['cmty-debt'] ) ? $search_output .= '<li><span class="dir-search-fields">Open to members with pre-existing debt:</span> ' . $_GET['cmty-debt'] . '</li>' : '';
+        isset( $_GET['cmty-sharedmeals'] ) ? $search_output .= '<li><span class="dir-search-fields">Frequency of shared meals:</span> ' . $_GET['cmty-sharedmeals'] . '</li>' : '';
+        isset( $_GET['cmty-sharedarea'] ) ? $search_output .= '<li><span class="dir-search-fields">Shared common area (house, building, or space):</span> ' . $_GET['cmty-sharedarea'] . '</li>' : '';
+        isset( $_GET['cmty-leadergroup'] ) ? $search_output .= '<li><span class="dir-search-fields">Core leadership group:</span> ' . $_GET['cmty-leadergroup'] . '</li>' : '';
+        isset( $_GET['cmty-minlabor'] ) ? $search_output .= '<li><span class="dir-search-fields">Min labor hours per week:</span> ' . $_GET['cmty-minlabor'] . '</li>' : '';
+        isset( $_GET['cmty-maxlabor'] ) ? $search_output .= '<li><span class="dir-search-fields">Max labor hours per week:</span> ' . $_GET['cmty-maxlabor'] . '</li>' : '';
+        isset( $_GET['cmty-minjoinfee'] ) ? $search_output .= '<li><span class="dir-search-fields">Max required join fee amount:</span> ' . $_GET['cmty-minjoinfee'] . '</li>' : '';
+        isset( $_GET['cmty-maxjoinfee'] ) ? $search_output .= '<li><span class="dir-search-fields">Min required join fee amount:</span> ' . $_GET['cmty-maxjoinfee'] . '</li>' : '';
+        isset( $_GET['cmty-minmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Min number of adult members:</span> ' . $_GET['cmty-minmemb'] . '</li>' : '';
+        isset( $_GET['cmty-maxmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Max number of adult members:</span> ' . $_GET['cmty-maxmemb'] . '</li>' : '';
+        isset( $_GET['cmty-minongoingfee'] ) ? $search_output .= '<li><span class="dir-search-fields">Min required ongoing fee amount:</span> ' . $_GET['cmty-minongoingfee'] . '</li>' : '';
+        isset( $_GET['cmty-maxongoingfee'] ) ? $search_output .= '<li><span class="dir-search-fields">Max required ongoing fee amount:</span> ' . $_GET['cmty-maxongoingfee'] . '</li>' : '';
+        isset( $_GET['cmty-minchildren'] ) ? $search_output .= '<li><span class="dir-search-fields">Min number of children:</span> ' . $_GET['cmty-minchildren'] . '</li>' : '';
+        isset( $_GET['cmty-maxchildren'] ) ? $search_output .= '<li><span class="dir-search-fields">Max number of children:</span> ' . $_GET['cmty-maxchildren'] . '</li>' : '';
+        isset( $_GET['cmty-minnonmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Min number of non-member residents:</span> ' . $_GET['cmty-minnonmemb'] . '</li>' : '';
+        isset( $_GET['cmty-maxnonmemb'] ) ? $search_output .= '<li><span class="dir-search-fields">Max number of non-member residents:</span> ' . $_GET['cmty-maxnonmemb'] . '</li>' : '';
+        $search_output .= '</ul></div>';
+        return $search_output;
+    }
 }
 // shortcode to display a list of communities by state and country
 add_shortcode('show_directory_geo_list', 'show_directory_geo_list');
 function show_directory_geo_list() {
 
-	global $wpdb;
+    global $wpdb;
 
-//	delete_transient('dir-geo-list');
-	// check cache first
-	$geo_output = get_transient('dir-geo-list');
+//  delete_transient('dir-geo-list');
+    // check cache first
+    $geo_output = get_transient('dir-geo-list');
 
-	if ($geo_output === false) {
+    if ($geo_output === false) {
 
-		// the query is divided into three parts to accurately count the communities in each state, province, and country
-		$sql="SELECT countries.country AS country,
+        // the query is divided into three parts to accurately count the communities in each state, province, and country
+        $sql="SELECT countries.country AS country,
 countries.country_count AS country_count,
 GROUP_CONCAT( DISTINCT IF( states.state IS NOT NULL, states.state, provs.prov), ':', IF( states.state_count IS NOT NULL, CAST(states.state_count AS CHAR), CAST(provs.prov_count AS CHAR) ) ORDER BY states.state, provs.prov SEPARATOR ',') AS states_concat
 FROM (SELECT country.meta_value AS country, COUNT(country.meta_value) AS country_count
@@ -195,47 +195,47 @@ ORDER BY prov.meta_value ASC) AS provs
 ON provs.country=countries.country
 GROUP BY countries.country";
 
-		$results = $wpdb->get_results($sql);
+        $results = $wpdb->get_results($sql);
 
-		foreach ($results as $row) {
-			// lists the US before other countries
-			if ( $row->country == "United States") {
-				$us_output = "<ul class=\"geo-country\">";
+        foreach ($results as $row) {
+            // lists the US before other countries
+            if ( $row->country == "United States") {
+                $us_output = "<ul class=\"geo-country\">";
 
-				$us_output .= "\n\t<li class=\"geo-country\"><a href=\"/directory/listings/?cmty-country=" . $row->country . "\">" . $row->country . " <span class=\"geo-count\">(" . $row->country_count . ")</span></a>";
-				$us_output .= "\n\t\t<ul class=\"geo-us-state\">";
-				$states = explode(',', $row->states_concat);
-				$i = 1;
-				foreach ($states as $state) {
-					$state_info = explode(':', $state);
-					if ( $i == 18 || $i == 35 ) $us_output .= "\n\t\t</ul></li>\n\t\t<li class=\"geo-us-state\"><ul class=\"geo-us-state\">";
-					$us_output .= "\n\t\t\t<li class=\"geo-state-prov\"><a href=\"/directory/listings/?cmty-country=" . $row->country . "&cmty-state=" . $state_info[0] . "\">" . $state_info[0] . " <span class=\"geo-count\">(" . $state_info[1] . ")</span></a></li>";
-					$i++;
-				}
-				$us_output .= "\n\t\t</ul></li>";
-				$geo_output = $us_output . $geo_output;
-			}
-			else {
-				$geo_output .= "\n\t<li class=\"geo-country\"><a href=\"/directory/listings/?cmty-country=" . $row->country . "\">" . $row->country . " <span class=\"geo-count\">(" . $row->country_count . ")</span></a>";
-				if( !is_null($row->states_concat) ) {
-					$states = explode(',', $row->states_concat);
-					$geo_output .= "\n\t\t<ul class=\"geo-state\">";
-					foreach ($states as $state) {
-						$state_info = explode(':', $state);
-						$geo_output .= "\n\t\t\t<li class=\"geo-state-prov\"><a href=\"/directory/listings/?cmty-country=" . $row->country . "&cmty-prov=" . $state_info[0] . "\">" . $state_info[0] . " <span class=\"geo-count\">(" . $state_info[1] . ")</span></a></li>";
-					}
-					$geo_output .= "\n\t\t</li></ul>";
-				}
-				else $geo_output .= "</li>";
-			}
-		}
-		$geo_output .= "\n</ul>";
+                $us_output .= "\n\t<li class=\"geo-country\"><a href=\"/directory/listings/?cmty-country=" . $row->country . "\">" . $row->country . " <span class=\"geo-count\">(" . $row->country_count . ")</span></a>";
+                $us_output .= "\n\t\t<ul class=\"geo-us-state\">";
+                $states = explode(',', $row->states_concat);
+                $i = 1;
+                foreach ($states as $state) {
+                    $state_info = explode(':', $state);
+                    if ( $i == 18 || $i == 35 ) $us_output .= "\n\t\t</ul></li>\n\t\t<li class=\"geo-us-state\"><ul class=\"geo-us-state\">";
+                    $us_output .= "\n\t\t\t<li class=\"geo-state-prov\"><a href=\"/directory/listings/?cmty-country=" . $row->country . "&cmty-state=" . $state_info[0] . "\">" . $state_info[0] . " <span class=\"geo-count\">(" . $state_info[1] . ")</span></a></li>";
+                    $i++;
+                }
+                $us_output .= "\n\t\t</ul></li>";
+                $geo_output = $us_output . $geo_output;
+            }
+            else {
+                $geo_output .= "\n\t<li class=\"geo-country\"><a href=\"/directory/listings/?cmty-country=" . $row->country . "\">" . $row->country . " <span class=\"geo-count\">(" . $row->country_count . ")</span></a>";
+                if( !is_null($row->states_concat) ) {
+                    $states = explode(',', $row->states_concat);
+                    $geo_output .= "\n\t\t<ul class=\"geo-state\">";
+                    foreach ($states as $state) {
+                        $state_info = explode(':', $state);
+                        $geo_output .= "\n\t\t\t<li class=\"geo-state-prov\"><a href=\"/directory/listings/?cmty-country=" . $row->country . "&cmty-prov=" . $state_info[0] . "\">" . $state_info[0] . " <span class=\"geo-count\">(" . $state_info[1] . ")</span></a></li>";
+                    }
+                    $geo_output .= "\n\t\t</li></ul>";
+                }
+                else $geo_output .= "</li>";
+            }
+        }
+        $geo_output .= "\n</ul>";
 
-		// store output to cache for 24 hours
-		set_transient('dir-geo-list', $geo_output, 3600 * 24);
-	}
+        // store output to cache for 24 hours
+        set_transient('dir-geo-list', $geo_output, 3600 * 24);
+    }
 
-	return $geo_output;
+    return $geo_output;
 }
 
 
@@ -252,8 +252,8 @@ add_filter ('comments_array', 'iweb_reverse_comments');
 // show category descriptions
 // http://www.themethesis.com/tutorials/show-category-descriptions/
 /*function cat_desc () {
-	if ( is_category() ) { ?>
-		<div class="catdesc"><?php echo category_description( $category ); ?></div>
+    if ( is_category() ) { ?>
+        <div class="catdesc"><?php echo category_description( $category ); ?></div>
 <?php }
 }
 add_action('thesis_hook_before_teasers_box', 'cat_desc'); */
@@ -262,16 +262,16 @@ add_action('thesis_hook_before_teasers_box', 'cat_desc'); */
 // http://sevenspark.com/docs/ubermenu-search-bar
 /*function custom_searchform(){
 
-	$placeholder = __( 'Search ic.org' , 'ubermenu' );
+    $placeholder = __( 'Search ic.org' , 'ubermenu' );
 
-	$form = '<form class="ubersearch-v2" role="search" method="get" id="searchform-custom" action="' . esc_url( home_url( '/' ) ) . '" >
-	<div class="ubersearch">
-	<input type="text" value="' . get_search_query() . '" name="s" id="menu-search-text" placeholder="'. $placeholder .'" />
-	<input type="submit" id="menu-search-submit" value="'. __( 'Go' , 'ubermenu' ) .'" />
-	</div>
-	</form>';
+    $form = '<form class="ubersearch-v2" role="search" method="get" id="searchform-custom" action="' . esc_url( home_url( '/' ) ) . '" >
+    <div class="ubersearch">
+    <input type="text" value="' . get_search_query() . '" name="s" id="menu-search-text" placeholder="'. $placeholder .'" />
+    <input type="submit" id="menu-search-submit" value="'. __( 'Go' , 'ubermenu' ) .'" />
+    </div>
+    </form>';
 
-	return $form;
+    return $form;
 }
 add_shortcode('custom-ubermenu-search', 'custom_searchform');*/
 
@@ -321,13 +321,13 @@ function filter_custom_display($where, $args){
 function post_footer_author() {
 if (is_single() && 'directory' != get_post_type() ) { ?>
 <div class="post-author">
-	<?php if( get_the_author_meta('user_custom_avatar', get_the_author_id()) != '' || get_user_meta(get_the_author_id(), 'simple_local_avatar', true) != '' ) echo get_avatar( get_the_author_id() , 85 ); ?>
-	<h4>Article by <?php the_author_posts_link(); /* ?>
-	<h4>Article by <a href="<?php the_author_url(); ?>">
-	<?php the_author_firstname(); ?> <?php the_author_lastname(); </a>*/?></h4>
-	<p><?php the_author_description(); ?></p>
-	<p><?php the_author_firstname(); ?> has posted <span><?php the_author_posts(); ?></span> article(s) online.</p>
-<?php //	<p>Subscribe to feed via <a href="http://feeds.feedburner.com/thesis-blogs"><b>RSS</b></a> or <a href="#"><b>EMAIL</b></a> to receive updates.</p> ?>
+    <?php if( get_the_author_meta('user_custom_avatar', get_the_author_id()) != '' || get_user_meta(get_the_author_id(), 'simple_local_avatar', true) != '' ) echo get_avatar( get_the_author_id() , 85 ); ?>
+    <h4>Article by <?php the_author_posts_link(); /* ?>
+    <h4>Article by <a href="<?php the_author_url(); ?>">
+    <?php the_author_firstname(); ?> <?php the_author_lastname(); </a>*/?></h4>
+    <p><?php the_author_description(); ?></p>
+    <p><?php the_author_firstname(); ?> has posted <span><?php the_author_posts(); ?></span> article(s) online.</p>
+<?php //    <p>Subscribe to feed via <a href="http://feeds.feedburner.com/thesis-blogs"><b>RSS</b></a> or <a href="#"><b>EMAIL</b></a> to receive updates.</p> ?>
 </div><!-- end post-author -->
 <?php }
 }
@@ -368,10 +368,10 @@ $curauth = (get_query_var('author_name')) ? get_user_by('slug', get_query_var('a
 //add_action('thesis_hook_before_content', 'author_info');
 
 function cat_desc (){
-	if(is_category()){
-	?>
-	<div class="catdesc"><?php echo category_description( $category ); ?></div>
-	<?php }
+    if(is_category()){
+    ?>
+    <div class="catdesc"><?php echo category_description( $category ); ?></div>
+    <?php }
 }
 //add_action('thesis_hook_before_teasers_box', 'cat_desc');
 
@@ -392,12 +392,12 @@ add_filter( 'lostpassword_url', 'my_lostpwd_page' );
 /*------------------------------------------------------------------------------*/
 
 function woocommerce_taxonomy_archive_description() {
-	if ( is_tax( array( 'product_cat', 'product_tag' ) ) && get_query_var( 'paged' ) == 0 ) {
-		$description = term_description();
-		if ( $description ) {
-			echo '<div>' . do_shortcode( wpautop( wptexturize( $description ) ) ) . '</div>';
-		}
-	}
+    if ( is_tax( array( 'product_cat', 'product_tag' ) ) && get_query_var( 'paged' ) == 0 ) {
+        $description = term_description();
+        if ( $description ) {
+            echo '<div>' . do_shortcode( wpautop( wptexturize( $description ) ) ) . '</div>';
+        }
+    }
 }
 
 /*------------------------------------------------------------------------------*/
@@ -418,8 +418,8 @@ add_action( 'woocommerce_after_single_product_summary', 'custom_output_related_p
 /* http://wordpress.org/support/topic/plugin-woocommerce-show-empty-product-categories */
 add_filter('woocommerce_product_categories_widget_args', 'woocommerce_show_empty_categories');
 function woocommerce_show_empty_categories($cat_args){
-	$cat_args['hide_empty']=0;
-	return $cat_args;
+    $cat_args['hide_empty']=0;
+    return $cat_args;
 }
 
 // Use WC 2.0 variable price format, now include sale price strikeout
@@ -427,18 +427,18 @@ function woocommerce_show_empty_categories($cat_args){
 add_filter( 'woocommerce_variable_sale_price_html', 'wc_wc20_variation_price_format', 10, 2 );
 add_filter( 'woocommerce_variable_price_html', 'wc_wc20_variation_price_format', 10, 2 );
 function wc_wc20_variation_price_format( $price, $product ) {
-	// Main Price
-	$prices = array( $product->get_variation_price( 'min', true ), $product->get_variation_price( 'max', true ) );
-	$price = $prices[0] !== $prices[1] ? sprintf( __( '%1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
-	// Sale Price
-	$prices = array( $product->get_variation_regular_price( 'min', true ), $product->get_variation_regular_price( 'max', true ) );
-	sort( $prices );
-	$saleprice = $prices[0] !== $prices[1] ? sprintf( __( '%1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
+    // Main Price
+    $prices = array( $product->get_variation_price( 'min', true ), $product->get_variation_price( 'max', true ) );
+    $price = $prices[0] !== $prices[1] ? sprintf( __( '%1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
+    // Sale Price
+    $prices = array( $product->get_variation_regular_price( 'min', true ), $product->get_variation_regular_price( 'max', true ) );
+    sort( $prices );
+    $saleprice = $prices[0] !== $prices[1] ? sprintf( __( '%1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
 
-	if ( $price !== $saleprice ) {
-		$price = '<del>' . $saleprice . '</del> <ins>' . $price . '</ins>';
-	}
-	return $price;
+    if ( $price !== $saleprice ) {
+        $price = '<del>' . $saleprice . '</del> <ins>' . $price . '</ins>';
+    }
+    return $price;
 }
 
 // Display 100 products per page. Goes in functions.php
@@ -449,13 +449,13 @@ add_filter( 'loop_shop_per_page', create_function( '$cols', 'return 100;' ), 20 
 // duplicate of woocommerce_template_single_excerpt function, modified
 // http://wordpress.org/support/topic/how-to-add-product-description-to-category-or-shop-page
 function show_product_short_desc() {
-	global $post;
+    global $post;
 
-	if ( ! $post->post_excerpt ) return;
-	?>
-	<div itemprop="description" id="product_short_desc">
-	        <?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ) ?>
-	</div>
+    if ( ! $post->post_excerpt ) return;
+    ?>
+    <div itemprop="description" id="product_short_desc">
+            <?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ) ?>
+    </div>
 <?php }
 add_action('woocommerce_after_shop_loop_item_title','show_product_short_desc', 5);
 
@@ -471,19 +471,19 @@ function newgravatar ($avatar_defaults) {
 // Add custom authors page
 // http://diythemes.com/thesis/rtfm/contributors-authors-page/
 /*function list_all_authors() {
-	if (is_page('Communities Authors')) {
+    if (is_page('Communities Authors')) {
     global $wpdb;
     $authors = $wpdb->get_results("SELECT ID, user_nicename from $wpdb->users ORDER BY display_name");
     foreach ($authors as $author ) {
     $aid = $author->ID; ?>
-	    <div class="author_info <?php the_author_meta('user_nicename',$aid); ?>">
-			<span class="author_photo"><?php echo get_avatar($aid,96); ?></span>
-        	<p><a href="<?php get_bloginfo('url'); ?>/author/<?php the_author_meta('user_nicename', $aid); ?>"><?php the_author_meta('display_name',$aid); ?></a></p>
-        	<p><?php the_author_meta('description',$aid); ?></p>
-        	<p class="author_email"><a href="mailto:<?php the_author_meta('user_email', $aid); ?>" title="Send an Email to the Author of this Post">Contact the author</a></p>
+        <div class="author_info <?php the_author_meta('user_nicename',$aid); ?>">
+            <span class="author_photo"><?php echo get_avatar($aid,96); ?></span>
+            <p><a href="<?php get_bloginfo('url'); ?>/author/<?php the_author_meta('user_nicename', $aid); ?>"><?php the_author_meta('display_name',$aid); ?></a></p>
+            <p><?php the_author_meta('description',$aid); ?></p>
+            <p class="author_email"><a href="mailto:<?php the_author_meta('user_email', $aid); ?>" title="Send an Email to the Author of this Post">Contact the author</a></p>
         </div>
-	<?php }
-	}
+    <?php }
+    }
 }
 add_action('thesis_hook_custom_template','list_all_authors');
 remove_action('thesis_hook_custom_template','thesis_custom_template_sample');*/

@@ -56,7 +56,7 @@ function directory_show_message_if_404_in_directory($atts)
     $sub_uri = "/directory/";
     $request_starts_with_sub_uri = strpos($request_uri, $sub_uri) === 0;
 
-    $message = "<p>If you are looking for a Community on the Directory which has " .
+    $message = "<p>If you are looking for a Community in the Directory which has " .
         "not yet been approved, you may see this message. Contact " .
         "<a href=\"mailto:directory@ic.org\">Directory@ic.org</a> with any " .
         "questions.</p>";
