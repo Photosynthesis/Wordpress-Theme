@@ -43,8 +43,13 @@ require_once 'includes/directory_listings.php';
 /* Directory<->Map Functions */
 require_once 'includes/formidable_mappress.php';
 
+
+/* WooCommerce Product Customizations */
+require_once 'includes/woocommerce_products.php';
+
 /* Separate WooCommerce Product Reviews from Wordpress Comments */
 require_once 'includes/separate_product_reviews.php';
+
 
 /* Utility Functions */
 require_once 'includes/utilities.php';
