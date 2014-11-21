@@ -3,8 +3,8 @@
 Create a CSV export containing Emails for Listing Editors & Contacts.
 
 Email Addresses and Community Names are pulled from data in a Formidable Form.
-Editor Emails are derived from the Author of the associated Wordpress Post while
-Contact Emails are from a Contact Email field.
+Editor Emails are derived from the Author of the associated Wordpress Post
+while Contact Emails are from a Contact Email field.
 
 Simple validation and uniqueness checks are run on the list of email addreses.
 
@@ -100,22 +100,22 @@ def make_unique_csv_lines(rows):
 
 
 def make_csv_line(listing_row):
-    """Create a CSV line of ``email,community name,role`` from a Listing row."""
+    """Create a CSV line of `email,community name,role` from a Listing row."""
     output = ""
     community_name = clean(listing_row["post_title"])
-    created_years = clean_date(listing_row["created_date"])
+    created_years = clean(clean_date(listing_row["created_date"]))
 
     contact_email = clean(listing_row["contact_email"])
     if is_valid_email(contact_email):
-        contact_name = clean_name(listing_row["contact_name"])
-        output += u"{0},{1},{2},{3},contact\r\n".format(
+        contact_name = clean(clean_name(listing_row["contact_name"]))
+        output += u"{0},{1},{2},{3},contact\n".format(
             contact_email, contact_name, created_years, community_name)
     if contact_email in [None, '']:
         editor_email = clean(listing_row["user_email"])
         if is_valid_email(editor_email):
-            editor_name = clean_name(listing_row["display_name"])
+            editor_name = clean(clean_name(listing_row["display_name"]))
             if editor_email != contact_email:
-                output += u"{0},{1},{2},{3},editor\r\n".format(
+                output += u"{0},{1},{2},{3},editor\n".format(
                     editor_email, editor_name, created_years, community_name)
     return output
 
@@ -135,8 +135,8 @@ def clean_date(date_string):
     if len(parts) != 3:
         return ''
     try:
-        year = int(parts[0])
-        return year if year != 1970 else ''
+        year = parts[0]
+        return year if year != '1970' else ''
     except ValueError:
         return ''
 
