@@ -60,6 +60,20 @@ require_once 'includes/utilities.php';
 //require_once('includes/fix_links_to_store_products_and_categories.php');
 
 
+add_action('admin_head', 'print_custom_admin_css');
+function print_custom_admin_css()
+{
+    echo '
+        <style>
+          div#poststuff.woocommerce-reports-wide {
+            width: 85% !important;
+            float: right !important;
+          }
+        </style>
+    ';
+}
+
+
 // allow more HTML tags in author bios description
 remove_filter('pre_user_description','wp_filter_kses');
 add_filter('pre_user_description', 'wp_filter_post_kses');
