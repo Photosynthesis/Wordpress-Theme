@@ -60,11 +60,11 @@ def get_id_from_name(community_name, cursor):
         INNER JOIN (
           SELECT ID as post_id
           FROM {0}posts
-          WHERE post_title='{1}'
+          WHERE post_title LIKE "%{1}%"
             AND post_type="directory")
           AS posts
           ON posts.post_id=items.post_id
-    """.format(WP_PREFIX, community_name.replace("'", "\\'"), NAME_FIELD_ID)
+    """.format(WP_PREFIX, community_name.strip(), NAME_FIELD_ID)
     cursor.execute(name_query)
     result = cursor.fetchone()
     if result:
@@ -90,7 +90,12 @@ def pull_community_data(cursor, community_name, community_id):
     data = {'Community Name': community_name}
     for row in result:
         data[row['field_name']] = row['field_value']
-    return {k: v.encode('utf8') for k, v in data.items()}
+    for key, value in data.items():
+        try:
+            data[key] = value.encode('utf8')
+        except UnicodeDecodeError:
+            pass
+    return data
 
 
 def export_to_csv(data):
