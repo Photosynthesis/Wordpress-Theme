@@ -100,7 +100,7 @@ def pull_community_data(cursor, community_name, community_id):
 
 def export_to_csv(data):
     """Save the escaped data to an Excel CSV file."""
-    keys = set("Community Name")
+    keys = set("Community Name",)
     _ = [keys.add(key) for community in data for key in community.keys()]
     with open('communities_for_research.csv', 'w') as output_file:
         output_file.write(u'\ufeff'.encode('utf8'))  # Required for Excel UTF-8
