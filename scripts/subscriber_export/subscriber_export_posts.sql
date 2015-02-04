@@ -8,8 +8,14 @@ LEFT JOIN (
     FROM `3uOgy46w_postmeta`
     WHERE `meta_key` = '_billing_first_name'
        OR `meta_key` = '_billing_last_name'
+       OR `meta_key` = '_billing_email'
+       OR `meta_key` = '_billing_email-2'
+       OR `meta_key` = '_billing_state'
+       OR `meta_key` = '_billing_country'
        OR `meta_key` = '_shipping_first_name'
        OR `meta_key` = '_shipping_last_name'
+       OR `meta_key` = '_shipping_state'
+       OR `meta_key` = '_shipping_country'
 ) AS `post_metas`
   ON `post_metas`.`post_id` = `posts`.`ID`
 

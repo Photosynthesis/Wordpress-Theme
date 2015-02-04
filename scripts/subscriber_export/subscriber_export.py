@@ -23,13 +23,15 @@ def fill_with_order_data(order_data):
     with open('./orders.csv') as input_csv:
         order_reader = csv.reader(input_csv)
         for row in order_reader:
-            meta_key, meta_value, _, order_id = [
+            meta_key, meta_value, _, order_id, item_name = [
                 field.strip() for field in row
             ]
             if meta_key == '_subscription_start_date':
                 meta_value = meta_value.split()[0]
             if order_id not in order_data:
-                order_data[order_id] = {meta_key: meta_value}
+                order_data[order_id] = {meta_key: meta_value,
+                                        'Post ID': order_id,
+                                        'Item Name': item_name}
             else:
                 order_data[order_id][meta_key] = meta_value
 
@@ -39,11 +41,12 @@ def fill_with_post_data(order_data):
     with open('./posts.csv') as input_csv:
         for row in input_csv.readlines():
             row = row.replace('\xef\xbb\xbf', '').replace('"', '')
-            order_id, order_date, _, meta_key, meta_value, _ = [
+            order_id, order_date, _, meta_key, meta_value, order_num = [
                 field.strip() for field in row.split(',')
             ]
             if order_id in order_data:
                 order_date = order_date.split()[0]
+                order_data[order_id]['order number'] = order_num
                 order_data[order_id]['order_date'] = order_date
                 order_data[order_id][meta_key] = meta_value
 
