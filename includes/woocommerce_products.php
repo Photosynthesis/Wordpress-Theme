@@ -9,10 +9,13 @@
  */
 
 
-/** Hide the price for Suggested Price Products */
+/** Hide the price for Suggested/Zero Price Products */
 function hide_suggested_prices($price, $product)
 {
-    if (WC_Name_Your_Price_Helpers::is_nyp($product)) {
+    $is_suggested_price_product = WC_Name_Your_Price_Helpers::is_nyp($product);
+    // `&#36;` is the HTML entity for `$`
+    $price_is_zero = strpos($price, '&#36;0.00') !== false;
+    if ($is_suggested_price_product || $price_is_zero) {
         $price = '';
     }
     return $price;
