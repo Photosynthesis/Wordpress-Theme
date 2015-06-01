@@ -37,6 +37,9 @@ function fa_allow_tags_in_comments($data) {
  * Import Additional Functions, Shortcodes & Customizations
  */
 
+/* Utility Functions */
+require_once 'includes/utilities.php';
+
 /* General Directory Listing Functions */
 require_once 'includes/directory_listings.php';
 
@@ -51,8 +54,6 @@ require_once 'includes/woocommerce_products.php';
 require_once 'includes/separate_product_reviews.php';
 
 
-/* Utility Functions */
-require_once 'includes/utilities.php';
 
 
 // Scripts
