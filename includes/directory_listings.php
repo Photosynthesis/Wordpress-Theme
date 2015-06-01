@@ -81,7 +81,6 @@ add_shortcode(
  * @return string HTML containing the lists
  */
 function directory_show_directory_geo_list() {
-    delete_transient('directory_geographical_lists');
     return FIC_Utils::cache_result(function() {
         global $wpdb;
 
@@ -184,7 +183,7 @@ function directory_show_directory_geo_list() {
         };
 
         return '<ul class="geo-country">' . $countries_html . '</ul>';
-    }, 'directory_geographical_lists', 1);
+    }, 'directory_geographical_lists',  7 * 24 * 60 * 60);
 }
 add_shortcode('show_directory_geo_list', 'directory_show_directory_geo_list');
 

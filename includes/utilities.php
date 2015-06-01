@@ -30,10 +30,9 @@ class FIC_Utils
             return $cached;
         } else {
             $result = $function_to_cache();
-            set_transient($cache_name, $result, $timeout);
+            set_transient($cache_key, $result, $timeout);
             return $result;
         }
-
     }
 
     /** HTML-Escape Ampersands
