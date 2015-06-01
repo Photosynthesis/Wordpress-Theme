@@ -11,6 +11,31 @@
 
 class FIC_Utils
 {
+    /** Cache & return the result of a performance-heavy function.
+     *
+     * The $function_to_cache will be passed 0 arguments.
+     *
+     * @param function $function_to_cache The function to call if there is no
+     * cached result.
+     * @param string $cache_key The key to store the result under.
+     * @param number $timeout The number of seconds to cache the result
+     * for.
+     *
+     * @return The cached or calculated result of the function.
+     */
+    public static function cache_result($function_to_cache, $cache_key,
+                                        $timeout) {
+        $cached = get_transient($cache_key);
+        if ($cached !== false) {
+            return $cached;
+        } else {
+            $result = $function_to_cache();
+            set_transient($cache_name, $result, $timeout);
+            return $result;
+        }
+
+    }
+
     /** HTML-Escape Ampersands
      *
      * Takes one parameter, `content`.
