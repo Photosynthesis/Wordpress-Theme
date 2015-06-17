@@ -48,8 +48,27 @@ class FIC_Utils
         $escaped_content = str_replace('&', '&amp;', $content);
         return $escaped_content;
     }
+
+    /** Transform a Formidable `[created-at]` date into an RSS 2.0 compliant
+     * date.
+     *
+     * The shortcode should be used like `[formidable_to_rss_date [created-at]]`.
+     *
+     * @return string The RSS 2.0 respresentation of the date
+     */
+    public static function formidable_to_rss_date($atts) {
+        $date_string = join(' ', $atts);
+        preg_match(
+            '/(?<Month>\w+) (?<Day>\d+), (?<Year>\d{4}) at (?<Hour>\d+):(?<Minute>\d{2}) (?<Period>AM|PM)/',
+            $date_string, $matches);
+        $date = DateTime::createFromFormat(
+            'j F Y g i A',
+            "$matches[Day] $matches[Month] $matches[Year] $matches[Hour] $matches[Minute] $matches[Period]");
+        return $date->format(DateTime::RFC2822);
+    }
 }
 add_shortcode('escape_ampersands', array('FIC_Utils', 'escape_ampersands'));
+add_shortcode('formidable_to_rss_date', array('FIC_Utils', 'formidable_to_rss_date'));
 
 
 ?>
