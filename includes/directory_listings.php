@@ -11,6 +11,10 @@
  */
 
 
+/* Fix Formidable database updates on WPEngine sites */
+function frm_default_templates_files(){ return array(); }
+add_filter( 'frm_default_templates_files', 'frm_default_templates_files' );
+
 /** Return an Edit link for the Directory Listing if the Current User is an
  * Administrator. This is checked by checking for the `edit_plugins`
  * permission.
