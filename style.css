@@ -38,9 +38,15 @@ div#container div#page div#header div.fb-like span {
     border: hidden;
 }
 
+/* emphasize ubermenu un-collapse button */
+#megaMenu #megaMenuToggle {
+  font-size: 1em;
+  font-weight: bold;
+}
+
 /* google search box */
 div#google-search-div {
-    width: 18em;
+    width: 17.7em;
     z-index: 20000;
     float: right;
 }
@@ -939,4 +945,27 @@ div.cmtylistpage div.cmtycontact button#cmty-contact-button:active {
 }
 div.cmtylistpage div.cmtycontact li#contact-button {
     text-align: center;
+}
+
+/* Small Screen Styles */
+@media (max-width: 800px) {
+  /* Reduce space around login/logout link */
+  #block-156 { margin-bottom: 0; }
+  #block-20 { margin-bottom: 0; }
+
+  /* Remove extra line below Menu/Search */
+  #block-160 {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    border-style: none;
+  }
+
+  /* Remove space between menu & post */
+  .block-content > .loop > div { padding-top: 0; }
+
+  /* Remove space below Floating Social Bar */
+  .entry-content > #fsb-social-bar.fsb-social-bar { margin-bottom: 2px; }
+
+  /* Add space between the Directory update/created dates & Title */
+  .cmtystatus { padding-bottom: 10px; }
 }
