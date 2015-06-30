@@ -1,0 +1,942 @@
+/*
+   THEME NAME:Headway Child Theme
+   VERSION:1.0   AUTHOR:Foxx
+   DESCRIPTION: Headway child theme to add custom style.css and functions.php
+   TEMPLATE:headway
+*/
+
+.custom #header {
+    border: 0px;
+}
+h1 {
+    margin-bottom: 15px;
+}
+h1, h2 {
+    line-height: 1.2em;
+}
+.custom .block-type-content div.entry-content h1 {
+    font-size: 24px;
+}
+ul {
+    list-style-position: inside;
+}
+.custom ul {
+    list-style: disc outside none;
+}
+div.fb-like {
+    text-align: right;
+}
+div.fb_iframe_widget {
+    display: block;
+}
+div#container div#page div#header div.fb-like span {
+    width: 285px !important;
+}
+
+/* fix ubermenu extra border */
+.custom #megaMenu {
+    border: hidden;
+}
+
+/* google search box */
+div#google-search-div {
+    width: 18em;
+    z-index: 20000;
+    float: right;
+}
+.custom .gsc-control-cse {
+    background-color: transparent;
+    border: 0px hidden;
+    padding: 0px;
+    margin-top: -5px;
+}
+.custom .gsc-search-box-tools .gsc-search-box .gsc-input {
+    padding-right: 0px;
+}
+
+.custom a {
+    color: #596A96;
+}
+.custom a:hover, .custom ul.product-categories li.cat-item a:hover, .custom ul.product_list_widget li a:hover {
+    color: #F3A939;
+}
+.custom a:active, .custom ul.product-categories li.cat-item a:active, .custom ul.product_list_widget li a:active {
+    color: #F0673A;
+}
+
+.custom p {
+    font-family: Verdana;
+}
+
+/* fix for social icons covering drop down menus */
+#megaMenu {
+    z-index: 10000;
+}
+
+
+/* fix mystery top border over nav bar google search form */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    border: hidden;
+}
+
+/* Greeting and log out box on header for logged in user */
+div#greeting-logout {
+    font-size: 12px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+/* fix widget h1 line spacing */
+.custom .block-type-widget-area li.widget .widget-title {
+    line-height: 150%;
+}
+/* body background color */
+body {
+    background-color: #666698;
+}
+
+/* fix in-page login form for restricted pages */
+.custom form#loginform input {
+    width: auto;
+}
+.custom form#loginform p.login-password label {
+    margin-right: 3px;
+}
+.custom form.register input.button {
+    margin-top: 15px;
+}
+
+/* fix Woocommerce cart buttons */
+.woocommerce .cart .button, .woocommerce .cart input.button, .woocommerce-page .cart .button, .woocommerce-page .cart input.button {
+    width: auto;
+}
+.custom .woocommerce table.cart td.actions .coupon .input-text, .custom .woocommerce #content table.cart td.actions .coupon .input-text, .custom .woocommerce-page table.cart td.actions .coupon .input-text, .custom .woocommerce-page #content table.cart td.actions .coupon .input-text {
+    width: 8em;
+}
+.custom .woocommerce a.added_to_cart, .custom .woocommerce-page a.added_to_cart {
+    margin-left: 25px;
+}
+.custom .format_text input, #commentform input, #commentform textarea {
+    width: auto;
+}
+.custom #payment ul.payment_methods li input.input-radio {
+    margin-left: 2em;
+}
+/* add spacing to Woocommerce attributes fields */
+.woocommerce .summary div[itemprop="description"] {
+    margin-bottom: 10px;
+}
+.woocommerce .summary form.variations_form table.variations tr {
+    line-height: 2.5em;
+}
+
+
+/* Style ubermenu search field */
+/*div.ubersearch input#menu-search-text {
+    padding: 4px;
+    font-size: 1.2em;
+    max-width: 10em;
+    width: auto;
+    vertical-align: middle;
+}
+input#menu-search-submit {
+    margin-top: 3px;
+}*/
+
+/* adjust featured classifieds widget content */
+.custom li.widget_featured_ads_widget ul {
+    list-style: none;
+    padding: 0px;
+}
+li.widget_featured_ads_widget ul li.featured_ad_item {
+    margin-bottom: 10px;
+}
+
+/* fix blog categories drop down width */
+.custom li.widget_categories select {
+    width: 100%;
+}
+
+/* fix button sizes */
+.custom button.button, .custom input.button {
+    height: auto;
+}
+.custom button.single_add_to_cart_button {
+    padding: 7px 10px;
+}
+
+/* change blog post font */
+.custom .type-post .format_text p {
+    font-family: Lora;
+}
+
+/* CMAG gallery */
+div.cmag-gallery {
+    text-align: center;
+    margin-bottom: 20px;
+}
+div.cmag-gallery ul {
+    list-style: none;
+}
+div.cmag-gallery li {
+    display: inline-block;
+}
+div.cmag-gallery img {
+    max-width: 200px;
+    max-height: 200px;
+    margin-right: 20px;
+}
+
+/* CMAG pagination */
+/*div.pip-nav ul {
+    text-align: center;
+}
+div.pip-nav ul li {
+    display: inline-block;
+    margin-right: 150px;
+    font-size: 20px;
+}*/
+/* style Thesis buttons */
+.custom input[type="submit"] {
+/*    padding: 5px 10px;*/
+    border: 1px solid #c7c0c7;
+    background: #f7f6f7; /* Old browsers */
+    background: -moz-linear-gradient(top,  #f7f6f7 0%, #dfdbdf 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f6f7), color-stop(100%,#dfdbdf)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #f7f6f7 0%,#dfdbdf 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #f7f6f7 0%,#dfdbdf 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #f7f6f7 0%,#dfdbdf 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #f7f6f7 0%,#dfdbdf 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f6f7', endColorstr='#dfdbdf',GradientType=0 ); /* IE6-9 */
+}
+.custom input[type="submit"], .incsub_wiki_tabs li {
+    font-weight: bold;
+    color: #5e5e5e;
+}
+/* shrink google translate area to fit in sidebar width */
+div#:0.targetLanguage {
+    display: block !important;
+}
+/* fit blog categories display drop down menu to sidebar width */
+div.sidebar select#cat {
+    width: 100%;
+}
+/* fix CMAG article listing in products short description */
+div#product_short_desc li {
+    list-style: disc inside none;
+}
+/* CMAG article posts CSS */
+/*div.cmag-article-excerpts p.headline_meta {
+    margin-bottom: 0px;
+    line-height: 1.4em;
+}
+div.cmag-article-excerpts div.headline_area div.cmag-thumbnail {
+
+}
+div.cmag-article-excerpts div.headline_area img {
+    float: left;
+    max-width: 250px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+div.cmag-article-excerpts div.headline_area {
+    font-size: 1em;
+    line-height: 1em;
+}
+div.cmag-article-excerpts h2.entry-title {
+    margin: 0px 0px 15px 0px;
+    line-height: 1.364em;
+    font-size: 1.6em;
+}
+div.cmag-article-excerpts h2.entry-title a {
+    color: #586A96;
+}
+div.cmag-article-excerpts h2.entry-title a, div.cmag-article-excerpts p.headline_meta a {
+    text-decoration: none;
+}
+div.cmag-article-excerpts div.entry-content {
+    font-size: 1.2em;
+}*/
+/* CMAG article posts and ALL category posts CSS */
+div.cmag-article-excerpts p.headline_meta, div.category-loop p.headline_meta {
+    margin-bottom: 0px;
+    line-height: 1.4em;
+}
+div.cmag-article-excerpts div.headline_area div.cmag-thumbnail, div.category-loop div.headline_area div.cmag-thumbnail {
+
+}
+div.cmag-article-excerpts div.headline_area img, div.category-loop div.headline_area img {
+    float: left;
+    max-width: 250px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    height: auto;
+}
+div.cmag-article-excerpts div.headline_area, div.category-loop div.headline_area {
+    font-size: 1em;
+    line-height: 1em;
+}
+div.cmag-article-excerpts h2.entry-title, div.category-loop h2.entry-title {
+    margin: 0px 0px 15px 0px;
+    line-height: 1.364em;
+    font-size: 1.6em;
+}
+div.cmag-article-excerpts h2.entry-title a, div.category-loop h2.entry-title a {
+    color: #586A96;
+}
+div.cmag-article-excerpts h2.entry-title a, div.cmag-article-excerpts p.headline_meta a, div.category-loop h2.entry-title a, div.category-loop p.headline_meta a {
+    text-decoration: none;
+}
+div.cmag-article-excerpts div.entry-content, div.category-loop div.entry-content {
+    font-size: 1.2em;
+}
+/* style Wiki page management buttons */
+div.incsub_wiki_tabs.incsub_wiki_tabs_top {
+    padding-bottom: 22px;
+}
+.incsub_wiki_tabs li.current {
+    background: #FFF !important;
+    text-decoration: underline;
+}
+.incsub_wiki_tabs li {
+    padding-top: 10px;
+    border-radius: 5px 5px 0px 0px;
+    padding-bottom: 8px !important;
+
+    background: #f7f6f7 !important; /* Old browsers */
+    background: -moz-linear-gradient(top,  #f7f6f7 0%, #dfdbdf 100%) !important; /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f6f7), color-stop(100%,#dfdbdf)) !important; /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #f7f6f7 0%,#dfdbdf 100%) !important; /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #f7f6f7 0%,#dfdbdf 100%) !important; /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #f7f6f7 0%,#dfdbdf 100%) !important; /* IE10+ */
+    background: linear-gradient(to bottom,  #f7f6f7 0%,#dfdbdf 100%) !important; /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f6f7', endColorstr='#dfdbdf',GradientType=0 ) !important; /* IE6-9 */
+}
+
+/* add margin below Wiki editor */
+div.incsub_wiki_clear {
+    margin-bottom: 30px;
+}
+
+/* fix wiki tabs height */
+div.incsub_wiki_tabs_top {
+    height: 22px;
+}
+
+/* fix comment submit button border width */
+#commentform input.form_submit {
+    border-width: 1px !important;
+}
+
+/* fix newsletter text input box overhang */
+p.wysija-paragraph input.wysija-input {
+    width: 95%;
+}
+
+/* fix newsletter comment subscribe checkbox */
+p.wysija-after-comment {
+    margin-top: 20px;
+}
+input#wysija-box-after-comment {
+    margin-right: 5px;
+}
+/* fix newsletter comment subscribe widget margins */
+form.widget_wysija p.wysija-paragraph {
+    margin-bottom: 5px;
+}
+form.widget_wysija input.wysija-submit {
+    margin-top: 0px;
+}
+
+/* blog categories drop down fix */
+li.widget select {
+    width: 95%;
+}
+
+/* directory list entries */
+.custom div.cmtylistblock { background:#F9F9F9; border:1px solid #DDD; margin:10px; overflow:hidden; padding:1em; }
+.custom div.cmtylistblock img { background-color:#fff; max-width:80px;     padding:5px; border: 1px solid #ddd; float: left; margin-right: 1.5em;  }
+/* directory search form */
+form#frm_search_form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+form#frm_search_form input#frm_search {
+    margin-bottom: 5px;
+}
+
+/* Hide the Author Box */
+div.post-author {
+  display: none;
+}
+
+/* Custom Author Archive Page */
+/* thesis-blogs.com/custom-author-archive-page-in-thesis/ */
+.authorarchive { background: #F5F5F5; border-top: 1px solid #e1e1e0; border-bottom: 1px solid #e1e1e0; padding: 1.5em; min-height:107px; }
+.authorarchive img { border: 1px solid #e2dede; padding: 4px; float: left; margin-right: 1.5em; }
+.authorarchive h4 { color: #666; font-size: 2em; margin-bottom: 5px; }
+.authorarchive p { color: #515151; font-size: 13px; margin-bottom: 12px; }
+.authorarchive p.hlight { font-size: 15px; /* text-transform: uppercase; */ }
+.authorarchive p.hlight span { color: #CB3131; font-size: 15px; font-style: italic; font-weight: bold; letter-spacing: 0.8px; }
+
+/* Thumbnails on post excerpts from: http://diywpblog.com/thesis-tutorial-excerpts-with-thumbnail-image/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+DiyWPBlog+%28DIY+WP+Blog%29 */
+/*.custom .teaser {
+    padding-bottom: 15px;
+    text-align: justify;
+    width: 100%;
+    float: left;
+}
+.custom .teasers_box {
+padding: 0;
+border-top: 0;
+margin: 0;
+}
+
+.format_teaser img {
+    border: 2px solid #DDDDDD;
+    float: left;
+    max-height: 250px;
+    margin: 0 10px;
+    max-width: 250px;
+}*/
+
+
+
+
+/* bold heading labels for classified ads */
+div.showawpcpadpage label {
+    font-weight:bold;
+}
+
+div.awpcp-category {
+    margin-bottom: 15px;
+}
+
+.custom #showawpcpadpage .adtitle, .custom #showawpcpadpage .awpcp-title {
+    border-top: hidden;
+    background: none;
+    text-align: center;
+}
+
+
+
+/* WooCommerce style additions from rockinwp.com/wordpress-tutorials/woocommerce-thesis-theme-complete-solution/ */
+.custom .price {
+    padding-bottom: 9px;
+}
+
+
+.custom .products h3 {
+    font-size: 18px;
+}
+.custom h1.page-title {
+    margin-bottom: 30px;
+}
+
+
+/* WooCommerce additions */
+
+/* Hide WooCommerce Product SKUs and Tags */
+span.sku_wrapper, span.sku, .tagged_as { display:none !important }
+
+/* push content down */
+.custom div.headway-storefront-wooc-content {
+    margin-top: 20px;
+}
+
+/* General Price and Suggested Price Font and Spacing Tweaks */
+.price {
+    font-size: 14px;
+}
+.amount {
+    font-size: 18px;
+    font-weight: bold;
+}
+.suggested-text {
+    padding-right: 2px;
+}
+
+
+/* Fix Community Bookstore title */
+.custom .headway-storefront-wooc-content .page-title {
+    color: #586A96;
+    border: hidden;
+}
+/* Fix community bookstore text */
+.custom div.headway-storefront-wooc-content div.page-description p {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+/* hide misplaced coupon message */
+.page-id-8 div.woocommerce-message {
+    display: none;
+}
+/* hide product count from WooCommerce categories on sidebar column */
+ul.product-categories .count { display:none !important; }
+
+/* style short descriptions for WooCommerce */
+ul.products div#product_short_desc {
+    color: #000;
+    margin-bottom: 10px;
+}
+/* un-bold product links */
+.woocommerce ul.products li.product h3, .woocommerce-page ul.products li.product h3 {
+    font-weight: normal;
+    font-family: Verdana;
+}
+/* cart widget buttons adjustment */
+div.widget_shopping_cart_content p.buttons {
+    text-align: right;
+}
+div.widget_shopping_cart_content a.button {
+    width: 7em;
+}
+div.widget_shopping_cart_content a.checkout {
+    margin-top: 10px;
+}
+/* style Woocommerce <a> Add to Cart buttons */
+.custom a.add_to_cart_button {
+    background: -webkit-linear-gradient(#ad74a2,#96588a);
+    background: -moz-linear-gradient(center top,#ad74a2 0%,#96588a 100%);
+    background: -moz-gradient(center top,#ad74a2 0%,#96588a 100%);
+    border-color: #76456c;
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.6);
+}
+.custom a.add_to_cart_button:hover, .custom button.single_add_to_cart_button:hover {
+    background: -webkit-linear-gradient(#96588a,#ad74a2);
+    background: -moz-linear-gradient(center top,#96588a 0%,#ad74a2 100%);
+    background: -moz-gradient(center top,#96588a 0%,#ad74a2 100%);
+    border-color: #76456c;
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.6);
+}
+.custom ul.products li.product .btn, .custom ul.products li.product .button {
+    margin-top: 0px;
+}
+/* remove underline from "Calculate Shipping" line */
+.custom .shipping-calculator-button {
+    text-decoration: none;
+}
+/* adjust product categories list font */
+li.widget_product_categories ul.product-categories li.cat-item a {
+    text-decoration: none;
+    font-size: 0.9em;
+}
+li.widget_product_categories ul.product-categories li.cat-item a:hover {
+    font-weight: bold;
+}
+.woocommerce .product-categories .current-cat a {
+    font-weight: bold;
+    color: #F3A939;
+}
+.woocommerce .product-categories .current-cat .children a {
+    font-weight: normal;
+    color: #333;
+}
+/* add right line to add to cart quantity box */
+.woocommerce .quantity input.qty, .woocommerce #content .quantity input.qty, .woocommerce-page .quantity input.qty, .woocommerce-page #content .quantity input.qty {
+    border-right: 1px solid #c7c0c7;
+}
+/* shipping options line-height fix */
+.custom .woocommerce ul#shipping_method li, .woocommerce-page ul#shipping_method li {
+    line-height: 1.5em;
+}
+/* shipping options size adjustment */
+.custom .woocommerce ul#shipping_method .amount, .custom .woocommerce-page ul#shipping_method .amount {
+    font-size: 18px;
+}
+/* product search form adjustment */
+form#searchform input#searchsubmit {
+    margin-top: 5px;
+}
+/* widget item lists adjustment */
+ul.product_list_widget li {
+    margin-bottom: 10px !important;
+}
+/* Hide redundant search text in WC search widget */
+.custom li.widget_product_search label {
+    display: none;
+}
+/* WC onsale and best sellers widgets */
+li.widget_products ins span.amount, li.widget_best_sellers ins span.amount, li.widget_recently_viewed_products ins span.amount, .custom li.woocommerce ins, span.amount {
+    color: #51C620;
+}
+li.widget_products del span.amount, li.widget_best_sellers del span.amount, li.widget_recently_viewed_products del span.amount, p.price del span.amount {
+    color: #AAA;
+    font-size: 1.2em;
+}
+li.product del span.amount {
+    color: #AAA;
+    font-size: 1.8em;
+}
+/* make review stars gold */
+.woocommerce .star-rating span, .woocommerce-page .star-rating span {
+    color: #FDD017;
+}
+/* WC CMAG subscribe button fix */
+/*.custom div#product-136292 button.single_add_to_cart_button {
+    margin-top: 15px;
+}*/
+/* WC font size for sale font items on main page */
+.custom .woocommerce ul.products li.product .price del, .woocommerce-page ul.products li.product .price del {
+    font-size: 0.8em;
+}
+/* WC pagination buttons bottom of page */
+nav.woocommerce-pagination ul.page-numbers {
+    font-size: 1.6em;
+}
+/* WC hide "no products found" notices on custom pages */
+.term-on-sale p.woocommerce-info, .term-most-popular p.woocommerce-info, .term-recently-added p.woocommerce-info {
+    display: none;
+}
+/* move sale products down */
+.woocommerce #content div.product {
+    margin-top: 15px;
+}
+/* menucart position adjustment */
+#megaMenu.megaMenuHorizontal ul.megaMenu .wcmenucart-contents {
+    margin-top: 2px;
+}
+.woocommerce .woocommerce-tabs #tab-description h2 {
+    display: none !important;
+}
+#woocentercolumn {
+    padding :1em;
+    font-size: 14px;
+}
+#woocentercolumn p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+.quantity .amount, .product_list_widget .amount, .total .amount {
+    font-size: 1.5em;
+}
+#searchform #s {
+    width: 180px;
+}
+.woocommerce-tabs .additional_information_tab {
+    display : none !important;
+}
+#woocentercolumn h1, #woocentercolumn h2, #woocentercolumn h2 a, .woocommerce #sidebar_1 h2 {
+    margin-bottom : 0.5em;
+}
+.woocommerce .product-categories .cat-item {
+    /*margin-bottom : 0.2em;*/
+}
+#woocentercolumn .woocommerce-tabs ul {
+    padding-left : 1em;
+}
+#woocentercolumn div.page-description {
+    padding-bottom : 3em;
+}
+.woocommerce .images {
+    max-width : 300px;
+}
+.woocommerce .related ul.products li.product img, .woocommerce-page .related ul.products li.product img, .woocommerce .upsells.products ul.products li.product img, .woocommerce-page .upsells.products ul.products li.product img, .woocommerce .related ul li.product img, .woocommerce-page .related ul li.product img, .woocommerce .upsells.products ul li.product img, .woocommerce-page .upsells.products ul li.product img {
+    max-width : 200px;
+}
+.woocommerce div.product, .woocommerce-page div.product, .woocommerce #content div.product, .woocommerce-page #content div.product {
+    font-size : 11pt;
+}
+.woocommerce div.product div.images, .woocommerce-page div.product div.images, .woocommerce #content div.product div.images, .woocommerce-page #content div.product div.images {
+    width : 350px !important;
+}
+.woocommerce div.product div.summary, .woocommerce-page div.product div.summary, .woocommerce #content div.product div.summary, .woocommerce-page #content div.product div.summary {
+    width : 54% !important;
+}
+.woocommerce .related ul.products li.product, .woocommerce .related ul li.product, .woocommerce .upsells.products ul.products li.product, .woocommerce .upsells.products ul li.product, .woocommerce-page .related ul.products li.product, .woocommerce-page .related ul li.product, .woocommerce-page .upsells.products ul.products li.product, .woocommerce-page .upsells.products ul li.product {
+    width: 200px !important;
+    margin-right: 3em;
+    line-height: 120%;
+}
+.woocommerce ul.cart_list li a, .woocommerce ul.product_list_widget li a, .woocommerce-page ul.cart_list li a, .woocommerce-page ul.product_list_widget li a {
+    text-decoration: none;
+}
+.custom .woocommerce ul.products li.product, .custom .woocommerce-page ul.products li.product {
+    line-height: 120%;
+}
+.woocommerce .upsells.products ul.products li.product, .woocommerce .upsells.products ul li.product, .woocommerce-page .upsells.products ul.products li.product, .woocommerce-page .upsells.products ul li.product {
+     clear: none;
+}
+
+.woocommerce span.onsale, .woocommerce-page span.onsale {
+    top: -10px !important;
+    left: 270px !important;
+}
+
+.woocommerce ul.products li.product .onsale, .woocommerce-page ul.products li.product .onsale {
+    top: 0px !important;
+    left: auto !important;
+}
+
+#sidebars li del span.amount {
+    font-size: 0.8em;
+    color: rgba(115, 115, 115, 0.5);
+}
+
+#sidebars li ins span.amount {
+    font-size: 1.5em;
+    color: rgb(81, 198, 32);
+}
+
+#sthoverbuttons
+{
+top: 0% !important;
+}
+
+
+
+/* clean up page restricted login form */
+div.page-restrict-output input#rememberme {
+    width: 1em;
+    margin-left: 10px;
+}
+div.page-restrict-output input.button {
+    width: auto;
+}
+div.page-restrict-output input#pwd {
+    margin-bottom: 10px;
+}
+div.page-restrict-output input#log {
+    margin-bottom: 5px;
+}
+
+
+
+
+/* Map customizations */
+.custom .mapp-map-links {
+    background-color: transparent;
+    border-top: none;
+}
+.custom .mapp-canvas {
+    background-color: #F0F0F0;
+}
+
+
+
+/* Directory forms CSS */
+div.directory-rss {
+    float: right;
+    margin-right: 10px;
+}
+.frm_forms.with_frm_style {
+    max-width: 100% !important;
+}
+.with_frm_style .form-field {
+    margin-bottom: 10px !important;
+}
+span.searchrangeheader {
+    font-weight: bold;
+}
+div.frm_form_field.frm_section_heading h3 {
+    font-weight: bold;
+}
+form#form_oais1l span.cmtymapdesc {
+    font-size: 0.8em;
+}
+div.tablenav div.tablenav-pages {
+    text-align: center;
+    font-size: 1.4em;
+}
+div.frm_pagination_cont {
+    text-align: center;
+    margin-top: 30px;
+}
+ul.frm_pagination {
+    font-size: 1.4em;
+}
+
+
+
+
+/* Formidable directory add form scroll box fix */
+.frm_opt_container {
+    width: 99% !important;
+}
+
+/* Directory state and country list */
+a.frm_delete_list {
+    color: #C00 !important;
+    padding-left: 20px;
+}
+a.frm_delete_list:hover {
+    color: #F00 !important;
+}
+div.cmty-geo-list {
+    text-align: center;
+}
+div.cmty-geo-list ul.geo-country {
+    display: inline-block;
+    text-align: left;
+}
+div.cmty-geo-list ul.geo-country li.geo-country {
+    font-size: 16px;
+    font-weight: bold;
+}
+div.cmty-geo-list ul.geo-country li.geo-us-state {
+    margin-top: 32px !important;
+}
+div.cmty-geo-list ul.geo-country li.geo-country, div.cmty-geo-list ul.geo-country li.geo-us-state {
+    vertical-align: top;
+    float: left;
+    width: 30%;
+    margin: 10px;
+    min-height: 150px;
+    list-style: none;
+}
+div.cmty-geo-list ul.geo-state, div.cmty-geo-list ul.geo-us-state {
+    font-size: 14px;
+    font-weight: normal;
+    list-style: none;
+}
+
+
+
+
+/* Directory listings CSS */
+div.directory-header-links {
+    text-align: center;
+}
+div.cmtylistpage div.cmtyheader div.cmtystatus p {
+    line-height: 140%;
+}
+div.cmtylistpage {
+    margin-bottom: 20px;
+}
+div.cmtylistpage ul {
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 0px;
+}
+div.cmtylistpage ul li {
+    list-style: none;
+}
+div.cmtylistpage div.cmtymap {
+    margin-right: 11px;
+}
+div.cmtylistpage div.cmtylinks {
+    line-height: 1em;
+}
+div.cmtylistpage div.cmtylinks ul {
+    padding-left: 10px;
+}
+div.cmtylistpage div.cmtycontact {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    padding-top: 5px !important;
+}
+div.cmtylistpage div.cmtycontact, div.cmtylistpage div.cmtyinfoblock, div.cmtylistpage div.cmtygallery, div.cmtylistpage div.cmtyvideos {
+    padding: 0px 10px;
+    border-width: 1px;
+    border-color: #CCC;
+    border-style: solid;
+    background: #F9F9F9;
+    line-height: 140%;
+}
+div.cmtylistpage div.cmtygallery {
+    margin-bottom: 10px;
+}
+/* fix gallery width to fit all four gallery columns */
+.custom #gallery-1 .gallery-item {
+width: 19%;
+}
+div.cmtylistpage div.cmtyinfoblock {
+    width: 29%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+}
+div.cmtylistpage div.cmtyinfoblockleft {
+    float: left;
+}
+div.cmtylistpage div.cmtyinfoblockright {
+    float: right;
+}
+div.cmtylistpage div.cmtycontact h3, div.cmtylistpage div.cmtyinfoblock h3 {
+    margin-top: 5px;
+    text-decoration: underline;
+    text-align: left;
+}
+div.cmtylistpage div.cmtygallery h3, div.cmtylistpage div.cmtyvideos h3 {
+    margin-top: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+div.cmtylistpage div.cmtylistingright {
+    float: right;
+    max-width: 49%;
+    /*min-width: 390px;*/
+}
+div.cmtylistpage div.cmtystatus {
+    text-align: right;
+    float: right;
+    margin-left: 10px;
+}
+div.cmtylistpage div.cmtyinfoblockalign {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+div.cmtylistpage div.cmtyinfoline p {
+    margin-bottom: 5px;
+}
+div.cmtylistpage div.cmtyinfoline h3 {
+    text-decoration: underline;
+    margin-top: 5px;
+}
+div.cmtylistpage div.cmtyinfoline {
+    border-bottom: 1px solid #CCC;
+}
+div.cmtylistpage div.cmtymissionstatement h3, div.cmtylistpage div.cmtydescription h3 {
+    font-weight: bold;
+}
+div.cmtylistpage span.cmtyquestions {
+    font-weight: bold;
+}
+div.cmtylistpage div.cmtyprimaryimg img {
+    max-width: 48%;
+}
+div.cmtylistpage div.cmtylinks li {
+    display: inline-block;
+    max-width: 30%;
+    vertical-align: top;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+div.cmtylistpage div.cmtyvideos {
+    text-align: center;
+    padding-bottom: 10px;
+}
+div.cmtylistpage div.cmtyvideos p {
+    display: inline-block;
+    margin: auto;
+}
+div.cmtylistpage div.cmtyheaderinfo h1 {
+    line-height: 1.2em;
+    margin-bottom: 0px;
+}
+div.cmtylistpage div.cmtyheader {
+    margin-bottom: 10px;
+}
+div.cmtylistpage div.cmtycontact button#cmty-contact-button {
+    padding: 0px 5px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px 0px 5px 0px;
+    background: linear-gradient(to bottom, #F7F6F7 0%, #DFDBDF 100%) repeat scroll 0% 0% transparent;
+    border: 1px solid #C7C0C7;
+}
+div.cmtylistpage div.cmtycontact button#cmty-contact-button:hover {
+    background: linear-gradient(to bottom, #FEFEFE 0%, #E6E1E6 100%) repeat scroll 0% 0% transparent;
+}
+div.cmtylistpage div.cmtycontact button#cmty-contact-button:active {
+    background: linear-gradient(to bottom, #DFDBDF 0%, #F7F6F7 100%) repeat scroll 0% 0% transparent;
+}
+div.cmtylistpage div.cmtycontact li#contact-button {
+    text-align: center;
+}
