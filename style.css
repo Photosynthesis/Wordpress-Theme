@@ -565,7 +565,8 @@ ul.product_list_widget li {
     display: none;
 }
 /* Hide page description on WC search results page */
-body.search-results.woocommerce #content .page-description {
+body.search-results.woocommerce #content .page-description,
+body.search-no-results.woocommerce #content .page-description {
   display: none;
 }
 /* WC onsale and best sellers widgets */
