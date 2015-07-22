@@ -59,6 +59,8 @@ require_once 'includes/separate_product_reviews.php';
 // Scripts
 /* Shortcode to Fix Sitewide Links Pointing to Store Products & Categories */
 //require_once('scripts/fix_links_to_store_products_and_categories.php');
+/* Shortcode to Remove Old, Unpublished, Imported Directory Listings */
+require_once('scripts/remove_unused_communities.php');
 
 
 add_action('admin_head', 'print_custom_admin_css');
