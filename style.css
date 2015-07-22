@@ -450,6 +450,11 @@ span.sku_wrapper, span.sku, .tagged_as { display:none !important }
     margin-top: 20px;
 }
 
+/* Hide the 'Showing all X results' Text on Product Category Pages */
+body.tax-product_cat.woocommerce #content .woocommerce-result-count {
+  display: none;
+}
+
 /* General Price and Suggested Price Font and Spacing Tweaks */
 .price {
     font-size: 14px;
