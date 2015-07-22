@@ -564,6 +564,10 @@ ul.product_list_widget li {
 .custom li.widget_product_search label {
     display: none;
 }
+/* Hide page description on WC search results page */
+body.search-results.woocommerce #content .page-description {
+  display: none;
+}
 /* WC onsale and best sellers widgets */
 li.widget_products ins span.amount, li.widget_best_sellers ins span.amount, li.widget_recently_viewed_products ins span.amount, .custom li.woocommerce ins, span.amount {
     color: #51C620;
