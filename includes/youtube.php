@@ -37,7 +37,7 @@ function youtube_embedded_player($atts)
         $vid = str_replace('watch?v=', 'embed/', $vid);
         $vid = str_replace('http:', '', $vid);
         $vid = str_replace('https:', '', $vid);
-r       return "<iframe type='text/html' frameborder='0'
+        return "<iframe type='text/html' frameborder='0' allowfullscreen
                         width='{$width}'
                         height='{$height}'
                         src='{$vid}?html5=1&origin=http://www.ic.org'></iframe>";
