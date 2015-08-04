@@ -40,6 +40,10 @@ function fa_allow_tags_in_comments($data) {
 /* Utility Functions */
 require_once 'includes/utilities.php';
 
+/* Youtube Functions */
+require_once 'includes/youtube.php';
+
+
 /* General Directory Listing Functions */
 require_once 'includes/directory_listings.php';
 
