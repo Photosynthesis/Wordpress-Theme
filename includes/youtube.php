@@ -33,17 +33,17 @@ function youtube_embedded_player($atts)
         )
     );
 
-    if ($vid !== '') {
-        $vid = str_replace('watch?v=', 'embed/', $vid);
-        $vid = str_replace('http:', '', $vid);
-        $vid = str_replace('https:', '', $vid);
-        return "<iframe type='text/html' frameborder='0' allowfullscreen
-                        width='{$width}'
-                        height='{$height}'
-                        src='{$vid}?html5=1&origin=http://www.ic.org'></iframe>";
-    } else {
-        return '';
+    $vids = explode(',', $vid);
+    $output = '';
+    foreach ($vids as $vid_id) {
+        $vid_id = str_replace('http://www.youtube.com/watch?v=', '', $vid_id);
+        $vid_id = str_replace('https://www.youtube.com/watch?v=', '', $vid_id);
+        $output .= "<iframe type='text/html' frameborder='0' allowfullscreen
+                            width='{$width}'
+                            height='{$height}'
+                            src='//www.youtube.com/embed/{$vid_id}?html5=1&origin=http://www.ic.org'></iframe>";
     }
+    return $output;
 }
 add_shortcode('youlist', 'youtube_embedded_player');
 
