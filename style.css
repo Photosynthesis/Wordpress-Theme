@@ -810,8 +810,14 @@ div.cmty-geo-list ul.geo-state, div.cmty-geo-list ul.geo-us-state {
 
 
 
-
 /* Directory listings CSS */
+
+/* Hide the page title on directory pages */
+div.loop div.directory.type-directory h1.entry-title { display: none; }
+/* Hide the 1st Floating Social Bar widget on directory pages */
+div.directory.type-directory div.fsb-social-bar:nth-of-type(1) { display: none; }
+/* Remove top spacing from Entry content on directory pages since we hide the title */
+div.loop div.directory.type-directory div.entry-content { margin-top: 0; }
 div.directory-header-links {
     text-align: center;
 }
