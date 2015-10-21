@@ -6,6 +6,10 @@
    TEMPLATE: headway
 */
 
+.hidden-all {
+  display: none;
+}
+
 .custom #header {
     border: 0px;
 }
