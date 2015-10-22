@@ -29,5 +29,22 @@ function my_account_login_redirect($redirect_to, $request, $user)
 }
 add_filter('login_redirect', 'my_account_login_redirect', 10, 3);
 
+/* Only show the content if the user is logged in, otherwise show a login form
+ *
+ * @param array $atts The Shortcode Attributes
+ * @param string $content The Contents Inside the Shortcode Block
+ *
+ * @return string The $content or login form HTML
+ */
+function logged_in_only($atts, $content)
+{
+    if (is_user_logged_in()) {
+        return do_shortcode($content);
+    } else {
+        return do_shortcode('[display_login_form]');
+    }
+}
+add_shortcode('logged_in_only', 'logged_in_only');
+
 
 ?>
