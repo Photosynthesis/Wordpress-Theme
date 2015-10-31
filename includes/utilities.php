@@ -48,7 +48,7 @@ class FIC_Utils
     public static function remove_from_comma_separated_string($value, $string) {
         $comma_and_space = ',%20';
         $search_to_replacements = array(
-            $comma_and_space . $value . $comma_and_space => ',',
+            $comma_and_space . $value . $comma_and_space => $comma_and_space,
             $comma_and_space . $value => '',
             $value . $comma_and_space => '',
             $value => ''
