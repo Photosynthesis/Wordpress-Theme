@@ -35,6 +35,34 @@ class FIC_Utils
         }
     }
 
+    /** Properly remove the $value from the comma and space separated $string
+    *
+    * Assumes the comma is a literal comma and the space is an HTML-escaped space:
+    * ',%20
+    *
+    * @param string $value The string to remove
+    * @param string $string The full comma separated string
+    *
+    * @return string The original string with $value replaced
+    */
+    public static function remove_from_comma_separated_string($value, $string) {
+        $comma_and_space = ',%20';
+        $search_to_replacements = array(
+            $comma_and_space . $value . $comma_and_space => ',',
+            $comma_and_space . $value => '',
+            $value . $comma_and_space => '',
+            $value => ''
+        );
+        $new_string = $string;
+        foreach ($search_to_replacements as $search => $replacement) {
+            $new_string = str_replace($search, $replacement, $string);
+            if ($new_string !== $string) {
+                break;
+            }
+        }
+        return $new_string;
+    }
+
     /** HTML-Escape Ampersands
      *
      * Takes one parameter, `content`.
