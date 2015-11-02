@@ -43,6 +43,9 @@ div#container div#page div#header div.fb-like span {
     border: hidden;
 }
 
+/* fix ubermenu overflow in headway blocks */
+#block-160 { overflow: visible; }
+
 /* emphasize ubermenu un-collapse button */
 #megaMenu #megaMenuToggle {
   font-size: 1em;
