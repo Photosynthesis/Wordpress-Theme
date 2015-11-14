@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 Create a CSV export containing Emails for Listing Editors & Contacts.
 
@@ -43,8 +43,18 @@ CONTACT_EMAIL_FIELD_ID = 199
 # The ID Number of the Formidable Field Containg the Contact Person's Name.
 CONTACT_NAME_FIELD_ID = 202
 
+# The ID Number of the Formidable Field Containing the Backup Email.
+BACKUP_EMAIL_FIELD_ID = 284
+
 # The ID Number of the Formidable Field of the Year the Listing was Made
 LISTING_CREATED_FIELD_ID = 725
+
+# Whether or not to include all emails of a community, or just one
+INCLUDE_ALL_EMAILS = True
+
+# Whether or not to add the years since the community has been created as the
+# 3rd field in the CSV
+INCLUDE_YEARS_SINCE_CREATED = False
 
 
 def main():
@@ -73,13 +83,18 @@ def get_listing_contact_rows():
                    FROM 3uOgy46w_frm_item_metas
                    WHERE field_id={3})
              AS created_metas ON items.id=created_metas.item_id
+        LEFT JOIN (SELECT meta_value AS backup_email, item_id
+                   FROM 3uOgy46w_frm_item_metas
+                   WHERE field_id={4})
+             AS backup_metas ON items.id=backup_metas.item_id
         LEFT JOIN (SELECT post_title, post_author, ID FROM 3uOgy46w_posts)
              AS posts ON items.post_id=posts.ID
         LEFT JOIN (SELECT user_email, display_name, ID FROM 3uOgy46w_users)
             AS users ON users.ID=posts.post_author
         WHERE items.form_id={0}""".format(FORM_ID, CONTACT_EMAIL_FIELD_ID,
                                           CONTACT_NAME_FIELD_ID,
-                                          LISTING_CREATED_FIELD_ID)
+                                          LISTING_CREATED_FIELD_ID,
+                                          BACKUP_EMAIL_FIELD_ID)
     cursor = get_cursor()
     cursor.execute(listing_contacts_query)
     listing_rows = cursor.fetchall()
@@ -96,11 +111,13 @@ def get_cursor():
 
 def make_unique_csv_lines(rows):
     """Make CSV Lines from Listing Rows."""
-    return ensure_unique_emails(make_csv_line(row) for row in rows)
+    csv_rows = []
+    _ = [csv_rows.extend(make_csv_lines(row).split('\n')) for row in rows]
+    return [u'{0}\n'.format(row) for row in ensure_unique_emails(csv_rows)]
 
 
-def make_csv_line(listing_row):
-    """Create a CSV line of `email,community name,role` from a Listing row."""
+def make_csv_lines(listing_row):
+    """Create CSV lines of `email,community name,role` from a Listing row."""
     output = ""
     community_name = clean(listing_row["post_title"])
     created_years = clean(clean_date(listing_row["created_date"]))
@@ -108,15 +125,24 @@ def make_csv_line(listing_row):
     contact_email = clean(listing_row["contact_email"])
     if is_valid_email(contact_email):
         contact_name = clean(clean_name(listing_row["contact_name"]))
-        output += u"{0},{1},{2},{3},contact\n".format(
-            contact_email, contact_name, created_years, community_name)
-    if contact_email in [None, '']:
+        output += create_csv_line(contact_email, contact_name, created_years,
+                                  community_name, 'contact')
+    if contact_email in [None, ''] or INCLUDE_ALL_EMAILS:
         editor_email = clean(listing_row["user_email"])
-        if is_valid_email(editor_email):
-            editor_name = clean(clean_name(listing_row["display_name"]))
-            if editor_email != contact_email:
-                output += u"{0},{1},{2},{3},editor\n".format(
-                    editor_email, editor_name, created_years, community_name)
+        if is_valid_email(editor_email) and editor_email != contact_email:
+            editor_name = (clean(clean_name(listing_row["display_name"]))
+                           if not INCLUDE_ALL_EMAILS else '')
+            output += create_csv_line(editor_email, editor_name, created_years,
+                                      community_name, 'editor')
+        if not is_valid_email(editor_email) or INCLUDE_ALL_EMAILS:
+            backup_email = clean(listing_row["backup_email"])
+            backup_name = (clean(clean_name(listing_row["display_name"]))
+                           if not INCLUDE_ALL_EMAILS else '')
+            if (is_valid_email(backup_email) and backup_email not in
+                    [contact_email, editor_email]):
+                output += create_csv_line(
+                    backup_email, backup_name, created_years, community_name,
+                    'backup')
     return output
 
 
@@ -159,6 +185,15 @@ def clean_name(name):
         return name
 
 
+def create_csv_line(email, name, years, community, role):
+    """Create a CSV line from an email/community."""
+    if INCLUDE_YEARS_SINCE_CREATED:
+        return u'{0},{1},{2},{3},{4}\n'.format(
+            email, name, years, community, role)
+    else:
+        return u'{0},{1},{2},{3}\n'.format(email, name, community, role)
+
+
 def ensure_unique_emails(csv_lines):
     """Make sure each CSV line has a unique email address."""
     unique_csv_lines = list()
@@ -166,7 +201,7 @@ def ensure_unique_emails(csv_lines):
     for line in csv_lines:
         if line is None:
             continue
-        email = line.split(',')[0]
+        email = line.split(',')[0].lower()
         if email not in used_emails:
             unique_csv_lines.append(line)
             used_emails.append(email)
