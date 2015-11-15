@@ -971,12 +971,18 @@ div.cmtylistpage div.cmtycontact li#contact-button {
 }
 
 
+
 /* Directory Listings Details Page */
 
 /* Add an orange shadow to the "Message this Community" button */
 #cmty-contact-button {
      box-shadow: 2px 2px 2px 1px rgba(255, 168, 0, 0.75);
 }
+/* Hide all list decorations in Community Info Blocks */
+div.cmtylistpage .cmtyinfoblock ul li {
+    list-style: none !important;
+}
+
 
 
 /* Small Screen Styles */
