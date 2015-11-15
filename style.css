@@ -970,6 +970,15 @@ div.cmtylistpage div.cmtycontact li#contact-button {
     text-align: center;
 }
 
+
+/* Directory Listings Details Page */
+
+/* Add an orange shadow to the "Message this Community" button */
+#cmty-contact-button {
+     box-shadow: 2px 2px 2px 1px rgba(255, 168, 0, 0.75);
+}
+
+
 /* Small Screen Styles */
 @media (max-width: 800px) {
   /* Reduce space around login/logout link */
