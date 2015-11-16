@@ -23,3 +23,22 @@ function hide_suggested_prices($price, $product)
 }
 remove_filter('woocommerce_get_price_html', 'nyp_price_html');
 add_filter('woocommerce_get_price_html', 'hide_suggested_prices', 99, 2);
+
+
+/** Modify the WooCommerce `product` shortcode to open in a new page.
+ *
+ * You must pass an `id` parameter to the shortcode containg the id of the
+ * Product.
+ *
+ * @param array $atts The Shortcode Parameters
+ *
+ * @return string The Add to Cart HTML
+ */
+function product_new_page($atts)
+{
+    extract(shortcode_atts(array('id' => 0), $atts));
+    $text = do_shortcode("[product id='$id']");
+
+    return str_replace('<a', '<a target="_blank"', $text);
+}
+add_shortcode('product_new_page', 'product_new_page');
