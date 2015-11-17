@@ -771,6 +771,10 @@ div.frm_pagination_cont {
 ul.frm_pagination {
     font-size: 1.4em;
 }
+/* Make the FIC Membership "Add to Cart" Button on Create/Edit Listing Page White */
+div.directory-form-add-to-cart a.button.add_to_cart_button {
+  color: white;
+}
 
 
 
