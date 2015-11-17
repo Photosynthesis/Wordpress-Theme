@@ -775,6 +775,10 @@ ul.frm_pagination {
 div.directory-form-add-to-cart a.button.add_to_cart_button {
   color: white;
 }
+/* Increase FIC Membership Image Size on Credit/Edit Listing Pages */
+div.directory-form-add-to-cart ul.products li.product {
+  width: 50%;
+}
 
 
 
