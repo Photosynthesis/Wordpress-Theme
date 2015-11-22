@@ -1043,13 +1043,15 @@ div.cmtylistpage .cmtyinfoblock ul li {
 div.cmtylistpage .cmtyinfoblock p {
   display: none;
 }
-/* Remove vertical margins from <ul>s in info blocks */
-div.cmtylistpage .cmtyinfoblock ul {
+/* Remove vertical margins from <ul>s in info blocks & the cohousing section */
+div.cmtylistpage .cmtyinfoblock ul,
+div.cmtylistpage div#cmty-cohousing-section ul{
   margin-top: 0;
   margin-bottom: 0;
 }
-/* Pad the bottom of the info blocks */
-div.cmtylistpage div.cmtyinfoblock {
+/* Pad the bottom of the info blocks & the cohousing section */
+div.cmtylistpage div.cmtyinfoblock,
+div.cmtylistpage div#cmty-cohousing-section {
   padding-bottom: 10px;
 }
 
