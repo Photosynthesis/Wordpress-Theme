@@ -1039,8 +1039,8 @@ div.cmtylistpage div.cmtycontact li#contact-button {
 div.cmtylistpage .cmtyinfoblock ul li {
     list-style: none !important;
 }
-/* Hide <p>s in info blocks to save space */
-div.cmtylistpage .cmtyinfoblock p {
+/* Hide empty <p>s in info blocks to save space */
+div.cmtylistpage .cmtyinfoblock p:empty {
   display: none;
 }
 /* Remove vertical margins from <ul>s in info blocks & the cohousing section */
