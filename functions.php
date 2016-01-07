@@ -54,6 +54,9 @@ require_once 'includes/directory_listings.php';
 require_once 'includes/formidable_mappress.php';
 
 
+/* General WooCommerce Customizations */
+require 'includes/woocommerce.php';
+
 /* WooCommerce Product Customizations */
 require_once 'includes/woocommerce_products.php';
 
