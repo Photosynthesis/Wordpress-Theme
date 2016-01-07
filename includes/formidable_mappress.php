@@ -380,12 +380,9 @@ function form_to_mappress($atts)
     if ($geocode) {
         $mypoi_1->geocode();
     }
+    if ($mypoi_1->point['lat'] == 0 && $mypoi_1->point['lng'] == 0) { return ''; }
     $mymap->pois = array($mypoi_1);
-    if ($address2 != '') {
-        $mypoi_2 = new Mappress_Poi(array('address' => $address2));
-        $mypoi_2->geocode();
-        $mymap->pois = $mypoi_2;
-    }
+
     return $mymap->display(array('directions' => $directions));
 }
 add_shortcode('form_to_mappress', 'form_to_mappress');
