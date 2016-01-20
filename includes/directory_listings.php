@@ -321,5 +321,61 @@ function directory_show_directory_geo_list() {
 }
 add_shortcode('show_directory_geo_list', 'directory_show_directory_geo_list');
 
+/** Return the 12 Tribes Child-Discpline Statement
+ *
+ * @return string HTML containing the statement.
+ */
+function directory_twelve_tribes_statement() {
+    $content = <<<HTML
+<p><em>Publisher’s Note: FIC has a policy of not listing communities in our
+Directory that advocate violent practices, and there is controversy over
+whether the Twelve Tribes Child Discipline practice crosses that line.
+While we are convinced of the sincerity of their belief that their practice
+is not violent, we are also aware of visitors and ex-members who hold that
+it is. In recognition of this controversy, the Twelve Tribes leadership
+agreed to have this note referenced as a regular part of each community’s
+listing, so that users of the Directory could be more fully informed and
+make their own decision about this important matter. There is more about
+their position on this
+<a herf='http://twelvetribes.org/articles/on-child-discipline' target='_blank'>here</a>.</em></p>
+
+<h3>Child Rearing Practice of the Twelve Tribes Communities</h3>
+<p>We train our children according to the Word of God as recorded in the Bible.
+Part of this training is correcting our little ones for errant behavior.
+Setting boundaries for our children is an integral part of building good
+character into them at a young age. Loving protection for children is of
+supreme importance to us. We do not tolerate violence or abuse, whether
+physical, psychological, or verbal, nor do we condone disrespectful or
+rebellious behavior. We believe it is the God-given right and responsibility of
+parents to discipline their children if they are disobedient or disrespectful
+to parental guidance.</p>
+<p>God is love. He loves children and His word is clear on what it means to
+love your child as Proverbs 13:24 says: &ldquo;Whoever spares the rod
+<em>hates</em> his son, but he who <em>loves</em> him is diligent to discipline
+him.&rdquo; Proverbs 23:13-14 makes it clear that spanking is an act of love to
+save your children from the destruction of their souls, and restore them to the
+way they should go. &ldquo;Do not withhold discipline from a child; if you
+strike him with a rod ... you will save his soul from destruction.&rdquo; And
+Proverbs 22:6 states that if you &ldquo;train up a child in the way he should
+go, when he is old he will not depart from it.&rdquo;</p>
+<p>The Bible does not describe the rod itself, but surely God did not intend
+something that would damage a child. We use a thin, reed-like rod, which stings
+but causes no damage or injury. We have purposefully chosen this method,
+inspired by God’s love, as part of our child rearing practices because His Word
+commands us. We see the good fruit in our children, which is recognized all
+over the world, even by those who don’t understand it.</p>
+<p>Because we love our children, we discipline them only for attitudes and
+actions they know to be wrong, and only after the child admits to wrongdoing
+and is willing to receive discipline. Godly discipline is always followed by
+forgiveness, reconciliation, and encouragement.</p>
+<p><em>For a fuller statement about our thinking about Child Discipline, please
+visit: <a href="http://twelvetribes.org/articles/on-child-discipline" target='_blank'>
+http://twelvetribes.org/articles/on-child-discipline</a>.</em></p>
+HTML;
+    return str_replace("\n", ' ', $content);
+}
+add_shortcode(
+    'directory_twelve_tribes_statement', 'directory_twelve_tribes_statement');
+
 
 ?>
