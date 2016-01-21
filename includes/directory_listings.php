@@ -321,24 +321,12 @@ function directory_show_directory_geo_list() {
 }
 add_shortcode('show_directory_geo_list', 'directory_show_directory_geo_list');
 
-/** Return the 12 Tribes Child-Discpline Statement
+/** Return the 12 Tribes Child-Discipline Statement
  *
  * @return string HTML containing the statement.
  */
 function directory_twelve_tribes_statement() {
     $content = <<<HTML
-<p><em>Publisher’s Note: FIC has a policy of not listing communities in our
-Directory that advocate violent practices, and there is controversy over
-whether the Twelve Tribes Child Discipline practice crosses that line.
-While we are convinced of the sincerity of their belief that their practice
-is not violent, we are also aware of visitors and ex-members who hold that
-it is. In recognition of this controversy, the Twelve Tribes leadership
-agreed to have this note referenced as a regular part of each community’s
-listing, so that users of the Directory could be more fully informed and
-make their own decision about this important matter. There is more about
-their position on this
-<a herf='http://twelvetribes.org/articles/on-child-discipline' target='_blank'>here</a>.</em></p>
-
 <h3>Child Rearing Practice of the Twelve Tribes Communities</h3>
 <p>We train our children according to the Word of God as recorded in the Bible.
 Part of this training is correcting our little ones for errant behavior.
@@ -371,8 +359,18 @@ forgiveness, reconciliation, and encouragement.</p>
 <p><em>For a fuller statement about our thinking about Child Discipline, please
 visit: <a href="http://twelvetribes.org/articles/on-child-discipline" target='_blank'>
 http://twelvetribes.org/articles/on-child-discipline</a>.</em></p>
+
+<p><em>Publisher’s Note: FIC has a policy of not listing communities in our
+Directory that advocate violent practices, and there is controversy over
+whether the Twelve Tribes Child Discipline practice crosses that line.
+While we are convinced of the sincerity of their belief that their practice
+is not violent, we are also aware of visitors and ex-members who hold that
+it is. In recognition of this controversy, the Twelve Tribes leadership
+agreed to have this note referenced as a regular part of each community’s
+listing, so that users of the Directory could be more fully informed and
+make their own decision about this important matter.</em></p>
 HTML;
-    return str_replace("\n", ' ', $content);
+    return str_replace('  ', ' ', str_replace("\n", ' ', $content));
 }
 add_shortcode(
     'directory_twelve_tribes_statement', 'directory_twelve_tribes_statement');
