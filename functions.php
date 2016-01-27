@@ -43,6 +43,9 @@ require_once 'includes/utilities.php';
 /* User Functions */
 require_once 'includes/users.php';
 
+/* Admin Menu Functions */
+require 'includes/admin/main.php';
+
 /* Youtube Functions */
 require_once 'includes/youtube.php';
 
@@ -62,8 +65,6 @@ require_once 'includes/woocommerce_products.php';
 
 /* Separate WooCommerce Product Reviews from Wordpress Comments */
 require_once 'includes/separate_product_reviews.php';
-
-
 
 
 // Scripts
