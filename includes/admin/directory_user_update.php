@@ -48,15 +48,19 @@ class FIC_Menu_Directory_User
 
     /** Generate the Options for the Community Dropdown */
     public static function community_options() {
-        global $frm_form, $frm_field;
+        global $frm_form;
         $options = array();
         $form = $frm_form->getOne(self::$directory_form_id);
         $entries = FrmEntry::getAll(array('it.form_id' => $form->id));
         foreach ($entries as $entry) {
             $post = get_post($entry->post_id);
-            $options[] =
-                "<option value='{$entry->id}'>{$post->post_title}</option>";
+            $options[] = array('id' => $entry->id, 'title' => $post->post_title);
         }
+        usort($options, function ($a, $b) { return $a['title'] > $b['title']; });
+        $options = array_map(function ($option) {
+            return "<option value='{$option['id']}'>{$option['title']}</option>";
+        }, $options);
+
         return join("\n", $options);
     }
 
