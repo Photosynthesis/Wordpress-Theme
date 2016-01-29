@@ -67,8 +67,8 @@ class FIC_Menu_Directory_User
     /** Render the page **/
     public static function render_page() {
         $user_dropdown_options = array(
-            'show_option_none' => '---', 'show' => 'user_login',
-            'id' => 'duu-user', 'name' => self::$user_input_name);
+            'show_option_none' => '---', 'show' => 'user_login', 'id' => 'duu-user',
+            'orderby' => 'user_nicename', 'name' => self::$user_input_name);
 ?>
 <div class='wrap'>
   <h2><?php echo self::$page_title; ?></h2><?php
