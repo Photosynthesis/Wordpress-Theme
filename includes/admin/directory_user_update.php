@@ -25,6 +25,9 @@ class FIC_Menu_Directory_User
         if (self::valid_form($_POST)) {
             $entry_id = sanitize_text_field($_POST[self::$community_input_name]);
             $field_value = sanitize_text_field($_POST[self::$user_input_name]);
+            $entry = FrmEntry::getOne($entry_id);
+            $post = get_post($entry->post_id);
+            wp_update_post(array('ID' => $post->ID, 'post_author' => $field_value));
             FrmProEntryMeta::update_single_field(array(
                 'entry_id' => $entry_id, 'field_id' => self::$user_field_id,
                 'value' => $field_value));
