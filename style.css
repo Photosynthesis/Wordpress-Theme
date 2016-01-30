@@ -877,6 +877,11 @@ div.cmty-geo-list ul.geo-state, div.cmty-geo-list ul.geo-us-state {
 
 /* Directory listings CSS */
 
+/* Remove the Bottom Headings from the Directory Listings on the My Account Page */
+div#post-8 .entry-content table#form_results2 tfoot {
+  display: none;
+}
+
 /* Hide the page title on directory pages */
 div.loop div.directory.type-directory h1.entry-title { display: none; }
 /* Hide the 1st Floating Social Bar widget on directory pages */
