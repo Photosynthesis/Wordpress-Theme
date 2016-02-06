@@ -21,6 +21,7 @@ class FIC_Menu_Directory_User
 
     /** Handle POST requests */
     public static function handle_post() {
+        global $wpdb;
         check_admin_referer(self::$nonce_field);
         if (self::valid_form($_POST)) {
             $entry_id = sanitize_text_field($_POST[self::$community_input_name]);
@@ -28,6 +29,8 @@ class FIC_Menu_Directory_User
             $entry = FrmEntry::getOne($entry_id);
             $post = get_post($entry->post_id);
             wp_update_post(array('ID' => $post->ID, 'post_author' => $field_value));
+            $wpdb->update($wpdb->prefix . 'frm_items',
+                array('user_id' => $field_value), array('id' => $entry->id));
             FrmProEntryMeta::update_single_field(array(
                 'entry_id' => $entry_id, 'field_id' => self::$user_field_id,
                 'value' => $field_value));
