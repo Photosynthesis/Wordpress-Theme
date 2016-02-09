@@ -15,6 +15,27 @@
 function frm_default_templates_files(){ return array(); }
 add_filter( 'frm_default_templates_files', 'frm_default_templates_files' );
 
+/** Show Usernames instead of Display Names for the User ID field */
+function directory_usernames_for_user_id($values, $field, $entry_id=false)
+{
+    $user_field_id = 430;
+    if ($field->id == $user_field_id) {
+        $users = get_users(array(
+            'orderby' => 'login', 'fields' => array('ID', 'user_login')));
+        $values['options'] = array();
+        foreach ($users as $user) {
+            $values['options'][$user->ID] = $user->user_login;
+            unset($user);
+        }
+        $values['use_key'] = true;
+    }
+    return $values;
+}
+add_filter(
+    'frm_setup_new_fields_vars', 'directory_usernames_for_user_id', 20, 2);
+add_filter(
+    'frm_setup_edit_fields_vars', 'directory_usernames_for_user_id', 20, 3);
+
 /** Return an Edit link for the Directory Listing if the Current User is an
  * Administrator. This is checked by checking for the `edit_plugins`
  * permission.
