@@ -25,7 +25,6 @@ function directory_usernames_for_user_id($values, $field, $entry_id=false)
         $values['options'] = array();
         foreach ($users as $user) {
             $values['options'][$user->ID] = $user->user_login;
-            unset($user);
         }
         $values['use_key'] = true;
     }
