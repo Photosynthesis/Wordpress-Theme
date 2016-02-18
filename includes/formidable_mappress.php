@@ -113,6 +113,10 @@ function generate_new_directories_map()
     $directory_listings = $wpdb->get_results($directory_sql);
 
 
+    $excluded_points = array(
+        array(0, 0),
+        array(39.095963, -96.606447),
+    );
     $pois = array();
     foreach ($directory_listings as $listing) {
         $address = get_directory_listing_address($listing);
@@ -120,12 +124,16 @@ function generate_new_directories_map()
             continue;
         }
         $post_id = get_post_id_from_directory_id($listing->item_id);
+        $post_title = get_the_title($post_id);
+
+        if ($post_title == '') { continue; }
+
         $poi_body = $address[0] . "<br />" . join(', ', array_slice($address, 1));
         $poi_info = array(
             'postid' => $post_id,
             'body'   => $poi_body,
             'title'  => '<a href="' . get_permalink($post_id) . '">' .
-                        get_the_title($post_id) .'</a>'
+                        $post_title .'</a>'
         );
 
 
@@ -139,7 +147,18 @@ function generate_new_directories_map()
                 $listing->item_id, $poi->point['lat'], $poi->point['lng']
             );
         }
-        array_push($pois, $poi);
+
+        $exclude_poi = false;
+        foreach ($excluded_points as $point) {
+            if ($poi->point['lat'] == $point[0] && $poi->point['lng'] == $point[1]) {
+                $exclude_poi = true;
+                break;
+            }
+        }
+
+        if (!$exclude_poi) {
+            array_push($pois, $poi);
+        }
     }
 
     $map->pois = $pois;
