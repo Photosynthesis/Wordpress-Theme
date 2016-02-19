@@ -94,6 +94,13 @@ function directory_show_and_process_verify_link($atts)
         $get_parameter = 'verify_as_up_to_date';
 
         if (isset($_GET[$get_parameter])) {
+            $entry_is_valid = directory_validate_entry($listing_id);
+            if (!$entry_is_valid) {
+                return '<small style="color:red;text-emphasis:bold;">' .
+                    'Your Listing could not be verified <br />' .
+                    'because it is incomplete, please edit your <br />' .
+                    'listing before verifying it.</small>';
+            }
             $verify_date_field_id = 937;
             $exists_query = "
                 SELECT id FROM {$wpdb->prefix}frm_item_metas
@@ -126,6 +133,22 @@ function directory_show_and_process_verify_link($atts)
 add_shortcode(
     'directory_verify_listing_link', 'directory_show_and_process_verify_link'
 );
+
+/** Ensure that the current data for the Listing would validate the current form */
+function directory_validate_entry($entry_id) {
+    $community_name_field_id = 9;
+
+    $entry = FrmEntry::getOne($entry_id);
+    $data = array('form_id' => 2, 'item_key' => $entry->item_key, 'item_meta' => array());
+    $metas = FrmEntryMeta::getAll(array('item_id' => $entry->id));
+    foreach ($metas as $meta) {
+       $data['item_meta'][$meta->field_id] = $meta->meta_value;
+    }
+    $errors = FrmEntryValidate::validate($data);
+    $name_field_key = "field{$community_name_field_id}";
+    if (array_key_exists($name_field_key, $errors)) { unset($errors[$name_field_key]); }
+    return empty($errors);
+}
 
 
 /** Show an additional 404 message if the URL is in the 'directory' sub-URI
