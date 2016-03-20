@@ -453,6 +453,20 @@ div.awpcp-category {
 /* Hide WooCommerce Product SKUs and Tags */
 span.sku_wrapper, span.sku, .tagged_as { display:none !important }
 
+/* Hide the default 'From: $.../yr' price text on variable subscription Products */
+div.product-type-variable-subscription div.summary div p.price {
+  display: none
+}
+
+/* Center the Clear Variation Selection link */
+div.product div.summary table.variations td.value {
+  text-align: center
+}
+/* De-emphasize the Clear Variation Selection links */
+div.product div.summary table.variations a.reset_variations {
+  font-size: 12px;
+}
+
 /* push content down */
 .custom div.headway-storefront-wooc-content {
     margin-top: 20px;
