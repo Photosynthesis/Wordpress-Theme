@@ -19,12 +19,11 @@ Written For The FIC by Pavan Rikhi<pavan@ic.org> on 8/17/2014.
 
 """
 
-import re
-import getpass
 import datetime
+import getpass
+import re
 
-import MySQLdb
-import MySQLdb.cursors
+import pymysql
 
 # MySQL Login Details
 MYSQL_USER = "root"
@@ -57,14 +56,18 @@ INCLUDE_ALL_EMAILS = True
 # 3rd field in the CSV
 INCLUDE_YEARS_SINCE_CREATED = False
 
-# Filter out communities that have been updated after this date, None to
-# disable
-REMOVE_UPDATED_AFTER = datetime.datetime(2015, 11, 19)
+# Filer out communities that have been last updated after this date. Set to
+# None to disable filtering.
+FILTER_LAST_UPDATED_AFTER = None
+
+# Filter out communities that have been last updated before this date. Set to
+# None to disable filtering.
+FILTER_LAST_UPDATED_BEFORE = datetime.datetime(2016, 2, 16)
 
 
 def main():
     """Retrieve the Emails of Listing Contacts and Generate a CSV File."""
-    listing_rows = filter_rows(get_listing_contact_rows())
+    listing_rows = get_listing_contact_rows()
     unique_csv_lines = make_unique_csv_lines(listing_rows)
     write_csv_file(unique_csv_lines)
 
@@ -108,25 +111,29 @@ def get_listing_contact_rows():
 
 def get_cursor():
     """Retrieve the Database Connection Cursor."""
-    connection = MySQLdb.connect(host=MYSQL_HOST, user=MYSQL_USER,
+    connection = pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER,
                                  passwd=MYSQL_PASS, db=MYSQL_DB,
                                  use_unicode=True, charset='utf8')
-    return connection.cursor(MySQLdb.cursors.DictCursor)
-
-
-def filter_rows(rows):
-    """Filter the rows if necessary."""
-    if REMOVE_UPDATED_AFTER is not None:
-        rows = [row for row in rows
-                if row['updated_at'] <= REMOVE_UPDATED_AFTER]
-    return rows
+    return connection.cursor(pymysql.cursors.DictCursor)
 
 
 def make_unique_csv_lines(rows):
     """Make CSV Lines from Listing Rows."""
+    filtered_rows = filter_listing_rows(rows)
     csv_rows = []
-    _ = [csv_rows.extend(make_csv_lines(row).split('\n')) for row in rows]
+    _ = [csv_rows.extend(make_csv_lines(row).split('\n')) for row in
+         filtered_rows]
     return [u'{0}\n'.format(row) for row in ensure_unique_emails(csv_rows)]
+
+
+def filter_listing_rows(rows):
+    if FILTER_LAST_UPDATED_AFTER is not None:
+        rows = [row for row in rows
+                if row['updated_at'] > FILTER_LAST_UPDATED_AFTER]
+    if FILTER_LAST_UPDATED_BEFORE is not None:
+        rows = [row for row in rows
+                if row['updated_at'] < FILTER_LAST_UPDATED_BEFORE]
+    return rows
 
 
 def make_csv_lines(listing_row):
