@@ -21,6 +21,7 @@ Written For The FIC by Pavan Rikhi<pavan@ic.org> on 8/17/2014.
 
 import re
 import getpass
+import datetime
 
 import MySQLdb
 import MySQLdb.cursors
@@ -56,10 +57,14 @@ INCLUDE_ALL_EMAILS = True
 # 3rd field in the CSV
 INCLUDE_YEARS_SINCE_CREATED = False
 
+# Filter out communities that have been updated after this date, None to
+# disable
+REMOVE_UPDATED_AFTER = datetime.datetime(2015, 11, 19)
+
 
 def main():
     """Retrieve the Emails of Listing Contacts and Generate a CSV File."""
-    listing_rows = get_listing_contact_rows()
+    listing_rows = filter_rows(get_listing_contact_rows())
     unique_csv_lines = make_unique_csv_lines(listing_rows)
     write_csv_file(unique_csv_lines)
 
@@ -68,7 +73,7 @@ def get_listing_contact_rows():
     """Retrieve the Listing Contacts Query Result."""
     listing_contacts_query = """
         SELECT * FROM
-                  (SELECT form_id, id, post_id, user_id
+                  (SELECT form_id, id, post_id, user_id, updated_at
                    FROM 3uOgy46w_frm_items AS items
                    WHERE items.form_id={0}) AS items
         LEFT JOIN (SELECT meta_value AS contact_email, item_id
@@ -107,6 +112,14 @@ def get_cursor():
                                  passwd=MYSQL_PASS, db=MYSQL_DB,
                                  use_unicode=True, charset='utf8')
     return connection.cursor(MySQLdb.cursors.DictCursor)
+
+
+def filter_rows(rows):
+    """Filter the rows if necessary."""
+    if REMOVE_UPDATED_AFTER is not None:
+        rows = [row for row in rows
+                if row['updated_at'] <= REMOVE_UPDATED_AFTER]
+    return rows
 
 
 def make_unique_csv_lines(rows):
