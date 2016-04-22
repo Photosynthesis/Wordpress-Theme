@@ -26,7 +26,7 @@ javascript;
     }
 }
 add_action('woocommerce_after_my_account',
-    array(FIC_WC, 'fix_flickrocket_iframe_display'));
+    array('FIC_WC', 'fix_flickrocket_iframe_display'));
 
 
 ?>
