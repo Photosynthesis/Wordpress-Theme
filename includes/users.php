@@ -22,7 +22,9 @@ function my_account_login_redirect($redirect_to, $request, $user)
     global $user;
     if (isset($user->roles) && is_array($user->roles)) {
         if (!in_array('administrator', $user->roles)) {
-            return get_permalink(get_option('woocommerce_myaccount_page_id'));
+            if (strpos('wp-admin', $redirect_to) !== false) {
+                return get_permalink(get_option('woocommerce_myaccount_page_id'));
+            }
         }
     }
     return $redirect_to;
