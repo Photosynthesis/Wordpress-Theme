@@ -270,13 +270,10 @@ function directory_show_directory_geo_list() {
         $entries_query = "
             SELECT countries.country, regions.region, states.state
             FROM `{$wpdb->prefix}frm_items` AS entries
-            " . /*  Commented out in order to keep the Counts accurate
-                    until hiding drafts works in Formidable
             INNER JOIN (SELECT ID, post_status
                         FROM `{$wpdb->prefix}posts`
                         WHERE post_status='publish')
                    AS posts ON posts.ID=entries.post_id
-            */ "
             INNER JOIN (SELECT `item_id`, `meta_value` AS is_public
                         FROM `{$wpdb->prefix}frm_item_metas`
                         WHERE `meta_value`='Yes' AND
