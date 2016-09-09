@@ -125,8 +125,9 @@ function generate_new_directories_map()
         }
         $post_id = get_post_id_from_directory_id($listing->item_id);
         $post_title = get_the_title($post_id);
+        $post_status = get_post_status($post_id);
 
-        if ($post_title == '') { continue; }
+        if ($post_title == '' || $post_status != 'publish') { continue; }
 
         $poi_body = $address[0] . "<br />" . join(', ', array_slice($address, 1));
         $poi_info = array(
