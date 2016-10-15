@@ -206,9 +206,9 @@ function directory_show_search_filters() {
         array('param' => 'open_to_members', 'value' => 'Yes,%20Yes,%20rarely',
               'text' => 'Accepting New Members'),
         array('param' => 'community_status', 'value' => 'Established',
-              'text' => 'Is Established'),
+              'text' => 'Established'),
         array('param' => 'community_status', 'value' => 'Forming,%20Re-forming',
-              'text' => 'Is Forming'),
+              'text' => 'Forming'),
         array('param' => 'fic_member', 'value' => 'Yes', 'text' => 'FIC Member')
 
     );
@@ -247,7 +247,7 @@ function directory_show_search_filters() {
 
     $link_html = join(' | ', $checkboxes);
 
-    return "<div style='float:right;'>Filters: {$link_html}</div>" .
+    return "<div style='float:right;'>Filter: {$link_html}</div>" .
         "<div style='clear:both;'></div>";
 }
 add_shortcode('show_directory_search_filters', 'directory_show_search_filters');
