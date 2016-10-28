@@ -46,6 +46,9 @@ div#container div#page div#header div.fb-like span {
 /* fix ubermenu overflow in headway blocks */
 #block-160 { overflow: visible; }
 
+/* Fix logo height in footer */
+#block-162 img { height: 40px; }
+
 /* emphasize ubermenu un-collapse button */
 #megaMenu #megaMenuToggle {
   font-size: 1em;
