@@ -11,9 +11,6 @@
  */
 
 
-/* Fix Formidable database updates on WPEngine sites */
-function frm_default_templates_files(){ return array(); }
-add_filter( 'frm_default_templates_files', 'frm_default_templates_files' );
 
 /** Show Usernames instead of Display Names for the User ID field */
 function directory_usernames_for_user_id($values, $field, $entry_id=false)
