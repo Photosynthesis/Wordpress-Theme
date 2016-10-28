@@ -11,6 +11,22 @@
  */
 
 
+/* When Draft Listings are updated, send the Directory Manager a notification */
+function directory_send_manager_notification($entry_id, $form_id)
+{
+    $entry = FrmEntry::getOne($entry_id, true);
+    if ($form_id == 2 && $entry->metas[920] != 'publish') {
+        $MANAGER_EMAIL = "directory@ic.org";
+        $listing_name = get_the_title($entry->post_id);
+        $edit_link = "https://www.ic.org/wp-admin/admin.php" .
+            "?page=formidable-entries&frm_action=edit&id={$entry_id}";
+        $subject = "Draft Listing `{$listing_name}` Has Been Updated";
+        $message = "{$listing_name} has updated their Directory Listing:\n" .
+            "<a href='{$edit_link}' target='_blank'>\n{$edit_link}\n</a>";
+        wp_mail($MANAGER_EMAIL, $subject, $message);
+    }
+}
+add_action('frm_after_update_entry', 'directory_send_manager_notification', 10, 2);
 
 /** Show Usernames instead of Display Names for the User ID field */
 function directory_usernames_for_user_id($values, $field, $entry_id=false)
