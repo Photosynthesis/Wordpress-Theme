@@ -38,6 +38,18 @@ div#container div#page div#header div.fb-like span {
     width: 285px !important;
 }
 
+/* Style the Cart Icon link in the site header */
+#header-cart-icon {
+  text-decoration:none;
+}
+#header-cart-icon .cart-icon:before {
+  font-family: WooCommerce;
+  content: "\e01d";
+  font-size: 20px;
+  font-weight: 400;
+  vertical-align: bottom;
+}
+
 /* fix ubermenu extra border */
 .custom #megaMenu {
     border: hidden;
