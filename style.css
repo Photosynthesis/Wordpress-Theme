@@ -717,6 +717,12 @@ nav.woocommerce-pagination ul.page-numbers {
     left: auto !important;
 }
 
+/* Hide list of categories on Product Details pages */
+#content > .product div.product_meta div.posted_in {
+  display: none;
+}
+
+
 #sidebars li del span.amount {
     font-size: 0.8em;
     color: rgba(115, 115, 115, 0.5);
