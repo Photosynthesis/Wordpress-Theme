@@ -692,12 +692,6 @@ nav.woocommerce-pagination ul.page-numbers {
 .woocommerce div.product, .woocommerce-page div.product, .woocommerce #content div.product, .woocommerce-page #content div.product {
     font-size : 11pt;
 }
-.woocommerce div.product div.images, .woocommerce-page div.product div.images, .woocommerce #content div.product div.images, .woocommerce-page #content div.product div.images {
-    width : 350px !important;
-}
-.woocommerce div.product div.summary, .woocommerce-page div.product div.summary, .woocommerce #content div.product div.summary, .woocommerce-page #content div.product div.summary {
-    width : 54% !important;
-}
 .woocommerce .related ul.products li.product, .woocommerce .related ul li.product, .woocommerce .upsells.products ul.products li.product, .woocommerce .upsells.products ul li.product, .woocommerce-page .related ul.products li.product, .woocommerce-page .related ul li.product, .woocommerce-page .upsells.products ul.products li.product, .woocommerce-page .upsells.products ul li.product {
     width: 200px !important;
     margin-right: 3em;
