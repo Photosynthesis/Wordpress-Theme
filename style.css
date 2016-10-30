@@ -718,7 +718,7 @@ nav.woocommerce-pagination ul.page-numbers {
 }
 
 /* Hide list of categories on Product Details pages */
-#content > .product div.product_meta div.posted_in {
+#content > .product div.product_meta span.posted_in {
   display: none;
 }
 
