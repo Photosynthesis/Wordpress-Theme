@@ -55,8 +55,27 @@ div#container div#page div#header div.fb-like span {
     border: hidden;
 }
 
-/* fix ubermenu overflow in headway blocks */
-#block-160 { overflow: visible; }
+#block-33 .donate-button {
+  background-color: #596A96;
+  color: white;
+}
+#block-33 .donate-button:hover {
+  background-color: #6576A4;
+  color: white;
+}
+
+/* Menu Headway Block */
+#block-160 {
+  /* fix ubermenu overflow */
+  overflow: visible;
+  /* Remove bottom border */
+  border-bottom-width: 0;
+}
+
+/* Remove spacing below menu/search blocks */
+#block-160, #block-161 {
+  margin-bottom: 0;
+}
 
 /* Fix logo height in footer */
 #block-162 img { height: 40px; }
@@ -69,9 +88,7 @@ div#container div#page div#header div.fb-like span {
 
 /* google search box */
 div#google-search-div {
-    width: 17.7em;
     z-index: 20000;
-    float: right;
 }
 .custom .gsc-control-cse {
     background-color: transparent;
@@ -81,6 +98,14 @@ div#google-search-div {
 }
 .custom .gsc-search-box-tools .gsc-search-box .gsc-input {
     padding-right: 0px;
+}
+/* Hide the X icon in the search box */
+div#google-search-div .gsib_b {
+  display: none;
+}
+/* Reduce width of search button */
+td.gsc-search-button input.gsc-search-button {
+  padding: 6px 15px;
 }
 
 .custom a {
