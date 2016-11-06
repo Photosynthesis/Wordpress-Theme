@@ -15,7 +15,8 @@
 function directory_send_manager_notification($entry_id, $form_id)
 {
     $entry = FrmEntry::getOne($entry_id, true);
-    if ($form_id == 2 && $entry->metas[920] != 'publish') {
+    $user_not_admin = !current_user_can('edit_plugins');
+    if ($form_id == 2 && $entry->metas[920] != 'publish' && $user_not_admin) {
         $MANAGER_EMAIL = "directory@ic.org";
         $listing_name = get_the_title($entry->post_id);
         $edit_link = "https://www.ic.org/wp-admin/admin.php" .
