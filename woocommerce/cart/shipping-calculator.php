@@ -98,5 +98,15 @@ if ( 'no' === get_option( 'woocommerce_enable_shipping_calc' ) || ! WC()->cart->
 		<?php wp_nonce_field( 'woocommerce-cart' ); ?>
 	</section>
 </form>
+<script>
+jQuery('#calc_shipping_country').change(function(e) {
+    var $zipcode_input = jQuery('#calc_shipping_postcode');
+    if (e.target.value == "US") {
+        $zipcode_input.attr("required", true);
+    } else {
+        $zipcode_input.attr("required", null);
+    }
+});
+</script>
 
 <?php do_action( 'woocommerce_after_shipping_calculator' ); ?>
