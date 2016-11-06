@@ -71,7 +71,7 @@ if ( 'no' === get_option( 'woocommerce_enable_shipping_calc' ) || ! WC()->cart->
 				// Standard Input
 				} else {
 
-					?><input type="text" class="input-text" value="<?php echo esc_attr( $current_r ); ?>" placeholder="<?php esc_attr_e( 'State / county', 'woocommerce' ); ?>" name="calc_shipping_state" id="calc_shipping_state" required /><?php
+					?><input type="text" class="input-text" value="<?php echo esc_attr( $current_r ); ?>" placeholder="<?php esc_attr_e( 'State / county', 'woocommerce' ); ?>" name="calc_shipping_state" id="calc_shipping_state" /><?php
 
 				}
 			?>
@@ -80,7 +80,7 @@ if ( 'no' === get_option( 'woocommerce_enable_shipping_calc' ) || ! WC()->cart->
 		<?php if ( apply_filters( 'woocommerce_shipping_calculator_enable_city', false ) ) : ?>
 
 			<p class="form-row form-row-wide" id="calc_shipping_city_field">
-				<input type="text" class="input-text" value="<?php echo esc_attr( WC()->customer->get_shipping_city() ); ?>" placeholder="<?php esc_attr_e( 'City', 'woocommerce' ); ?>" name="calc_shipping_city" id="calc_shipping_city" required />
+				<input type="text" class="input-text" value="<?php echo esc_attr( WC()->customer->get_shipping_city() ); ?>" placeholder="<?php esc_attr_e( 'City', 'woocommerce' ); ?>" name="calc_shipping_city" id="calc_shipping_city" />
 			</p>
 
 		<?php endif; ?>
@@ -88,7 +88,7 @@ if ( 'no' === get_option( 'woocommerce_enable_shipping_calc' ) || ! WC()->cart->
 		<?php if ( apply_filters( 'woocommerce_shipping_calculator_enable_postcode', true ) ) : ?>
 
 			<p class="form-row form-row-wide" id="calc_shipping_postcode_field">
-				<input type="text" class="input-text" value="<?php echo esc_attr( WC()->customer->get_shipping_postcode() ); ?>" placeholder="<?php esc_attr_e( 'Postcode / ZIP', 'woocommerce' ); ?>" name="calc_shipping_postcode" id="calc_shipping_postcode" required />
+				<input type="text" class="input-text" value="<?php echo esc_attr( WC()->customer->get_shipping_postcode() ); ?>" placeholder="<?php esc_attr_e( 'Postcode / ZIP', 'woocommerce' ); ?>" name="calc_shipping_postcode" id="calc_shipping_postcode" />
 			</p>
 
 		<?php endif; ?>
