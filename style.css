@@ -83,6 +83,7 @@ div#container div#page div#header div.fb-like span {
 
 /* Fix logo height in footer */
 #block-162 img { height: 40px; }
+#block-162 #csa-footer-logo img { height: 50px; }
 
 /* emphasize ubermenu un-collapse button */
 #megaMenu #megaMenuToggle {
