@@ -20,16 +20,9 @@ Written For The FIC by Pavan Rikhi<pavan@ic.org> on 8/17/2014.
 """
 
 import datetime
-import getpass
 import re
 
-import pymysql
-
-# MySQL Login Details
-MYSQL_USER = "root"
-MYSQL_PASS = getpass.getpass("MySQL Password: ")
-MYSQL_DB = "fic_wp"
-MYSQL_HOST = "localhost"
+from .db import get_cursor
 
 # The Regular Expression Used to Validate Email Addresses
 EMAIL_REGEX = re.compile(r'[^@]+@[^@]+\.[^@]+')
@@ -109,20 +102,11 @@ def get_listing_contact_rows():
     return listing_rows
 
 
-def get_cursor():
-    """Retrieve the Database Connection Cursor."""
-    connection = pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER,
-                                 passwd=MYSQL_PASS, db=MYSQL_DB,
-                                 use_unicode=True, charset='utf8')
-    return connection.cursor(pymysql.cursors.DictCursor)
-
-
 def make_unique_csv_lines(rows):
     """Make CSV Lines from Listing Rows."""
     filtered_rows = filter_listing_rows(rows)
     csv_rows = []
-    _ = [csv_rows.extend(make_csv_lines(row).split('\n')) for row in
-         filtered_rows]
+    [csv_rows.extend(make_csv_lines(row).split('\n')) for row in filtered_rows]
     return [u'{0}\n'.format(row) for row in ensure_unique_emails(csv_rows)]
 
 

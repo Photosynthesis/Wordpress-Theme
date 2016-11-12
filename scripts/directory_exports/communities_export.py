@@ -2,19 +2,9 @@
 """Create a CSV containing all data from a communities specified in a file."""
 
 import csv
-import getpass
 
-import MySQLdb
-import MySQLdb.cursors
+from .db import get_cursor, WP_PREFIX
 
-
-# MySQL Login Details
-MYSQL_USER = "root"
-MYSQL_PASS = getpass.getpass("MySQL Password: ")
-MYSQL_DB = "fic_wp"
-MYSQL_HOST = "localhost"
-
-WP_PREFIX = "3uOgy46w_"
 
 # Formidable Details
 FORM_ID = 2
@@ -23,19 +13,11 @@ NAME_FIELD_ID = 9
 
 def main():
     """Read, pull & export community data."""
-    cursor = get_database_cursor()
+    cursor = get_cursor()
     community_ids = get_community_ids_to_export(cursor)
     data = [pull_community_data(cursor, community_name, community_id)
             for (community_name, community_id) in community_ids]
     export_to_csv(data)
-
-
-def get_database_cursor():
-    """Prompt for a password, create a connection and return a cursor."""
-    connection = MySQLdb.connect(host=MYSQL_HOST, user=MYSQL_USER,
-                                 passwd=MYSQL_PASS, db=MYSQL_DB,
-                                 use_unicode=True, charset='utf8')
-    return connection.cursor(MySQLdb.cursors.DictCursor)
 
 
 def get_community_ids_to_export(cursor):
