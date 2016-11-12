@@ -230,8 +230,8 @@ def ensure_unique_emails(csv_lines):
 
 def write_csv_file(csv_lines):
     """Write the Lines to ``export.csv`` in the Current Working Directory."""
-    with open('./export.csv', 'w') as output_file:
-        output_file.writelines(s.encode('UTF-8') for s in csv_lines)
+    with open('./export.csv', 'w', encoding='utf-8') as output_file:
+        output_file.writelines(csv_lines)
 
 
 if __name__ == "__main__":
