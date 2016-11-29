@@ -3,7 +3,7 @@
 import datetime
 
 from csv_exports import export_dictionaries
-from db import get_cursor, get_communities
+from db import get_cursor, get_communities, get_community_name
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
         and community.get('country', '') in ['United States', 'Canada']
     ]
     data = [
-        {'community': c.get('post_title') if c.get('post_title') else c.get('community_name'),
+        {'community': get_community_name(c),
          'contact name': c.get('contact_names_public', ''),
          'contact email': c.get('contact_email_public', ''),
          'phone number': c.get('contact_phone_public', ''),

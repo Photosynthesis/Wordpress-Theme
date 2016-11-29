@@ -20,7 +20,7 @@ def get_cursor():
     """Retrieve the Database Connection Cursor."""
     connection = pymysql.connect(
         host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASS, db=MYSQL_DB,
-        use_unicode=True, charset='utf8'
+        use_unicode=True, charset='utf8', autocommit=True
     )
     return connection.cursor(pymysql.cursors.DictCursor)
 
@@ -29,7 +29,8 @@ def get_communities(cursor):
     """Retrieve the Dictionaries representing Directory Listing Entries."""
     community_query = """
         SELECT items.id as id, items.updated_at as updated_at,
-               posts.post_title as post_title, posts.post_status as post_status
+               posts.post_title as post_title, posts.ID as post_id,
+               posts.post_status as post_status
         FROM {0}frm_items as items
         LEFT JOIN (SELECT * FROM {0}posts WHERE post_type="directory")
             AS posts on posts.ID=items.post_id
@@ -43,8 +44,22 @@ def get_communities(cursor):
     return listings
 
 
+def get_community_name(listing):
+    """Retrieve the name of a Community from it's listing w/ metas."""
+    return (listing.get('post_title') if listing.get('post_title')
+            else listing.get('community_name'))
+
+
+def get_community_detail_link(listing):
+    """Return the URL of the listing's details page."""
+    if not listing.get('post_id'):
+        return ''
+    return "http://ic.org/?post_type=directory&p={}".format(
+        listing.get('post_id', ''))
+
+
 def add_community_metas(cursor, listing):
-    """Add the listing's field values to the dictionary."""
+    """Add the listing's field values to a listing's dictionary."""
     meta_query = """
         SELECT fields.name AS field_name, metas.meta_value AS field_value
         FROM {0}frm_item_metas as metas
@@ -68,3 +83,26 @@ def add_community_metas(cursor, listing):
             field_name = field_name.replace(search, replace)
         listing[field_name] = meta['field_value']
     return listing
+
+
+def unpublish_community(cursor, listing):
+    """Put a listing into Draft mode, hiding it from everyone but Admins."""
+    item_query = """
+        UPDATE {0}frm_items
+        SET is_draft=1
+        WHERE id={1}
+    """.format(WP_PREFIX, listing['id'])
+    cursor.execute(item_query)
+    meta_query = """
+        UPDATE {0}frm_item_metas
+        SET meta_value="draft"
+        WHERE field_id=920 AND item_id={1}
+    """.format(WP_PREFIX, listing['id'])
+    cursor.execute(meta_query)
+    if listing['post_id']:
+        post_query = """
+            UPDATE {0}posts
+            SET post_status="draft"
+            WHERE ID={1}
+        """.format(WP_PREFIX, listing['post_id'])
+        cursor.execute(post_query)
