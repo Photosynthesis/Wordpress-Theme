@@ -7,6 +7,9 @@ include('./wp-blog-header.php');
 
 function main() {
     global $wpdb;
+
+    $quick_sense_disable = "<!--OffEnd-->";
+
     $products_query = "SELECT * FROM {$wpdb->prefix}posts WHERE `post_type`='product'";
     $products = $wpdb->get_results($products_query);
     foreach ($products as $product) {
