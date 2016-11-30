@@ -503,9 +503,9 @@ div.product-type-variable-subscription div.summary div p.price {
   display: none
 }
 
-/* Center the Clear Variation Selection link */
-div.product div.summary table.variations td.value {
-  text-align: center
+/* Move the Clear Variation Selection link to the next line*/
+div.product div.summary table.variations .reset_variations {
+  display: block
 }
 /* De-emphasize the Clear Variation Selection links */
 div.product div.summary table.variations a.reset_variations {
@@ -520,6 +520,13 @@ div.product div.summary table.variations a.reset_variations {
 /* Hide the 'Showing all X results' Text on Product Category Pages */
 body.tax-product_cat.woocommerce #content .woocommerce-result-count {
   display: none;
+}
+
+/* Fix Width of Variation Selects */
+div.product div.summary form.cart table.variations select {
+  width: 100%;
+  max-width: 100%;
+  min-width: auto;
 }
 
 /* General Price and Suggested Price Font and Spacing Tweaks */
