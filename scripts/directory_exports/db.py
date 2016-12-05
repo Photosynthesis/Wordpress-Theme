@@ -28,9 +28,9 @@ def get_cursor():
 def get_communities(cursor):
     """Retrieve the Dictionaries representing Directory Listing Entries."""
     community_query = """
-        SELECT items.id as id, items.updated_at as updated_at,
-               posts.post_title as post_title, posts.ID as post_id,
-               posts.post_status as post_status
+        SELECT items.id as id, items.created_at as created_at,
+               items.updated_at as updated_at, posts.post_title as post_title,
+               posts.ID as post_id, posts.post_status as post_status
         FROM {0}frm_items as items
         LEFT JOIN (SELECT * FROM {0}posts WHERE post_type="directory")
             AS posts on posts.ID=items.post_id
