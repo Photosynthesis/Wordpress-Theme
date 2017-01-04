@@ -231,15 +231,22 @@ function my_custom_validation($errors, $posted_field, $posted_value){
 // http://formidablepro.com/help-desk/use-multiple-checkboxes-in-search-form/
 add_filter('frm_where_filter', 'filter_custom_display', 10, 2);
 function filter_custom_display($where, $args){
-  if(in_array($args['where_opt'], array(424, 291,240,262,283,204,268,297,295,256,257,259,281,282,250,251,241,242,243,294,301,236,237,238,239,697,815))){//set to the IDs of the field you are searching in your data form (NOT the search form)
-     $args['where_val'] = explode(', ', $args['where_val']); //this code changes the checkbox values into an array
-     $where = '(';
-     foreach($args['where_val'] as $v){
-       if($where != '(')
-         $where .= ' OR ';
-       $where .= "meta_value like '%". $v ."%'";
-     }
-     $where .= ") and fi.id='". $args['where_opt'] ."'";
+  if ($args['display']->ID == 148525) {
+    //set to the IDs of the field you are searching in your data form (NOT the search form)
+    $field_ids = array(424,291,240,262,283,204,268,297,295,256,257,259,281,282,
+                       250,251,241,242,243,294,301,236,237,238,239,697,815);
+    if (in_array($args['where_opt'], $field_ids)) {
+      //this code changes the checkbox values into an array
+      $args['where_val'] = explode(', ', $args['where_val']);
+      $where = '(';
+      foreach($args['where_val'] as $v) {
+        if ($where != '(') {
+          $where .= ' OR ';
+        }
+        $where .= "meta_value like '%". $v ."%'";
+      }
+      $where .= ") and fi.id='". $args['where_opt'] ."'";
+    }
   }
   return $where;
 }
