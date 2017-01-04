@@ -243,9 +243,13 @@ function filter_custom_display($where, $args){
         if ($where != '(') {
           $where .= ' OR ';
         }
-        $where .= "meta_value like '%". $v ."%'";
+        if ($args['where_is'] == 'LIKE') {
+          $where .= "meta_value " . $args['where_is'] . " '%". $v ."%'";
+        } else {
+          $where .= "meta_value " . $args['where_is'] . " '" . $v . "'";
+        }
       }
-      $where .= ") and fi.id='". $args['where_opt'] ."'";
+      $where .= ") and fi.id='" . $args['where_opt'] . "'";
     }
   }
   return $where;
