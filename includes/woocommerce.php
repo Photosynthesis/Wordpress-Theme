@@ -112,7 +112,7 @@ javascript;
             if ($_POST['attribute_pa_membership-category'] == 'community') {
                 $community_name = $_POST['addon-14602-name-of-individual-community-or-organ-1'][0];
                 if (FIC_DIR_DB::get_community_id_by_name($community_name) === false) {
-                    wc_add_notice(__('We could not find a Community in our online Directory with that name - if you want your Community membership automatically enabled, enter the exact same name as your Directory listing.', 'fic-wc'), 'warning');
+                    wc_add_notice(__('We could not find a Community in our online Directory with that name - if you want your Community membership automatically enabled, enter the exact same name as your Directory listing.', 'fic-wc'), 'notice');
                 }
                 return $is_valid;
             }
