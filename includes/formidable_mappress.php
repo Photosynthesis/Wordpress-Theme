@@ -108,7 +108,12 @@ function generate_new_directories_map()
                    FROM " . $wpdb->prefix . "frm_item_metas
                    WHERE field_id=218)
                 AS public_metas ON items.id=public_metas.item_id
-        WHERE public_metas.public='Yes'
+        LEFT JOIN (SELECT meta_value AS add_public, item_id
+                   FROM " . $wpdb->prefix . "frm_item_metas
+                   WHERE field_id=285)
+                AS add_public_metas ON items.id=add_public_metas.item_id
+
+        WHERE public_metas.public='Yes' AND add_public_metas.add_public='Public'
         ";
     $directory_listings = $wpdb->get_results($directory_sql);
 
