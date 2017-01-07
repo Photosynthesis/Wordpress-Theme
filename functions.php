@@ -49,6 +49,8 @@ require 'includes/admin/main.php';
 /* Youtube Functions */
 require_once 'includes/youtube.php';
 
+/* Directory Database Helper Functions */
+require_once 'includes/directory_db.php';
 
 /* General Directory Listing Functions */
 require_once 'includes/directory_listings.php';
