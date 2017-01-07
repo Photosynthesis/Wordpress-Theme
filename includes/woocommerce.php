@@ -112,13 +112,14 @@ javascript;
             if ($_POST['attribute_pa_membership-category'] == 'community') {
                 $community_name = $_POST['addon-14602-name-of-individual-community-or-organ-1'][0];
                 if (FIC_DIR_DB::get_community_id_by_name($community_name) === false) {
-                    wc_add_notice(__('We could not find a Community in our online Directory with that name - if you want your Community membership automatically enabled, enter the exact same name as your Directory listing.', 'fic-wc'), 'notice');
+                    wc_add_notice(__("Community category members are entitled to have a membership badge added to their online directory listing. We couldn't find a matching community in our directory so a membership badge will not be automatically activated or extended. If you have a listing and want to have the member badge added to the listing (or renewed), please re-add the Membership to your cart with the name of the community exactly as it appears in our online Directory or contact support@ic.org and provide the name of the listed community.", 'fic-wc'), 'notice');
+                } else {
+                    wc_add_notice(__('We were able to find your community in our Directory. A membership badge for your intentional community will be added(or extended) after checkout.', 'fic-wc'));
                 }
                 return $is_valid;
             }
         }
         return $is_valid;
-
     }
 
 }
