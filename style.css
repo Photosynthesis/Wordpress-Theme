@@ -541,6 +541,12 @@ div.product div.summary form.cart table.variations select {
     padding-right: 2px;
 }
 
+/* Accepted Payment Method Logos */
+.payment-methods-widget .payment-method-image {
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
 
 /* Fix Community Bookstore title */
 .custom .headway-storefront-wooc-content .page-title {
