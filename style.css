@@ -765,6 +765,22 @@ nav.woocommerce-pagination ul.page-numbers {
   display: none;
 }
 
+/* Fixed Related Products on Products Detais pages */
+#content > .product div.related.products ul.products {
+  text-align: justify;
+  height: 100%;
+}
+#content > .product div.related.products ul.products li {
+  width: 31% !important;
+  text-align: left;
+  display: inline-block;
+  height: 100%;
+  margin: 0px;
+  float: none;
+  padding: 1em 0em;
+  vertical-align: top;
+}
+
 
 #sidebars li del span.amount {
     font-size: 0.8em;
