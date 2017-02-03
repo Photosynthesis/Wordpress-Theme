@@ -40,6 +40,9 @@ function fa_allow_tags_in_comments($data) {
 /* Utility Functions */
 require_once 'includes/utilities.php';
 
+/* General Site Functions */
+require_once 'includes/general_site.php';
+
 /* User Functions */
 require_once 'includes/users.php';
 
