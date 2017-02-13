@@ -477,6 +477,11 @@ div.awpcp-category {
     text-align: center;
 }
 
+/* Fix Price Color of WPAdvert Payments */
+span.adverts-listing-type-cost span.woocommerce-Price-amount.amount {
+  color: white;
+}
+
 
 
 /* WooCommerce style additions from rockinwp.com/wordpress-tutorials/woocommerce-thesis-theme-complete-solution/ */

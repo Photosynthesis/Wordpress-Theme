@@ -35,10 +35,19 @@ CSS;
   public static function customize_login_logo_title() {
     return 'Fellowship of Intentional Community';
   }
+
+  /* Fix AJAX URLs on HTTP pages */
+  public static function fix_ajax_url($url) {
+    if (!is_admin() && !is_ssl()) {
+      $url = str_replace('https:', 'http:', $url);
+    }
+    return $url;
+  }
 }
 
 add_action('login_enqueue_scripts', array('FIC_General', 'customize_login_logo'));
 add_action('login_headerurl', array('FIC_General', 'customize_login_logo_url'));
 add_action('login_headertitle', array('FIC_General', 'customize_login_logo_title'));
+add_filter('admin_url', array('FIC_General', 'fix_ajax_url'));
 
 ?>
