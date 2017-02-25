@@ -43,6 +43,9 @@ require_once 'includes/utilities.php';
 /* General Site Functions */
 require_once 'includes/general_site.php';
 
+/* WPAdverts Functions */
+require_once 'includes/adverts.php';
+
 /* User Functions */
 require_once 'includes/users.php';
 
