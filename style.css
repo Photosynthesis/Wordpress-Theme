@@ -461,10 +461,15 @@ margin: 0;
 
 
 
+/* WPAdverts */
 
-/* Fix Price Color of WPAdvert Payments */
+/* Fix Price Color of Payments */
 span.adverts-listing-type-cost span.woocommerce-Price-amount.amount {
   color: white;
+}
+/* Remove HTML Bar from Description Field */
+div.adverts-field-textarea.adverts-field-name-post_content div.mce-statusbar {
+  display: none;
 }
 
 
@@ -851,7 +856,7 @@ div.page-restrict-output input#log {
     background: -moz-linear-gradient(top, #a03e0c, #a03e0c);
     background: linear-gradient(to bottom, #a03e0c, #a03e0c);
 }
-#crowdfunding-button:before{
+#crowdfunding-button:before {
     content:  "\0000a0";
     display: inline-block;
     height: 24px;
