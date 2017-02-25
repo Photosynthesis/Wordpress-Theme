@@ -462,21 +462,6 @@ margin: 0;
 
 
 
-/* bold heading labels for classified ads */
-div.showawpcpadpage label {
-    font-weight:bold;
-}
-
-div.awpcp-category {
-    margin-bottom: 15px;
-}
-
-.custom #showawpcpadpage .adtitle, .custom #showawpcpadpage .awpcp-title {
-    border-top: hidden;
-    background: none;
-    text-align: center;
-}
-
 /* Fix Price Color of WPAdvert Payments */
 span.adverts-listing-type-cost span.woocommerce-Price-amount.amount {
   color: white;
