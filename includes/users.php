@@ -48,15 +48,4 @@ function logged_in_only($atts, $content)
 }
 add_shortcode('logged_in_only', 'logged_in_only');
 
-/** Escape the body of User Password Reset Emails.
- *
- * Some plugin is defaulting all emails to HTML. This messes up the password
- * reset emails because Wordpress puts the reset URL in angle brackets, like
- * `<reset-url>`. Since the content type is HTML, email clients read this as an
- * invalid HTML tag and the link is not displayed. We avoid this by escaping
- * the password reset emails so that the angle brackets are escaped and the
- * link appears.
- */
-add_filter('retrieve_password_message', 'esc_html', 99, 1);
-
 ?>
