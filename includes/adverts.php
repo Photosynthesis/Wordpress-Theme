@@ -20,9 +20,20 @@ class FIC_Adverts
         }
         return $form;
     }
+
+    /* Set the Category Slug to "community-classifieds" */
+    public function customize_taxonomy($args) {
+        if(!isset($args["rewrite"])) {
+            $args["rewrite"] = array();
+        }
+
+        $args["rewrite"]["slug"] = "ad-category";
+        return $args;
+    }
 }
 
 add_filter("adverts_form_load", array("FIC_Adverts", "hide_price"));
+add_action("adverts_register_taxonomy", array("FIC_Adverts", "customize_taxonomy"));
 
 
 ?>
