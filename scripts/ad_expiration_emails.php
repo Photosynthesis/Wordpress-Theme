@@ -30,24 +30,26 @@ function get_timestamp_of_day($days_from_now) {
 function get_expiring_ads($days_from_now) {
     $expiration_start_date = get_timestamp_of_day($days_from_now);
     $expiration_end_date = get_timestamp_of_day($days_from_now + 1);
-    $query = new WP_Query(
-        array(
-            'post_type' => 'advert',
-            'meta_query' => array(
-                'relation' => 'AND',
-                array(
-                    'key' => '_expiration_date',
-                    'value' => $expiration_end_date,
-                    'compare' => '<'
-                ),
-                array(
-                    'key' => '_expiration_date',
-                    'value' => $expiration_start_date,
-                    'compare' => '>='
-                )
+    $args = array(
+        'post_type' => 'advert',
+        'meta_query' => array(
+            'relation' => 'AND',
+            array(
+                'key' => '_expiration_date',
+                'value' => $expiration_end_date,
+                'compare' => '<'
+            ),
+            array(
+                'key' => '_expiration_date',
+                'value' => $expiration_start_date,
+                'compare' => '>='
             )
         )
     );
+    if ($days_from_now !== 0) {
+        $args['post_status'] = 'publish';
+    }
+    $query = new WP_Query($args);
     return $query->posts;
 }
 
