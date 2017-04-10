@@ -10,7 +10,7 @@
 class FIC_Adverts
 {
     /* Hide the Price Field in the Ad Forms */
-    public function hide_price($form) {
+    public static function hide_price($form) {
         if ($form['name'] == 'advert') {
             foreach ($form['field'] as $key => $field) {
                 if ($field['name'] == 'adverts_price') {
@@ -22,7 +22,7 @@ class FIC_Adverts
     }
 
     /* Set the Category Slug to "community-classifieds" */
-    public function customize_taxonomy($args) {
+    public static function customize_taxonomy($args) {
         if(!isset($args["rewrite"])) {
             $args["rewrite"] = array();
         }
