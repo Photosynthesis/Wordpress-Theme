@@ -30,10 +30,18 @@ class FIC_Adverts
         $args["rewrite"]["slug"] = "ad-category";
         return $args;
     }
+
+    /* Allow Using Hidden WooCommerce Products */
+    public static function allow_hidden($args) {
+        $args["meta_query"][0]["value"] = array("catalog", "search", "hidden");
+        return $args;
+    }
 }
 
 add_filter("adverts_form_load", array("FIC_Adverts", "hide_price"));
 add_action("adverts_register_taxonomy", array("FIC_Adverts", "customize_taxonomy"));
+add_filter("adext_wc_payments_products_new", array("FIC_Adverts", "allow_hidden"));
+add_filter("adext_wc_payments_products_renew", array("FIC_Adverts", "allow_hidden"));
 
 
 ?>
