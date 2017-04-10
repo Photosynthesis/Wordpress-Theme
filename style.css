@@ -471,6 +471,13 @@ span.adverts-listing-type-cost span.woocommerce-Price-amount.amount {
 div.adverts-field-textarea.adverts-field-name-post_content div.mce-statusbar {
   display: none;
 }
+/* Always show all actions on the My Account Page */
+a.adverts-manage-action.adverts-manage-action-more {
+  display: none;
+}
+div.adverts-manage-actions-more {
+  display: block !important;
+}
 
 
 
