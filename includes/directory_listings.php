@@ -217,7 +217,7 @@ function directory_show_search_filters() {
     $filters = array(
         array('param' => 'open_to_visitors', 'value' => 'Yes',
               'text' => 'Visitors Welcome'),
-        array('param' => 'open_to_members', 'value' => 'Yes,%20Yes,%20rarely',
+        array('param' => 'open_to_members', 'value' => 'Yes',
               'text' => 'Accepting New Members'),
         array('param' => 'community_status', 'value' => 'Established',
               'text' => 'Established'),
