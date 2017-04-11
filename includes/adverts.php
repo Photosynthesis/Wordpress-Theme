@@ -33,7 +33,7 @@ class FIC_Adverts
 
     /* Allow Using Hidden WooCommerce Products */
     public static function allow_hidden($args) {
-        $args["meta_query"][0]["value"] = array("catalog", "search", "hidden");
+        $args["meta_query"][0]["value"] = array("hidden", "visible");
         return $args;
     }
 }
