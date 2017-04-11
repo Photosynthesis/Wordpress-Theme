@@ -65,6 +65,7 @@ function send_going_to_expire_email($ad, $days_from_now) {
         $my_account_link = "https://www.ic.org/my-fic-account/";
     }
     $renewal_link = $my_account_link . "?advert_renew={$ad->ID}";
+    $ad_link = get_post_permalink($ad->ID);
 
     $to = $ad_owner->data->user_email;
 
@@ -72,9 +73,11 @@ function send_going_to_expire_email($ad, $days_from_now) {
         $subject = "[FIC] Your Ad Expires in {$days_from_now} Day{$pluralize}";
         $message = "Hello {$ad_owner->data->user_nicename},\n\n" .
             "This is a notification that your classified ad, \"{$ad->post_title}\", will expire in {$days_from_now} day{$pluralize}.\n\n" .
+            "You can view your ad here:\n\n" .
+            "\t\t{$ad_link}\n\n" .
             "To renew your ad now, you can click the following link:\n\n" .
             "\t\t{$renewal_link}\n\n" .
-            "Once it has expired, you can renew your ad from the My Account page:\n\n" .
+            "You can also view, edit, or renew any of your ads from the My Account page:\n\n" .
             "\t\t{$my_account_link}\n"
             ;
     } else {
@@ -85,6 +88,7 @@ function send_going_to_expire_email($ad, $days_from_now) {
             "\t\t{$renewal_link}\n\n"
             ;
     }
+    $message .= "\n\n---\nFor assistance with ads and for special offers, please contact ads@ic.org";
 
     wp_mail($to, $subject, $message, array('From: FIC <no-reply@ic.org>'));
 }
