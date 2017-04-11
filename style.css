@@ -256,18 +256,6 @@ div.pip-nav ul li {
     font-size: 20px;
 }*/
 /* style Thesis buttons */
-.custom input[type="submit"] {
-/*    padding: 5px 10px;*/
-    border: 1px solid #c7c0c7;
-    background: #f7f6f7; /* Old browsers */
-    background: -moz-linear-gradient(top,  #f7f6f7 0%, #dfdbdf 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f6f7), color-stop(100%,#dfdbdf)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #f7f6f7 0%,#dfdbdf 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #f7f6f7 0%,#dfdbdf 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #f7f6f7 0%,#dfdbdf 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #f7f6f7 0%,#dfdbdf 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f6f7', endColorstr='#dfdbdf',GradientType=0 ); /* IE6-9 */
-}
 .custom input[type="submit"], .incsub_wiki_tabs li {
     font-weight: bold;
     color: #5e5e5e;
