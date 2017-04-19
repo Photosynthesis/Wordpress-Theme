@@ -5,7 +5,7 @@
  *  This script is run daily by cron.
  */
 
-require_once '../../../../wp-load.php';
+require_once __DIR__ . '/../../../../wp-load.php';
 
 
 /* Send Expiration Notices for Ads Expiring in 1 or 5 Days */
