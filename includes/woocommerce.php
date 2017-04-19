@@ -10,6 +10,11 @@
 
 class FIC_WC
 {
+    /** Enable Lightboxes for Product Images */
+    public static function enable_lightboxes() {
+        add_theme_support('wc-product-gallery-lightbox');
+    }
+
     /** Reduce the height inline-style from the FlickRocket iframe */
     public static function fix_flickrocket_iframe_display($user) {
         echo <<<javascript
@@ -146,6 +151,8 @@ javascript;
     }
 }
 
+add_action('after_setup_theme',
+    array('FIC_WC', 'enable_lightboxes'));
 
 add_action('woocommerce_after_my_account',
     array('FIC_WC', 'fix_flickrocket_iframe_display'));
