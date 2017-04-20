@@ -15,21 +15,6 @@ class FIC_WC
         add_theme_support('wc-product-gallery-lightbox');
     }
 
-    /** Reduce the height inline-style from the FlickRocket iframe */
-    public static function fix_flickrocket_iframe_display($user) {
-        echo <<<javascript
-<script type='text/javascript'>
-jQuery(document).ready(function() {
-    // Fix the wrapping div
-    jQuery('#post-8 > div > div > div:nth-child(9)').css(
-        {'margin-top': '10px', 'margin-bottom': '0', 'width': '100%'});
-    // Fix the iFrame
-    jQuery('.woocommerce div iframe').height('301px');
-});
-</script>
-javascript;
-    }
-
     private static $membership_product_id = 14602;
 
     public static function activate_directory_listing_membership($subscription) {
@@ -153,9 +138,6 @@ javascript;
 
 add_action('after_setup_theme',
     array('FIC_WC', 'enable_lightboxes'));
-
-add_action('woocommerce_after_my_account',
-    array('FIC_WC', 'fix_flickrocket_iframe_display'));
 
 add_action('woocommerce_subscription_payment_complete',
     array('FIC_WC', 'activate_directory_listing_membership'));
