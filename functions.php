@@ -40,15 +40,15 @@ register_nav_menus(array(
 
 /* Return the CSS classes for left Sidebars */
 function theme_left_sidebar_css_classes() {
-  return "hidden-sm-down col-md-3 col-xl-2 sidebar";
+  return "hidden-sm-down col-md-4 col-lg-5 col-xl-4 sidebar";
 }
 /* Return the CSS classes for right Sidebars */
 function theme_right_sidebar_css_classes() {
-  return "col-12 col-md-3 col-xl-2 sidebar";
+  return "col-24 col-md-5 col-xl-4 sidebar";
 }
 /* Return the CSS classes for the main Content */
 function theme_main_column_css_classes() {
-  return "col-12 col-md-6 col-xl-8 center-column";
+  return "col-24 col-md-14 col-xl-16 center-column";
 }
 
 

@@ -48,7 +48,7 @@
 
   <!-- Nav Menu -->
   <div id="nav-menu" class="row">
-    <div class="col-md-9 col-7">
+    <div class="col-md-18 col-14">
       <nav class="navbar navbar-light navbar-toggleable-sm">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
                 aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
         </div>
       </nav>
     </div>
-    <div class="col-md-3 col-5">
+    <div class="col-md-6 col-10">
       <div id="google-search-div">
         <script>
           (function() {

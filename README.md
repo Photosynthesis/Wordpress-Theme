@@ -16,8 +16,6 @@ npm run watch
 
 * Fix nav clicking on chrome, also nav get stuck open on click
 * Navbar wrap - maybe reduce custom search wide on smaller screens
-* Login Page 
-* Finish Sidebars
 * Finish Navs
 * Classifieds
 * Directory
