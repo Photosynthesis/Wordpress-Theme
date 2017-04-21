@@ -35,20 +35,20 @@ function theme_register_sidebars() {
 /* Bootstrap Menu */
 require_once('includes/bootstrap_menu_walker.php');
 register_nav_menus(array(
-    'primary' => __( 'Primary Menu', 'FIC Theme'  ),
+  'primary' => __( 'Primary Menu', 'FIC Theme'  ),
 ));
 
 /* Return the CSS classes for left Sidebars */
 function theme_left_sidebar_css_classes() {
-    return "hidden-sm-down col-md-3 col-xl-2 sidebar";
+  return "hidden-sm-down col-md-3 col-xl-2 sidebar";
 }
 /* Return the CSS classes for right Sidebars */
 function theme_right_sidebar_css_classes() {
-    return "col-12 col-md-3 col-xl-2 sidebar";
+  return "col-12 col-md-3 col-xl-2 sidebar";
 }
 /* Return the CSS classes for the main Content */
 function theme_main_column_css_classes() {
-    return "col-12 col-md-6 col-xl-8 center-column";
+  return "col-12 col-md-6 col-xl-8 center-column";
 }
 
 
@@ -118,6 +118,6 @@ function my_theme_wrapper_end() {
 }
 add_action('after_setup_theme', 'woocommerce_support');
 function woocommerce_support() {
-    add_theme_support('woocommerce');
+  add_theme_support('woocommerce');
 }
 ?>
