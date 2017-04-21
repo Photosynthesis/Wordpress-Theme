@@ -20,7 +20,7 @@
   <div id="site-header" class="row">
     <div class="col">
       <a href="/" class="banner-image">
-      <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo_header_fic.png'; ?>" alt="FIC" height="80" />
+      <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-fic.png'; ?>" alt="FIC" height="80" />
       </a>
     </div>
     <div class="col text-right">
