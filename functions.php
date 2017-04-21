@@ -52,6 +52,36 @@ function theme_main_column_css_classes() {
 }
 
 
+/** Login Page **/
+/* Replace the Logo */
+function theme_customize_login_logo() {
+  $logo_path = get_stylesheet_directory_uri() . "/img/logo-login-fic.png";
+  echo <<<CSS
+    <style type="text/css">
+      #login h1 a, .login h1 a {
+        background-image: url("{$logo_path}");
+        background-size: auto;
+        width: 300px;
+        padding-bottom: 30px;
+      }
+    </style>
+CSS;
+}
+add_action('login_enqueue_scripts', 'theme_customize_login_logo');
+
+/* Link to Logo to the Home Page */
+function theme_customize_login_logo_url() {
+  return home_url();
+}
+add_action('login_headerurl', 'theme_customize_login_logo_url');
+
+/* Set the Login Logo's Link Title to the Name of the Site */
+function theme_customize_login_logo_title(){
+  return 'Fellowship of Intentional Community';
+}
+add_action('login_headertitle', 'theme_customize_login_logo_title');
+
+
 /** Comments **/
 require_once('includes/bootstrap_comment_walker.php');
 add_theme_support('html5', array('comment-list'));
