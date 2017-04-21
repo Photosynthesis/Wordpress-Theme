@@ -1,0 +1,279 @@
+$blue: #596A96
+$orange: #FBAF3B
+
+$header-blue: #586A96
+$background-blue: #666698
+$menu-orange: #F57241
+
+$brand-primary: $blue
+$link-hover-color: $orange
+
+$container-max-widths: (sm: 540px, md: 720px, lg: 960px, xl: 1350px)
+
+$navbar-light-active-color: $menu-orange
+$navbar-padding-x: 0
+
+$dropdown-min-width: 14rem
+$dropdown-padding-y: 0.3rem
+
+$sizes: (10: 10%, 25: 25%, 33: 33%, 40: 40%, 50: 50%, 66: 66%, 75: 75%, 100: 100%)
+
+@import "~bootstrap/scss/bootstrap"
+
+/** General Site Design **/
+
+/* Always Fill the Page */
+html, body
+  height: 100%
+  margin: 0
+  padding: 0
+
+/* Add Purple Background */
+body
+  background-color: $background-blue
+  padding-bottom: 15px
+
+
+/* Add Spacing & White Backdrop */
+#body-wrapper
+  margin-top: 30px
+  margin-bottom: 30px
+  padding: 15px
+  background-color: white
+  box-shadow: black 0px 6px 32px
+  @include media-breakpoint-down(lg)
+    width: 100%
+
+
+#site-header
+  .banner-image
+    height: 80px
+  #greeting-logout
+    font-size: 0.8em
+    margin-right: 5px
+    #header-cart-icon
+      text-decoration: none
+      .cart-icon:before
+        font-family: WooCommerce
+        content: "\e01d"
+        font-size: 20px
+        font-weight: 400
+        vertical-align: bottom
+  #header-buttons
+    margin-top: 10px
+    font-weight: bold
+    button
+      cursor: pointer
+
+
+#nav-menu
+  nav.navbar
+    cursor: pointer
+    .navbar-toggler-label
+      font-size: 0.8em
+      font-weight: bold
+      color: black
+    /* Remove Carets From Dropdown Menus */
+    .dropdown-toggle.nav-link:after
+      content: none
+    .navbar-nav
+      flex-wrap: wrap
+    .navbar-nav > li
+      /* Add Separators */
+      border-left: 1px solid $orange
+      @include media-breakpoint-up(sm)
+        &:first-child
+          border-left: none
+      /* Emphasize Text & Reduce Size */
+      & > a
+        font-size: 0.8em
+        font-weight: bold
+        padding: 0.75em 1.25em
+        color: black
+      &.active > a
+        color: #F57241
+      ul
+        /* Reduce Size of Dropdown Text */
+        font-size: 0.9em
+        /* Remove Spacing for Continuous Hover Event */
+        margin-top: 0
+        /* Remove Border & Rounding */
+        border: none
+        border-radius: 0
+        /* Set Sub-Menu Colors */
+        background-color: $orange
+        a
+          color: black
+        li.active > a
+          color: white
+          font-weight: bold
+        li.dropdown:hover > ul
+          font-size: 1em
+          display: block
+          top: 0
+          left: 100%
+      /* Recolor on Active, Hover & Click */
+      &:hover, &.show
+        background-color: $orange
+        @include media-breakpoint-up(sm)
+          border-left-color: white
+        & > a
+          color: white
+        & a:hover
+          color: white
+          font-weight: bold
+  /* google search box */
+  div#google-search-div
+    z-index: 20000
+    padding-top: 16px
+    /* Fix Input Alignment */
+    input.gsc-input, .gsc-input-box, .gsc-input-box-hover, .gsc-input-box-focus, .gsc-search-button
+      box-sizing: content-box
+      line-height: normal
+    .gsc-control-cse
+      background-color: transparent
+      border: 0px hidden
+      padding: 0px
+      margin-top: -5px
+    .gsc-search-box-tools .gsc-search-box .gsc-input
+      padding-right: 0px
+    /* Hide the X icon in the search box */
+    div#google-search-div .gsib_b
+      display: none
+    /* Reduce width of search button */
+    td.gsc-search-button input.gsc-search-button
+      padding: 6px 15px
+
+
+/* Change Font & Text Size/Emphasis */
+h1, h2, h3, h4, h5
+  color: $header-blue
+  font-family: Lora
+  font-weight: bold
+
+
+.sidebar
+  font-size: 0.8em
+  /* Style the Sidebar Inputs */
+  select#cat, select.goog-te-combo, .widget_wysija_cont input
+    @extend .form-control
+    @extend .form-control-sm
+    @extend .w-75
+    @extend .mx-auto
+  /* Space Widgets Vertically */
+  .widget
+    margin: 2.75em 0
+  /* Reduce Padding of Recent Blog Posts */
+  .widget_recent_entries ul
+    padding-left: 10px
+  /* Show Multiple Ads per Row on Small Screens */
+  .widget#text-2 > div > div.text-center > div
+    display: inline-block
+  /* Newsletter Signup Widget */
+  .widget_wysija_cont
+    /* Center Submit Button */
+    text-align: center
+    /* Fix Vertical Spacing of Inputs */
+    p
+      margin-bottom: 3px
+    /* Style Submit as Primary Button */
+    input.wysija-submit
+      margin-top: 0
+      @extend .btn
+      @extend .btn-sm
+      @extend .btn-primary
+  /* Stylize Widget Headers */
+  h4.widget-title
+    font-size: 1.1em
+    font-weight: bold
+    text-transform: uppercase
+    border-top: 1px solid $gray-lighter
+    border-bottom: 1px solid $gray-lighter
+    padding: 3px 0
+    margin-bottom: 12px
+
+
+/* Reduce Footer Text Sigze */
+#partners-footer
+  font-size: 0.8em
+
+
+/** WP Core **/
+.alignleft
+  @extend .float-left
+.aligncenter
+  @extend .mx-auto
+  display: block
+.alignright
+  @extend .float-right
+.alignnone
+  @extend .float-none
+.size-full
+  @extend .img-fluid
+.screen-reader-text
+  clip: rect(1px, 1px, 1px, 1px)
+  clip-path: polygon(0px 0px, 0px 0px,0px 0px, 0px 0px)
+  position: absolute !important
+  white-space: nowrap
+  height: 1px
+  width: 1px
+  overflow: hidden
+
+
+/*** Content Styles ***/
+
+/** General **/
+.center-column
+  border-left: solid 1px $gray-lightest
+  border-right: solid 1px $gray-lightest
+
+#main
+  /* Add Spacing between Nav & Content */
+  padding-top: 2em
+  /* Reduce Font Sizes */
+  h1
+    font-size: 1.7rem
+  h2
+    font-size: 1.3rem
+  h3
+    font-size: 1.1rem
+  /* Style Pagination Links as Buttons */
+  .paginate
+    a
+      @extend .btn
+      @extend .btn-primary
+  /* Responsive Post Thumbnails with Spacing */
+  img.attachment-post-thumbnail
+    @extend .img-fluid
+    @extend .p-1
+
+/** Comments **/
+#comments
+  /* Reduce Size of Comment Author Text */
+  h5
+    font-size: 1.2rem
+  /* Reduce Size of Comment Body Text */
+  .comment-content
+    font-size: 0.8rem
+
+
+/** Archives **/
+body.archive
+  .posts
+    /* Reduce Space Between Descriptions & Category Links */
+    p
+      margin-bottom: 0.5rem
+    /* Equalize Spacing of Posts & Horizontal Rules */
+    & > div.post-summary:first-of-type
+      margin-top: 2rem
+    hr
+      margin: 2rem 0
+
+body.single
+  .post-links
+    a button
+      padding: 0.25rem
+      /* Wrap Link Text */
+      white-space: normal
+      /* Don't Center the Link Text */
+      text-align: left !important
