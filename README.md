@@ -16,7 +16,6 @@ npm run watch
 
 * Fix nav clicking on chrome, also nav get stuck open on click
 * Navbar wrap - maybe reduce custom search wide on smaller screens
-* 404 Page
 * Login Page 
 * Finish Sidebars
 * Finish Navs
@@ -25,6 +24,7 @@ npm run watch
 * Wiki
 * WooCommerce
 * Mobile/Tablet Responsiveness
+* Style/Design/Font/Color Tweaks
 * Structured SEO
 * Migrate functions.php from old theme
 
