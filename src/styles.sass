@@ -160,6 +160,15 @@ h1, h2, h3, h4, h5
   font-size: 0.8em
   /* Add Spacing between Nav & Content */
   margin-top: 2.75em
+  /* Stylize Widget Headers */
+  h4.widget-title
+    font-size: 1.1em
+    font-weight: bold
+    text-transform: uppercase
+    border-top: 1px solid $gray-lighter
+    border-bottom: 1px solid $gray-lighter
+    padding: 3px 0
+    margin-bottom: 12px
   /* Style the Sidebar Inputs */
   select#cat, select.goog-te-combo, .widget_wysija_cont input
     @extend .form-control
@@ -190,15 +199,8 @@ h1, h2, h3, h4, h5
       @extend .btn
       @extend .btn-sm
       @extend .btn-primary
-  /* Stylize Widget Headers */
-  h4.widget-title
-    font-size: 1.1em
-    font-weight: bold
-    text-transform: uppercase
-    border-top: 1px solid $gray-lighter
-    border-bottom: 1px solid $gray-lighter
-    padding: 3px 0
-    margin-bottom: 12px
+  #adswidget3-quick-adsense, #adswidget1-quick-adsense
+    @extend .text-center
 
 
 /* Reduce Footer Text Sigze */
