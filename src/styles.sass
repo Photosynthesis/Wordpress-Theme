@@ -295,3 +295,68 @@ body.single
       white-space: normal
       /* Don't Center the Link Text */
       text-align: left !important
+
+
+
+/*** Plugin Customizations ***/
+
+/** Wiki **/
+body.incsub_wiki div#main
+    /* Style Tabs */
+    div.incsub_wiki_tabs
+      ul
+        @extend .nav
+        @extend .nav-tabs
+        li
+          @extend .nav-item
+          a
+            @extend .nav-link
+
+    /* Style Breadcrumbs */
+    div.incsub_wiki_top
+      margin-bottom: 0
+      padding: 0.38rem 0.5rem
+      background-color: transparent
+      @extend .breadcrumb
+      > .incsub_wiki_crumbs
+        @extend .active
+
+    /* Remove Wiki Site Name */
+    h3#siteSub
+      display: none
+
+    /* Move Article Title Up */
+    .incsub_wiki_content
+      margin-top: -1em
+
+    /* Remove Empty Space Above Article Title */
+    div#wiki-content
+      br:first-of-type, p:first-of-type
+        display: none
+        margin: 0
+
+    form
+      /* Style the Edit & Create Form Inputs */
+      input[type="text"], input[type="checkbox"], select
+        @extend .form-control
+
+      /* Space Out Meta Sections */
+      .incsub_wiki_meta_box
+        padding: 0.5em 0
+
+      /* Style the Buttons */
+      .incsub_wiki_clear
+        input
+          @extend .btn
+          @extend .btn-primary
+        a
+          @extend .btn
+          @extend .btn-secondary
+
+/* Cleanup Wiki 404 Create Page */
+body.error404.incsub_wiki
+  #main > .incsub_wiki
+    > h3
+      display: none
+    .incsub_wiki_tabs
+      border-bottom: none

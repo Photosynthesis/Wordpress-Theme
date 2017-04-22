@@ -19,7 +19,6 @@ npm run watch
 * Finish Navs
 * Classifieds
 * Directory
-* Wiki
 * WooCommerce
 * Mobile/Tablet Responsiveness
 * Style/Design/Font/Color Tweaks
