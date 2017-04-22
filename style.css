@@ -189,6 +189,11 @@ body {
     line-height: 2.5em;
 }
 
+/* Hide Minimum & Suggested Prices from General Donation Product */
+.post-14601 .nyp .minimum-price, .post-14601 .woocommerce-variation-price {
+  display: none !important;
+}
+
 
 /* Style ubermenu search field */
 /*div.ubersearch input#menu-search-text {
