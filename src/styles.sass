@@ -110,13 +110,14 @@ body
         li.active > a
           color: white
           font-weight: bold
-        li.dropdown:hover > ul
-          font-size: 1em
-          display: block
-          top: 0
-          left: 100%
+        li.dropdown:hover, li.dropdown.show
+          > ul
+            font-size: 1em
+            display: block
+            top: 0
+            left: 99.9%
       /* Recolor on Active, Hover & Click */
-      &:hover, &.show
+      &:hover, & ul.show
         background-color: $orange
         @include media-breakpoint-up(sm)
           border-left-color: white

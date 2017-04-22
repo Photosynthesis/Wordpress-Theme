@@ -84,11 +84,10 @@ class wp_bootstrap_navwalker extends Walker_Nav_Menu {
 
       // If item has_children add atts to a.
       if ( $args->has_children && $depth === 0 ) {
-        $atts['data-toggle']  = 'dropdown';
         $atts['class']      = 'dropdown-toggle nav-link';
         $atts['aria-haspopup']  = 'true';
       } else {
-        $atts['class'] = 'nav-link';
+        $atts['class'] = 'nav-link nav-item';
       }
       $atts['href'] = ! empty( $item->url ) ? $item->url : '';
 
