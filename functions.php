@@ -3,7 +3,7 @@
 /** TODO: Organize into classes/files **/
 
 
-/** General Site **/
+/** General Site Layout **/
 /* Disable jQuery */
 add_action('wp_enqueue_scripts', 'theme_disable_jquery');
 function theme_disable_jquery() {
@@ -51,6 +51,28 @@ function theme_main_column_css_classes() {
   return "col-24 col-md-14 col-xl-16 center-column";
 }
 
+/* Print Out the Header, Left Sidebar, and Opening Center Tag */
+function theme_main_top() {
+  $sidebar_class = theme_left_sidebar_css_classes();
+  $center_class = theme_main_column_css_classes();
+  get_header();
+  echo "\n<div class='row'>";
+  echo "\n<div id='left-sidebar' class='{$sidebar_class}'>\n";
+  dynamic_sidebar('main-left');
+  echo "\n</div>\n";
+  echo "<div id='main' class='{$center_class}'>";
+}
+
+/* Print Out the Closing Center Tag, Right Sidebar, and Footer */
+function theme_main_bottom() {
+  $sidebar_class = theme_right_sidebar_css_classes();
+  echo "</div>";
+  echo "<div id='right-sidebar' class='{$sidebar_class}'>\n";
+  dynamic_sidebar('main-right');
+  echo "\n</div></div>\n";
+  get_footer();
+}
+
 
 /** Login Page **/
 /* Replace the Logo */
@@ -82,9 +104,11 @@ function theme_customize_login_logo_title(){
 add_action('login_headertitle', 'theme_customize_login_logo_title');
 
 
+
 /** Comments **/
 require_once('includes/bootstrap_comment_walker.php');
 add_theme_support('html5', array('comment-list'));
+
 
 
 /** Posts **/
