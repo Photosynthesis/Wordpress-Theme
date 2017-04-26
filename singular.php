@@ -2,12 +2,15 @@
 
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-  <div class='clearfix'>
-    <div class="float-left mr-2 mb-2">
-      <div class="card"><a href="<?php the_permalink(); ?>">
-        <?php the_post_thumbnail('post-thumbnail'); ?>
-      </a></div>
-    </div>
+  <div class='clearfix'><?php
+    $thumbnail = get_the_post_thumbnail();
+    if ($thumbnail != '') { ?>
+      <div class="float-left mr-2 mb-2">
+        <div class="card"><a href="<?php the_permalink(); ?>">
+          <?php echo $thumbnail; ?>
+        </a></div>
+      </div><?php
+    } ?>
     <div>
       <h1><?php the_title(); ?></h1>
     </div>
