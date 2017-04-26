@@ -21,16 +21,6 @@ class FIC_Adverts
         return $form;
     }
 
-    /* Set the Category Slug to "community-classifieds" */
-    public static function customize_taxonomy($args) {
-        if(!isset($args["rewrite"])) {
-            $args["rewrite"] = array();
-        }
-
-        $args["rewrite"]["slug"] = "ad-category";
-        return $args;
-    }
-
     /* Allow Using Hidden WooCommerce Products */
     public static function allow_hidden($args) {
         $args["meta_query"][0]["value"] = array("hidden", "visible");
@@ -39,7 +29,6 @@ class FIC_Adverts
 }
 
 add_filter("adverts_form_load", array("FIC_Adverts", "hide_price"));
-add_action("adverts_register_taxonomy", array("FIC_Adverts", "customize_taxonomy"));
 add_filter("adext_wc_payments_products_new", array("FIC_Adverts", "allow_hidden"));
 add_filter("adext_wc_payments_products_renew", array("FIC_Adverts", "allow_hidden"));
 

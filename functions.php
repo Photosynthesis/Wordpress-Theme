@@ -144,4 +144,42 @@ add_action('after_setup_theme', 'woocommerce_support');
 function woocommerce_support() {
   add_theme_support('woocommerce');
 }
+
+
+
+/** WPAdverts **/
+/* Allow Theme to Override Shortcode Templates */
+function theme_wpadverts_templates($template) {
+  $dirs = array(
+    get_template_directory() . "/wpadverts/",
+    ADVERTS_PATH . "/templates/"
+  );
+
+  $basename = basename($template);
+
+  foreach ($dirs as $dir) {
+    if (file_exists($dir . $basename)) {
+      return $dir . $basename;
+    }
+  }
+}
+add_action('adverts_template_load', 'theme_wpadverts_templates');
+
+/* Disable Loading of Page Template for Categories */
+function theme_wpadverts_init() {
+  remove_filter('template_include', 'adverts_template_include');
+}
+add_action('init', 'theme_wpadverts_init');
+
+/* Change Category Slug to `community-classifieds` */
+function theme_wpadverts_customize_taxonomy($args) {
+  if (!isset($args['rewrite'])) {
+    $args['rewrite'] = array();
+  }
+  $args['rewrite']['slug'] = 'community-classifieds';
+  return $args;
+}
+add_action("adverts_register_taxonomy", "theme_wpadverts_customize_taxonomy");
+
+
 ?>

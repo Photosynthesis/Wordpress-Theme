@@ -3,7 +3,7 @@
 /* Include Custom Styles & Bootstrap */
 //require('style!css!font-awesome/css/font-awesome.css');
 require('./styles.sass');
-window.jQuery = require('../node_modules/jquery/dist/jquery.slim.js');
+window.jQuery = require('../node_modules/jquery/dist/jquery.js');
 window.Tether = require('../node_modules/tether/dist/js/tether.js');
 require('../node_modules/bootstrap/dist/js/bootstrap.js');
 
@@ -33,5 +33,11 @@ $(document).ready(function() {
   /* Hide Any Shown Menus When Touching Outside a Menu */
   $('body').on('touchend', function(event) {
     $('li.menu-item.dropdown').removeClass('show');
+  });
+
+  /* WPAdverts */
+  /* Toggle Contact Form on Button Click */
+  $('body.advert-template-default button#adverts-send-message-button').click(function() {
+    $('body.advert-template-default .adverts-contact-box').toggleClass('d-block');
   });
 });
