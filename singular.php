@@ -1,4 +1,4 @@
-<?php theme_main_top(); ?>
+<?php theme_top(); ?>
 
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -52,6 +52,6 @@ if (!is_page()) { ?>
 }
 
 
-theme_main_bottom();
+theme_bottom();
 
 ?>

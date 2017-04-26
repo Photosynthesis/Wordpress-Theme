@@ -52,23 +52,23 @@ function theme_main_column_css_classes() {
 }
 
 /* Print Out the Header, Left Sidebar, and Opening Center Tag */
-function theme_main_top() {
+function theme_top($sidebar='main') {
   $sidebar_class = theme_left_sidebar_css_classes();
   $center_class = theme_main_column_css_classes();
   get_header();
   echo "\n<div class='row'>";
   echo "\n<div id='left-sidebar' class='{$sidebar_class}'>\n";
-  dynamic_sidebar('main-left');
+  dynamic_sidebar("{$sidebar}-left");
   echo "\n</div>\n";
   echo "<div id='main' class='{$center_class}'>";
 }
 
 /* Print Out the Closing Center Tag, Right Sidebar, and Footer */
-function theme_main_bottom() {
+function theme_bottom($sidebar='main') {
   $sidebar_class = theme_right_sidebar_css_classes();
   echo "</div>";
   echo "<div id='right-sidebar' class='{$sidebar_class}'>\n";
-  dynamic_sidebar('main-right');
+  dynamic_sidebar("{$sidebar}-right");
   echo "\n</div></div>\n";
   get_footer();
 }

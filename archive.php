@@ -1,4 +1,4 @@
-<?php theme_main_top(); ?>
+<?php theme_top(); ?>
 
 
 <?php if (is_category()) { ?>
@@ -46,4 +46,4 @@
 </div>
 
 
-<?php theme_main_bottom(); ?>
+<?php theme_bottom(); ?>

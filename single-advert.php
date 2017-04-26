@@ -2,7 +2,7 @@
 
 wp_enqueue_script('wpadverts-mal-google-api');
 
-theme_main_top();
+theme_top();
 $post_id = get_the_ID();
 ?>
 
@@ -101,4 +101,4 @@ do_action("adverts_tpl_single_bottom", $post_id); ?>
 <script type='application/javascript' src='<?php echo plugins_url('wpadverts-mal/assets/js/map-single.js'); ?>'></script>
 
 
-<?php theme_main_bottom(); ?>
+<?php theme_bottom(); ?>
