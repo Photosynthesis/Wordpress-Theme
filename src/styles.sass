@@ -251,6 +251,8 @@ h1, h2, h3, h4, h5
     font-size: 1.3rem
   h3
     font-size: 1.1rem
+  h4
+    font-size: 1rem
   /* Style Pagination Links as Buttons */
   .paginate
     a
@@ -356,6 +358,32 @@ body.error404.incsub_wiki
       display: none
     .incsub_wiki_tabs
       border-bottom: none
+
+
+
+/** WooCommerce **/
+body.woocommerce
+  /* Make the Search/List Product Count Match the Height of the Ordering Select */
+  .result-count
+    line-height: calc(2rem + 2px);
+  /* Product List Cards */
+  ul.products > li.product > div.card
+    > .price-and-cart
+      /* Move the Price & Button to Bottom of the Card */
+      margin-top: auto
+      .btn
+        /* Add Space Between Price & Button */
+        @extend .mt-2
+        /* Make Top Corners of Button Flush With Sides of Card */
+        border-top-left-radius: 0
+        border-top-right-radius: 0
+    /* Don't Underline Any Link Text On Hover/Focus */
+    a:hover, a:focus
+      text-decoration: none
+  /* Color the Prices Green */
+  span.price
+    color: $brand-success
+
 
 
 /** WPAdverts **/
