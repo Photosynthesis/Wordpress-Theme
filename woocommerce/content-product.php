@@ -26,10 +26,16 @@ global $product;
 if ( empty( $product ) || ! $product->is_visible() ) {
   return;
 }
+
+$card_classes = 'card h-100';
+if ($product->is_on_sale()) {
+  $card_classes .= ' card-outline-primary';
+}
 ?>
 <li <?php post_class('text-center col-12 col-sm-8 col-xl-6 mb-4'); ?>>
   <a href='<?php the_permalink(); ?>'>
-    <div class='card h-100'>
+    <div class='<?php echo $card_classes; ?>'>
+      <?php woocommerce_show_product_loop_sale_flash(); ?>
       <img src='<?php the_post_thumbnail_url(); ?>' class='mw-100 mx-auto card-img-top' />
       <h4 class='mt-2 px-1'><?php the_title(); ?></h4>
       <div class='price-and-cart'>

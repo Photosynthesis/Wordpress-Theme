@@ -40,7 +40,7 @@ if ( $wp_query->max_num_pages <= 1 ) {
       'end_size'     => 3,
       'mid_size'     => 3,
     ) ) );
-    // TODO: Refactor into function, repeated in wpadverts/list.php
+    // TODO: Refactor into function, similar code in wpadverts/list.php
     if (is_array($links)) {
       foreach ($links as $index => $link) {
         $class = 'page-item';
