@@ -27,6 +27,12 @@ $sizes: (10: 10%, 25: 25%, 33: 33%, 40: 40%, 50: 50%, 66: 66%, 75: 75%, 100: 100
 
 @import "~bootstrap/scss/bootstrap"
 
+/** Utility Classes */
+/* Auto Height for Images with Height Attributes */
+.h-auto
+  height: auto !important
+
+
 /** General Site Design **/
 
 /* Always Fill the Page */
@@ -366,6 +372,7 @@ body.woocommerce
   /* Make the Search/List Product Count Match the Height of the Ordering Select */
   .result-count
     line-height: calc(2rem + 2px);
+
   /* Product List Cards */
   ul.products > li.product > div.card
     /* On Sale Badge */
@@ -391,9 +398,32 @@ body.woocommerce
     /* Don't Underline Any Link Text On Hover/Focus */
     a:hover, a:focus
       text-decoration: none
+
   /* Color the Prices Green */
   span.price
     color: $brand-success
+
+  /* Cart Widget */
+  .widget_shopping_cart
+    /* Remove Horizontal Line Above First Item */
+    tr:first-of-type > td
+      border-top: none
+    /* Fix the Width of the Product Image */
+    td.mini-cart-image-cell
+      width: 55px
+    /* Remove Extra Spacing Around Variation Text */
+    dl.variation
+      &, > dt, > dd, > dd p
+        margin-bottom: 0
+
+  /* Products Widget */
+  .product_list_widget
+    h5
+      font-size: 0.9rem
+    /* Fix Size of Placeholder Images */
+    .woocommerce-placeholder
+      height: auto
+      max-width: 100%
 
 
 

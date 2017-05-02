@@ -153,7 +153,7 @@ function theme_wc_format_price_range($price, $from, $to) {
   return "Starting From {$formatted_from}";
 }
 add_filter('woocommerce_format_price_range', 'theme_wc_format_price_range', 10, 3);
-/* SUrround Result Count & Ordering Dropdown In A Clearfix Div Tag */
+/* Surround Result Count & Ordering Dropdown In A Clearfix Div Tag */
 function theme_wc_count_ordering_start() {
   echo '<div class="clearfix mb-3">';
 }
@@ -162,6 +162,37 @@ function theme_wc_count_ordering_end() {
 }
 add_action('woocommerce_before_shop_loop', 'theme_wc_count_ordering_start', 19);
 add_action('woocommerce_before_shop_loop', 'theme_wc_count_ordering_end', 31);
+/* Change the Tag of the WC Products Widget to a Div */
+function theme_wc_products_widget_start($tag) {
+  return str_replace('<ul class="', '<div class="list-group ', $tag);
+}
+function theme_wc_products_widget_end($tag) {
+  return '</div>';
+}
+add_filter('woocommerce_before_widget_product_list', 'theme_wc_products_widget_start');
+add_filter('woocommerce_after_widget_product_list', 'theme_wc_products_widget_end');
+/* Show Accepted Payment Method Images */
+function theme_wc_accepted_payment_methods() {
+    $path = get_stylesheet_directory_uri() . "/img/cc-logos/";
+
+    $method_image_to_name = array(
+        'amex' => 'American Express',
+        'discover' => 'Discover',
+        'mastercard' => 'MasterCard',
+        'paypal' => 'PayPal',
+        'visa' => 'Visa',
+    );
+
+    $content = "<div class='pt-1 text-center'>";
+    foreach ($method_image_to_name as $image => $name) {
+        $image_path = "{$path}{$image}.png";
+        $content .= "<img class='mr-3 mb-3' alt='{$name}' title='{$name}' src='{$image_path}' />";
+    }
+    $content .= "</div>";
+
+    return $content;
+}
+add_shortcode('fic_accepted_payment_methods', 'theme_wc_accepted_payment_methods');
 
 
 /** WPAdverts **/

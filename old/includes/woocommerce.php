@@ -111,29 +111,6 @@ class FIC_WC
         }
         return $is_valid;
     }
-
-    public static function show_accepted_payment_methods() {
-        $path = get_stylesheet_directory_uri() . "/img/cc-logos/";
-
-        $method_image_to_name = array(
-            'amex' => 'American Express',
-            'discover' => 'Discover',
-            'mastercard' => 'MasterCard',
-            'paypal' => 'PayPal',
-            'visa' => 'Visa',
-        );
-
-        $content = "<span class='payment-methods-widget'>";
-        foreach ($method_image_to_name as $image => $name) {
-            $image_path = "{$path}{$image}.png";
-            $content .= "<span class='payment-method-image'>";
-            $content .= "<img alt='{$name}' title='{$name}' src='{$image_path}' />";
-            $content .= "</span>";
-        }
-        $content .= "</span>";
-
-        return $content;
-    }
 }
 
 add_action('after_setup_theme',
@@ -143,9 +120,6 @@ add_action('woocommerce_subscription_payment_complete',
     array('FIC_WC', 'activate_directory_listing_membership'));
 
 add_action('woocommerce_add_to_cart_validation',
-    array('FIC_WC', 'validate_community_name_Exists'), 10, 2);
-
-add_shortcode('fic_accepted_payment_methods',
-    array('FIC_WC', 'show_accepted_payment_methods'));
+    array('FIC_WC', 'validate_community_name_exists'), 10, 2);
 
 ?>
