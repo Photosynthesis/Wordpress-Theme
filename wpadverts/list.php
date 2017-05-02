@@ -51,7 +51,6 @@ if ($show_results && $loop->have_posts()) { ?>
           if (($index + 1) == max(1, $paged)) {
             $class .= ' active';
             $link = str_replace('current', 'active', $link);
-            $link = str_replace('span', 'a', $link);
           }
           echo "<li class='{$class}'>{$link}</li>\n";
         }
