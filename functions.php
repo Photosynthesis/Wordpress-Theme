@@ -75,11 +75,26 @@ function theme_bottom($sidebar='main') {
 
 
 /** Login Page **/
-/* Replace the Logo */
-function theme_customize_login_logo() {
+/* Replace the Logo & Change the Background Area & Color */
+function theme_customize_login_css() {
   $logo_path = get_stylesheet_directory_uri() . "/img/logo-login-fic.png";
   echo <<<CSS
     <style type="text/css">
+      body {
+        background: #666698 !important;
+      }
+      #login {
+        background: white;
+        margin: 0 auto !important;
+        padding: 1em 1.5em !important;
+        border-bottom-left-radius: 3px !important;
+        border-bottom-right-radius: 3px !important;
+      }
+      #login > form {
+        margin-top: 0 !important;
+        padding: 1em 0 0 !important;
+        box-shadow: none;
+      }
       #login h1 a, .login h1 a {
         background-image: url("{$logo_path}");
         background-size: auto;
@@ -89,7 +104,7 @@ function theme_customize_login_logo() {
     </style>
 CSS;
 }
-add_action('login_enqueue_scripts', 'theme_customize_login_logo');
+add_action('login_enqueue_scripts', 'theme_customize_login_css');
 
 /* Link to Logo to the Home Page */
 function theme_customize_login_logo_url() {
