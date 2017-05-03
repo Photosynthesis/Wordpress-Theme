@@ -208,6 +208,11 @@ function theme_wc_accepted_payment_methods() {
     return $content;
 }
 add_shortcode('fic_accepted_payment_methods', 'theme_wc_accepted_payment_methods');
+/* Customize the Name Your Price Amount Input Field */
+function theme_wc_nyp_amount_input($return, $product_id, $prefix) {
+  return str_replace('class="', 'class="form-control text-left ', $return);
+}
+add_filter('woocommerce_get_price_input', 'theme_wc_nyp_amount_input', 3);
 
 
 /** WPAdverts **/

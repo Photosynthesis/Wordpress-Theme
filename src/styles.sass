@@ -373,12 +373,18 @@ body.woocommerce
   .result-count
     line-height: calc(2rem + 2px);
 
+  /* Make On Sale Badge Text More Visible */
+  .onsale
+    font-size: 1rem
+
+  /* Color the Prices Green */
+  .price
+    color: $brand-success
+
   /* Product List Cards */
   ul.products > li.product > div.card
     /* On Sale Badge */
     .onsale
-      /* Make Text More Visible */
-      font-size: 1rem
       /* Position the Badge Over the Image */
       position: absolute
       top: 0
@@ -399,9 +405,25 @@ body.woocommerce
     a:hover, a:focus
       text-decoration: none
 
-  /* Color the Prices Green */
-  span.price
-    color: $brand-success
+  /* Product Details */
+  &.single-product
+    /* Properly Position Badge Over Product Image */
+    .onsale
+      position: absolute
+      top: -0.5em
+      left: 1.5em
+    /* Fix Font Weight of Name Your Price Labels & Inputs */
+    .nyp
+      label, input
+        font-weight: normal
+    /* Fix Spacing Around Review Comments */
+    #comments ol.commentlist
+      margin-top: 1.5em;
+      padding-left: 1em;
+    /* Hide Suggested Price for NYP Subscriptions */
+    div.product-type-variable-subscription.nyp-product .woocommerce-variation-price
+      display: none
+
 
   /* Cart Widget */
   .widget_shopping_cart

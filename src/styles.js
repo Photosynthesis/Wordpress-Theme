@@ -35,6 +35,13 @@ $(document).ready(function() {
     $('li.menu-item.dropdown').removeClass('show');
   });
 
+  /* WooCommerce */
+  /* Fix Classes When Clicking Tabs */
+  $('.woocommerce-tabs.wc-tabs-wrapper li.nav-item a').on('click', function(event) {
+    $('.woocommerce-tabs.wc-tabs-wrapper li.nav-item a').removeClass('active');
+    $(this).addClass('active');
+  });
+
   /* WPAdverts */
   /* Toggle Contact Form on Button Click */
   $('body.advert-template-default button#adverts-send-message-button').click(function() {
