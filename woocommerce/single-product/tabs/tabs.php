@@ -28,31 +28,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 $tabs = apply_filters( 'woocommerce_product_tabs', array() );
 
-if ( ! empty( $tabs ) ) : ?>
+if ( ! empty( $tabs ) ) :
+  $key = 'description';
+  $tab = $tabs[$key]; ?>
 
-  <div class="woocommerce-tabs wc-tabs-wrapper col-24">
-    <ul class="nav nav-tabs tabs wc-tabs pl-3" role="tablist"><?php
-      $first_tab = true;
-      foreach ( $tabs as $key => $tab ) :
-        if ($key === 'additional_information') { continue; }
-        if ($first_tab === true) {
-          $extra_class = 'active';
-          $first_tab = false;
-        } else {
-          $extra_class = '';
-        } ?>
-        <li class="nav-item <?php echo esc_attr( $key ); ?>_tab" id="tab-title-<?php echo esc_attr( $key ); ?>" role="tab" aria-controls="tab-<?php echo esc_attr( $key ); ?>">
-          <a href="#tab-<?php echo esc_attr( $key ); ?>" class='nav-link <?php echo $extra_class; ?>'><?php echo apply_filters( 'woocommerce_product_' . $key . '_tab_title', esc_html( $tab['title'] ), $key ); ?></a>
-        </li>
-      <?php endforeach; ?>
-    </ul>
-    <div class='mt-2'>
-      <?php foreach ( $tabs as $key => $tab ) :
-        if ($key === 'additional_information') { continue; } ?>
-        <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--<?php echo esc_attr( $key ); ?> panel entry-content wc-tab" id="tab-<?php echo esc_attr( $key ); ?>" role="tabpanel" aria-labelledby="tab-title-<?php echo esc_attr( $key ); ?>">
-          <?php call_user_func( $tab['callback'], $key, $tab ); ?>
-        </div>
-      <?php endforeach; ?>
+  <div class='mt-2 col-24'>
+    <div class="entry-content" id="tab-<?php echo esc_attr( $key ); ?>">
+      <?php call_user_func( $tab['callback'], $key, $tab ); ?>
     </div>
   </div>
 
