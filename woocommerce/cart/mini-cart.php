@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
   <?php else : ?>
 
-    <tr><td class='text-center'><?php _e( 'Your Cart is Currently Empty', 'woocommerce' ); ?></td></tr>
+    <tr><td class='text-center small text-muted font-italic'><?php _e( 'Your Cart is Currently Empty', 'woocommerce' ); ?></td></tr>
 
   <?php endif; ?>
 
