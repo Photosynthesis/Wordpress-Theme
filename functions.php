@@ -212,7 +212,7 @@ add_shortcode('fic_accepted_payment_methods', 'theme_wc_accepted_payment_methods
 function theme_wc_nyp_amount_input($return, $product_id, $prefix) {
   return str_replace('class="', 'class="form-control text-left ', $return);
 }
-add_filter('woocommerce_get_price_input', 'theme_wc_nyp_amount_input', 3);
+add_filter('woocommerce_get_price_input', 'theme_wc_nyp_amount_input', 10, 3);
 
 
 /** WPAdverts **/

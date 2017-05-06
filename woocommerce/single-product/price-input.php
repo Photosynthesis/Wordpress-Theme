@@ -10,7 +10,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 ?>
 
-<div class="nyp my-2" <?php echo WC_Name_Your_Price_Helpers::get_data_attributes( $product_id, $prefix ); ?> >
+<div class="nyp col-24 my-2" <?php echo WC_Name_Your_Price_Helpers::get_data_attributes( $product_id, $prefix ); ?> >
   <div class='row form-group mb-0'>
 
     <?php do_action( 'woocommerce_nyp_before_price_input', $product_id ); ?>
