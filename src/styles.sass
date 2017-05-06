@@ -381,6 +381,11 @@ body.error404.incsub_wiki
   .price
     color: $brand-success
 
+  /* Remove Extra Spacing Around Variation Text */
+  dl.variation
+    &, > dt, > dd, > dd p
+      margin-bottom: 0
+
   /* Product List Cards */
   ul.products > li.product > div.card
     /* On Sale Badge */
@@ -424,7 +429,6 @@ body.error404.incsub_wiki
     div.product-type-variable-subscription.nyp-product .woocommerce-variation-price
       display: none
 
-
   /* Cart Widget */
   .widget_shopping_cart
     /* Remove Horizontal Line Above First Item */
@@ -436,16 +440,33 @@ body.error404.incsub_wiki
 
   /* Carts */
   .widget_shopping_cart, .cart
-    /* Remove Extra Spacing Around Variation Text */
-    dl.variation
-      &, > dt, > dd, > dd p
-        margin-bottom: 0
     /* Don't Underline Remove Links */
     .remove:hover, .remove:active
       text-decoration: none
   /* Fix the State/County Shipping Calculator Field for Non-U.S. Countries */
   .cart_totals #calc_shipping_state
     @extend .form-control
+
+  /* Checkout */
+  .checkout
+    /* Color Markers for Required Fields Red */
+    .required
+      color: $brand-danger
+    /* Style Fields with Errors */
+    .woocommerce-invalid
+      @extend .has-danger
+    li.wc_payment_method
+      &.payment_method_paypal
+        a.about_paypal
+          float: right
+        img
+          max-width: 50%
+        .payment_box
+          p
+            margin-bottom: 0
+      &.payment_method_stripe div.payment_box p.woocommerce-SavedPaymentMethods-saveNew
+        margin-bottom: 0
+
 
   /* Products Widget */
   .product_list_widget

@@ -8,7 +8,7 @@
     <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
     <script type="application/javascript" src="<?php echo get_stylesheet_directory_uri() . '/dist/styles.js'; ?>"></script>
     <script type="application/javascript" src="<?php echo get_stylesheet_directory_uri() . '/dist/base.js'; ?>"></script>
-    <link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
     <?php if (is_singular() && get_option('thread_comments')) { wp_enqueue_script('comment-reply'); } ?>
     <?php wp_head(); ?>
   </head>
