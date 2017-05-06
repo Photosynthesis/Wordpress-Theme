@@ -218,6 +218,8 @@ add_image_size('cart-thumbnail', 75, 0);
 /* Move Cross Sells Below Cart Totals */
 remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
 add_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display', 11);
+/* Show 18 Products Per Page */
+add_filter('loop_shop_per_page', create_function('$cols', 'return 18;'), 20);
 
 
 /** WPAdverts **/
