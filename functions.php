@@ -213,6 +213,11 @@ function theme_wc_nyp_amount_input($return, $product_id, $prefix) {
   return str_replace('class="', 'class="form-control text-left ', $return);
 }
 add_filter('woocommerce_get_price_input', 'theme_wc_nyp_amount_input', 10, 3);
+/* Add an Image Size for Cart Thumbnails */
+add_image_size('cart-thumbnail', 75, 0);
+/* Move Cross Sells Below Cart Totals */
+remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
+add_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display', 11);
 
 
 /** WPAdverts **/

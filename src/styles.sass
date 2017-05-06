@@ -368,7 +368,7 @@ body.error404.incsub_wiki
 
 
 /** WooCommerce **/
-body.woocommerce
+.woocommerce
   /* Make the Search/List Product Count Match the Height of the Ordering Select */
   .result-count
     line-height: calc(2rem + 2px);
@@ -433,10 +433,19 @@ body.woocommerce
     /* Fix the Width of the Product Image */
     td.mini-cart-image-cell
       width: 55px
+
+  /* Carts */
+  .widget_shopping_cart, .cart
     /* Remove Extra Spacing Around Variation Text */
     dl.variation
       &, > dt, > dd, > dd p
         margin-bottom: 0
+    /* Don't Underline Remove Links */
+    .remove:hover
+      text-decoration: none
+  /* Fix the State/County Shipping Calculator Field for Non-U.S. Countries */
+  .cart_totals #calc_shipping_state
+    @extend .form-control
 
   /* Products Widget */
   .product_list_widget
