@@ -26,7 +26,12 @@ if ( ! $messages ) {
 
 ?>
 <div class="alert alert-danger woocommerce-error clearfix">
-  <?php foreach ( $messages as $message ) {
-    echo str_replace('class="button', 'class="btn btn-secondary float-right ml-2', wp_kses_post( $message ));
-  } ?>
+<?php
+  if (sizeof($messages) > 1) { echo '<ul>'; }
+    foreach ( $messages as $message ) {
+      if (sizeof($messages) > 1) { echo '<li>'; }
+        echo str_replace('class="button', 'class="btn btn-secondary float-right ml-2', wp_kses_post( $message ));
+      if (sizeof($messages) > 1) { echo '</li>'; }
+    }
+  if (sizeof($messages) > 1) { echo '</ul>'; } ?>
 </div>
