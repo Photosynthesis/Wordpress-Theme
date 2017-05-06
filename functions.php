@@ -220,6 +220,22 @@ remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
 add_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display', 11);
 /* Show 18 Products Per Page */
 add_filter('loop_shop_per_page', create_function('$cols', 'return 18;'), 20);
+/* Remove Hidden Products from Queries */
+function theme_wc_remove_hidden($query, $wc_query) {
+  $hidden_meta = array('key' => '_visibility', 'value' => 'hidden', 'compare' => '!=');
+  $meta = $query->get('meta_query');
+  if (!is_search()) {
+    $meta[] = array(
+      'relation' => 'AND',
+      $hidden_meta,
+      array('key' => '_visibility', 'value' => 'search', 'compare' => '!='),
+    );
+  } else {
+    $meta[] = $hidden_meta;
+  }
+  $query->set('meta_query', $meta);
+}
+add_action('woocommerce_product_query', 'theme_wc_remove_hidden', 10, 2);
 
 
 /** WPAdverts **/
