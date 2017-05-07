@@ -35,8 +35,12 @@ if ($product->is_on_sale()) {
 <li <?php post_class('text-center col-12 col-sm-8 col-xl-6 mb-4'); ?>>
   <a href='<?php the_permalink(); ?>'>
     <div class='<?php echo $card_classes; ?>'>
-      <?php woocommerce_show_product_loop_sale_flash(); ?>
-      <img src='<?php the_post_thumbnail_url(); ?>' class='mw-100 mx-auto card-img-top' />
+      <?php woocommerce_show_product_loop_sale_flash();
+      $img_src = get_the_post_thumbnail_url(null, 'product-thumbnail');
+      if (!$img_src) {
+        $img_src = wc_placeholder_img_src();
+      } ?>
+      <img src='<?php echo $img_src ?>' class='mw-100 mx-auto card-img-top' />
       <h4 class='mt-2 px-1'><?php the_title(); ?></h4>
       <div class='price-and-cart'>
         <strong><?php woocommerce_template_loop_price(); ?></strong>
