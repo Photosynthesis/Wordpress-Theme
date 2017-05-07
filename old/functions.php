@@ -1,41 +1,5 @@
 <?php
-/* By taking advantage of hooks, filters, and the Custom Loop API, you can make Thesis
- * do ANYTHING you want. For more information, please see the following articles from
- * the Thesis User’s Guide or visit the members-only Thesis Support Forums:
- *
- * Hooks: http://diythemes.com/thesis/rtfm/customizing-with-hooks/
- * Filters: http://diythemes.com/thesis/rtfm/customizing-with-filters/
- * Custom Loop API: http://diythemes.com/thesis/rtfm/custom-loop-api/
-
----:[ place your custom code below this line ]:---*/
-
-// http://wpengineer.com/2487/
-// Disable auto-embeds for WordPress >= v3.5
-// remove_filter( 'the_content', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 );
-
-// force mappress update on all directory listings
-// http://wphostreviews.com/forums/topic/custom-fields-and-mashup
-//  $wpq = new WP_Query('post_type=directory&posts_per_page=-1');
-//  foreach($wpq->posts as $postid)
-//      do_action('mappress_update_meta', $postid);
-
-// Add additional acceptable tags to author bios pages
-// http://wordpress.org/support/topic/how-to-add-and-tags-in-comments
-/*add_filter('pre_user_description','fa_allow_tags_in_comments');
-function fa_allow_tags_in_comments($data) {
-    global $allowedtags;
-//  $allowedtags['span'] = array('style'=>array());
-    $allowedtags['p'] = array();
-    $allowedtags['br'] = array();
-        $allowedtags['ul'] = array();
-        $allowedtags['li'] = array();
-    return $data;
-}*/
-
-
-/*
- * Import Additional Functions, Shortcodes & Customizations
- */
+/** Import Additional Functions, Shortcodes & Customizations **/
 
 /* Utility Functions */
 require_once 'includes/utilities.php';
@@ -73,28 +37,6 @@ require_once 'includes/woocommerce_products.php';
 
 /* Separate WooCommerce Product Reviews from Wordpress Comments */
 require_once 'includes/separate_product_reviews.php';
-
-
-// Scripts
-/* Shortcode to Fix Sitewide Links Pointing to Store Products & Categories */
-//require_once('scripts/fix_links_to_store_products_and_categories.php');
-/* Shortcode to Remove Old, Unpublished, Imported Directory Listings */
-//require_once('scripts/remove_unused_communities.php');
-
-
-add_action('admin_head', 'print_custom_admin_css');
-function print_custom_admin_css()
-{
-    echo '
-        <style>
-          div#poststuff.woocommerce-reports-wide {
-            width: 85% !important;
-            float: right !important;
-          }
-        </style>
-    ';
-}
-
 
 // allow more HTML tags in author bios description
 remove_filter('pre_user_description','wp_filter_kses');
@@ -189,32 +131,6 @@ if (!function_exists('iweb_reverse_comments')) {
 }
 add_filter ('comments_array', 'iweb_reverse_comments');
 
-// show category descriptions
-// http://www.themethesis.com/tutorials/show-category-descriptions/
-/*function cat_desc () {
-    if ( is_category() ) { ?>
-        <div class="catdesc"><?php echo category_description( $category ); ?></div>
-<?php }
-}
-add_action('thesis_hook_before_teasers_box', 'cat_desc'); */
-
-// replace Ubermenu search shortcode
-// http://sevenspark.com/docs/ubermenu-search-bar
-/*function custom_searchform(){
-
-    $placeholder = __( 'Search ic.org' , 'ubermenu' );
-
-    $form = '<form class="ubersearch-v2" role="search" method="get" id="searchform-custom" action="' . esc_url( home_url( '/' ) ) . '" >
-    <div class="ubersearch">
-    <input type="text" value="' . get_search_query() . '" name="s" id="menu-search-text" placeholder="'. $placeholder .'" />
-    <input type="submit" id="menu-search-submit" value="'. __( 'Go' , 'ubermenu' ) .'" />
-    </div>
-    </form>';
-
-    return $form;
-}
-add_shortcode('custom-ubermenu-search', 'custom_searchform');*/
-
 // remove automatic paragraph breaks on directory
 // https://formidablepro.com/help-desk/remove-p-tags-from-paragraph-text/
 add_filter('frm_use_wpautop', create_function('', "return false;"));
@@ -266,68 +182,6 @@ function filter_custom_display($where, $args){
 
 
 
-
-// Author Profile Box, hide on Directory Listings
-// http://thesis-blogs.com/add-an-author-profile-box-below-posts-in-thesis/
-function post_footer_author() {
-if (is_single() && 'directory' != get_post_type() ) { ?>
-<div class="post-author">
-    <?php if( get_the_author_meta('user_custom_avatar', get_the_author_id()) != '' || get_user_meta(get_the_author_id(), 'simple_local_avatar', true) != '' ) echo get_avatar( get_the_author_id() , 85 ); ?>
-    <h4>Article by <?php the_author_posts_link(); /* ?>
-    <h4>Article by <a href="<?php the_author_url(); ?>">
-    <?php the_author_firstname(); ?> <?php the_author_lastname(); </a>*/?></h4>
-    <p><?php the_author_description(); ?></p>
-    <p><?php the_author_firstname(); ?> has posted <span><?php the_author_posts(); ?></span> article(s) online.</p>
-<?php //    <p>Subscribe to feed via <a href="http://feeds.feedburner.com/thesis-blogs"><b>RSS</b></a> or <a href="#"><b>EMAIL</b></a> to receive updates.</p> ?>
-</div><!-- end post-author -->
-<?php }
-}
-
-//add_action('thesis_hook_after_post_box', 'post_footer_author');
-
-// Add Author bio and avatar at top of author archive page
-// http://thesis-blogs.com/custom-author-archive-page-in-thesis/
-// Hide Author Archive Page Headline
-function hide_author_intro_headline($output) {
-        if (is_author()) {
-        $output ='<br/>';
-        }
-return $output;
-}
-
-//add_filter('thesis_archive_intro','hide_author_intro_headline');
-
-// Author Archive Page
-function author_info() {
-if (is_author())
-        {
-?>
-<?php
-$curauth = (get_query_var('author_name')) ? get_user_by('slug', get_query_var('author_name')) : get_userdata(get_query_var('author'));
-?>
-<div class="authorarchive">
-<?php if ( get_the_author_meta('user_custom_avatar', get_the_author_id()) != '' || get_user_meta($curauth->ID, 'simple_local_avatar', true) != '' ) echo get_avatar($curauth->ID, 70); ?>
-<h4>Archive for <?php the_author_posts_link(); ?></h4>
-<? /* <h4>Archive for <a href="<?php echo $curauth->user_url; ?>"><?php echo $curauth->first_name; ?> <?php echo $curauth->last_name; ?></a></h4> */ ?>
-<p><?php echo $curauth->description; ?></p>
-<p class="hlight"><?php echo $curauth->first_name; ?> has posted <span><?php the_author_posts(); ?></span> article(s) online.</p>
-</div>
-<?php
-        }
-}
-
-//add_action('thesis_hook_before_content', 'author_info');
-
-function cat_desc (){
-    if(is_category()){
-    ?>
-    <div class="catdesc"><?php echo category_description( $category ); ?></div>
-    <?php }
-}
-//add_action('thesis_hook_before_teasers_box', 'cat_desc');
-
-
-
 // override the fucking broken WC lost password page
 // http://codex.wordpress.org/Plugin_API/Filter_Reference/lostpassword_url
 function my_lostpwd_page( $lostpassword_url, $redirect ) {
@@ -335,107 +189,5 @@ function my_lostpwd_page( $lostpassword_url, $redirect ) {
 }
 add_filter( 'lostpassword_url', 'my_lostpwd_page' );
 
-/*------------------------------------------------------------------------------*/
 
-/* Start Code to make shortcodes work in product category descriptions */
-/* http://www.sunrisecreative.co.uk/make-shortcodes-work-in-product-category-descriptions/ */
-
-/*------------------------------------------------------------------------------*/
-
-function woocommerce_taxonomy_archive_description() {
-    if ( is_tax( array( 'product_cat', 'product_tag' ) ) && get_query_var( 'paged' ) == 0 ) {
-        $description = term_description();
-        if ( $description ) {
-            echo '<div>' . do_shortcode( wpautop( wptexturize( $description ) ) ) . '</div>';
-        }
-    }
-}
-
-/*------------------------------------------------------------------------------*/
-
-/*End Code to make shortcodes work in product category descriptions*/
-
-/*------------------------------------------------------------------------------*/
-
-// change related products quantity to 9 products
-remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
-function custom_output_related_products() {
-// Display 9 related products
-woocommerce_related_products( 9, 3 );
-}
-add_action( 'woocommerce_after_single_product_summary', 'custom_output_related_products', 20 );
-
-// Show empty (without products) categories. (to show short code categories)
-/* http://wordpress.org/support/topic/plugin-woocommerce-show-empty-product-categories */
-add_filter('woocommerce_product_categories_widget_args', 'woocommerce_show_empty_categories');
-function woocommerce_show_empty_categories($cat_args){
-    $cat_args['hide_empty']=0;
-    return $cat_args;
-}
-
-// Use WC 2.0 variable price format, now include sale price strikeout
-// http://gerhardpotgieter.com/2014/02/13/woocommerce-2-1-variation-prices-revert-to-2-0-format/
-add_filter( 'woocommerce_variable_sale_price_html', 'wc_wc20_variation_price_format', 10, 2 );
-add_filter( 'woocommerce_variable_price_html', 'wc_wc20_variation_price_format', 10, 2 );
-function wc_wc20_variation_price_format( $price, $product ) {
-    // Main Price
-    $prices = array( $product->get_variation_price( 'min', true ), $product->get_variation_price( 'max', true ) );
-    $price = $prices[0] !== $prices[1] ? sprintf( __( '%1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
-    // Sale Price
-    $prices = array( $product->get_variation_regular_price( 'min', true ), $product->get_variation_regular_price( 'max', true ) );
-    sort( $prices );
-    $saleprice = $prices[0] !== $prices[1] ? sprintf( __( '%1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
-
-    if ( $price !== $saleprice ) {
-        $price = '<del>' . $saleprice . '</del> <ins>' . $price . '</ins>';
-    }
-    return $price;
-}
-
-// Display 100 products per page. Goes in functions.php
-// http://docs.woothemes.com/document/change-number-of-products-displayed-per-page/
-add_filter( 'loop_shop_per_page', create_function( '$cols', 'return 100;' ), 20 );
-
-// show the short description exerpt on product listing pages
-// duplicate of woocommerce_template_single_excerpt function, modified
-// http://wordpress.org/support/topic/how-to-add-product-description-to-category-or-shop-page
-function show_product_short_desc() {
-    global $post;
-
-    if ( ! $post->post_excerpt ) return;
-    ?>
-    <div itemprop="description" id="product_short_desc">
-            <?php echo apply_filters( 'woocommerce_short_description', $post->post_excerpt ) ?>
-    </div>
-<?php }
-add_action('woocommerce_after_shop_loop_item_title','show_product_short_desc', 5);
-
-
-/*add_filter( 'avatar_defaults', 'newgravatar' );
-function newgravatar ($avatar_defaults) {
-//    $myavatar = get_bloginfo('template_directory') . '/wp-includes/images/blank.gif';
-    $myavatar = 'http://wp.ic.org/wp-includes/images/blank.gif';
-    $avatar_defaults[$myavatar] = "Blank.gif";
-    return $avatar_defaults;
-}*/
-
-// Add custom authors page
-// http://diythemes.com/thesis/rtfm/contributors-authors-page/
-/*function list_all_authors() {
-    if (is_page('Communities Authors')) {
-    global $wpdb;
-    $authors = $wpdb->get_results("SELECT ID, user_nicename from $wpdb->users ORDER BY display_name");
-    foreach ($authors as $author ) {
-    $aid = $author->ID; ?>
-        <div class="author_info <?php the_author_meta('user_nicename',$aid); ?>">
-            <span class="author_photo"><?php echo get_avatar($aid,96); ?></span>
-            <p><a href="<?php get_bloginfo('url'); ?>/author/<?php the_author_meta('user_nicename', $aid); ?>"><?php the_author_meta('display_name',$aid); ?></a></p>
-            <p><?php the_author_meta('description',$aid); ?></p>
-            <p class="author_email"><a href="mailto:<?php the_author_meta('user_email', $aid); ?>" title="Send an Email to the Author of this Post">Contact the author</a></p>
-        </div>
-    <?php }
-    }
-}
-add_action('thesis_hook_custom_template','list_all_authors');
-remove_action('thesis_hook_custom_template','thesis_custom_template_sample');*/
 // END
