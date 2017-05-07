@@ -386,6 +386,19 @@ body.error404.incsub_wiki
     &, > dt, > dd, > dd p
       margin-bottom: 0
 
+  /* Category Sidebar Widget */
+  &.widget_product_categories
+    /* Push Categories to Left */
+    ul
+      padding-left: 1.5rem
+    /* Emphasize Current Category in Sidebar Widget */
+    .current-cat, .current-cat-parent
+      > a
+        &, &:hover, &:active
+          color: $orange
+          font-weight: bold
+          text-decoration: none
+
   /* Product List Cards */
   ul.products > li.product > div.card
     /* On Sale Badge */
