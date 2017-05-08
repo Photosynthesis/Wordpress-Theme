@@ -97,8 +97,4 @@ do_action("adverts_tpl_single_bottom", $post_id); ?>
 <div><?php the_content(); ?></div>
 
 
-<!-- For some reason, wordpress doesn't want to enqueue this script, so we add it manually... -->
-<script type='application/javascript' src='<?php echo plugins_url('wpadverts-mal/assets/js/map-single.js'); ?>'></script>
-
-
 <?php theme_bottom(); ?>

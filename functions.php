@@ -274,5 +274,27 @@ function theme_wpadverts_customize_taxonomy($args) {
 }
 add_action("adverts_register_taxonomy", "theme_wpadverts_customize_taxonomy");
 
+/* Hide the Price Field in the Ad Forms */
+function theme_wpadverts_hide_price($form) {
+    if ($form['name'] == 'advert') {
+        foreach ($form['field'] as $key => $field) {
+            if ($field['name'] == 'adverts_price') {
+                unset($form['field'][$key]);
+            }
+        }
+    }
+    return $form;
+}
+add_filter("adverts_form_load", "theme_wpadverts_hide_price");
+
+/* Fix AJAX URL */
+function theme_wpadverts_fix_ajax_url($url) {
+  if (!is_admin() && !is_ssl()) {
+    $url = str_replace('https:', 'http:', $url);
+  }
+  return $url;
+}
+add_filter('admin_url', 'theme_wpadverts_fix_ajax_url');
+
 
 ?>

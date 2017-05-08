@@ -9,18 +9,6 @@
 
 class FIC_Adverts
 {
-    /* Hide the Price Field in the Ad Forms */
-    public static function hide_price($form) {
-        if ($form['name'] == 'advert') {
-            foreach ($form['field'] as $key => $field) {
-                if ($field['name'] == 'adverts_price') {
-                    unset($form['field'][$key]);
-                }
-            }
-        }
-        return $form;
-    }
-
     /* Allow Using Hidden WooCommerce Products */
     public static function allow_hidden($args) {
         $args["meta_query"][0]["value"] = array("hidden", "visible");
@@ -28,7 +16,6 @@ class FIC_Adverts
     }
 }
 
-add_filter("adverts_form_load", array("FIC_Adverts", "hide_price"));
 add_filter("adext_wc_payments_products_new", array("FIC_Adverts", "allow_hidden"));
 add_filter("adext_wc_payments_products_renew", array("FIC_Adverts", "allow_hidden"));
 

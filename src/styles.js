@@ -45,6 +45,6 @@ $(document).ready(function() {
   /* WPAdverts */
   /* Toggle Contact Form on Button Click */
   $('body.advert-template-default button#adverts-send-message-button').click(function() {
-    $('body.advert-template-default .adverts-contact-box').toggleClass('d-block');
+    $('body.advert-template-default .adverts-contact-box').slideToggle('fast');
   });
 });
