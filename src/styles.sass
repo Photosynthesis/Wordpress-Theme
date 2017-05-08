@@ -306,13 +306,21 @@ body.single
 
 /** Wiki **/
 body.incsub_wiki div#main
-    /* Style Tabs */
-    div.incsub_wiki_tabs
+    div.wiki_tabs
+      /* Push Tab Groups Together */
+      .left, .right
+        float: left
+      /* Hide Discussion & History Tabs */
+      .incsub_wiki_link_discussion, .incsub_wiki_link_history
+        display: none
+      /* Style Tabs */
       ul
         @extend .nav
         @extend .nav-tabs
         li
           @extend .nav-item
+          &.current a
+            @extend .active
           a
             @extend .nav-link
 

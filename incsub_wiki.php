@@ -13,7 +13,7 @@ get_header(); ?>
     <h1 class="entry-title"><?php the_title(); ?></h1>
     <?php if (!post_password_required()) { ?>
       <div class="incsub_wiki incsub_wiki_single">
-        <div class="incsub_wiki_tabs incsub_wiki_tabs_top"><?php echo $wiki->tabs(); ?><div class="incsub_wiki_clear"></div></div>
+        <div class="clearfix wiki_tabs incsub_wiki_tabs_top"><?php echo $wiki->tabs(); ?></div>
       </div>
       <?php
       $revision_id = isset($_REQUEST['revision'])?absint($_REQUEST['revision']):0;
