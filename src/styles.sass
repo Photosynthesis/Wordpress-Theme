@@ -386,6 +386,19 @@ body.error404.incsub_wiki
     &, > dt, > dd, > dd p
       margin-bottom: 0
 
+  /* Color Markers for Required Fields Red */
+  .required
+    color: $brand-danger
+
+  /* Order Details Product Metas */
+  .order_details ul.wc-item-meta
+    /* Hide Bullets & Fix Left Alignment/Spacing */
+    list-style: none
+    padding-left: 1rem
+    /* Remove Vertical Spacing Between & After Metas */
+    &, li > p
+      margin-bottom: 0
+
   /* Category Sidebar Widget */
   &.widget_product_categories
     /* Push Categories to Left */
@@ -398,6 +411,24 @@ body.error404.incsub_wiki
           color: $orange
           font-weight: bold
           text-decoration: none
+
+  /* Cart Widget */
+  .widget_shopping_cart
+    /* Remove Horizontal Line Above First Item */
+    tr:first-of-type > td
+      border-top: none
+    /* Fix the Width of the Product Image */
+    td.mini-cart-image-cell
+      width: 55px
+
+  /* Products Widget */
+  .product_list_widget
+    h5
+      font-size: 0.9rem
+    /* Fix Size of Placeholder Images */
+    .woocommerce-placeholder
+      height: auto
+      max-width: 100%
 
   /* Product List Cards */
   ul.products > li.product > div.card
@@ -442,15 +473,6 @@ body.error404.incsub_wiki
     div.product-type-variable-subscription.nyp-product .woocommerce-variation-price
       display: none
 
-  /* Cart Widget */
-  .widget_shopping_cart
-    /* Remove Horizontal Line Above First Item */
-    tr:first-of-type > td
-      border-top: none
-    /* Fix the Width of the Product Image */
-    td.mini-cart-image-cell
-      width: 55px
-
   /* Carts */
   .widget_shopping_cart, .cart
     /* Don't Underline Remove Links */
@@ -462,12 +484,10 @@ body.error404.incsub_wiki
 
   /* Checkout */
   .checkout
-    /* Color Markers for Required Fields Red */
-    .required
-      color: $brand-danger
     /* Style Fields with Errors */
     .woocommerce-invalid
       @extend .has-danger
+    /* Cleanup Payment Method Cards */
     li.wc_payment_method
       &.payment_method_paypal
         a.about_paypal
@@ -480,16 +500,11 @@ body.error404.incsub_wiki
       &.payment_method_stripe div.payment_box p.woocommerce-SavedPaymentMethods-saveNew
         margin-bottom: 0
 
-
-  /* Products Widget */
-  .product_list_widget
-    h5
-      font-size: 0.9rem
-    /* Fix Size of Placeholder Images */
-    .woocommerce-placeholder
-      height: auto
-      max-width: 100%
-
+  /* My Account */
+  > .woocommerce-account
+    /* Remove Space Below Customer Addresses */
+    .woocommerce-customer-details .addresses address
+      margin-bottom: 0
 
 
 /** WPAdverts **/

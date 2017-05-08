@@ -10,11 +10,6 @@
 
 class FIC_WC
 {
-    /** Enable Lightboxes for Product Images */
-    public static function enable_lightboxes() {
-        add_theme_support('wc-product-gallery-lightbox');
-    }
-
     private static $membership_product_id = 14602;
 
     public static function activate_directory_listing_membership($subscription) {
@@ -112,9 +107,6 @@ class FIC_WC
         return $is_valid;
     }
 }
-
-add_action('after_setup_theme',
-    array('FIC_WC', 'enable_lightboxes'));
 
 add_action('woocommerce_subscription_payment_complete',
     array('FIC_WC', 'activate_directory_listing_membership'));
