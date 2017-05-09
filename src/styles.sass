@@ -320,7 +320,12 @@ body.single-directory
     .listing-status
       overflow-x: hidden
     .listing-info-blocks
-      column-count: 2
+      /* Use 2 Columns on Smaller Screens */
+      @include media-breakpoint-down(lg)
+        column-count: 2
+      /* Use 1 Column on the Smallest Screens */
+      @include media-breakpoint-down(xs)
+        column-count: 1
       h3
         text-align: center
       ul
