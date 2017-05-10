@@ -54,7 +54,7 @@ body
   padding: 15px
   background-color: white
   box-shadow: black 0px 6px 32px
-  @include media-breakpoint-down(lg)
+  +media-breakpoint-down(lg)
     width: 100%
 
 
@@ -92,7 +92,7 @@ body
     .navbar-nav > li
       /* Add Separators */
       border-left: 1px solid $orange
-      @include media-breakpoint-up(sm)
+      +media-breakpoint-up(sm)
         &:first-child
           border-left: none
       /* Emphasize Text & Reduce Size */
@@ -126,7 +126,7 @@ body
       /* Recolor on Active, Hover & Click */
       &:hover, & ul.show
         background-color: $orange
-        @include media-breakpoint-up(sm)
+        +media-breakpoint-up(sm)
           border-left-color: white
         > ul.dropdown-menu
           display: block
@@ -321,16 +321,118 @@ body.single-directory
       overflow-x: hidden
     .listing-info-blocks
       /* Use 2 Columns on Smaller Screens */
-      @include media-breakpoint-down(lg)
+      +media-breakpoint-down(lg)
         column-count: 2
       /* Use 1 Column on the Smallest Screens */
-      @include media-breakpoint-down(xs)
+      +media-breakpoint-down(xs)
         column-count: 1
+      /* Center the Headings */
       h3
         text-align: center
+      /* Fix the Left Spacing of the Info Block Content */
       ul
         list-style: none
         padding-left: 0
+  /* Style the Quick Links */
+  .directory-header-links
+    text-align: center
+    margin: 0.5rem 0
+
+
+
+/** Formidable Forms **/
+/* Forms */
+.frm_forms
+  /* Add Spacing Around Form */
+  margin-top: 1.5rem
+  margin-bottom: 1.5rem
+  /* Style the Indicator for Required Fields */
+  .frm_required
+    color: $brand-danger
+    font-weight: bold
+  /* De-Emphasize Help Text */
+  .frm_description
+    color: $text-muted
+    font-size: $small-font-size
+    /* Reposition the Help Text for Sections */
+    &.frm_section_spacing
+      margin: -0.5rem 0 0.5rem;
+  /* Emphasize Field Labels */
+  .frm_primary_label
+    font-weight: bold
+  /* Style the General Inputs */
+  input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]), select, textarea
+    @extend .form-control
+  /* Hide Hidden Inputs */
+  .frm_form_field .frm_pos_none, .frm_ajax_loading
+    display: none !important
+  /* Stack Checkbox & Radio Fields */
+  .frm_opt_container > div
+    @extend .form-check
+    label
+      @extend .form-check-label
+      input
+        @extend .form-check-input
+  /* Style the Field Wrappers & Labels */
+  .frm_form_field
+    @extend .form-group
+    label
+      @extend .form-control-label
+  /* Style the Submit Buttons */
+  .frm_final_submit
+    @extend .btn
+    @extend .btn-primary
+  .frm_save_draft
+    @extend .btn
+    @extend .btn-secondary
+  /* Fix The Column Sizes */
+  fieldset
+    @extend .row
+    > .frm_section_heading
+      @extend .col-24
+      @extend .row
+    .frm_top_container, .frm_none_container, > h3, .frm_section_spacing, .frm_submit
+      &:not(.frm_first_half):not(.frm_last_half)
+        @extend .col-24
+      &.frm_first_half, &.frm_last_half
+        @extend .col-12
+  /* Align Text Inputs with Radio/Check Boxes in "Other" Fields */
+  .frm_other_input
+    max-width: 75%
+    display: inline-block !important
+    margin-left: 1em
+  /* Style the Messages */
+  .frm_message
+    @extend .alert
+    @extend .alert-info
+  .frm_error_style
+    @extend .alert
+    @extend .alert-danger
+  /* Style Input Errors */
+  .frm_blank_field
+    @extend .has-danger
+    input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]), select, textarea
+      @extend .form-control-danger
+  .frm_error
+    @extend .form-control-feedback
+
+/* Style the Results Table */
+.form_results
+  @extend .table
+  @extend .table-sm
+  @extend .table-striped
+  /* Hide the Footer */
+  tfoot
+    display: none
+
+/* Style the Pagination */
+.frm_pagination
+  @extend .pagination
+  @extend .justify-content-center
+  li
+    @extend .page-item
+    &.dots, a
+      @extend .page-link
 
 
 

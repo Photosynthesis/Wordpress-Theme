@@ -186,7 +186,8 @@ function regenerate_map_cache($map)
         $maps = new Mappress_Map();
         $maps->delete($old_map_id);
     }
-    $map_id = $map->save(148417);
+    $map_post_id = 148417;
+    $map_id = $map->save($map_post_id);
     update_option("communities_map_generation_time", time());
     update_option("communities_map_id", $map_id);
 }
@@ -499,45 +500,6 @@ function get_latitude_and_longitude_of_listing($listing_id)
             'longitude' => $directory_listing->longitude);
     }
 }
-
-
-
-/** Generate a Map from an Existing Latitude and Longitude
- *
- * http://formidablepro.com/how-to-create-maps-from-form-entries/
- *
- * @param array $atts The Shortcode Attributes
- *
- * @return string
- */
-function form_to_mappress_latlng($atts)
-{
-    extract(
-        shortcode_atts(
-            array(
-                'width' => '100%', 'height' => 300, 'title' => '', 'body' => '',
-                'lat1' => '', 'lng1' => '', 'lat2' => '', 'lng2' => '',
-                'address2' => '', 'directions' => 'none'
-            ), $atts
-        )
-    );
-
-    $mymap = new Mappress_Map(array("width" => $width, "height" => $height));
-    $mypoi_1 = new Mappress_Poi(
-        array("title" => $title, "body" => $body, "point" => array(
-                "lat" => $lat1, "lng" => $lng1))
-    );
-    $mymap->pois = array($mypoi_1);
-    if ($address2 != '') {
-        $mypoi_2 = new Mappress_Poi(
-            array("point" => array("lat" => $lat2, "lng" => $lng2))
-        );
-        $mymap->pois = $mypoi_2;
-    }
-    return $mymap->display(array('directions' => $directions));
-}
-add_shortcode('form_to_mappress_latlng', 'form_to_mappress_latlng');
-
 
 
 /** Trigger Map Updates on Entry Updates

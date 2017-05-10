@@ -30,6 +30,16 @@ npm run watch
 * Migrate functions.php from old theme
 
 
+## Migrating
+
+1. Add & Activate New Theme
+1. Replace Directory View(List & Details)
+1. Remove `filter=1` from Directory View Shortcodes
+1. Disable Formidable Styling: Admin -> Formidable -> Settings
+1. Regenerate Thumbnails
+1. Set Default Avatar
+
+
 ## License
 
 I dunno, I tried getting this answered by the FIC Board, but they're too busy.

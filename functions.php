@@ -141,8 +141,47 @@ add_filter('excerpt_more', 'theme_excerpt_more');
 
 
 /** Directory **/
-/* Don't Automatically Create Paragraphs From Newlines */
-//add_filter('frm_use_wpautop', create_function('', "return false;"));
+/* Remove the Formidable CSS */
+add_action('wp_enqueue_styles', 'theme_directory_disable_css');
+function theme_directory_disable_css() {
+  wp_deregister_style('formidable');
+}
+
+/** Generate a Map from an Existing Latitude and Longitude
+ *
+ * http://formidablepro.com/how-to-create-maps-from-form-entries/
+ *
+ * @param array $atts The Shortcode Attributes
+ *
+ * @return string
+ */
+function form_to_mappress_latlng($atts)
+{
+    extract(
+        shortcode_atts(
+            array(
+                'width' => '100%', 'height' => 300, 'title' => '', 'body' => '',
+                'lat1' => '', 'lng1' => '', 'lat2' => '', 'lng2' => '',
+                'address2' => '', 'directions' => 'none'
+            ), $atts
+        )
+    );
+
+    $mymap = new Mappress_Map(array("width" => $width, "height" => $height));
+    $mypoi_1 = new Mappress_Poi(
+        array("title" => $title, "body" => $body, "point" => array(
+                "lat" => $lat1, "lng" => $lng1))
+    );
+    $mymap->pois = array($mypoi_1);
+    if ($address2 != '') {
+        $mypoi_2 = new Mappress_Poi(
+            array("point" => array("lat" => $lat2, "lng" => $lng2))
+        );
+        $mymap->pois = $mypoi_2;
+    }
+    return $mymap->display(array('directions' => $directions));
+}
+add_shortcode('form_to_mappress_latlng', 'form_to_mappress_latlng');
 
 /** Return an Edit link for the Directory Listing if the Current User is an
  * Administrator. This is checked by checking for the `edit_plugins`
@@ -241,6 +280,38 @@ function directory_show_and_process_verify_link($atts)
 add_shortcode(
     'directory_verify_listing_link', 'directory_show_and_process_verify_link'
 );
+
+/** Ensure that the current data for the Listing would validate the current form */
+function directory_validate_entry($entry_id) {
+    $community_name_field_id = 9;
+
+    $entry = FrmEntry::getOne($entry_id);
+    $data = array('form_id' => 2, 'item_key' => $entry->item_key, 'item_meta' => array());
+    $metas = FrmEntryMeta::getAll(array('item_id' => $entry->id));
+    foreach ($metas as $meta) {
+       $data['item_meta'][$meta->field_id] = $meta->meta_value;
+    }
+    $errors = FrmEntryValidate::validate($data);
+    $name_field_key = "field{$community_name_field_id}";
+    if (array_key_exists($name_field_key, $errors)) { unset($errors[$name_field_key]); }
+    return empty($errors);
+}
+
+//shortcode to display community name in contact a community form
+add_shortcode('frm_cmty_name', 'frm_cmty_name');
+function frm_cmty_name() {
+    if ( !empty($_GET["cmty"]) && is_numeric($_GET["cmty"]) ) {
+        return do_shortcode('[frm-field-value field_id="9" entry_id="' . $_GET["cmty"] . '"]');
+    }
+    else return "the community";
+}
+//shortcode to display community link in contact a community form
+add_shortcode('frm_cmty_link', 'frm_cmty_link');
+function frm_cmty_link() {
+        if ( !empty($_GET["cmty"]) && is_numeric($_GET["cmty"]) ) {
+        return 'Back to <a href="/directory/listings/?entry=' . $_GET["cmty"] . '">' . do_shortcode('[frm_cmty_name]') . '</a>';
+        }
+}
 
 
 

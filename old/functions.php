@@ -38,30 +38,11 @@ require_once 'includes/woocommerce_products.php';
 /* Separate WooCommerce Product Reviews from Wordpress Comments */
 require_once 'includes/separate_product_reviews.php';
 
-// allow more HTML tags in author bios description
-remove_filter('pre_user_description','wp_filter_kses');
-add_filter('pre_user_description', 'wp_filter_post_kses');
-
 // shortcode to display login form
 add_shortcode('display_login_form', 'display_login_form');
 function display_login_form() {
-    $pre_text = "<h1>Please Log in</h1>\nYou must be logged in to view this page.\n<p>";
+    $pre_text = "<h1>Please Log in</h1><p>You must be logged in to view this page.</p>";
     return $pre_text . wp_login_form( array( 'echo' => false ) ) . "\n" . wp_register('', '', false) . " | <a href=\"" . wp_lostpassword_url( get_permalink() ) . "\" title=\"Lost your password?\">Lost your password?</a>";
-}
-//shortcode to display community name in contact a community form
-add_shortcode('frm_cmty_name', 'frm_cmty_name');
-function frm_cmty_name() {
-    if ( !empty($_GET["cmty"]) && is_numeric($_GET["cmty"]) ) {
-        return do_shortcode('[frm-field-value field_id="9" entry_id="' . $_GET["cmty"] . '"]');
-    }
-    else return "the community";
-}
-//shortcode to display community link in contact a community form
-add_shortcode('frm_cmty_link', 'frm_cmty_link');
-function frm_cmty_link() {
-        if ( !empty($_GET["cmty"]) && is_numeric($_GET["cmty"]) ) {
-        return 'Back to <a href="/directory/listings/?entry=' . $_GET["cmty"] . '">' . do_shortcode('[frm_cmty_name]') . '</a>';
-        }
 }
 
 // shortcode to display search terms when searching the directory
@@ -130,16 +111,6 @@ if (!function_exists('iweb_reverse_comments')) {
     }
 }
 add_filter ('comments_array', 'iweb_reverse_comments');
-
-// remove automatic paragraph breaks on directory
-// https://formidablepro.com/help-desk/remove-p-tags-from-paragraph-text/
-add_filter('frm_use_wpautop', create_function('', "return false;"));
-
-
-
-
-
-
 
 // allow comments, or not, based on directory form entry
 // http://formidablepro.com/help-desk/allow-wp-comments-per-form-posts/
