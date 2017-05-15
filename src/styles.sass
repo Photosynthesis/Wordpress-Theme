@@ -337,6 +337,20 @@ body.single-directory
   .directory-header-links
     text-align: center
     margin: 0.5rem 0
+  /* Style the Search Bar */
+  #frm_search_form
+    text-align: center
+    input[type="search"]
+      display: inline-block
+      margin-right: 0.5rem
+      @extend .form-control
+      +media-breakpoint-up(lg)
+        width: 25%
+      +media-breakpoint-down(md)
+        width: 50%
+    input[type="submit"]
+      @extend .btn
+      @extend .btn-primary
 
 
 
