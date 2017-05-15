@@ -648,19 +648,30 @@ body.error404.incsub_wiki
 
 
 /** WPAdverts **/
-body.advert-template-default
-  /* Hide the Default Send Message & Phone Buttons */
-  .adverts-show-contact-form, .adverts-single-actions span.adverts-button
-    display: none
+/* Hide the Default Send Message & Phone Buttons */
+.adverts-show-contact-form, .adverts-single-actions span.adverts-button
+  display: none !important
 
-  /* Fix the Height of the Image Carousel */
-  .carousel .carousel-item > img
-    height: 350px
+/* Fix the Height of the Image Carousel */
+#advert-carousel .carousel-item > img
+  height: 350px
 
-  .adverts-contact-box
-    /* Fix Spacing Between Send Message Button & Contact Form */
-    margin-top: 0
+.adverts-contact-box
+  /* Fix Spacing Between Send Message Button & Contact Form */
+  margin-top: 0 !important
 
-  /* Add Spacing Below Map */
-  #wpadverts-mal-map-single
-    @extend .mb-3
+/* Add Spacing Below Map */
+#wpadverts-mal-map-single
+  @extend .mb-3
+
+/* Style Payment Options */
+.adverts-pricings-list
+  text-align: center
+  .adverts-listing-type-x
+    display: inline-block
+    margin: 5px 2px
+    @extend .card
+    @extend .card-block
+    .adverts-listing-type-cost
+      color: $brand-success
+      font-weight: bold

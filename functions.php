@@ -433,6 +433,13 @@ function theme_wpadverts_templates($template) {
 }
 add_action('adverts_template_load', 'theme_wpadverts_templates');
 
+
+/* Disable Payments CSS */
+add_action('init', 'theme_wpadverts_disable_css', 100);
+function theme_wpadverts_disable_css() {
+  wp_deregister_style('adverts-wc-payments-frontend');
+}
+
 /* Disable Loading of Page Template for Categories */
 function theme_wpadverts_init() {
   remove_filter('template_include', 'adverts_template_include');
@@ -471,5 +478,12 @@ function theme_wpadverts_fix_ajax_url($url) {
 }
 add_filter('admin_url', 'theme_wpadverts_fix_ajax_url');
 
+/* Allow Using Hidden WooCommerce Products */
+function theme_wpadverts_allow_hidden_products($args) {
+    $args["meta_query"][0]["value"] = array("hidden", "visible");
+    return $args;
+}
+add_filter("adext_wc_payments_products_new", "theme_wpadverts_allow_hidden_products");
+add_filter("adext_wc_payments_products_renew", "theme_wpadverts_allow_hidden_products");
 
 ?>
