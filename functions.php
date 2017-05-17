@@ -4,6 +4,8 @@
 
 
 /** General Site Layout **/
+/* Support Title Tags */
+add_theme_support('title-tag');
 /* Register & Enqueue Any Compiled Scripts & Styles */
 add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
 function theme_enqueue_scripts() {
