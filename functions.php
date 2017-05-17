@@ -4,10 +4,17 @@
 
 
 /** General Site Layout **/
-/* Disable jQuery */
-add_action('wp_enqueue_scripts', 'theme_disable_jquery');
-function theme_disable_jquery() {
-  wp_deregister_script('jquery');
+/* Register & Enqueue Any Compiled Scripts & Styles */
+add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
+function theme_enqueue_scripts() {
+  foreach (scandir(__DIR__ . "/dist") as $dist_file) {
+    $extension = pathinfo($dist_file, PATHINFO_EXTENSION);
+    if ($extension === 'js') {
+      wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}");
+    } else if ($extension === 'css') {
+      wp_enqueue_style($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}");
+    }
+  }
 }
 
 /* Enable Sidebars */

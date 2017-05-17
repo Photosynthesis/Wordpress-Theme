@@ -1,5 +1,6 @@
 var path = require("path");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -13,7 +14,8 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname + '/dist'),
-    filename: '[name].js'
+    filename: '[chunkHash].js',
+    publicPath: '/wp-content/themes/fic-theme/dist/',
   },
 
   module: {
@@ -28,7 +30,7 @@ module.exports = {
         exclude: /node_modules/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'sass-loader']
+          use: ['css-loader', 'sass-loader'],
         }),
       },
       {
@@ -38,32 +40,17 @@ module.exports = {
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "url-loader?limit=10000&minetype=application/font-woff"
+        loader: "url-loader?limit=10000&mimetype=application/font-woff&name=[hash].[ext]"
       },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "file-loader"
+        loader: "file-loader?name=[hash].[ext]"
       },
     ],
   },
 
   plugins: [
-    new ExtractTextPlugin('[name].css'),
+    new ExtractTextPlugin('[chunkHash].css'),
+    new CleanWebpackPlugin('dist'),
   ],
-
-  // devServer: {
-  //   inline: true,
-  //   host: '0.0.0.0',
-  //   stats: {
-  //     colors: true,
-  //     chunks: false,
-  //   },
-  //   proxy: {
-  //     '/api/*': {
-  //       target: 'http://localhost:8080',
-  //       changeOrigin: true,
-  //       pathRewrite: { "^/api/": "" },
-  //     }
-  //   }
-  // },
 
 };

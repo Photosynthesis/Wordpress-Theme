@@ -21,6 +21,7 @@
   "license": "GPLv3",
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
+    "clean-webpack-plugin": "^0.1.16",
     "css-loader": "^0.26.1",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.0",
