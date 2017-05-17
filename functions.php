@@ -19,6 +19,14 @@ function theme_enqueue_scripts() {
   }
 }
 
+/* Add Favicon to Login & Admin Pages */
+function theme_add_favicon() {
+  $favicon_url = get_stylesheet_directory_uri() . '/img/favicon/favicon.ico';
+  echo "<link rel='shortcut icon' href='{$favicon_url}' />";
+}
+add_action('login_head', 'theme_add_favicon');
+add_action('admin_head', 'theme_add_favicon');
+
 /* Enable Sidebars */
 add_action('widgets_init', 'theme_register_sidebars');
 function theme_register_sidebars() {
