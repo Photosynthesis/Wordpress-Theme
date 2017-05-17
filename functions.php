@@ -10,9 +10,9 @@ function theme_enqueue_scripts() {
   foreach (scandir(__DIR__ . "/dist") as $dist_file) {
     $extension = pathinfo($dist_file, PATHINFO_EXTENSION);
     if ($extension === 'js') {
-      wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}");
+      wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
     } else if ($extension === 'css') {
-      wp_enqueue_style($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}");
+      wp_enqueue_style($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
     }
   }
 }
