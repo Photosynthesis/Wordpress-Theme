@@ -49,11 +49,12 @@ body
 
 /* Add Spacing & White Backdrop */
 #body-wrapper
-  margin-top: 30px
   margin-bottom: 30px
   padding: 15px
   background-color: white
   box-shadow: black 0px 6px 32px
+  +media-breakpoint-up(md)
+    margin-top: 30px
   +media-breakpoint-down(lg)
     width: 100%
 
@@ -92,7 +93,7 @@ body
     .navbar-nav > li
       /* Add Separators */
       border-left: 1px solid $orange
-      +media-breakpoint-up(sm)
+      +media-breakpoint-up(lg)
         &:first-child
           border-left: none
       /* Emphasize Text & Reduce Size */
@@ -103,8 +104,6 @@ body
       &.active > a
         color: #F57241
       ul
-        /* Reduce Size of Dropdown Text */
-        font-size: 0.9em
         /* Remove Spacing for Continuous Hover Event */
         margin-top: 0
         /* Remove Border & Rounding */
@@ -114,22 +113,20 @@ body
         background-color: $orange
         a
           color: black
+        li
+          padding-left: 1rem
         li.active > a
           color: white
           font-weight: bold
-        li.dropdown:hover, li.dropdown.show
+        li.dropdown
           > ul
-            font-size: 1em
-            display: block
             top: 0
             left: 99.9%
       /* Recolor on Active, Hover & Click */
-      &:hover, & ul.show
+      &:hover, &.show
         background-color: $orange
         +media-breakpoint-up(sm)
           border-left-color: white
-        > ul.dropdown-menu
-          display: block
         > a
           color: white
         & a:hover
