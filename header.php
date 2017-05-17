@@ -8,6 +8,7 @@
     <link href='//fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
     <?php if (is_singular() && get_option('thread_comments')) { wp_enqueue_script('comment-reply'); } ?>
     <?php wp_head(); ?>
+    <script type='text/javascript'><?php echo get_option('theme_extra_javascript'); ?></script>
   </head>
     <body <?php body_class(); ?>>
 

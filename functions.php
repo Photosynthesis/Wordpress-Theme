@@ -149,6 +149,41 @@ add_filter('excerpt_more', 'theme_excerpt_more');
 
 
 
+/** Admin **/
+/* Add Theme Settings Page */
+add_action('admin_menu', 'theme_menu');
+function theme_menu() {
+  add_options_page('FIC Theme Settings', 'FIC Theme', 'manage_options', 'fic-theme-settings', 'theme_options_page');
+}
+function theme_options_page() {
+  echo "<div class='wrap'><h1>FIC Theme Settings</h1>\n";
+  echo "<form method='post' action='options.php'>\n";
+  settings_fields('fic-theme-settings');
+  do_settings_sections('fic-theme-settings');
+  submit_button();
+  echo "</form></div>";
+}
+/* Add Theme Settings */
+add_action('admin_init', 'theme_options');
+function theme_options() {
+  register_setting('fic-theme-settings', 'theme_extra_javascript');
+  add_settings_section('fic-theme-javascript', 'Javascript', 'display_section', 'fic-theme-settings');
+  add_settings_field('extra_javascript-id', 'Extra Javascript', 'display_setting', 'fic-theme-settings', 'fic-theme-javascript', array('type' => 'textarea', 'option_name' => 'theme_extra_javascript'));
+}
+function display_section($section) {}
+function display_setting($args) {
+  extract($args);
+  $option_name = 'theme_extra_javascript';
+  $options = esc_attr(stripslashes(get_option($option_name)));
+  switch ($type) {
+    case 'textarea':
+      echo "<textarea name='{$option_name}' rows='80' cols='80'>{$options}</textarea>";
+      break;
+  }
+}
+
+
+
 /** Directory **/
 /* Remove the Formidable CSS */
 add_action('wp_enqueue_styles', 'theme_directory_disable_css');
