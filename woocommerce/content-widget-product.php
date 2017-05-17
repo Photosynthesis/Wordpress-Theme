@@ -24,8 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $product; ?>
 
 <a class='list-group-item list-group-item-action text-center' href="<?php echo esc_url( $product->get_permalink() ); ?>">
-  <?php echo $product->get_image('post-thumbnail', array('class' => 'mw-100 h-auto')); ?>
-  <h5 class="product-title mt-2"><?php echo $product->get_name(); ?></h5>
+  <?php echo $product->get_image('post-thumbnail', array('class' => 'mw-100 h-auto mx-auto')); ?>
+  <h5 class="product-title mt-2 w-100"><?php echo $product->get_name(); ?></h5>
   <?php if ( ! empty( $show_rating ) ) : ?>
     <?php echo wc_get_rating_html( $product->get_average_rating() ); ?>
   <?php endif; ?>
