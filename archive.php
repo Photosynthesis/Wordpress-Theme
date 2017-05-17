@@ -15,6 +15,7 @@
       the_post(); ?>
       <div id="post-<?php the_ID(); ?>" class="<?php echo join(" ", get_post_class("post-summary")); ?>">
         <div class="clearfix">
+          <?php if (has_post_thumbnail()) { ?>
           <div class="float-left mr-2 mb-1">
             <div class="card">
               <a href="<?php the_permalink(); ?>">
@@ -22,6 +23,7 @@
               </a>
             </div>
           </div>
+          <?php } ?>
           <div>
             <h2 class="mb-0"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
             <small class="text-muted pb-3">
