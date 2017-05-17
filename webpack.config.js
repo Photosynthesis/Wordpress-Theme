@@ -10,6 +10,9 @@ module.exports = {
     base: [
       './src/base.js',
     ],
+    fa: [
+      'style-loader!css-loader!./node_modules/font-awesome/css/font-awesome.css',
+    ],
   },
 
   output: {

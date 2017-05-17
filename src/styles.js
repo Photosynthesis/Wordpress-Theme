@@ -1,7 +1,6 @@
 'use strict';
 
 /* Include Custom Styles & Bootstrap */
-//require('style!css!font-awesome/css/font-awesome.css');
 require('./styles.sass');
 window.jQuery = require('../node_modules/jquery/dist/jquery.js');
 window.Tether = require('../node_modules/tether/dist/js/tether.js');

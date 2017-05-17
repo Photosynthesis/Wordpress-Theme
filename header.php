@@ -34,7 +34,7 @@
               '">My Account</a>&nbsp;|&nbsp;<a href="/wp-login.php">Login</a>';
           } ?>
           <a id="header-cart-icon" href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e('View your shopping cart.'); ?>">
-            <span class='cart-icon'></span>&nbsp;&nbsp;
+            <i class='fa fa-shopping-cart'></i>&nbsp;&nbsp;
           </a>
       </div>
       <div id="header-buttons">
