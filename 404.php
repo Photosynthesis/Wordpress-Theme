@@ -2,7 +2,7 @@
 
 <div class="row">
   <!-- Left Sidebar -->
-  <div id="left-sidebar" class="<?php echo theme_left_sidebar_css_classes(); ?>">;
+  <div id="left-sidebar" class="<?php echo theme_left_sidebar_css_classes(); ?>">
     <?php dynamic_sidebar('main-left'); ?>
   </div>
 
@@ -14,6 +14,9 @@
        moved elsewhere.</p>
     <p>If you keep ending up here, please head back to our
        <a href="<?php echo get_site_url(); ?>">homepage</a>.</p>
+    <div class="google-search-div">
+      <gcse:search></gcse:search>
+    </div>
   </div>
 
 

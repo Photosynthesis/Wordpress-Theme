@@ -121,36 +121,38 @@ body
             top: 0
             left: 99.9%
       /* Recolor on Active, Hover & Click */
+    .navbar-nav li
       &:hover, &.show
         background-color: $orange
         +media-breakpoint-up(sm)
           border-left-color: white
         > a
           color: white
+          font-weight: bold
         & a:hover
           color: white
           font-weight: bold
-  /* google search box */
-  div#google-search-div
-    z-index: 20000
-    padding-top: 16px
-    /* Fix Input Alignment */
-    input.gsc-input, .gsc-input-box, .gsc-input-box-hover, .gsc-input-box-focus, .gsc-search-button
-      box-sizing: content-box
-      line-height: normal
-    .gsc-control-cse
-      background-color: transparent
-      border: 0px hidden
-      padding: 0px
-      margin-top: -5px
-    .gsc-search-box-tools .gsc-search-box .gsc-input
-      padding-right: 0px
-    /* Hide the X icon in the search box */
-    div#google-search-div .gsib_b
-      display: none
-    /* Reduce width of search button */
-    td.gsc-search-button input.gsc-search-button
-      padding: 6px 15px
+/* google search box */
+div.google-search-div
+  z-index: 20000
+  padding-top: 16px
+  /* Fix Input Alignment */
+  input.gsc-input, .gsc-input-box, .gsc-input-box-hover, .gsc-input-box-focus, .gsc-search-button
+    box-sizing: content-box
+    line-height: normal
+  .gsc-control-cse
+    background-color: transparent
+    border: 0px hidden
+    padding: 0px
+    margin-top: -5px
+  .gsc-search-box-tools .gsc-search-box .gsc-input
+    padding-right: 0px
+  /* Hide the X icon in the search box */
+  div#google-search-div .gsib_b
+    display: none
+  /* Reduce width of search button */
+  td.gsc-search-button input.gsc-search-button
+    padding: 6px 15px
 
 
 /* Change Font & Text Size/Emphasis */

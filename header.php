@@ -71,7 +71,7 @@
       </nav>
     </div>
     <div class="col-md-6 col-24">
-      <div id="google-search-div">
+      <div class="google-search-div">
         <script>
           (function() {
             var cx = 'partner-pub-4810885975061329:dhwcft-rc6r';
