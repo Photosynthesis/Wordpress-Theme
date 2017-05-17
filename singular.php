@@ -12,7 +12,9 @@
       </div><?php
     } ?>
     <div>
-      <h1><?php the_title(); ?></h1>
+      <?php if (!is_page()) { ?>
+        <h1><?php the_title(); ?></h1>
+      <?php } ?>
     </div>
   </div><?php
 
