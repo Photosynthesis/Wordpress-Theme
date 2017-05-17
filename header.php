@@ -37,8 +37,8 @@
           </a>
       </div>
       <div id="header-buttons">
-        <button class="btn btn-sm btn-secondary" onclick="location.href='<?php echo get_permalink(14602); ?>'">Membership</button>
-        <button class="btn btn-sm btn-primary donate-button" onclick="location.href='<?php echo get_permalink(14601); ?>'">Donate</button>
+        <a class="btn btn-sm btn-secondary" href='<?php echo get_permalink(14602); ?>'>Membership</a>
+        <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>Donate</a>
       </div>
     </div>
   </div>

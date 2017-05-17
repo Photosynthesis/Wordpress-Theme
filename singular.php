@@ -2,6 +2,7 @@
 
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+  <?php if (has_post_thumbnail() || !is_page()) { ?>
   <div class='clearfix'><?php
     $thumbnail = get_the_post_thumbnail();
     if ($thumbnail != '') { ?>
@@ -17,6 +18,7 @@
       <?php } ?>
     </div>
   </div><?php
+  }
 
   if (!is_page()) { ?>
     <p>
