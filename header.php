@@ -9,6 +9,15 @@
     <?php if (is_singular() && get_option('thread_comments')) { wp_enqueue_script('comment-reply'); } ?>
     <?php wp_head(); ?>
     <script type='text/javascript'><?php echo get_option('theme_extra_javascript'); ?></script>
+    <!-- From RealFaviconGenerator.net -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/wp-content/themes/fic-theme/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/manifest.json">
+    <link rel="mask-icon" href="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/safari-pinned-tab.svg" color="#f0673a">
+    <link rel="shortcut icon" href="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/favicon.ico">
+    <meta name="msapplication-config" content="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
   </head>
     <body <?php body_class(); ?>>
 
