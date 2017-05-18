@@ -46,6 +46,14 @@ class ThemeWooCommerce
     return $price;
   }
 
+  /* Hide the Prices for Name Your Price Products */
+  public static function remove_suggested_price($price, $product) {
+    if (WC_Name_Your_Price_Helpers::is_nyp($product)) {
+      return '';
+    }
+    return $price;
+  }
+
   /* Show the Lowest Price for Price Ranges */
   public static function format_price_range($price, $from, $to) {
     $formatted_from = wc_price($from);
@@ -93,6 +101,14 @@ class ThemeWooCommerce
 
     return $content;
   }
+
+  /* Modify the WooCommerce `[product]` Shortcode to Open in a New Page */
+  public static function product_new_page($atts) {
+    extract(shortcode_atts(array('id' => 0), $atts));
+    $text = do_shortcode("[product id='$id']");
+
+    return str_replace('<a', '<a target="_blank"', $text);
+  }
 }
 
 /* Move Cross Sells Below the Cart Totals */
@@ -108,11 +124,13 @@ add_filter('woocommerce_enqueue_styles', array('ThemeWooCommerce', 'disable_css'
 add_filter('woocommerce_loop_add_to_cart_args', array('ThemeWooCommerce', 'add_to_cart_classes'), 10, 2);
 add_filter('woocommerce_get_price_input', array('ThemeWooCommerce', 'nyp_input_classes'), 10, 3);
 add_filter('woocommerce_get_price_html', array('ThemeWooCommerce', 'change_free_text'), 10, 2);
+add_filter('woocommerce_get_price_html', array('ThemeWooCommerce', 'remove_suggested_price'), 11, 2);
 add_filter('woocommerce_format_price_range', array('ThemeWooCommerce', 'format_price_range'), 10, 3);
 add_action('woocommerce_before_shop_loop', array('ThemeWooCommerce', 'result_count_start'), 19);
 add_action('woocommerce_before_shop_loop', array('ThemeWooCommerce', 'result_count_end'), 31);
 add_filter('woocommerce_before_widget_product_list', array('ThemeWooCommerce', 'products_widget_start'));
 add_filter('woocommerce_after_widget_product_list', array('ThemeWooCommerce', 'products_widget_end'));
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
+add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'));
 
 ?>

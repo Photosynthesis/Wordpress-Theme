@@ -8,7 +8,7 @@
  * presenting a form with inputs for only the Community Name and User ID.
  *
  */
-class FIC_Menu_Directory_User
+class ThemeDirectoryUserMenu
 {
     public static $page_name = 'fic-directory-user-update';
     public static $page_title = 'Directory Listing User Update Form';
@@ -104,8 +104,8 @@ class FIC_Menu_Directory_User
     }
 }
 add_action(
-    'admin_post_' . FIC_Menu_Directory_User::$post_action,
-    array('FIC_Menu_Directory_User', 'handle_post')
+    'admin_post_' . ThemeDirectoryUserMenu::$post_action,
+    array('ThemeDirectoryUserMenu', 'handle_post')
 );
 
 ?>

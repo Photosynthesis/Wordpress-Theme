@@ -1,6 +1,6 @@
 <?php
 /** Admin Customization Functions **/
-class ThemeAdminMenu
+class ThemeSettingsMenu
 {
   /* Register Theme Settings & Sections */
   public static function register_options() {
@@ -35,18 +35,6 @@ class ThemeAdminMenu
     }
   }
 
-
-  /* Add a Theme Settings Page to the Admin Settings Menu */
-  public static function register_menu() {
-    add_options_page(
-      'FIC Theme Settings',
-      'FIC Theme',
-      'manage_options',
-      'fic-theme-settings',
-      array(__CLASS__, 'options_page')
-    );
-  }
-
   /* Render the Theme Settings Form */
   public static function options_page() {
     echo "<div class='wrap'><h1>FIC Theme Settings</h1>\n";
@@ -58,7 +46,6 @@ class ThemeAdminMenu
   }
 }
 
-add_action('admin_menu', array('ThemeAdminMenu', 'register_menu'));
-add_action('admin_init', array('ThemeAdminMenu', 'register_options'));
+add_action('admin_init', array('ThemeSettingsMenu', 'register_options'));
 
 ?>

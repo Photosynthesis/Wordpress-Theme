@@ -109,6 +109,11 @@ CSS;
       "Read More</a>";
   }
 
+  /* Show Comments In Reverse Order, From Recent to Oldest */
+  public static function reverse_comments($comments) {
+    return array_reverse($comments);
+  }
+
 
   /** Layout Functions **/
 
@@ -161,5 +166,6 @@ add_action('login_enqueue_scripts', array('ThemeGeneral', 'customize_login_css')
 add_action('login_headerurl', array('ThemeGeneral', 'customize_login_logo_url'));
 add_action('login_headertitle', array('ThemeGeneral', 'customize_login_logo_title'));
 add_filter('excerpt_more', array('ThemeGeneral', 'post_excerpt_link'));
+add_filter('comments_array', array('ThemeGeneral', 'reverse_comments'));
 
 ?>

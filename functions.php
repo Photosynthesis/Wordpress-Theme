@@ -4,6 +4,9 @@ function load_include($path) {
   require_once(get_template_directory() . "/includes/{$path}");
 }
 
+/** Utility Functions **/
+load_include('utilities.php');
+
 /** General Site & Layout Functions **/
 load_include('general.php');
 
@@ -11,8 +14,12 @@ load_include('general.php');
 load_include('bootstrap_menu_walker.php');
 load_include('bootstrap_comment_walker.php');
 
-/** Admin Settings Menu **/
-load_include('admin_menu.php');
+/** Admin Menus **/
+load_include('menu.php');
+
+/** User Customizations **/
+load_include('users.php');
+
 
 /** Plugins **/
 /* Directory */
