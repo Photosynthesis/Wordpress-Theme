@@ -1,4 +1,4 @@
-<?php theme_top(); ?>
+<?php ThemeGeneral::top(); ?>
 
 
 <?php if (is_category()) { ?>
@@ -48,4 +48,4 @@
 </div>
 
 
-<?php theme_bottom(); ?>
+<?php ThemeGeneral::bottom(); ?>

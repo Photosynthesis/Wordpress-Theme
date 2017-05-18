@@ -3,7 +3,7 @@
 Template Name: With Title
  */
 
-theme_top(); ?>
+ThemeGeneral::top(); ?>
 
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -26,4 +26,4 @@ theme_top(); ?>
 </article>
 
 
-<?php theme_bottom(); ?>
+<?php ThemeGeneral::bottom(); ?>

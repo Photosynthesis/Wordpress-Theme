@@ -1,5 +1,5 @@
 <?php
-theme_top();
+ThemeGeneral::top();
 
 
 if (have_posts()) {
@@ -14,4 +14,4 @@ if (have_posts()) {
 }
 
 
-theme_bottom();
+ThemeGeneral::bottom();

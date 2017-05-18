@@ -3,7 +3,7 @@
 Template Name: Store Sidebars
  */
 
-theme_top('wc'); ?>
+ThemeGeneral::top('wc'); ?>
 
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -26,4 +26,4 @@ theme_top('wc'); ?>
 </article>
 
 
-<?php theme_bottom('wc'); ?>
+<?php ThemeGeneral::bottom('wc'); ?>

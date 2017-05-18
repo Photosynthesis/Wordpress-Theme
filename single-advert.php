@@ -2,7 +2,7 @@
 
 wp_enqueue_script('wpadverts-mal-google-api');
 
-theme_top();
+ThemeGeneral::top();
 $post_id = get_the_ID();
 ?>
 
@@ -97,4 +97,4 @@ do_action("adverts_tpl_single_bottom", $post_id); ?>
 <div><?php the_content(); ?></div>
 
 
-<?php theme_bottom(); ?>
+<?php ThemeGeneral::bottom(); ?>

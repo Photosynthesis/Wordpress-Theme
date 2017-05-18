@@ -1,4 +1,4 @@
-<?php theme_top(); ?>
+<?php ThemeGeneral::top(); ?>
 
 
 <h1><?php echo str_replace('Category: ', '', get_the_title()); ?></h1>
@@ -18,4 +18,4 @@
 </div>
 
 
-<?php theme_bottom(); ?>
+<?php ThemeGeneral::bottom(); ?>

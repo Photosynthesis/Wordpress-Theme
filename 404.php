@@ -2,13 +2,13 @@
 
 <div class="row">
   <!-- Left Sidebar -->
-  <div id="left-sidebar" class="<?php echo theme_left_sidebar_css_classes(); ?>">
+  <div id="left-sidebar" class="<?php echo ThemeGeneral::left_sidebar_css_classes(); ?>">
     <?php dynamic_sidebar('main-left'); ?>
   </div>
 
 
   <!-- Content -->
-  <div class="<?php echo theme_main_column_css_classes(); ?>" id="main">
+  <div class="<?php echo ThemeGeneral::main_column_css_classes(); ?>" id="main">
     <h2>Page Not Found</h2>
     <p>It appears that the page you are looking for does not exist, or has been
        moved elsewhere.</p>
@@ -21,7 +21,7 @@
 
 
   <!-- Right Sidebar -->
-  <div id="right-sidebar" class="<?php echo theme_right_sidebar_css_classes(); ?>">
+  <div id="right-sidebar" class="<?php echo ThemeGeneral::right_sidebar_css_classes(); ?>">
     <?php dynamic_sidebar('main-right'); ?>
   </div>
 </div>

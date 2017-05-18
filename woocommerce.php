@@ -1,4 +1,4 @@
-<?php theme_top('wc'); ?>
+<?php ThemeGeneral::top('wc'); ?>
 
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -6,4 +6,4 @@
 </article>
 
 
-<?php theme_bottom('wc'); ?>
+<?php ThemeGeneral::bottom('wc'); ?>
