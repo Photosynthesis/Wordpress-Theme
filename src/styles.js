@@ -13,15 +13,15 @@ $(document).ready(function() {
     var $dropdown = $(this);
     if ($dropdown.hasClass('show'))  {
       /* Hide the Clicked Menu */
-      $dropdown.children('.dropdown-menu').slideUp();
+      $dropdown.children('.dropdown-menu').slideUp('fast');
       $dropdown.removeClass('show');
       /* Hide any Open Sub-Menus */
-      $dropdown.find('li.menu-item.dropdown').removeClass('show').children('.dropdown-menu').slideUp();
+      $dropdown.find('li.menu-item.dropdown').removeClass('show').children('.dropdown-menu').slideUp('fast');
     } else {
       /* Hide Any Shown Sibling Menus */
-      $dropdown.siblings('.dropdown').find('.dropdown-menu').slideUp();
+      $dropdown.siblings('.dropdown').find('.dropdown-menu').slideUp('fast');
       /* Show the Touched Menu */
-      $dropdown.children('.dropdown-menu').slideDown();
+      $dropdown.children('.dropdown-menu').slideDown('fast');
       $dropdown.addClass('show');
       /* Hide All Other Menus */
       $('li.menu-item.dropdown').not(function(i, el) {
@@ -40,15 +40,15 @@ $(document).ready(function() {
   });
   /* Hide Any Shown Menus When Touching Outside a Menu */
   $('body').on('touchend', function(event) {
-    $('li.menu-item.dropdown').removeClass('show').children('.dropdown-menu').slideUp();
+    $('li.menu-item.dropdown').removeClass('show').children('.dropdown-menu').slideUp('fast');
   });
   $('li.menu-item.dropdown').hover(function() {
     /* Open Submenus on Hover In */
-    $(this).children('.dropdown-menu').slideDown();
+    $(this).children('.dropdown-menu').slideDown('fast');
     $(this).addClass('show');
   }, function() {
     /* Close Submenus on Hover Out */
-    $(this).children('.dropdown-menu').slideUp();
+    $(this).children('.dropdown-menu').slideUp('fast');
     $(this).removeClass('show');
   });
 
