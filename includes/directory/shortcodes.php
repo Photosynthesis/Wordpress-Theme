@@ -215,7 +215,7 @@ class DirectoryShortcodes
 
       $link_html = join(' | ', $checkboxes);
 
-      return "<div style='float:right;'>Filter: {$link_html}</div>" .
+      return "<div class='small' style='float:right;'>Filter: {$link_html}</div>" .
           "<div style='clear:both;'></div>";
   }
 
