@@ -55,15 +55,21 @@ body
   padding: 15px
   background-color: white
   box-shadow: black 0px 6px 32px
-  +media-breakpoint-up(md)
+  +media-breakpoint-only(xs)
+    padding-top: 10px
+  +media-breakpoint-only(lg)
+    width: 98%
+  +media-breakpoint-up(lg)
     margin-top: 30px
-  +media-breakpoint-down(lg)
+  +media-breakpoint-down(md)
     width: 100%
 
 
 #site-header
-  .banner-image
+  .banner-image img
     height: 80px
+    +media-breakpoint-only(md)
+      height: 100%
   #greeting-logout
     margin-right: 5px
     #header-cart-icon
@@ -77,6 +83,9 @@ body
     font-weight: bold
     button
       cursor: pointer
+  .google-search-div
+    width: 60%
+    margin-left: auto
 
 
 #nav-menu
@@ -93,7 +102,7 @@ body
     .navbar-nav > li
       /* Add Separators */
       border-left: 1px solid $orange
-      +media-breakpoint-up(lg)
+      +media-breakpoint-up(md)
         &:first-child
           border-left: none
       /* Emphasize Text & Reduce Size */
@@ -113,16 +122,19 @@ body
         background-color: $orange
         a
           color: black
+        /* Push Each Nested Level of Sub-Menus Slightly More to the Right */
         li
           padding-left: 1rem
+        /* Emphasize Links to Current Page */
         li.active > a
           color: white
           font-weight: bold
+        /* Position Nested Sub-Menus to the Right of the Open Sub-Menu */
         li.dropdown
           > ul
             top: 0
             left: 99.9%
-      /* Recolor on Active, Hover & Click */
+    /* Recolor on Active & Hover */
     .navbar-nav li
       &:hover, &.show
         background-color: $orange
@@ -134,6 +146,11 @@ body
         & a:hover
           color: white
           font-weight: bold
+  +media-breakpoint-only(md)
+    /* Hide NavBar Search on Medium Screens */
+    .google-search-div
+      display: none
+
 
 /* Google Search Boxes */
 div.google-search-div
@@ -169,7 +186,10 @@ h1, h2, h3, h4, h5
 
 .sidebar
   /* Add Spacing between Nav & Content */
-  margin-top: 2.75em
+  +media-breakpoint-down(sm)
+    margin-top: 1em
+  +media-breakpoint-up(md)
+    margin-top: 2.75em
   /* Stylize Widget Headers */
   h4.widget-title
     font-size: 1.1em
@@ -183,11 +203,15 @@ h1, h2, h3, h4, h5
   select#cat, select.goog-te-combo, .widget_wysija_cont input
     @extend .form-control
     @extend .form-control-sm
-    @extend .w-75
-    @extend .mx-auto
+    width: 80% !important
+    margin-left: auto
+    margin-right: auto
   /* Space Widgets Vertically */
   .widget
-    margin: 2.75em 0
+    +media-breakpoint-down(sm)
+      margin: 1em 0
+    +media-breakpoint-up(md)
+      margin: 2.75em 0
     &:first-of-type
       margin-top: 0
   /* Reduce Padding of Recent Blog Posts */
@@ -253,14 +277,17 @@ h1, h2, h3, h4, h5
 /** General **/
 .center-column
   /* Style the Vertical Borders */
-  border-left: solid 1px $gray-lightest
-  border-right: solid 1px $gray-lightest
+  +media-breakpoint-up(md)
+    border-left: solid 1px darken($gray-lightest, 5%)
+  +media-breakpoint-up(xl)
+    border-right: solid 1px darken($gray-lightest, 5%)
   /* Push Vertical Borders Out */
   padding: 0 15px
-  /* Add Spacing between Nav & Content */
-  margin-top: 2em
-  /* Add Spacing between Vertical Borders & Footer
-  margin-bottom: 2em
+  +media-breakpoint-up(sm)
+    /* Add Spacing between Nav & Content */
+    margin-top: 2em
+    /* Add Spacing between Vertical Borders & Footer
+    margin-bottom: 2em
 
 #main
   /* Reduce Font Sizes */
@@ -587,6 +614,11 @@ body.error404.incsub_wiki
     .woocommerce-placeholder
       height: auto
       max-width: 100%
+    img
+      +media-breakpoint-down(lg)
+        height: 5em !important
+        width: auto !important
+        margin: 0 auto
 
   /* Product List Cards */
   ul.products > li.product > div.card

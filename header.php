@@ -26,12 +26,12 @@
 
   <!-- Header -->
   <div id="site-header" class="row">
-    <div class="col">
+    <div class="col text-center text-sm-left">
       <a href="/" class="banner-image">
-      <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-fic.png'; ?>" alt="FIC" height="80" />
+        <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-fic.png'; ?>" alt="FIC" />
       </a>
     </div>
-    <div class="col text-right">
+    <div class="col text-right hidden-xs-down">
       <div id="greeting-logout"><?php
           $current_user = wp_get_current_user();
           if (is_user_logged_in()) {
@@ -51,12 +51,30 @@
         <a class="btn btn-sm btn-secondary" href='<?php echo get_permalink(14602); ?>'>Membership</a>
         <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>Donate</a>
       </div>
+      <div class="google-search-div hidden-sm-down hidden-lg-up">
+        <script>
+          (function() {
+            var cx = 'partner-pub-4810885975061329:dhwcft-rc6r';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+                '//www.google.com/cse/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+          })();
+        </script>
+        <gcse:search></gcse:search>
+      </div>
     </div>
   </div>
 
-  <!-- Nav Menu -->
+  <!-- Nav Menu & Search -->
   <div id="nav-menu" class="row">
-    <div class="col-md-18 col-24">
+    <div class="col-24 col-sm-12 push-sm-12 col-md-6 push-md-0 push-lg-18">
+      <div class="google-search-div"><gcse:search></gcse:search></div>
+    </div>
+    <div class="col-24 col-sm-12 pull-sm-12 col-md-24 pull-md-0 col-lg-18 pull-lg-6">
       <nav class="navbar navbar-light navbar-toggleable-sm">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
                 aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,22 +97,5 @@
           ?>
         </div>
       </nav>
-    </div>
-    <div class="col-md-6 col-24">
-      <div class="google-search-div">
-        <script>
-          (function() {
-            var cx = 'partner-pub-4810885975061329:dhwcft-rc6r';
-            var gcse = document.createElement('script');
-            gcse.type = 'text/javascript';
-            gcse.async = true;
-            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-                '//www.google.com/cse/cse.js?cx=' + cx;
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(gcse, s);
-          })();
-        </script>
-        <gcse:search></gcse:search>
-      </div>
     </div>
   </div>

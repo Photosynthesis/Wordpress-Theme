@@ -119,17 +119,17 @@ CSS;
 
   /* Return CSS Classes for Left Sidebars */
   public static function left_sidebar_css_classes() {
-    return "hidden-sm-down col-md-4 col-lg-5 col-xl-4 sidebar";
+    return "col-24 col-sm-12 col-md-7 pull-md-17 col-lg-5 pull-lg-19 col-xl-4 pull-xl-16 sidebar";
   }
 
   /* Return CSS Classes for Right Sidebars */
   public static function right_sidebar_css_classes() {
-    return "col-24 col-md-5 col-xl-4 sidebar";
+    return "col-24 col-sm-12 col-md-24 col-xl-4 sidebar";
   }
 
   /* Return CSS Classes for Center Column */
   public static function main_column_css_classes() {
-    return "col-24 col-md-14 col-xl-16 center-column";
+    return "col-24 col-md-17 push-md-7 col-lg-19 push-lg-5 col-xl-16 push-xl-4 center-column";
   }
 
   /* Echo the Header, Left Sidebar, & Opening Center Column Tag */
@@ -138,17 +138,18 @@ CSS;
     $center_class = ThemeGeneral::main_column_css_classes();
     get_header();
     echo "\n<div class='row'>";
-    echo "\n<div id='left-sidebar' class='{$sidebar_class}'>\n";
-    dynamic_sidebar("{$sidebar}-left");
-    echo "\n</div>\n";
     echo "<div id='main' class='{$center_class}'>";
   }
 
   /* Echo the Closing Center Column Tag, Right Sidebar, & Footer */
   public static function bottom($sidebar='main') {
-    $sidebar_class = ThemeGeneral::right_sidebar_css_classes();
+    $left_sidebar_class = ThemeGeneral::left_sidebar_css_classes();
+    $right_sidebar_class = ThemeGeneral::right_sidebar_css_classes();
     echo "</div>";
-    echo "<div id='right-sidebar' class='{$sidebar_class}'>\n";
+    echo "\n<div id='left-sidebar' class='{$left_sidebar_class}'>\n";
+    dynamic_sidebar("{$sidebar}-left");
+    echo "\n</div>\n";
+    echo "<div id='right-sidebar' class='{$right_sidebar_class}'>\n";
     dynamic_sidebar("{$sidebar}-right");
     echo "\n</div></div>\n";
     get_footer();
