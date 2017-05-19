@@ -8,15 +8,24 @@ require('../node_modules/bootstrap/dist/js/bootstrap.js');
 
 var $ = window.jQuery;
 $(document).ready(function() {
-  /* Touching Items With Dropdowns */
+  /** Navbar **/
+  /* Menu Touching */
+  var touchDragging = false;
+  /* Set as Dragging on Touch Move Events */
+  $('body').on('touchmove', function() { touchDragging = true; })
+  /* Reset Dragging Status on New Touches */
+  $('body').on('touchstart', function() { touchDragging = false; })
+  /* Handle Touches on Items with Sub-Menus */
   $('li.menu-item.dropdown').on('touchend', function(event) {
+    if (touchDragging) { return; }
     var $dropdown = $(this);
     if ($dropdown.hasClass('show'))  {
       /* Hide the Clicked Menu */
       $dropdown.children('.dropdown-menu').slideUp('fast');
       $dropdown.removeClass('show');
       /* Hide any Open Sub-Menus */
-      $dropdown.find('li.menu-item.dropdown').removeClass('show').children('.dropdown-menu').slideUp('fast');
+      $dropdown.find('li.menu-item.dropdown').removeClass('show')
+        .children('.dropdown-menu').slideUp('fast');
     } else {
       /* Hide Any Shown Sibling Menus */
       $dropdown.siblings('.dropdown').find('.dropdown-menu').slideUp('fast');
@@ -34,14 +43,19 @@ $(document).ready(function() {
   });
   /* Click Links When Touching Non-Dropdown Nav Items */
   $('li.menu-item').not('.dropdown').on('touchend', function(event) {
+    if (touchDragging) { return; }
     $(this).find('a')[0].click();
     event.preventDefault();
     event.stopPropagation();
   });
   /* Hide Any Shown Menus When Touching Outside a Menu */
   $('body').on('touchend', function(event) {
-    $('li.menu-item.dropdown').removeClass('show').children('.dropdown-menu').slideUp('fast');
+    if (touchDragging) { return; }
+    $('li.menu-item.dropdown').removeClass('show')
+      .children('.dropdown-menu').slideUp('fast');
   });
+
+  /* Menu Hovering */
   var menuHoverTimeout = 325;
   var menuCloseTimeout = 100;
   var menuHoverTimer = null;
@@ -69,14 +83,16 @@ $(document).ready(function() {
     }, menuCloseTimeout);
   });
 
-  /* WooCommerce */
+
+  /** WooCommerce **/
   /* Fix Classes When Clicking Tabs */
   $('.woocommerce-tabs.wc-tabs-wrapper li.nav-item a').on('click', function(event) {
     $('.woocommerce-tabs.wc-tabs-wrapper li.nav-item a').removeClass('active');
     $(this).addClass('active');
   });
 
-  /* WPAdverts */
+
+  /** WPAdverts **/
   /* Toggle Contact Form on Button Click */
   $('body.advert-template-default button#adverts-send-message-button').click(function() {
     $('body.advert-template-default .adverts-contact-box').slideToggle('fast');
