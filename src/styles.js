@@ -42,14 +42,31 @@ $(document).ready(function() {
   $('body').on('touchend', function(event) {
     $('li.menu-item.dropdown').removeClass('show').children('.dropdown-menu').slideUp('fast');
   });
+  var menuHoverTimeout = 325;
+  var menuCloseTimeout = 100;
+  var menuHoverTimer = null;
   $('li.menu-item.dropdown').hover(function() {
+    if (menuHoverTimer) {
+      clearTimeout(menuHoverTimer);
+      menuHoverTimer = null;
+    }
     /* Open Submenus on Hover In */
-    $(this).children('.dropdown-menu').slideDown('fast');
-    $(this).addClass('show');
+    var $this = $(this);
+    menuHoverTimer = setTimeout(function() {
+      $this.children('.dropdown-menu').stop(true, true).slideDown('fast');
+      $this.addClass('show');
+    }, menuHoverTimeout);
   }, function() {
+    if (menuHoverTimer) {
+      clearTimeout(menuHoverTimer);
+      menuHoverTimer = null;
+    }
     /* Close Submenus on Hover Out */
-    $(this).children('.dropdown-menu').slideUp('fast');
-    $(this).removeClass('show');
+    var $this = $(this);
+    setTimeout(function() {
+      $this.children('.dropdown-menu').stop(true, true).slideUp('fast');
+      $this.removeClass('show');
+    }, menuCloseTimeout);
   });
 
   /* WooCommerce */
