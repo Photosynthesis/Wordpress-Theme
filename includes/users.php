@@ -32,7 +32,7 @@ class ThemeUsers
     if (is_user_logged_in()) {
       return do_shortcode($content);
     } else {
-      return this::login_form();
+      return self::login_form();
     }
   }
 
@@ -50,8 +50,8 @@ class ThemeUsers
 }
 
 add_filter('login_redirect', array('ThemeUsers', 'login_redirect'), 10, 3);
-add_shortcode('logged_in_only', array('ThemeUsers', 'login_redirect'));
+add_shortcode('logged_in_only', array('ThemeUsers', 'logged_in_only'));
 add_shortcode('display_login_form', array('ThemeUsers', 'login_form'));
-add_filter('lostpassword_url', array('ThemeUsers', 'lost_password_url'));
+add_filter('lostpassword_url', array('ThemeUsers', 'lost_password_url'), 10, 2);
 
 ?>
