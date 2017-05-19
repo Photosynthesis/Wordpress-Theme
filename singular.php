@@ -15,18 +15,18 @@
     } ?>
     <div>
       <?php if (!is_page()) { ?>
-        <h1><?php the_title(); ?></h1>
+        <h1 class='entry-title'><?php the_title(); ?></h1>
         <div>
           <small class="text-muted pb-3">
-            Posted on <?php echo get_the_date('F j, Y'); ?>
-            by <?php the_author_posts_link(); ?>
+            Posted on <span class='updated published'><?php echo get_the_date('F j, Y'); ?></span>
+            by <span class='author'><?php the_author_posts_link(); ?></span>
             <br class='hidden-lg-up' /><span class='hidden-md-down'> - </span>
             <a href="<?php comments_link(); ?>"><?php comments_number("0 Comments"); ?></a>
           </small>
         </div>
       <?php } ?>
     </div>
-    <div class='mt-3'><?php the_content(); ?></div>
+    <div class='mt-3 entry-content'><?php the_content(); ?></div>
   </div>
 
 </article>

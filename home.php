@@ -1,13 +1,6 @@
 <?php ThemeGeneral::top(); ?>
 
 
-<?php if (is_category()) { ?>
-  <h1><?php echo single_cat_title(); ?></h1>
-<?php } else { ?>
-  <h1><?php echo get_the_archive_title(); ?></h1>
-<?php } ?>
-<hr class="mt-2" />
-<p><?php the_archive_description(); ?></p>
 <div class="posts">
   <?php
   if (have_posts()) {
