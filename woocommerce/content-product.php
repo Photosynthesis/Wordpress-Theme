@@ -32,7 +32,7 @@ if ($product->is_on_sale()) {
   $card_classes .= ' card-outline-primary';
 }
 ?>
-<li <?php post_class('text-center col-12 col-sm-8 col-xl-6 mb-4'); ?>>
+<li <?php post_class('text-center col-12 col-sm-8 col-lg-6 mb-4'); ?>>
   <a href='<?php the_permalink(); ?>'>
     <div class='<?php echo $card_classes; ?>'>
       <?php woocommerce_show_product_loop_sale_flash();

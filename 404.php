@@ -1,12 +1,6 @@
 <?php get_header(); ?>
 
 <div class="row">
-  <!-- Left Sidebar -->
-  <div id="left-sidebar" class="<?php echo ThemeGeneral::left_sidebar_css_classes(); ?>">
-    <?php dynamic_sidebar('main-left'); ?>
-  </div>
-
-
   <!-- Content -->
   <div class="<?php echo ThemeGeneral::main_column_css_classes(); ?>" id="main">
     <h2>Page Not Found</h2>
@@ -26,6 +20,10 @@
     </div>
   </div>
 
+  <!-- Left Sidebar -->
+  <div id="left-sidebar" class="<?php echo ThemeGeneral::left_sidebar_css_classes(); ?>">
+    <?php dynamic_sidebar('main-left'); ?>
+  </div>
 
   <!-- Right Sidebar -->
   <div id="right-sidebar" class="<?php echo ThemeGeneral::right_sidebar_css_classes(); ?>">

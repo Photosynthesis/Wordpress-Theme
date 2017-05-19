@@ -16,11 +16,13 @@
       <div id="post-<?php the_ID(); ?>" class="<?php echo join(" ", get_post_class("post-summary")); ?>">
         <div class="clearfix">
           <?php if (has_post_thumbnail()) { ?>
-          <div class="float-left mr-2 mb-1">
-            <div class="card">
-              <a href="<?php the_permalink(); ?>">
-                <?php the_post_thumbnail('post-thumbnail'); ?>
-              </a>
+          <div class="float-sm-left mr-sm-2 mb-1">
+            <div class='text-center text-sm-left'>
+              <div class="card d-inline-block">
+                <a href="<?php the_permalink(); ?>">
+                  <?php the_post_thumbnail('post-thumbnail', array('class' => 'p-1 img-fluid')); ?>
+                </a>
+              </div>
             </div>
           </div>
           <?php } ?>

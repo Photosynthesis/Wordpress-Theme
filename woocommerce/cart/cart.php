@@ -27,7 +27,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 <form class="woocommerce-cart-form" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
   <?php do_action( 'woocommerce_before_cart_table' ); ?>
 
-  <table class="mb-2 table table-sm tabl-responsive table-striped shop_table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
+  <table class="mb-2 table table-sm table-responsive table-striped shop_table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
     <thead>
       <tr>
         <th class="product-thumbnail">&nbsp;</th>
@@ -51,7 +51,7 @@ do_action( 'woocommerce_before_cart' ); ?>
           ?>
           <tr class="woocommerce-cart-form__cart-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
 
-            <td class="product-thumbnail">
+            <td class="product-thumbnail align-middle">
               <?php
                 $thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image('cart-thumbnail'), $cart_item, $cart_item_key );
 

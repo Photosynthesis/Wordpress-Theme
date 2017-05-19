@@ -304,10 +304,6 @@ h1, h2, h3, h4, h5
     a
       @extend .btn
       @extend .btn-primary
-  /* Responsive Post Thumbnails with Spacing */
-  img.attachment-post-thumbnail
-    @extend .img-fluid
-    @extend .p-1
 
 /** Comments **/
 #comments
@@ -355,8 +351,12 @@ body.single-directory
       +media-breakpoint-down(lg)
         column-count: 2
       /* Use 1 Column on the Smallest Screens */
-      +media-breakpoint-down(xs)
+      +media-breakpoint-only(xs)
         column-count: 1
+        /* Fix Touching Cards */
+        .card
+          margin-bottom: 1em
+
       /* Center the Headings */
       h3
         text-align: center
@@ -513,10 +513,6 @@ body.incsub_wiki div#main
     /* Remove Wiki Site Name */
     h3#siteSub
       display: none
-
-    /* Move Article Title Up */
-    .incsub_wiki_content
-      margin-top: -1em
 
     /* Remove Empty Space Above Article Title */
     div#wiki-content
