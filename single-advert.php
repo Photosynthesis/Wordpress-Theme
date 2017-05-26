@@ -83,7 +83,7 @@ if (!empty($children)) {
 
 
 <!-- Message / Phone -->
-<button id='adverts-send-message-button' class='btn btn-primary'>Send Message</button>
+<button id='adverts-send-message-button' class='btn btn-warning'>Send Message</button>
 <?php
 $phone_number = get_post_meta($post_id, 'adverts_phone', true);
 if ($phone_number) {
