@@ -80,6 +80,63 @@ class ThemeWooCommerce
     return '</div>';
   }
 
+  /* Add a `Purchased` Column to the Admin Orders Table */
+  public static function add_purchased_column_header($columns) {
+    $new_columns = array();
+    foreach ($columns as $key => $title) {
+      if ($key === 'billing_address') {
+        $new_columns['order_items'] = __('Purchased', 'woocommerce');
+      }
+      $new_columns[$key] = $title;
+    }
+    return $new_columns;
+  }
+
+  /* Render the `Purchased` Column in the Admin Orders Table */
+  public static function render_purchased_column($column) {
+    global $the_order;
+    if ($column === 'order_items') {
+      $item_count = $the_order->get_item_count();
+      $item_count_text =
+        apply_filters(
+          'woocommerce_admin_order_item_count',
+          sprintf(_n('%d item', '%d items', $item_count, 'woocommerce'), $item_count),
+          $the_order
+        );
+      echo "<a href='#' class='show_order_items'>{$item_count_text}</a>";
+      $order_items = $the_order->get_items();
+      if (sizeof($order_items) > 0) {
+        echo "<table class='order_items' cellspacing='0'>";
+        foreach ($order_items as $item) {
+          $product = apply_filters(
+            'woocommerce_order_item_product', $item->get_product(), $item);
+          $item_meta = new WC_Order_Item_Meta($item, $product);
+          $item_meta_html = $item_meta->display(true, true);
+          $item_class = apply_filters(
+            'woocommerce_admin_order_item_class', '', $item, $the_order);
+          $item_name = apply_filters(
+            'woocommerce_order_item_name', $item->get_name(), $item, false);
+          echo "<tr class='{$item_class}'>" .
+            "<td class='qty'>" . esc_html($item->get_quantity()) . "</td>" .
+            "<td class='name'>";
+          if ($product) {
+            $sku = $product->get_sku();
+            $edit_link = get_edit_post_link($product->get_id());
+            if (wc_product_sku_enabled() && $sku !== '') { echo "{$sku} - "; }
+            echo "<a href='{$edit_link}'>{$item_name}</a>";
+          } else {
+            echo $item_name;
+          }
+          if (!empty($item_meta_html)) {
+            echo wc_help_tip($item_meta_html);
+          }
+          echo "</td>";
+        }
+        echo "</table>";
+      }
+    }
+  }
+
   /* Show Images of Accepted Payment Methods */
   public static function accepted_payment_methods() {
     $path = get_stylesheet_directory_uri() . "/img/cc-logos/";
@@ -130,6 +187,8 @@ add_action('woocommerce_before_shop_loop', array('ThemeWooCommerce', 'result_cou
 add_action('woocommerce_before_shop_loop', array('ThemeWooCommerce', 'result_count_end'), 31);
 add_filter('woocommerce_before_widget_product_list', array('ThemeWooCommerce', 'products_widget_start'));
 add_filter('woocommerce_after_widget_product_list', array('ThemeWooCommerce', 'products_widget_end'));
+add_filter('manage_edit-shop_order_columns', array('ThemeWooCommerce', 'add_purchased_column_header'));
+add_action('manage_shop_order_posts_custom_column', array('ThemeWooCommerce', 'render_purchased_column'));
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
 add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'));
 
