@@ -612,9 +612,11 @@ body.error404.incsub_wiki
       max-width: 100%
     img
       +media-breakpoint-down(lg)
-        height: 5em !important
+        height: 15em !important
         width: auto !important
         margin: 0 auto
+      +media-breakpoint-down(sm)
+        height: 5em !important
 
   /* Product List Cards */
   ul.products > li.product > div.card
