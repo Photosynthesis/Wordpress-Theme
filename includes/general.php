@@ -15,6 +15,7 @@ class ThemeGeneral
   public static function set_thumbnail_sizes() {
     set_post_thumbnail_size(200);
     add_image_size('product-thumbnail', 250, 325, array('center', 'top'));
+    add_image_size('product-image', 300, 0);
     add_image_size('cart-thumbnail', 75, 0);
   }
 
