@@ -42,7 +42,7 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
       'data-large_image'        => $full_size_image[0],
       'data-large_image_width'  => $full_size_image[1],
       'data-large_image_height' => $full_size_image[2],
-      'class' => 'p-1 img-fluid',
+      'class' => 'p-1 img-fluid w-100',
     );
 
     if ( has_post_thumbnail() ) {
