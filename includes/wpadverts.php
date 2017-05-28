@@ -36,7 +36,7 @@ class ThemeWPAdverts
     if (!isset($args['rewrite'])) {
       $args['rewrite'] = array();
     }
-    $args['rewrite']['slug'] = 'community-classifieds';
+    $args['rewrite']['slug'] = 'classifieds-category';
     return $args;
   }
 
