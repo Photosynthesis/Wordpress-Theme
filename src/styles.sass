@@ -418,6 +418,11 @@ body.single-directory
     @extend .form-group
     label
       @extend .form-control-label
+  /* Fix Height of Scrollable Containers */
+  .frm_scroll_box > .frm_opt_container
+    height: 17em
+    overflow-y: scroll
+    overflow-x: hidden
   /* Style the Submit Buttons */
   .frm_final_submit
     @extend .btn
