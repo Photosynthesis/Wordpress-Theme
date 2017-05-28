@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="profile" href="http://gmpg.org/xfn/11" />
     <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
-    <link href='//fonts.googleapis.com/css?family=Rubik' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
     <?php if (is_singular() && get_option('thread_comments')) { wp_enqueue_script('comment-reply'); } ?>
     <?php wp_head(); ?>
     <script type='text/javascript'><?php echo get_option('theme_extra_javascript'); ?></script>
