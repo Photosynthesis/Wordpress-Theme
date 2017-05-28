@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
         if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_widget_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
           $product_name      = apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key );
-          $thumbnail         = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(array(50,50), array('class' => 'mw-100 h-auto')), $cart_item, $cart_item_key );
+          $thumbnail         = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(array(50,50), array('class' => 'mw-100 w-100 h-auto')), $cart_item, $cart_item_key );
           $product_price     = apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key );
           $product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
           ?>
