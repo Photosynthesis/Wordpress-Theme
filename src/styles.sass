@@ -437,10 +437,12 @@ body.single-directory
       @extend .col-24
       @extend .row
     .frm_top_container, .frm_none_container, > h3, .frm_section_spacing, .frm_submit
-      &:not(.frm_first_half):not(.frm_last_half)
+      &:not(.frm_first_half):not(.frm_last_half):not(.frm_first_fourth):not(.frm_fourth):not(.frm_last_fourth)
         @extend .col-24
       &.frm_first_half, &.frm_last_half
         @extend .col-12
+      &.frm_first_fourth, &.frm_fourth, &.frm_last_fourth
+        @extend .col-6
   /* Align Text Inputs with Radio/Check Boxes in "Other" Fields */
   .frm_other_input
     max-width: 75%
