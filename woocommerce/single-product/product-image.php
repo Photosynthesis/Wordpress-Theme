@@ -46,8 +46,8 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
     );
 
     if ( has_post_thumbnail() ) {
-      $html  = '<div data-thumb="' . get_the_post_thumbnail_url( $post->ID, 'post-thumbnail' ) . '" class="woocommerce-product-gallery__image"><a href="' . esc_url( $full_size_image[0] ) . '">';
-      $html .= get_the_post_thumbnail( $post->ID, 'post-thumbnail', $attributes );
+      $html  = '<div data-thumb="' . get_the_post_thumbnail_url( $post->ID, 'product-thumbnail' ) . '" class="woocommerce-product-gallery__image"><a href="' . esc_url( $full_size_image[0] ) . '">';
+      $html .= get_the_post_thumbnail( $post->ID, 'product-thumbnail', $attributes );
       $html .= '</a></div>';
     } else {
       $html  = '<div class="woocommerce-product-gallery__image--placeholder">';
