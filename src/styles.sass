@@ -680,6 +680,9 @@ body.error404.incsub_wiki
     /* Don't Underline Remove Links */
     .remove:hover, .remove:active
       text-decoration: none
+  /* Prevent Quantity Input Table Columns from Getting Too Big */
+  table.cart .qty
+    max-width: 7em
   /* Fix the State/County Shipping Calculator Field for Non-U.S. Countries */
   .cart_totals #calc_shipping_state
     @extend .form-control
