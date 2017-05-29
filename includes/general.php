@@ -64,6 +64,12 @@ class ThemeGeneral
     echo "<link rel='shortcut icon' href='{$favicon_url}' />";
   }
 
+  /* Remove the `Customize` Link From the Admin Bar */
+  public static function remove_customize_menu() {
+      global $wp_admin_bar;
+      $wp_admin_bar->remove_menu('customize');
+  }
+
   /* Customize the Login Page CSS - Replace Logo, Change Background Color */
   public static function customize_login_css() {
     $logo_path = get_stylesheet_directory_uri() . "/img/logo-login-fic.png";
@@ -164,6 +170,7 @@ add_action('wp_enqueue_scripts', array('ThemeGeneral', 'enqueue_assets'));
 add_action('widgets_init', array('ThemeGeneral', 'register_sidebars'));
 add_action('login_head', array('ThemeGeneral', 'add_favicon'));
 add_action('admin_head', array('ThemeGeneral', 'add_favicon'));
+add_action('wp_before_admin_bar_render', array('ThemeGeneral', 'remove_customize_menu'));
 add_action('login_enqueue_scripts', array('ThemeGeneral', 'customize_login_css'));
 add_action('login_headerurl', array('ThemeGeneral', 'customize_login_logo_url'));
 add_action('login_headertitle', array('ThemeGeneral', 'customize_login_logo_title'));
