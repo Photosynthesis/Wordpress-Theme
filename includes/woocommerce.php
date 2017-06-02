@@ -8,22 +8,6 @@ class ThemeWooCommerce
     add_theme_support('wc-product-gallery-lightbox');
   }
 
-  /* Remove Hidden Products from Display Queries */
-  public static function remove_hidden($query, $wc_query) {
-    $hidden_meta = array('key' => '_visibility', 'value' => 'hidden', 'compare' => '!=');
-    $meta = $query->get('meta_query');
-    if (!is_search()) {
-      $meta[] = array(
-        'relation' => 'AND',
-        $hidden_meta,
-        array('key' => '_visibility', 'value' => 'search', 'compare' => '!='),
-      );
-    } else {
-      $meta[] = $hidden_meta;
-    }
-    $query->set('meta_query', $meta);
-  }
-
   /* Disable WooCommerce CSS */
   public static function disable_css() {}
 
@@ -176,7 +160,6 @@ add_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display', 11)
 add_filter('loop_shop_per_page', create_function('$cols', 'return 24;'), 20);
 
 add_action('after_setup_theme', array('ThemeWooCommerce', 'enable_support'));
-add_action('woocommerce_product_query', array('ThemeWooCommerce', 'remove_hidden'), 10, 2);
 add_filter('woocommerce_enqueue_styles', array('ThemeWooCommerce', 'disable_css'));
 add_filter('woocommerce_loop_add_to_cart_args', array('ThemeWooCommerce', 'add_to_cart_classes'), 10, 2);
 add_filter('woocommerce_get_price_input', array('ThemeWooCommerce', 'nyp_input_classes'), 10, 3);
