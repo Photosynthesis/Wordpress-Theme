@@ -9,12 +9,13 @@
  */
 
 
-if ($search_bar == "enabled") { ?>
+if ($search_bar == "enabled") {
+  $search_query = isset($_GET['query']) ? $_GET['query'] : ''; ?>
   <div class='card bg-faded mb-3'>
     <form class='pt-3 pb-3 pl-2 pr-2 clearfix' action='<?php echo esc_attr($action); ?>' method='get'>
       <div class='row'>
         <div class='col-sm-18'>
-          <input type='text' class='form-control' placeholder='Keyword...' name='query' value='<?php echo $_GET['query']; ?>'/>
+          <input type='text' class='form-control' placeholder='Keyword...' name='query' value='<?php echo $search_query; ?>'/>
         </div>
         <div class='col-sm-6'>
           <input class='float-right btn btn-primary btn-block' type='submit' value='Search' />

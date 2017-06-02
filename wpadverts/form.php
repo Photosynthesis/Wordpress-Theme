@@ -65,7 +65,8 @@ if( ! isset( $form_label_placement ) ) {
         <div  style="">
             <?php include_once ADVERTS_PATH . "/includes/class-html.php"; ?>
             <?php foreach($buttons as $button): ?>
-            <?php $button['class'] .= ' btn btn-primary mt-0 mr-2' ?>
+            <?php if (!isset($button['class'])) { $button['class'] = ''; } ?>
+            <?php $button['class'] .= ' btn btn-primary mt-0 mr-2'; ?>
             <?php echo Adverts_Html::build($button["tag"], array_replace($button, array("tag"=>null, "html"=>null)), $button["html"]) ?>
             <?php endforeach; ?>
         </div>
