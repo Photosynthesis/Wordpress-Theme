@@ -20,7 +20,7 @@ npm run watch
 
 * Indent with 2 spaces.
 * Namespace functions using classes, prefer classes that don't require
-  instantiation using static functions.
+  instantiation by using static functions.
 * Prefix class names with `Theme` if necessary.
 * Classes with actions, filters, & shortcodes should live in the `includes/`
   subdirectory.
@@ -30,6 +30,4 @@ npm run watch
 
 ## License
 
-I dunno, I tried getting this answered by the FIC Board, but they're too busy.
-I'd love it to be GPLv3, but please contact the author or office@ic.org for
-permission to use this code.
+GPL-3.0
