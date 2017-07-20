@@ -15,18 +15,15 @@
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.5.0
+ * @version 3.1.0
  */
-
 if ( ! defined( 'ABSPATH' ) ) {
-  exit; // Exit if accessed directly
+	exit;
 }
 
-?>
+do_action( 'woocommerce_before_mini_cart' ); ?>
 
-<?php do_action( 'woocommerce_before_mini_cart' ); ?>
-
-<table class="cart_list product_list_widget table table-sm <?php echo esc_attr( $args['list_class'] ); ?>">
+<table class="woocommerce-mini-cart cart_list product_list_widget table table-sm <?php echo esc_attr( $args['list_class'] ); ?>">
 
   <?php if ( ! WC()->cart->is_empty() ) : ?>
 
@@ -43,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
           $product_price     = apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key );
           $product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
           ?>
-          <tr class="<?php echo esc_attr( apply_filters( 'woocommerce_mini_cart_item_class', 'mini_cart_item', $cart_item, $cart_item_key ) ); ?>">
+          <tr class="woocommerce-mini-cart-item <?php echo esc_attr( apply_filters( 'woocommerce_mini_cart_item_class', 'mini_cart_item', $cart_item, $cart_item_key ) ); ?>">
             <td class="align-middle text-center mini-cart-image-cell">
               <?php if ( ! $_product->is_visible() ) : ?>
                 <?php echo str_replace( array( 'http:', 'https:' ), '', $thumbnail ); ?>
@@ -94,9 +91,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php if ( ! WC()->cart->is_empty() ) : ?>
 
-  <p class="total text-center"><strong><?php _e( 'Subtotal', 'woocommerce' ); ?>:</strong> <?php echo WC()->cart->get_cart_subtotal(); ?></p>
+  <p class="woocommerce-mini-cart__total total text-center"><strong><?php _e( 'Subtotal', 'woocommerce' ); ?>:</strong> <?php echo WC()->cart->get_cart_subtotal(); ?></p>
 
-  <?php do_action( 'woocommerce_widget_shopping_cart_before_buttons' ); ?>
+  <span class='woocommerce-mini-cart__buttons buttons'><?php do_action( 'woocommerce_widget_shopping_cart_before_buttons' ); ?></span>
 
   <p class="clearfix">
     <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class='btn btn-secondary float-left'>View Cart</a>
