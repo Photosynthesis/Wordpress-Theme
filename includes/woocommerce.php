@@ -158,16 +158,59 @@ class ThemeWooCommerce
   }
 
   /* Add A Flat Rate Shipping Charge for Applicable Items */
+  const flat_shipping_rate_id = "flat_rate:6";
   const flat_rate_product_ids = array(241496, 241521, 241526, 241530);
   const us_flat_rate_cost = 7;
   const global_flat_rate_cost = 15;
   public static function add_flat_rate_charges($rates, $package) {
+    $total_count = 0;
+    $flat_rate_count = 0;
+    foreach ($package['contents'] as $product) {
+      $total_count += $product['quantity'];
+      if (array_search($product['product_id'], self::flat_rate_product_ids) !== false) {
+        $flat_rate_count += $product['quantity'];
+      }
+    }
 
-      error_log(print_r($rates, true));
-      error_log(print_r(array_keys($package), true));
-      error_log(print_r($package['destination'], true));
+    $flat_rate_cost = $package['destination']['country'] === 'US' ?
+      self::us_flat_rate_cost : self::global_flat_rate_cost;
 
-      return $rates;
+    if ($flat_rate_count === $total_count) {
+      // No Items
+      if ($total_count === 0) { return $rates; }
+
+      // Only Flat Rate Items
+      $rates[self::flat_shipping_rate_id]->cost = $flat_rate_cost;
+      return array(self::flat_shipping_rate_id => $rates[self::flat_shipping_rate_id]);
+    }
+
+    unset($rates[self::flat_shipping_rate_id]);
+
+    // No Flat Rate Items
+    if ($flat_rate_count === 0) { return $rates; }
+
+    // Mixed Flat Rate & Normal Items
+
+    $normal_items = array();
+    while (sizeof($package['contents']) > 0) {
+      end($package['contents']);
+      $item_key = key($package['contents']);
+      reset($package['contents']);
+      $item = array_pop($package['contents']);
+      if (array_search($item['product_id'], self::flat_rate_product_ids) === false) {
+        $normal_items[$item_key] = $item;
+      }
+    }
+    $package['contents'] = $normal_items;
+
+    $shipping = WC_Shipping::instance();
+    $rates = $shipping->calculate_shipping_for_package($package)['rates'];
+
+    foreach ($rates as &$rate) {
+      $rate->cost += $flat_rate_cost;
+    }
+
+    return $rates;
   }
 
   /* Show Images of Accepted Payment Methods */
