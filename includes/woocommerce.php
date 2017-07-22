@@ -121,6 +121,42 @@ class ThemeWooCommerce
     }
   }
 
+  // TODO: Refactor into top-level Constants file/class.
+  const membership_back_issues_product_id = 242058;
+  const fic_membership_group_id = 4;
+
+  /* Provide Back Issue Downloads For A User in the FIC Membership Group. */
+  public static function add_back_issue_access($user_id, $group_id) {
+    if ($group_id != self::fic_membership_group_id) { return; }
+
+    $back_issues = wc_get_product(self::membership_back_issues_product_id);
+
+    $order = wc_create_order(array(
+      'customer_id' => $user_id,
+      'customer_note' => 'FIC Membership Allows Access to Back Issue Downloads',
+      'created_via' => 'FIC-Membership',
+    ));
+    $order->add_product($back_issues);
+    $order->calculate_totals();
+    $order->update_status('completed');
+  }
+
+  /* Remove Back Issue Downloads For a User in the FIC Membership Group. */
+  public static function remove_back_issue_access($user_id, $group_id) {
+    if ($group_id != self::fic_membership_group_id) { return; }
+
+    $orders = wc_get_orders(array(
+      'customer_id' => $user_id,
+      'created_via' => 'FIC-Membership',
+      'limit' => 1,
+    ));
+
+    foreach ($orders as $order) {
+        wc_delete_shop_order_transients($order->get_id());
+        $order->delete();
+    }
+  }
+
   /* Show Images of Accepted Payment Methods */
   public static function accepted_payment_methods() {
     $path = get_stylesheet_directory_uri() . "/img/cc-logos/";
@@ -172,6 +208,8 @@ add_filter('woocommerce_before_widget_product_list', array('ThemeWooCommerce', '
 add_filter('woocommerce_after_widget_product_list', array('ThemeWooCommerce', 'products_widget_end'));
 add_filter('manage_edit-shop_order_columns', array('ThemeWooCommerce', 'add_purchased_column_header'));
 add_action('manage_shop_order_posts_custom_column', array('ThemeWooCommerce', 'render_purchased_column'));
+add_action('groups_created_user_group', array('ThemeWooCommerce', 'add_back_issue_access'), 10, 2);
+add_action('groups_deleted_user_group', array('ThemeWooCommerce', 'remove_back_issue_access'), 10, 2);
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
 add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'));
 
