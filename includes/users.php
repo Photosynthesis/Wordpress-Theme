@@ -10,7 +10,6 @@ class ThemeUsers
    * @return string The URL to redirect to after Login.
    */
   public static function login_redirect($redirect_to, $request, $user) {
-    global $user;
     if (isset($user->roles) && is_array($user->roles)) {
       if (!in_array('administrator', $user->roles)) {
         if (strpos($redirect_to, 'wp-admin') !== false) {
