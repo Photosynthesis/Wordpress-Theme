@@ -6,8 +6,8 @@ require_once __DIR__ . '/../../../../wp-load.php';
 $membership_back_issues_product_id = 242058;
 $fic_membership_group_id = 4;
 
-if (file_exists('to_process.php')) {
-  require 'to_process.php';
+if (file_exists('memberships_to_process.php')) {
+  require 'memberships_to_process.php';
 } else {
   $user_ids = (new Groups_Group($fic_membership_group_id))->user_ids;
 }
