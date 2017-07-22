@@ -3,6 +3,8 @@
 This is the wordpress theme used by FIC. It uses Webpack for asset compilation
 & Bootstrap4 as a SASS Framework.
 
+![The Homepage of http://www.ic.org](screenshot.png)
+
 Right now this is mostly a port of our old Headway theme, but it will
 eventually use Elm + REST & possibly be redesigned.
 
