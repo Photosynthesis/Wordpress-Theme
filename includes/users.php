@@ -37,7 +37,7 @@ class ThemeUsers
 
   /* Display a Login Form */
   public static function login_form() {
-    $pre_text = "<h1>Please Log In</h1><p class='text-danger'>You must be logged in to view this page.</p>";
+    $pre_text = "<p class='text-danger'>You must be logged in to view this page.</p>";
     return $pre_text . wp_login_form( array( 'echo' => false ) ) . "\n" .
       wp_register('', '', false) . " | <a href=\"" . wp_lostpassword_url( get_permalink() ) . "\" title=\"Lost your password?\">Lost your password?</a>";
   }
