@@ -157,6 +157,19 @@ class ThemeWooCommerce
     }
   }
 
+  /* Add A Flat Rate Shipping Charge for Applicable Items */
+  const flat_rate_product_ids = array(241496, 241521, 241526, 241530);
+  const us_flat_rate_cost = 7;
+  const global_flat_rate_cost = 15;
+  public static function add_flat_rate_charges($rates, $package) {
+
+      error_log(print_r($rates, true));
+      error_log(print_r(array_keys($package), true));
+      error_log(print_r($package['destination'], true));
+
+      return $rates;
+  }
+
   /* Show Images of Accepted Payment Methods */
   public static function accepted_payment_methods() {
     $path = get_stylesheet_directory_uri() . "/img/cc-logos/";
@@ -210,6 +223,7 @@ add_filter('manage_edit-shop_order_columns', array('ThemeWooCommerce', 'add_purc
 add_action('manage_shop_order_posts_custom_column', array('ThemeWooCommerce', 'render_purchased_column'));
 add_action('groups_created_user_group', array('ThemeWooCommerce', 'add_back_issue_access'), 10, 2);
 add_action('groups_deleted_user_group', array('ThemeWooCommerce', 'remove_back_issue_access'), 10, 2);
+add_filter('woocommerce_package_rates', array('ThemeWooCommerce', 'add_flat_rate_charges'), 99, 2);
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
 add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'));
 
