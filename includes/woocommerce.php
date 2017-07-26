@@ -213,6 +213,31 @@ class ThemeWooCommerce
     return $rates;
   }
 
+  /* Email Customers if their Subscription Renewal's Payment Fails */
+  public static function email_customer_on_renewal_fail($subscription) {
+    $customer = get_user_by('ID', $subscription->get_user_id());
+    $my_account_page = get_option('woocommerce_myaccount_page_id');
+    if ($my_account_page) {
+      $my_account_link = get_permalink($my_account_page);
+    } else {
+      $my_account_link = "https://www.ic.org/my-fic-account/";
+    }
+    $subscription_link = $my_account_link . "view-subscription/{$subscription->get_ID()}/";
+
+    $order_items = $subscription->get_items();
+    $product_name = sizeof($order_items) > 0 ?
+      array_shift($order_items)->get_product()->get_name() : "Subscription";
+
+    $to = $customer->data->user_email;
+    $subject = "[FIC] Your {$product_name} Renewal Payment Has Failed";
+    $message = "Hello {$customer->data->user_nicename},\n\n" .
+      "This is a notification that your automatic payment for your {$product_name} has failed.\n\n" .
+      "You can manually renew by clicking 'Resubscribe' on the Subscription's Page:\n\n" .
+      "\t\t{$subscription_link}\n\n";
+
+    wp_mail($to, $subject, $message, array('From: FIC <no-reply@ic.org>'));
+  }
+
   /* Show Images of Accepted Payment Methods */
   public static function accepted_payment_methods() {
     $path = get_stylesheet_directory_uri() . "/img/cc-logos/";
@@ -267,6 +292,7 @@ add_action('manage_shop_order_posts_custom_column', array('ThemeWooCommerce', 'r
 add_action('groups_created_user_group', array('ThemeWooCommerce', 'add_back_issue_access'), 10, 2);
 add_action('groups_deleted_user_group', array('ThemeWooCommerce', 'remove_back_issue_access'), 10, 2);
 add_filter('woocommerce_package_rates', array('ThemeWooCommerce', 'add_flat_rate_charges'), 99, 2);
+add_action('woocommerce_subscription_renewal_payment_failed', array('ThemeWooCommerce', 'email_customer_on_renewal_fail'));
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
 add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'));
 
