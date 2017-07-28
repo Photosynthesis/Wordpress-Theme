@@ -217,12 +217,7 @@ class ThemeWooCommerce
   /* Email Customers if their Subscription Renewal's Payment Fails */
   public static function email_customer_on_renewal_fail($subscription) {
     $customer = get_user_by('ID', $subscription->get_user_id());
-    $my_account_page = get_option('woocommerce_myaccount_page_id');
-    if ($my_account_page) {
-      $my_account_link = get_permalink($my_account_page);
-    } else {
-      $my_account_link = "https://www.ic.org/my-fic-account/";
-    }
+    $my_account_link = self::get_my_account_page_url();
     $subscription_link = $my_account_link . "view-subscription/{$subscription->get_ID()}/";
 
     $order_items = $subscription->get_items();
@@ -237,6 +232,17 @@ class ThemeWooCommerce
       "\t\t{$subscription_link}\n\n";
 
     wp_mail($to, $subject, $message, array('From: FIC <no-reply@ic.org>'));
+  }
+
+  /* Return a URL to the My Account Page */
+  private static function get_my_account_page_url() {
+    $my_account_page = get_option('woocommerce_myaccount_page_id');
+    if ($my_account_page) {
+      $my_account_link = get_permalink($my_account_page);
+    } else {
+      $my_account_link = "https://www.ic.org/my-fic-account/";
+    }
+    return $my_account_link;
   }
 
   /* Show Images of Accepted Payment Methods */
