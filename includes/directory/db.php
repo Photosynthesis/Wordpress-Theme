@@ -5,6 +5,34 @@ class DirectoryDB
   public static $is_member_field_id = 933;
   public static $membership_start_field_id = 977;
   public static $membership_end_field_id = 985;
+  public static $verified_date_field_id = 978;
+  public static $contact_email_field_id = 199;
+  public static $contact_name_field_id = 202;
+
+  /* Return an Array of every published community. */
+  public static function get_published_items() {
+    global $wpdb;
+    $listing_query = <<<SQL
+SELECT items.*, posts.post_title
+FROM {$wpdb->prefix}frm_items AS items
+INNER JOIN
+  (SELECT ID, post_type, post_status, post_title
+   FROM {$wpdb->prefix}posts AS posts
+   WHERE (`post_type`='directory' AND `post_status`='publish')
+  ) AS posts ON posts.ID=items.post_id
+WHERE (items.is_draft=0 AND items.form_id=2)
+SQL;
+    return $wpdb->get_results($listing_query, ARRAY_A);
+  }
+
+  /* Get the Name of a Community. */
+  public static function get_name($item) {
+    if ($item['post_title'] && $item['post_title'] !== '') {
+      return $item['post_title'];
+    } else {
+      return $item['name'];
+    }
+  }
 
   /* Attempt to find a Community by it's name, otherwise return false. */
   public static function get_community_id_by_name($name) {
@@ -51,6 +79,7 @@ class DirectoryDB
     }
   }
 
+  /* Get a specific meta item, or `false` if one does not exist */
   public static function get_item_meta($field_id, $item_id) {
     global $wpdb;
     $query = $wpdb->prepare(
@@ -60,6 +89,16 @@ class DirectoryDB
     $results = $wpdb->get_results($query);
     if (sizeof($results) > 0) {
       return $results[0];
+    } else {
+      return false;
+    }
+  }
+
+  /* Get the meta value for a meta item, or `false` if one does not exist */
+  public static function get_item_meta_value($field_id, $item_id) {
+    $item_meta = self::get_item_meta($field_id, $item_id);
+    if ($item_meta !== false) {
+      return $item_meta->meta_value;
     } else {
       return false;
     }

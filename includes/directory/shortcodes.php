@@ -62,7 +62,7 @@ class DirectoryShortcodes
             'because it is incomplete, please edit your <br />' .
             'listing before verifying it.</small>';
         }
-        $verify_date_field_id = 937;
+        $verify_date_field_id = DirectoryDB::$verified_date_field_id;
         $exists_query = "
           SELECT id FROM {$wpdb->prefix}frm_item_metas
           WHERE `field_id`=$verify_date_field_id
