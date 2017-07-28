@@ -124,6 +124,7 @@ class ThemeWooCommerce
   // TODO: Refactor into top-level Constants file/class.
   const membership_back_issues_product_id = 242058;
   const fic_membership_group_id = 4;
+  const membership_back_issues_via = 'FIC-Membership';
 
   /* Provide Back Issue Downloads For A User in the FIC Membership Group. */
   public static function add_back_issue_access($user_id, $group_id) {
@@ -134,7 +135,7 @@ class ThemeWooCommerce
     $order = wc_create_order(array(
       'customer_id' => $user_id,
       'customer_note' => 'FIC Membership Allows Access to Back Issue Downloads',
-      'created_via' => 'FIC-Membership',
+      'created_via' => self::membership_back_issues_via,
     ));
     $order->add_product($back_issues);
     $order->calculate_totals();
@@ -147,7 +148,7 @@ class ThemeWooCommerce
 
     $orders = wc_get_orders(array(
       'customer_id' => $user_id,
-      'created_via' => 'FIC-Membership',
+      'created_via' => self::membership_back_issues_via,
       'limit' => 1,
     ));
 
