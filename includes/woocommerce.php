@@ -1,5 +1,6 @@
 <?php
 /** Customize WooCommerce Plugins **/
+// TODO: This is getting big, it could be split into multiple files
 class ThemeWooCommerce
 {
   /* Enable Theme Support for WooCommerce & Lightboxes */
@@ -234,6 +235,111 @@ class ThemeWooCommerce
     wp_mail($to, $subject, $message, array('From: FIC <no-reply@ic.org>'));
   }
 
+  const magazine_subscription_product_id = 13997;
+  const product_ids_with_download_notifications = array(
+    self::magazine_subscription_product_id,
+    self::membership_back_issues_product_id,
+  );
+
+  /* Give Download Access to Membership Back Issues & Send New Downloads
+   * Notification for Membership Back Issues & Magazine Subscriptions
+   *
+   * Bits lifted from the Grant Download Permissions plugin.
+   */
+  public static function give_download_access_and_notify($product_id, $variation_id, $downloadable_files) {
+    if (!in_array($product_id, self::product_ids_with_download_notifications)) {
+      return;
+    } else if ($variation_id) {
+      $product_id = $variation_id;
+    }
+
+    global $wpdb;
+
+    $product = wc_get_product($product_id);
+
+    $current_downloads = array_keys($product->get_downloads());
+    $updated_downloads = array_keys($downloadable_files);
+    $new_download_ids = array_filter(array_diff($updated_downloads, $current_downloads));
+
+    if (sizeof($new_download_ids) === 0) { return; }
+
+    $customer_ids = array();
+    if ($product_id === self::membership_back_issues_product_id) {
+      // Grant Permissions to Back Issues
+      $orders = wc_get_orders(array(
+        'created_via' => self::membership_back_issues_via
+      ));
+      foreach ($orders as $order) {
+        foreach ($new_download_ids as $new_download_id) {
+          wc_downloadable_file_permission($new_download_id, $product_id, $order);
+        }
+        $customer_ids[] = $order->get_customer_id();
+      }
+    } else {
+      $customers_query = <<<SQL
+        SELECT sub_customer.meta_value
+        FROM {$wpdb->prefix}posts as subs
+        -- Join the Customer ID for the Sub
+        INNER JOIN
+          (SELECT meta_value, meta_key, post_id
+           FROM {$wpdb->prefix}postmeta
+           WHERE (`meta_key`='_customer_user')
+          ) AS sub_customer ON sub_customer.post_id=subs.ID
+        -- Only Keep Subs w/ Orders that Contain the Product
+        INNER JOIN
+          (SELECT orders.post_type, orders.ID
+           FROM {$wpdb->prefix}posts AS orders
+           -- Only Keep Orders Matching the Product
+           INNER JOIN
+             (SELECT items.`order_id` FROM {$wpdb->prefix}woocommerce_order_items AS items
+              INNER JOIN
+                (SELECT * FROM {$wpdb->prefix}woocommerce_order_itemmeta
+                          WHERE (`meta_value`="{$product_id}" AND
+                                (`meta_key`="_product_id" OR `meta_key`="_variation_id")
+                                )
+                ) AS item_meta ON item_meta.order_item_id=items.order_item_id
+             ) AS order_items ON order_items.order_id=orders.ID
+           WHERE orders.post_type='shop_order'
+          ) AS orders ON orders.ID=subs.post_parent
+        WHERE (subs.post_type='shop_subscription' AND
+               subs.post_status='wc-active')
+SQL;
+      foreach ($wpdb->get_results($customers_query, ARRAY_N) as $result) {
+        $customer_ids[] = $result[0];
+      }
+      $customer_ids = array_unique($customer_ids);
+    }
+
+    // Send Notification Emails to Customers
+    $product_name = $product->get_name();
+    $subject = "[FIC] Downloads Have Been Added to Your {$product_name}";
+
+    $downloads_page_link = self::get_my_account_page_url() .  "downloads/";
+    $common_message =
+      "This a notification that your {$product_name} has had new downloads added to it.\n\n" .
+      "The new items have been attached to this email, but you can also download them, " .
+      "as well as all of your other downloads, from the Downloads section " .
+      "of the My Account Page:\n\n" .
+      "\t\t{$downloads_page_link}\n\n";
+
+    $attachments = array();
+    foreach ($new_download_ids as $new_download_id) {
+      $download_url = $downloadable_files[$new_download_id]->get_file();
+      $attachments[] = WP_CONTENT_DIR .
+        substr($download_url, strpos($download_url, 'wp-content') + 10);
+    }
+
+    foreach ($customer_ids as $customer_id) {
+      $customer = get_user_by('ID', $customer_id) ;
+
+      $to = $customer->data->user_email;
+      $message = "Hello {$customer->data->user_nicename},\n\n{$common_message}";
+
+      wp_mail($to, $subject, $message, array('From: FIC <no-reply@ic.org>'),
+        $attachments);
+    }
+  }
+
   /* Return a URL to the My Account Page */
   private static function get_my_account_page_url() {
     $my_account_page = get_option('woocommerce_myaccount_page_id');
@@ -300,6 +406,7 @@ add_action('groups_created_user_group', array('ThemeWooCommerce', 'add_back_issu
 add_action('groups_deleted_user_group', array('ThemeWooCommerce', 'remove_back_issue_access'), 10, 2);
 add_filter('woocommerce_package_rates', array('ThemeWooCommerce', 'add_flat_rate_charges'), 99, 2);
 add_action('woocommerce_subscription_renewal_payment_failed', array('ThemeWooCommerce', 'email_customer_on_renewal_fail'));
+add_action('woocommerce_process_product_file_download_paths', array('ThemeWooCommerce', 'give_download_access_and_notify'), 11, 3);
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
 add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'));
 
