@@ -21,6 +21,41 @@
   </head>
     <body <?php body_class(); ?>>
 
+<!-- Nav Menu & Search -->
+<div class='container-fluid nav-outer-container'>
+<div class='container'>
+  <div id="nav-menu" class="row">
+    <div class="col-24 col-sm-12 push-sm-12 col-md-6 push-md-0 push-lg-18">
+      <div class="google-search-div"><gcse:search></gcse:search></div>
+    </div>
+    <div class="col-24 col-sm-12 pull-sm-12 col-md-24 pull-md-0 col-lg-18 pull-lg-6">
+      <nav class="navbar navbar-inverse navbar-toggleable-sm">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
+                aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-label">MENU</span> <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar-header">
+          <?php
+            wp_nav_menu( array(
+              'menu'              => 'Primary Menu',
+              'theme_location'    => 'primary',
+              'depth'             => 3,
+              'container'         => '',
+              'container_class'   => '',
+              'container_id'      => '',
+              'menu_class'        => 'navbar-nav',
+              'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+              'walker'            => new wp_bootstrap_navwalker())
+            );
+          ?>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>
+</div>
+
 <div id="body-wrapper" class="container"><!-- Closed in footer.php -->
 
   <!-- Header -->
@@ -65,36 +100,5 @@
         </script>
         <gcse:search></gcse:search>
       </div>
-    </div>
-  </div>
-
-  <!-- Nav Menu & Search -->
-  <div id="nav-menu" class="row">
-    <div class="col-24 col-sm-12 push-sm-12 col-md-6 push-md-0 push-lg-18">
-      <div class="google-search-div"><gcse:search></gcse:search></div>
-    </div>
-    <div class="col-24 col-sm-12 pull-sm-12 col-md-24 pull-md-0 col-lg-18 pull-lg-6">
-      <nav class="navbar navbar-light navbar-toggleable-sm">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
-                aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-label">MENU</span> <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbar-header">
-          <?php
-            wp_nav_menu( array(
-              'menu'              => 'Primary Menu',
-              'theme_location'    => 'primary',
-              'depth'             => 3,
-              'container'         => '',
-              'container_class'   => '',
-              'container_id'      => '',
-              'menu_class'        => 'navbar-nav',
-              'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
-              'walker'            => new wp_bootstrap_navwalker())
-            );
-          ?>
-        </div>
-      </nav>
     </div>
   </div>

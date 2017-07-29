@@ -20,6 +20,7 @@ $font-size-base: 0.8rem
 
 $navbar-light-active-color: $menu-orange
 $navbar-padding-x: 0
+$navbar-padding-y: 0.2rem
 
 $dropdown-min-width: 14rem
 $dropdown-padding-y: 0.3rem
@@ -47,45 +48,27 @@ body
   background-color: $background-blue
   padding-bottom: 15px
 
+/* Change Font Color & Text Emphasis of Headings */
+h1, h2, h3, h4, h5
+  color: $header-blue
+  font-weight: bold
+
 
 /* Add Spacing & White Backdrop */
 #body-wrapper
   margin-bottom: 30px
-  padding: 15px
+  padding: 5px 15px 15px
   background-color: white
-  box-shadow: black 0px 6px 32px
-  +media-breakpoint-only(xs)
-    padding-top: 10px
+  box-shadow: black 0px 20px 32px
   +media-breakpoint-only(lg)
     width: 98%
-  +media-breakpoint-up(lg)
-    margin-top: 30px
   +media-breakpoint-down(md)
     width: 100%
 
 
-#site-header
-  .banner-image img
-    height: 80px
-    +media-breakpoint-only(md)
-      height: 100%
-  #greeting-logout
-    margin-right: 5px
-    #header-cart-icon
-      text-decoration: none
-      i.fa
-        font-size: 20px
-        font-weight: 400
-        vertical-align: bottom
-  #header-buttons
-    margin-top: 10px
-    font-weight: bold
-    button
-      cursor: pointer
-  .google-search-div
-    width: 60%
-    margin-left: auto
-
+.nav-outer-container
+  background-color: $orange
+  box-shadow: black 0px 6px 16px
 
 #nav-menu
   nav.navbar
@@ -100,7 +83,7 @@ body
       flex-wrap: wrap
     .navbar-nav > li
       /* Add Separators */
-      border-left: 1px solid $orange
+      border-left: 1px solid white
       +media-breakpoint-up(md)
         &:first-child
           border-left: none
@@ -154,7 +137,7 @@ body
 /* Google Search Boxes */
 div.google-search-div
   z-index: 20000
-  padding-top: 16px
+  padding-top: 10px
   /* Fix Input Alignment */
   input.gsc-input, .gsc-input-box, .gsc-input-box-hover, .gsc-input-box-focus, .gsc-search-button
     box-sizing: content-box
@@ -169,22 +152,43 @@ div.google-search-div
   /* Hide the X icon in the search box */
   div#google-search-div .gsib_b
     display: none
-  /* Reduce width of search button */
   td.gsc-search-button input.gsc-search-button
+    /* Reduce width of search button */
     padding: 6px 15px
+    /* Darken button border */
+    border-color: black
 
-/* Change Font Color & Text Emphasis of Headings */
-h1, h2, h3, h4, h5
-  color: $header-blue
-  font-weight: bold
+
+
+#site-header
+  .banner-image img
+    height: 80px
+    +media-breakpoint-only(md)
+      height: 100%
+  #greeting-logout
+    margin-right: 5px
+    #header-cart-icon
+      text-decoration: none
+      i.fa
+        font-size: 20px
+        font-weight: 400
+        vertical-align: bottom
+  #header-buttons
+    margin-top: 10px
+    font-weight: bold
+    button
+      cursor: pointer
+  .google-search-div
+    width: 60%
+    margin-left: auto
 
 
 .sidebar
   /* Add Spacing between Nav & Content */
   +media-breakpoint-down(sm)
-    margin-top: 1em
+    margin-top: 0.5em
   +media-breakpoint-up(md)
-    margin-top: 2.75em
+    margin-top: 1em
   /* Stylize Widget Headers */
   h4.widget-title
     font-size: 1.1em
@@ -289,7 +293,7 @@ h1, h2, h3, h4, h5
   padding: 0 15px
   +media-breakpoint-up(sm)
     /* Add Spacing between Nav & Content */
-    margin-top: 2em
+    margin-top: 0.25em
     /* Add Spacing between Vertical Borders & Footer
     margin-bottom: 2em
 
