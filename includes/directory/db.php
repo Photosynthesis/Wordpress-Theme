@@ -8,6 +8,15 @@ class DirectoryDB
   public static $verified_date_field_id = 978;
   public static $contact_email_field_id = 199;
   public static $contact_name_field_id = 202;
+  public static $open_to_members_field_id = 257;
+  public static $open_to_visitors_field_id = 256;
+  public static $community_types_field_id = 262;
+  public static $community_status_field_id = 291;
+  public static $primary_image_field_id = 228;
+  public static $city_field_id = 427;
+  public static $state_field_id = 815;
+  public static $province_field_id = 816;
+  public static $country_field_id = 424;
 
   /* Return an Array of every published community. */
   public static function get_published_items() {

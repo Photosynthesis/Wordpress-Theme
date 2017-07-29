@@ -29,4 +29,8 @@ load_include('woocommerce.php');
 /* WPAdverts */
 load_include('wpadverts.php');
 
+
+/** REST API **/
+load_include('api.php');
+
 ?>
