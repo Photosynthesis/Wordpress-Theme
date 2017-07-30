@@ -72,12 +72,20 @@ INNER JOIN
   ) AS posts ON posts.ID=items.post_id
 LEFT JOIN
   (SELECT ID, guid
-   FROM {$wpdb->prefix}posts 
+   FROM {$wpdb->prefix}posts
    WHERE `post_type`='attachment'
   ) AS post_images ON post_images.ID={$meta_fields[DirectoryDB::$primary_image_field_id]}_metas.meta_value
 SQL;
 
     $joins = join("\n", $joins);
+
+    // Build the Limit
+    $per_page = 15;
+    $page = (int) $data['page'];
+    $page = $page ? $page : 1;
+    $page--;
+    $start = $page * $per_page;
+    $limit = "LIMIT {$start}, {$per_page}";
 
 
     $query = <<<SQL
@@ -88,7 +96,7 @@ FROM {$wpdb->prefix}frm_items AS items
 
 WHERE (items.is_draft=0 AND items.form_id=2)
 ORDER BY posts.post_title
-LIMIT 10
+{$limit}
 SQL;
 
     $entries = $wpdb->get_results($query, ARRAY_A);
@@ -97,7 +105,24 @@ SQL;
     if (empty($entries)) {
       return str_replace("\n", ' ', $query);
     }
-    return array('listings' => $entries);
+
+    // Get Total Listing Count
+    $total_count_query = <<<SQL
+SELECT COUNT(posts.ID) AS count
+FROM {$wpdb->prefix}posts AS posts
+INNER JOIN
+  (SELECT id, form_id, is_draft, post_id
+   FROM {$wpdb->prefix}frm_items
+   WHERE form_id=2 AND is_draft=0
+  ) AS items ON items.post_id=posts.ID
+WHERE post_type='directory' AND post_status='publish'
+SQL;
+    $total_count = (int) $wpdb->get_row($total_count_query, ARRAY_A)['count'];
+
+    return array(
+      'listings' => $entries,
+      'totalCount' => $total_count,
+    );
   }
 
   /* Transform the SQL Row into our API Spec */
