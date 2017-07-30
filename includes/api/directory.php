@@ -42,44 +42,6 @@ class APIDirectory
       DirectoryDB::$country_field_id => 'country',
     );
 
-    // Build the Selects
-    $selects = array(
-      'items.id', 'items.name', 'items.created_at', 'items.updated_at',
-      'posts.post_title', 'posts.post_name AS slug',
-      'post_images.ID AS imageID', 'post_images.guid AS imageUrl'
-    );
-    foreach ($meta_fields as $meta_field) {
-      $selects[] = "{$meta_field}_metas.meta_value as {$meta_field}";
-    }
-    $selects = join(",\n  ", $selects);
-
-
-    // Build the Joins
-    $joins = array();
-    foreach ($meta_fields as $meta_id => $meta_field) {
-      $joins[] = <<<SQL
-LEFT JOIN
-  (SELECT item_id, field_id, meta_value
-   FROM {$wpdb->prefix}frm_item_metas WHERE field_id={$meta_id})
-  AS {$meta_field}_metas ON {$meta_field}_metas.item_id=items.id
-SQL;
-    }
-
-    $joins[] = <<<SQL
-INNER JOIN
-  (SELECT ID, post_type, post_status, post_title, post_name
-   FROM {$wpdb->prefix}posts AS posts
-   WHERE (`post_type`='directory' AND `post_status`='publish')
-  ) AS posts ON posts.ID=items.post_id
-LEFT JOIN
-  (SELECT ID, guid
-   FROM {$wpdb->prefix}posts
-   WHERE `post_type`='attachment'
-  ) AS post_images ON post_images.ID={$meta_fields[DirectoryDB::$primary_image_field_id]}_metas.meta_value
-SQL;
-
-    $joins = join("\n", $joins);
-
     // Build the Limit
     $per_page = 15;
     $page = (int) $data['page'];
@@ -91,9 +53,25 @@ SQL;
 
     $query = <<<SQL
 SELECT
-  {$selects}
+  items.id, items.name, items.created_at, items.updated_at,
+  posts.post_title, posts.post_name AS slug,
+  post_images.ID AS imageID, post_images.guid AS imageUrl,
+  image_post_id_metas.meta_value AS image_post_id
 FROM {$wpdb->prefix}frm_items AS items
-{$joins}
+INNER JOIN
+  (SELECT ID, post_type, post_status, post_title, post_name
+   FROM {$wpdb->prefix}posts AS posts
+   WHERE (`post_type`='directory' AND `post_status`='publish')
+  ) AS posts ON posts.ID=items.post_id
+LEFT JOIN
+  (SELECT item_id, field_id, meta_value
+   FROM {$wpdb->prefix}frm_item_metas WHERE field_id=228)
+  AS image_post_id_metas ON image_post_id_metas.item_id=items.id
+LEFT JOIN
+  (SELECT ID, guid
+   FROM {$wpdb->prefix}posts
+   WHERE `post_type`='attachment'
+  ) AS post_images ON post_images.ID={$meta_fields[DirectoryDB::$primary_image_field_id]}_metas.meta_value
 
 WHERE (items.is_draft=0 AND items.form_id=2)
 ORDER BY posts.post_title
@@ -101,6 +79,14 @@ ORDER BY posts.post_title
 SQL;
 
     $entries = $wpdb->get_results($query, ARRAY_A);
+
+    foreach ($entries as &$entry) {
+      $metas = DirectoryDB::get_metas($entry['id'], array_keys($meta_fields));
+      foreach ($metas as $meta) {
+        $entry[$meta_fields[$meta['field_id']]] = $meta['meta_value'];
+      }
+    }
+
     $entries = array_map(array(self, 'clean_list_entry'), $entries);
 
     if (empty($entries)) {

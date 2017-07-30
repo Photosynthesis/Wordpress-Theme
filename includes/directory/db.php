@@ -63,6 +63,23 @@ SQL;
     }
   }
 
+  /* Grab all the meta items for a listing. */
+  public static function get_metas($item_id, $field_ids = array()) {
+    global $wpdb;
+    if (sizeof($field_ids) > 0) {
+      $field_string = "(" . join(",", $field_ids) . ")";
+      $field_where = "AND field_id IN {$field_string}";
+    } else {
+      $field_where = "";
+    }
+    $query = <<<SQL
+SELECT field_id, meta_value
+FROM {$wpdb->prefix}frm_item_metas
+WHERE item_id={$item_id} {$field_where}
+SQL;
+    return $wpdb->get_results($query, ARRAY_A);
+  }
+
   /* Update or insert an item's field value. */
   public static function update_or_insert_item_meta($field_id, $item_id, $value) {
     $meta_id = self::get_item_meta_id($field_id, $item_id);
