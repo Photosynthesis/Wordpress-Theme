@@ -45,7 +45,8 @@ class APIDirectory
     // Build the Selects
     $selects = array(
       'items.id', 'items.name', 'items.created_at', 'items.updated_at',
-      'posts.post_title', 'post_images.guid AS imageUrl'
+      'posts.post_title', 'posts.post_name AS slug',
+      'post_images.ID AS imageID', 'post_images.guid AS imageUrl'
     );
     foreach ($meta_fields as $meta_field) {
       $selects[] = "{$meta_field}_metas.meta_value as {$meta_field}";
@@ -66,7 +67,7 @@ SQL;
 
     $joins[] = <<<SQL
 INNER JOIN
-  (SELECT ID, post_type, post_status, post_title
+  (SELECT ID, post_type, post_status, post_title, post_name
    FROM {$wpdb->prefix}posts AS posts
    WHERE (`post_type`='directory' AND `post_status`='publish')
   ) AS posts ON posts.ID=items.post_id
@@ -127,6 +128,7 @@ SQL;
 
   /* Transform the SQL Row into our API Spec */
   public static function clean_list_entry(&$entry) {
+    $entry['id'] = (int) $entry['id'];
     unset($entry['image_post_id']);
 
     if ($entry['post_title']) {
@@ -139,12 +141,21 @@ SQL;
     }
     unset($entry['province']);
 
+    if ($entry['imageID']) {
+      $entry['thumbnailUrl'] = wp_get_attachment_thumb_url($entry['imageID']);
+      if (!$entry['thumbnailUrl']) {
+        $entry['thumbnailUrl'] = null;
+      }
+    } else {
+      $entry['thumbnailUrl'] = null;
+    }
+    unset($entry['imageID']);
 
     foreach (array_keys($entry) as $key) {
       // Unserialize Arrays
       $unserialized = unserialize($entry[$key]);
       if (is_array($unserialized)) {
-        $entry[$key] = $unserialized;
+        $entry[$key] = array_values($unserialized);
       }
 
       // Convert Any snake_case Keys to camelCase
@@ -153,6 +164,17 @@ SQL;
         $entry[$camelCaseKey] = $entry[$key];
         unset($entry[$key]);
       }
+    }
+
+    // TODO: The communities that these are necessary for should be fixed, these are required fields!
+    if (!$entry['communityTypes']) {
+      $entry['communityTypes'] = array();
+    }
+    if (!$entry['openToMembership']) {
+      $entry['openToMembership'] = "No";
+    }
+    if (!$entry['openToVisitors']) {
+      $entry['openToVisitors'] = "No";
     }
 
     return $entry;

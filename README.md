@@ -5,8 +5,12 @@ This is the wordpress theme used by FIC. It uses Webpack for asset compilation
 
 ![The Homepage of http://www.ic.org](screenshot.png)
 
-Right now this is mostly a port of our old Headway theme, but it will
-eventually use Elm + REST & possibly be redesigned.
+Right now this is mostly a port of our old Headway theme, but we are slowly
+migrating to use Elm + REST & will possibly redesign various pages. We may
+slowly migrate to a Haskell/Servant backend.
+
+Right now only the Directory List pages use Elm.
+
 
 ```
 # Install Dependencies
@@ -18,7 +22,7 @@ npm run watch
 ```
 
 
-## Code Style
+## PHP Code Style
 
 * Indent with 2 spaces.
 * Namespace functions using classes, prefer classes that don't require
@@ -29,6 +33,10 @@ npm run watch
 * Any functions used only by other methods in the class should be marked as
   private.
 
+
+## Elm Code Style
+
+Autoformat all code with `elm-format`.
 
 ## License
 

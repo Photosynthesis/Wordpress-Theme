@@ -10,6 +10,9 @@ module.exports = {
     fa: [
       'style-loader!css-loader!./node_modules/font-awesome/css/font-awesome.css',
     ],
+    directory: [
+      './src/directory.js',
+    ]
   },
 
   output: {
@@ -20,6 +23,11 @@ module.exports = {
 
   module: {
     loaders: [
+      {
+        test: /\.elm$/,
+        exclude: [/elm-stuff/, /node_modules/,],
+        loader: 'elm-webpack-loader?warn=true,verbose=true,debug=true',
+      },
       {
         test: /\.html$/,
         exclude: /node_modules/,
