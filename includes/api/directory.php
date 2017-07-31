@@ -20,9 +20,12 @@ class APIDirectory
    *
    * Filtering may be done via the following query paramters:
    *
+   *    - description
+   *    - status
+   *    - type
+   *    - spiritual
    *    - visitors
    *    - members
-   *    - status
    *    - membership
    *
    * You can separate multiple choices with commas, or by submitting arrays
@@ -63,6 +66,8 @@ class APIDirectory
       DirectoryDB::$province_field_id => 'province',
       DirectoryDB::$country_field_id => 'country',
       DirectoryDB::$is_member_field_id => 'ficMember',
+      DirectoryDB::$description_field_id => 'description',
+      DirectoryDB::$spiritual_practices_field_id => 'spiritual',
     );
 
     // Build additional Select, Join, & Where Clauses for Filters
@@ -79,6 +84,12 @@ class APIDirectory
         'id' => DirectoryDB::$community_status_field_id, 'compare' => 'LIKE%'),
       'membership' => array(
         'id' => DirectoryDB::$is_member_field_id, 'compare' => '='),
+      'type' => array(
+        'id' => DirectoryDB::$community_types_field_id, 'compare' => '%LIKE%'),
+      'description' => array(
+        'id' => DirectoryDB::$description_field_id, 'compare' => '%LIKE%'),
+      'spiritual' => array(
+        'id' => DirectoryDB::$spiritual_practices_field_id, 'compare' => '%LIKE%'),
     );
 
     foreach ($filters as $filter_param => $filter) {
@@ -101,6 +112,8 @@ SQL;
             $comparison = "='{$value}'";
           } else if ($filter['compare'] == 'LIKE%') {
             $comparison = " LIKE '{$value}%'";
+          } else if ($filter['compare'] == '%LIKE%') {
+            $comparison = " LIKE '%{$value}%'";
           }
           $where_clauses[] = "{$meta_fields[$field_id]}_metas.meta_value{$comparison}";
         }
@@ -157,8 +170,9 @@ SQL;
 
     $entries = $wpdb->get_results($query, ARRAY_A);
 
-    // Remove the FIC Membership Field, It's Only Used For Filtering
+    // Remove the Fields That Are Only Used For Filtering
     unset($meta_fields[DirectoryDB::$is_member_field_id]);
+    unset($meta_fields[DirectoryDB::$description_field_id]);
 
     foreach ($entries as &$entry) {
       $metas = DirectoryDB::get_metas($entry['id'], array_keys($meta_fields));
