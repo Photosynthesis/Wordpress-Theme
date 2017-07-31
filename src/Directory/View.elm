@@ -228,7 +228,11 @@ pagination filters communityPagination =
                     text ""
               ]
             , middleNumbers
-            , [ dots ]
+            , [ if not (List.isEmpty endNumbers) then
+                    dots
+                else
+                    text ""
+              ]
             , endNumbers
             , [ forwardArrow ]
             ]
