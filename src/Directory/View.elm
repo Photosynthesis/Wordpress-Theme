@@ -64,7 +64,7 @@ view { communities, currentDate, route } =
                 , filterHtml page filters
                 ]
             , communitiesHtml
-            , if not <| Pagination.hasNone communities then
+            , if not <| List.isEmpty (Pagination.getCurrent communities) then
                 Html.div []
                     [ links
                     , Html.ul [ class "pagination justify-content-center" ]
