@@ -181,7 +181,7 @@ pagination filters communityPagination =
             Html.li [ class "page-item disabled" ] [ Html.span [ class "page-link" ] [ text "..." ] ]
 
         splitSections =
-            lastPage > 6
+            lastPage > 8
 
         firstNumbers =
             if splitSections && not showMiddle then
@@ -191,7 +191,7 @@ pagination filters communityPagination =
                 List.range 1 2
                     |> List.map pageLink
             else
-                List.range 1 8
+                List.range 1 lastPage
                     |> List.map pageLink
 
         middleNumbers =
