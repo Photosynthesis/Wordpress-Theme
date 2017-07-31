@@ -3,13 +3,27 @@ module View exposing (view)
 import Date exposing (Date)
 import Date.Distance
 import Date.Format
+import Json.Decode as Decode
 import Html exposing (Html, text)
 import Html.Attributes exposing (class, src, alt, href)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, onWithOptions, defaultOptions)
 import Communities exposing (..)
-import Pagination exposing (Pagination)
 import Messages exposing (Msg(..))
 import Model exposing (Model)
+import Pagination exposing (Pagination)
+import Routing exposing (Route(..), reverse)
+
+
+navigateLink : Route -> String -> String -> Html Msg
+navigateLink route classes content =
+    let
+        onClickNoDefault =
+            onWithOptions "click"
+                { defaultOptions | preventDefault = True }
+                (Decode.succeed <| NavigateTo route)
+    in
+        Html.a [ href <| reverse route, class classes, onClickNoDefault ]
+            [ text content ]
 
 
 maybeHtml : (a -> Html msg) -> Maybe a -> Html msg
@@ -19,21 +33,38 @@ maybeHtml viewFunction =
 
 view : Model -> Html Msg
 view { communities, currentDate } =
-    Html.div []
-        [ links
-        , resultCount communities
-        , Html.div [ class "list-group directory-listings mt-2" ] <|
-            List.map (communityItem currentDate) <|
-                Pagination.getCurrent communities
-        , if not <| Pagination.hasNone communities then
-            Html.div []
-                [ links
-                , Html.ul [ class "pagination justify-content-center" ]
-                    (pagination communities)
-                ]
-          else
-            text ""
-        ]
+    let
+        communitiesHtml =
+            if Pagination.isLoading communities then
+                Html.div [ class "loading my-4" ]
+                    [ Html.div [ class "text-primary text-center" ] [ text "Loading the latest Communities, please wait..." ]
+                    , Html.div [ class "progress align-middle" ]
+                        [ Html.div [ class "progress-bar progress-bar-striped progress-bar-animated w-100" ] [] ]
+                    ]
+            else if Pagination.getError communities /= Nothing then
+                Html.div [ class "text-danger text-center" ]
+                    [ text "Sorry, we encountered a problem when trying to load Communities, please try again or contact "
+                    , Html.a [ href "mailto:directory@ic.org" ] [ text "directory@ic.org" ]
+                    , text "."
+                    ]
+            else
+                Html.div [ class "list-group directory-listings mt-2" ] <|
+                    List.map (communityItem currentDate) <|
+                        Pagination.getCurrent communities
+    in
+        Html.div []
+            [ links
+            , resultCount communities
+            , communitiesHtml
+            , if not <| Pagination.hasNone communities then
+                Html.div []
+                    [ links
+                    , Html.ul [ class "pagination justify-content-center" ]
+                        (pagination communities)
+                    ]
+              else
+                text ""
+            ]
 
 
 links : Html msg
@@ -68,24 +99,24 @@ resultCount pagination =
 pagination : Pagination Community -> List (Html Msg)
 pagination communityPagination =
     let
+        currentPage =
+            Pagination.getPage communityPagination
+
         backArrow =
             if Pagination.hasPrevious communityPagination then
-                Html.li [ class "page-item", onClick PreviousPage ]
-                    [ Html.a [ class "page-link", href "#" ] [ text "«" ] ]
+                Html.li [ class "page-item" ]
+                    [ navigateLink (Listings <| currentPage - 1) "page-link" ("«") ]
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "«" ] ]
 
         forwardArrow =
             if Pagination.hasNext communityPagination then
-                Html.li [ class "page-item", onClick NextPage ]
-                    [ Html.a [ class "page-link", href "#" ] [ text "»" ] ]
+                Html.li [ class "page-item" ]
+                    [ navigateLink (Listings <| currentPage + 1) "page-link" ("»") ]
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "»" ] ]
-
-        currentPage =
-            Pagination.getPage communityPagination
 
         lastPage =
             Pagination.getTotalPages communityPagination
@@ -132,8 +163,8 @@ pagination communityPagination =
                 Html.li [ class "page-item active" ]
                     [ Html.span [ class "page-link" ] [ text <| toString page ] ]
             else
-                Html.li [ class "page-item", onClick <| JumpToPage page ]
-                    [ Html.a [ class "page-link", href "#" ] [ text <| toString page ] ]
+                Html.li [ class "page-item" ]
+                    [ navigateLink (Listings page) "page-link" (toString page) ]
     in
         List.concat
             [ [ backArrow ]

@@ -4,11 +4,13 @@ import Date exposing (Date)
 import Commands exposing (getCommunities)
 import Communities exposing (Community)
 import Pagination exposing (Pagination)
+import Routing exposing (Route(..))
 
 
 type alias Model =
     { communities : Pagination Community
     , currentDate : Maybe Date
+    , route : Route
     }
 
 
@@ -20,6 +22,7 @@ initial page =
     in
         ( { communities = communitiesPagination
           , currentDate = Nothing
+          , route = Listings page
           }
         , paginationCmd
         )

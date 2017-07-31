@@ -7,7 +7,9 @@ module Pagination
         , getPage
         , getTotalPages
         , getTotalItems
+        , getError
           -- Querying
+        , isLoading
         , hasNone
         , hasPrevious
         , hasNext
@@ -17,16 +19,17 @@ module Pagination
         , jumpTo
           -- Config
         , Config
+        , FetchResponse
         , makeConfig
           -- Update / Messages
         , Msg
-        , FetchResponse
         , update
         )
 
 {- For paginating responses
 
    TODO: Eventually -
+    use RemoteData/WebData & add error/loading queries
     document everything
     custom page sizes(+ reorganize items when changed)
     publish as separate package
@@ -35,6 +38,7 @@ module Pagination
 
 import Dict exposing (Dict)
 import Http
+import RemoteData exposing (WebData)
 
 
 -- Model
@@ -46,7 +50,7 @@ type Chunk a
 
 type Pagination a
     = Pagination
-        { items : Dict Int (Chunk a)
+        { items : Dict Int (WebData (Chunk a))
         , currentPage : Int
         , totalCount : Int
         }
@@ -87,6 +91,7 @@ initial config page =
 getCurrent : Pagination a -> List a
 getCurrent (Pagination { items, currentPage }) =
     Dict.get currentPage items
+        |> Maybe.andThen RemoteData.toMaybe
         |> Maybe.map (\(Chunk { items }) -> items)
         |> Maybe.withDefault []
 
@@ -106,11 +111,35 @@ getTotalItems (Pagination { totalCount }) =
     totalCount
 
 
+getError : Pagination a -> Maybe Http.Error
+getError (Pagination { items, currentPage }) =
+    case Dict.get currentPage items of
+        Just (RemoteData.Failure e) ->
+            Just e
+
+        _ ->
+            Nothing
+
+
 hasNone : Pagination a -> Bool
 hasNone (Pagination { items, currentPage }) =
     Dict.get currentPage items
+        |> Maybe.andThen RemoteData.toMaybe
         |> Maybe.map (getChunkItems >> List.isEmpty)
         |> Maybe.withDefault True
+
+
+isLoading : Pagination a -> Bool
+isLoading (Pagination { items, currentPage }) =
+    case Dict.get currentPage items of
+        Just RemoteData.Loading ->
+            True
+
+        Just _ ->
+            False
+
+        _ ->
+            True
 
 
 hasPrevious : Pagination a -> Bool
@@ -176,20 +205,26 @@ jumpTo (Config config) ((Pagination pagination) as model) page =
 
 
 type Msg a
-    = FetchPage Int (Result Http.Error (FetchResponse a))
+    = FetchPage Int (WebData (FetchResponse a))
 
 
 update : Msg a -> Pagination a -> ( Pagination a, Cmd (Msg a) )
 update msg (Pagination model) =
     case msg of
-        FetchPage _ (Err e) ->
+        FetchPage page ((RemoteData.Failure e) as data) ->
             let
                 _ =
-                    Debug.log "Fetch Error: " e
+                    Debug.log "Fetch Error: "
+                        data
             in
-                ( Pagination model, Cmd.none )
+                ( Pagination
+                    { model
+                        | items = Dict.insert page (RemoteData.Failure e) model.items
+                    }
+                , Cmd.none
+                )
 
-        FetchPage page (Ok { items, totalCount }) ->
+        FetchPage page (RemoteData.Success { items, totalCount }) ->
             let
                 newChunk =
                     Chunk { items = items, page = page }
@@ -198,10 +233,20 @@ update msg (Pagination model) =
                     Pagination
                         { model
                             | totalCount = totalCount
-                            , items = Dict.insert page newChunk model.items
+                            , items = Dict.insert page (RemoteData.succeed newChunk) model.items
                         }
             in
                 ( updatedModel, Cmd.none )
+
+        FetchPage page data ->
+            let
+                newData =
+                    RemoteData.map (\{ items } -> Chunk { items = items, page = page })
+                        data
+            in
+                ( Pagination { model | items = Dict.insert page newData model.items }
+                , Cmd.none
+                )
 
 
 getChunkItems : Chunk a -> List a
@@ -220,27 +265,31 @@ getFetches (Config config) (Pagination pagination) =
 
         hasItems offset =
             Dict.get (pagination.currentPage + offset) pagination.items
+                |> Maybe.andThen RemoteData.toMaybe
                 |> Maybe.map (not << List.isEmpty << getChunkItems)
                 |> Maybe.withDefault False
 
         currentFetch =
             if not <| hasItems 0 then
                 config.fetchRequest currentPage
-                    |> Http.send (FetchPage currentPage)
+                    |> RemoteData.sendRequest
+                    |> Cmd.map (FetchPage currentPage)
             else
                 Cmd.none
 
         previousFetch =
             if not <| hasItems -1 then
                 config.fetchRequest (currentPage - 1)
-                    |> Http.send (FetchPage <| currentPage - 1)
+                    |> RemoteData.sendRequest
+                    |> Cmd.map (FetchPage <| currentPage - 1)
             else
                 Cmd.none
 
         nextFetch =
             if not <| hasItems 1 then
                 config.fetchRequest (currentPage + 1)
-                    |> Http.send (FetchPage <| currentPage + 1)
+                    |> RemoteData.sendRequest
+                    |> Cmd.map (FetchPage <| currentPage + 1)
             else
                 Cmd.none
     in

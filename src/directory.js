@@ -7,5 +7,11 @@ $(document).ready(function() {
   var node = document.getElementById('elm-directory');
   if (node) {
     var app = Elm.Main.embed(node);
+    app.ports.scrollTo.subscribe(function (elementId) {
+      $('html, body').animate({
+        scrollTop: $('#' + elementId).offset().top
+      }, 500);
+      $(':focus').blur();
+    });
   }
 });

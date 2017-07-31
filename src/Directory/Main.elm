@@ -1,10 +1,11 @@
 module Main exposing (main)
 
 import Date
-import Html
+import Navigation
 import Task
-import Messages exposing (Msg(SetCurrentDate, CommunityPagination))
+import Messages exposing (Msg(SetCurrentDate, UrlChange, CommunityPagination))
 import Model exposing (Model, paginationConfig)
+import Routing exposing (Route(..), routeParser)
 import Update exposing (update)
 import View exposing (view)
 
@@ -14,7 +15,7 @@ import View exposing (view)
 
 main : Program Never Model Msg
 main =
-    Html.program
+    Navigation.program (routeParser >> UrlChange)
         { init = initialize
         , update = update
         , subscriptions = always Sub.none
@@ -22,11 +23,16 @@ main =
         }
 
 
-initialize : ( Model, Cmd Msg )
-initialize =
+initialize : Navigation.Location -> ( Model, Cmd Msg )
+initialize location =
     let
+        route =
+            routeParser location
+
         ( model, paginationCmd ) =
-            Model.initial 1
+            case route of
+                Listings page ->
+                    Model.initial page
     in
         ( model
         , Cmd.batch
