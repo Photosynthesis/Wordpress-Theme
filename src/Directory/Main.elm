@@ -31,8 +31,8 @@ initialize location =
 
         ( model, paginationCmd ) =
             case route of
-                Listings page ->
-                    Model.initial page
+                Listings page filters ->
+                    Model.initial page filters
     in
         ( model
         , Cmd.batch

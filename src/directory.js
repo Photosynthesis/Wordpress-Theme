@@ -8,9 +8,11 @@ $(document).ready(function() {
   if (node) {
     var app = Elm.Main.embed(node);
     app.ports.scrollTo.subscribe(function (elementId) {
-      $('html, body').animate({
-        scrollTop: $('#' + elementId).offset().top
-      }, 500);
+      if ($('#' + elementId).offset().top < $(window).scrollTop()) {
+        $('html, body').animate({
+          scrollTop: $('#' + elementId).offset().top
+        }, 500);
+      }
       $(':focus').blur();
     });
   }

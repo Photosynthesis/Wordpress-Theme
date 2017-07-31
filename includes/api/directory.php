@@ -14,7 +14,21 @@ class APIDirectory
 
   /* Return All Published Entries.
    *
-   * No filtering, ordering, or pagination is currently supported.
+   * Responses are paginated by a fixed amount(currently 15). The page number
+   * may be set via the `page` query parameter. The total item count is nested
+   * under the `totalCount` key.
+   *
+   * Filtering may be done via the following query paramters:
+   *
+   *    - visitors
+   *    - members
+   *    - status
+   *    - membership
+   *
+   * You can separate multiple choices with commas, or by submitting arrays
+   * (`?visitors[]=Yes&visitors[]=No`).
+   *
+   * No ordering is currently supported.
    *
    * The entries are nested under the `listings` key.
    *
@@ -22,8 +36,16 @@ class APIDirectory
    *
    *    - id
    *    - name
+   *    - slug
+   *    - imageUrl
+   *    - thumbnailUrl
    *    - createdAt
    *    - updatedAt
+   *    - communityStatus
+   *    - communityType
+   *    - city
+   *    - state
+   *    - country
    *    - openToMembership
    *    - openToVisitors
    */
@@ -40,9 +62,63 @@ class APIDirectory
       DirectoryDB::$state_field_id => 'state',
       DirectoryDB::$province_field_id => 'province',
       DirectoryDB::$country_field_id => 'country',
+      DirectoryDB::$is_member_field_id => 'ficMember',
     );
 
+    // Build additional Select, Join, & Where Clauses for Filters
+    $selects = array();
+    $joins = array();
+    $wheres = "";
+
+    $filters = array(
+      'visitors' => array(
+        'id' => DirectoryDB::$open_to_visitors_field_id, 'compare' => 'LIKE%'),
+      'members' => array(
+        'id' => DirectoryDB::$open_to_members_field_id, 'compare' => '='),
+      'status' => array(
+        'id' => DirectoryDB::$community_status_field_id, 'compare' => 'LIKE%'),
+      'membership' => array(
+        'id' => DirectoryDB::$is_member_field_id, 'compare' => '='),
+    );
+
+    foreach ($filters as $filter_param => $filter) {
+      $filter_value = $data[$filter_param];
+      if ($filter_value) {
+        $filter_value = join(",", $filter_value);
+        $field_id = $filter['id'];
+        $selects[] = "{$meta_fields[$field_id]}_metas.meta_value AS {$meta_fields[$field_id]}";
+        $joins[] = <<<SQL
+          INNER JOIN
+            (SELECT field_id, id, item_id, meta_value
+             FROM {$wpdb->prefix}frm_item_metas
+             WHERE field_id={$field_id}
+            ) AS {$meta_fields[$field_id]}_metas ON {$meta_fields[$field_id]}_metas.item_id=items.id
+SQL;
+        $values = explode(",", $filter_value);
+        $where_clauses = array();
+        foreach ($values as $value) {
+          if ($filter['compare'] == '=')  {
+            $comparison = "='{$value}'";
+          } else if ($filter['compare'] == 'LIKE%') {
+            $comparison = " LIKE '{$value}%'";
+          }
+          $where_clauses[] = "{$meta_fields[$field_id]}_metas.meta_value{$comparison}";
+        }
+        $where_clauses = "(" . join(" OR ", $where_clauses) . ")";
+        $wheres .= " AND {$where_clauses}";
+      }
+    }
+
+    if (sizeof($selects) > 0) {
+      $selects = ", " . join(", ", $selects);
+    } else {
+      $selects = "";
+    }
+    $joins = join("\n", $joins);
+
+
     // Build the Limit
+    // TODO: Configurable per_page value
     $per_page = 15;
     $page = (int) $data['page'];
     $page = $page ? $page : 1;
@@ -56,7 +132,7 @@ SELECT
   items.id, items.name, items.created_at, items.updated_at,
   posts.post_title, posts.post_name AS slug,
   post_images.ID AS imageID, post_images.guid AS imageUrl,
-  image_post_id_metas.meta_value AS image_post_id
+  image_post_id_metas.meta_value AS image_post_id {$selects}
 FROM {$wpdb->prefix}frm_items AS items
 INNER JOIN
   (SELECT ID, post_type, post_status, post_title, post_name
@@ -72,13 +148,17 @@ LEFT JOIN
    FROM {$wpdb->prefix}posts
    WHERE `post_type`='attachment'
   ) AS post_images ON post_images.ID={$meta_fields[DirectoryDB::$primary_image_field_id]}_metas.meta_value
+{$joins}
 
-WHERE (items.is_draft=0 AND items.form_id=2)
+WHERE (items.is_draft=0 AND items.form_id=2 {$wheres})
 ORDER BY posts.post_title
 {$limit}
 SQL;
 
     $entries = $wpdb->get_results($query, ARRAY_A);
+
+    // Remove the FIC Membership Field, It's Only Used For Filtering
+    unset($meta_fields[DirectoryDB::$is_member_field_id]);
 
     foreach ($entries as &$entry) {
       $metas = DirectoryDB::get_metas($entry['id'], array_keys($meta_fields));
@@ -95,14 +175,15 @@ SQL;
 
     // Get Total Listing Count
     $total_count_query = <<<SQL
-SELECT COUNT(posts.ID) AS count
+SELECT COUNT(posts.ID) AS count {$selects}
 FROM {$wpdb->prefix}posts AS posts
 INNER JOIN
   (SELECT id, form_id, is_draft, post_id
    FROM {$wpdb->prefix}frm_items
    WHERE form_id=2 AND is_draft=0
   ) AS items ON items.post_id=posts.ID
-WHERE post_type='directory' AND post_status='publish'
+{$joins}
+WHERE post_type='directory' AND post_status='publish' {$wheres}
 SQL;
     $total_count = (int) $wpdb->get_row($total_count_query, ARRAY_A)['count'];
 
@@ -115,6 +196,8 @@ SQL;
   /* Transform the SQL Row into our API Spec */
   public static function clean_list_entry(&$entry) {
     $entry['id'] = (int) $entry['id'];
+    $entry['updated_at'] = date('c', strtotime($entry['updated_at']));
+    $entry['created_at'] = date('c', strtotime($entry['created_at']));
     unset($entry['image_post_id']);
 
     if ($entry['post_title']) {

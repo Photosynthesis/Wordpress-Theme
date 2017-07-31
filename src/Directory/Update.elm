@@ -14,19 +14,27 @@ updateUrl route model =
         withUpdatedRoute =
             { model | route = route }
 
-        jumpToPage model page =
+        jumpToPage page =
             let
                 ( updatedPagination, paginationCmd ) =
                     Pagination.jumpTo paginationConfig model.communities page
             in
-                ( { model | communities = updatedPagination }
+                ( { withUpdatedRoute | communities = updatedPagination }
                 , Cmd.map CommunityPagination paginationCmd
                 )
+
+        communityFilters =
+            Pagination.getFilters model.communities
     in
         case route of
-            Listings page ->
-                if page /= Pagination.getPage model.communities then
-                    jumpToPage model page
+            Listings page filters ->
+                if filters /= communityFilters then
+                    Pagination.updateFilters paginationConfig model.communities filters
+                        |> (\( m, c ) ->
+                                ( { withUpdatedRoute | communities = m }, Cmd.map CommunityPagination c )
+                           )
+                else if page /= Pagination.getPage model.communities then
+                    jumpToPage page
                 else
                     ( model, Cmd.none )
 

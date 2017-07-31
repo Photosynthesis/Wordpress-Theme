@@ -5,13 +5,13 @@ import Date.Distance
 import Date.Format
 import Json.Decode as Decode
 import Html exposing (Html, text)
-import Html.Attributes exposing (class, src, alt, href)
+import Html.Attributes exposing (class, src, alt, href, name, type_, checked)
 import Html.Events exposing (onClick, onWithOptions, defaultOptions)
 import Communities exposing (..)
 import Messages exposing (Msg(..))
 import Model exposing (Model)
 import Pagination exposing (Pagination)
-import Routing exposing (Route(..), reverse)
+import Routing exposing (Route(..), FilterParam(..), reverse)
 
 
 navigateLink : Route -> String -> String -> Html Msg
@@ -32,8 +32,13 @@ maybeHtml viewFunction =
 
 
 view : Model -> Html Msg
-view { communities, currentDate } =
+view { communities, currentDate, route } =
     let
+        ( page, filters ) =
+            case route of
+                Listings page filters ->
+                    ( page, filters )
+
         communitiesHtml =
             if Pagination.isLoading communities then
                 Html.div [ class "loading my-4" ]
@@ -42,7 +47,7 @@ view { communities, currentDate } =
                         [ Html.div [ class "progress-bar progress-bar-striped progress-bar-animated w-100" ] [] ]
                     ]
             else if Pagination.getError communities /= Nothing then
-                Html.div [ class "text-danger text-center" ]
+                Html.div [ class "text-danger text-center my-4" ]
                     [ text "Sorry, we encountered a problem when trying to load Communities, please try again or contact "
                     , Html.a [ href "mailto:directory@ic.org" ] [ text "directory@ic.org" ]
                     , text "."
@@ -54,13 +59,16 @@ view { communities, currentDate } =
     in
         Html.div []
             [ links
-            , resultCount communities
+            , Html.div [ class "clearfix" ]
+                [ resultCount communities
+                , filterHtml page filters
+                ]
             , communitiesHtml
             , if not <| Pagination.hasNone communities then
                 Html.div []
                     [ links
                     , Html.ul [ class "pagination justify-content-center" ]
-                        (pagination communities)
+                        (pagination filters communities)
                     ]
               else
                 text ""
@@ -84,10 +92,10 @@ links =
                 ]
 
 
-resultCount : Pagination Community -> Html Msg
+resultCount : Pagination Community FilterParam -> Html Msg
 resultCount pagination =
     if not <| Pagination.hasNone pagination then
-        Html.div []
+        Html.div [ class "float-left" ]
             [ text "Showing "
             , Html.b [] [ text <| toString <| Pagination.getTotalItems pagination ]
             , text " communities."
@@ -96,8 +104,53 @@ resultCount pagination =
         text ""
 
 
-pagination : Pagination Community -> List (Html Msg)
-pagination communityPagination =
+filterHtml : Int -> List FilterParam -> Html Msg
+filterHtml page params =
+    let
+        annotate filter =
+            (\( n, t ) -> ( filter, n, t, List.member filter params )) <|
+                case filter of
+                    VisitorsFilter ->
+                        ( "visitors", "Visitors Welcome" )
+
+                    MembersFilter ->
+                        ( "members", "Accepting Members" )
+
+                    EstablishedFilter ->
+                        ( "established", "Established" )
+
+                    FormingFilter ->
+                        ( "forming", "Forming" )
+
+                    FICMemberFilter ->
+                        ( "fic-member", "FIC Member" )
+
+        checkMsg filter isOn =
+            NavigateTo
+                << Listings 1
+            <|
+                if isOn then
+                    List.filter (\f -> f /= filter) params
+                else
+                    filter :: params
+
+        render ( filter, filterName, filterText, isOn ) =
+            Html.label [ onClick <| checkMsg filter isOn ]
+                [ Html.input
+                    [ type_ "checkbox"
+                    , name filterName
+                    , checked isOn
+                    ]
+                    []
+                , Html.span [] [ text <| " " ++ filterText ]
+                ]
+    in
+        Html.div [ class "float-right small directory-filters" ] <|
+            List.map (annotate >> render) Routing.inlineFilters
+
+
+pagination : List FilterParam -> Pagination Community FilterParam -> List (Html Msg)
+pagination filters communityPagination =
     let
         currentPage =
             Pagination.getPage communityPagination
@@ -105,7 +158,7 @@ pagination communityPagination =
         backArrow =
             if Pagination.hasPrevious communityPagination then
                 Html.li [ class "page-item" ]
-                    [ navigateLink (Listings <| currentPage - 1) "page-link" ("«") ]
+                    [ navigateLink (Listings (currentPage - 1) filters) "page-link" ("«") ]
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "«" ] ]
@@ -113,7 +166,7 @@ pagination communityPagination =
         forwardArrow =
             if Pagination.hasNext communityPagination then
                 Html.li [ class "page-item" ]
-                    [ navigateLink (Listings <| currentPage + 1) "page-link" ("»") ]
+                    [ navigateLink (Listings (currentPage + 1) filters) "page-link" ("»") ]
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "»" ] ]
@@ -164,7 +217,7 @@ pagination communityPagination =
                     [ Html.span [ class "page-link" ] [ text <| toString page ] ]
             else
                 Html.li [ class "page-item" ]
-                    [ navigateLink (Listings page) "page-link" (toString page) ]
+                    [ navigateLink (Listings page filters) "page-link" (toString page) ]
     in
         List.concat
             [ [ backArrow ]
