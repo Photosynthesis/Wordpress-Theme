@@ -34,11 +34,6 @@ maybeHtml viewFunction =
 view : Model -> Html Msg
 view { communities, currentDate, route } =
     let
-        ( page, filters ) =
-            case route of
-                Listings page filters ->
-                    ( page, filters )
-
         communitiesHtml =
             if Pagination.isLoading communities then
                 Html.div [ class "loading my-4" ]
@@ -61,14 +56,14 @@ view { communities, currentDate, route } =
             [ links
             , Html.div [ class "clearfix" ]
                 [ resultCount communities
-                , filterHtml page filters
+                , filterHtml route
                 ]
             , communitiesHtml
             , if not <| List.isEmpty (Pagination.getCurrent communities) then
                 Html.div []
                     [ links
-                    , Html.ul [ class "pagination justify-content-center" ]
-                        (pagination filters communities)
+                    , Html.ul [ class "pagination justify-content-center" ] <|
+                        pagination route communities
                     ]
               else
                 text ""
@@ -104,11 +99,19 @@ resultCount pagination =
         text ""
 
 
-filterHtml : Int -> List FilterParam -> Html Msg
-filterHtml page params =
+filterHtml : Route -> Html Msg
+filterHtml route =
     let
+        currentFilters =
+            List.foldl
+                (\inherentFilter extraFilters ->
+                    List.filter (\f -> f /= inherentFilter) extraFilters
+                )
+                (Routing.getAdditionalFilters route)
+                (Routing.getInherentFilters route)
+
         annotate filter =
-            (\( n, t ) -> ( filter, n, t, List.member filter params )) <|
+            (\( n, t ) -> ( filter, n, t, List.member filter currentFilters )) <|
                 case filter of
                     VisitorsFilter ->
                         ( "visitors", "Visitors Welcome" )
@@ -125,14 +128,17 @@ filterHtml page params =
                     FICMemberFilter ->
                         ( "fic-member", "FIC Member" )
 
+                    _ ->
+                        Debug.crash "Unhandled Inline Filter in `filterHtml`"
+
         checkMsg filter isOn =
             NavigateTo
-                << Listings 1
+                << Routing.toPageOne route
             <|
                 if isOn then
-                    List.filter (\f -> f /= filter) params
+                    List.filter (\f -> f /= filter) currentFilters
                 else
-                    filter :: params
+                    filter :: currentFilters
 
         render ( filter, filterName, filterText, isOn ) =
             Html.label [ onClick <| checkMsg filter isOn ]
@@ -149,8 +155,8 @@ filterHtml page params =
             List.map (annotate >> render) Routing.inlineFilters
 
 
-pagination : List FilterParam -> Pagination Community FilterParam -> List (Html Msg)
-pagination filters communityPagination =
+pagination : Route -> Pagination Community FilterParam -> List (Html Msg)
+pagination route communityPagination =
     let
         currentPage =
             Pagination.getPage communityPagination
@@ -158,7 +164,7 @@ pagination filters communityPagination =
         backArrow =
             if Pagination.hasPrevious communityPagination then
                 Html.li [ class "page-item" ]
-                    [ navigateLink (Listings (currentPage - 1) filters) "page-link" ("«") ]
+                    [ navigateLink (Routing.mapPage (\x -> x - 1) route) "page-link" ("«") ]
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "«" ] ]
@@ -166,7 +172,7 @@ pagination filters communityPagination =
         forwardArrow =
             if Pagination.hasNext communityPagination then
                 Html.li [ class "page-item" ]
-                    [ navigateLink (Listings (currentPage + 1) filters) "page-link" ("»") ]
+                    [ navigateLink (Routing.mapPage (\x -> x + 1) route) "page-link" ("»") ]
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "»" ] ]
@@ -217,7 +223,7 @@ pagination filters communityPagination =
                     [ Html.span [ class "page-link" ] [ text <| toString page ] ]
             else
                 Html.li [ class "page-item" ]
-                    [ navigateLink (Listings page filters) "page-link" (toString page) ]
+                    [ navigateLink (Routing.mapPage (always page) route) "page-link" (toString page) ]
     in
         List.concat
             [ [ backArrow ]

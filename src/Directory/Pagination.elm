@@ -34,6 +34,8 @@ module Pagination
 
    TODO: Eventually -
     document everything + examples
+    fetchRequest per-args cache?
+        toString on args to get a (Dict String (Dict PageNumber Chunk))?
     custom page sizes(+ reorganize items when changed)
     publish as separate package
     how to handle filtering/re-ordering/searching?

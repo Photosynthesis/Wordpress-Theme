@@ -5,7 +5,7 @@ import Navigation
 import Task
 import Messages exposing (Msg(SetCurrentDate, UrlChange, CommunityPagination))
 import Model exposing (Model, paginationConfig)
-import Routing exposing (Route(..), routeParser)
+import Routing exposing (Route(..), FilterParam(..), routeParser)
 import Update exposing (update)
 import View exposing (view)
 
@@ -30,9 +30,7 @@ initialize location =
             routeParser location
 
         ( model, paginationCmd ) =
-            case route of
-                Listings page filters ->
-                    Model.initial page filters
+            Model.initial route
     in
         ( model
         , Cmd.batch

@@ -1,7 +1,10 @@
-module Routing exposing (Route(..), FilterParam(..), inlineFilters, reverse, routeParser)
+module Routing exposing (..)
 
 import Navigation
 import UrlParser exposing (Parser, (</>), (<?>), s, int, map, oneOf, parsePath)
+
+
+-- QueryString Filters
 
 
 type FilterParam
@@ -10,6 +13,13 @@ type FilterParam
     | EstablishedFilter
     | FormingFilter
     | FICMemberFilter
+    | CommunesFilter
+    | EcovillagesFilter
+    | CohousingFilter
+    | CoopFilter
+    | ReligiousFilter
+    | JewishFilter
+    | ChristianFilter
 
 
 inlineFilters : List FilterParam
@@ -35,6 +45,27 @@ filterParamToQueryString filter =
         FICMemberFilter ->
             "ficMember"
 
+        CommunesFilter ->
+            "communes"
+
+        EcovillagesFilter ->
+            "ecovillages"
+
+        CohousingFilter ->
+            "cohousing"
+
+        CoopFilter ->
+            "coops"
+
+        ReligiousFilter ->
+            "religious"
+
+        JewishFilter ->
+            "jewish"
+
+        ChristianFilter ->
+            "christian"
+
 
 parseFilterParam : String -> Maybe FilterParam
 parseFilterParam str =
@@ -53,6 +84,27 @@ parseFilterParam str =
 
         "ficMember" ->
             Just FICMemberFilter
+
+        "communes" ->
+            Just CommunesFilter
+
+        "ecovillages" ->
+            Just EcovillagesFilter
+
+        "cohousing" ->
+            Just CohousingFilter
+
+        "coops" ->
+            Just CoopFilter
+
+        "religious" ->
+            Just ReligiousFilter
+
+        "jewish" ->
+            Just JewishFilter
+
+        "christian" ->
+            Just ChristianFilter
 
         _ ->
             Nothing
@@ -83,8 +135,157 @@ filtersToQueryString =
            )
 
 
+
+-- Routes
+
+
+{-| TODO: Expirement w/ splitting Comm Type into different Type & having a single route.
+-}
 type Route
     = Listings Int (List FilterParam)
+    | Communes Int (List FilterParam)
+    | Ecovillages Int (List FilterParam)
+    | CohousingCommunities Int (List FilterParam)
+    | Coops Int (List FilterParam)
+    | JewishCommunities Int (List FilterParam)
+    | ChristianCommunities Int (List FilterParam)
+
+
+{-| Get filters that aren't inherent to the Route. For example, the `Communes`
+route will never return a `CommunesFilter`.
+-}
+getAdditionalFilters : Route -> List FilterParam
+getAdditionalFilters route =
+    case route of
+        Listings _ filters ->
+            filters
+
+        Communes _ filters ->
+            filters
+
+        Ecovillages _ filters ->
+            filters
+
+        CohousingCommunities _ filters ->
+            filters
+
+        Coops _ filters ->
+            filters
+
+        JewishCommunities _ filters ->
+            filters
+
+        ChristianCommunities _ filters ->
+            filters
+
+
+{-| Get the filters that are inherent to a Route, ignoring any additional ones.
+For example, the `Communes` route will always return `[ CommunesFilter ]`.
+-}
+getInherentFilters : Route -> List FilterParam
+getInherentFilters route =
+    case route of
+        Listings _ filters ->
+            []
+
+        Communes _ _ ->
+            [ CommunesFilter ]
+
+        Ecovillages _ _ ->
+            [ EcovillagesFilter ]
+
+        CohousingCommunities _ _ ->
+            [ CohousingFilter ]
+
+        Coops _ _ ->
+            [ CoopFilter ]
+
+        JewishCommunities _ _ ->
+            [ ReligiousFilter, JewishFilter ]
+
+        ChristianCommunities _ _ ->
+            [ ReligiousFilter, ChristianFilter ]
+
+
+getFilters : Route -> List FilterParam
+getFilters route =
+    getAdditionalFilters route ++ getInherentFilters route
+
+
+getPageAndFilters : Route -> ( Int, List FilterParam )
+getPageAndFilters route =
+    flip (,) (getFilters route) <|
+        case route of
+            Listings page _ ->
+                page
+
+            Communes page _ ->
+                page
+
+            Ecovillages page _ ->
+                page
+
+            CohousingCommunities page _ ->
+                page
+
+            Coops page _ ->
+                page
+
+            JewishCommunities page _ ->
+                page
+
+            ChristianCommunities page _ ->
+                page
+
+
+toPageOne : Route -> (List FilterParam -> Route)
+toPageOne route =
+    case route of
+        Listings _ _ ->
+            Listings 1
+
+        Communes _ _ ->
+            Communes 1
+
+        Ecovillages _ _ ->
+            Ecovillages 1
+
+        CohousingCommunities _ _ ->
+            CohousingCommunities 1
+
+        Coops _ _ ->
+            Coops 1
+
+        JewishCommunities _ _ ->
+            JewishCommunities 1
+
+        ChristianCommunities _ _ ->
+            ChristianCommunities 1
+
+
+mapPage : (Int -> Int) -> Route -> Route
+mapPage func route =
+    case route of
+        Listings page filters ->
+            Listings (func page) filters
+
+        Communes page filters ->
+            Communes (func page) filters
+
+        Ecovillages page filters ->
+            Ecovillages (func page) filters
+
+        CohousingCommunities page filters ->
+            CohousingCommunities (func page) filters
+
+        Coops page filters ->
+            Coops (func page) filters
+
+        JewishCommunities page filters ->
+            JewishCommunities (func page) filters
+
+        ChristianCommunities page filters ->
+            ChristianCommunities (func page) filters
 
 
 parser : Parser (Route -> a) a
@@ -92,17 +293,66 @@ parser =
     oneOf
         [ map (Listings 1) (s "directory" </> s "listings" <?> filterParams)
         , map Listings (s "directory" </> s "listings" </> int <?> filterParams)
+        , map (Communes 1) (s "directory" </> s "communes" <?> filterParams)
+        , map Communes (s "directory" </> s "communes" </> int <?> filterParams)
+        , map (Ecovillages 1) (s "directory" </> s "ecovillages" <?> filterParams)
+        , map Ecovillages (s "directory" </> s "ecovillages" </> int <?> filterParams)
+        , map (CohousingCommunities 1) (s "directory" </> s "cohousing-communities" <?> filterParams)
+        , map CohousingCommunities (s "directory" </> s "cohousing-communities" </> int <?> filterParams)
+        , map (Coops 1) (s "directory" </> s "co-ops" <?> filterParams)
+        , map Coops (s "directory" </> s "co-ops" </> int <?> filterParams)
+        , map (JewishCommunities 1) (s "directory" </> s "jewish-communities" <?> filterParams)
+        , map JewishCommunities (s "directory" </> s "jewish-communities" </> int <?> filterParams)
+        , map (ChristianCommunities 1) (s "directory" </> s "christian-communities" <?> filterParams)
+        , map ChristianCommunities (s "directory" </> s "christian-communities" </> int <?> filterParams)
         ]
 
 
 reverse : Route -> String
 reverse route =
-    case route of
-        Listings 1 filterParams ->
-            "/directory/listings/" ++ filtersToQueryString filterParams
+    "/directory/"
+        ++ case route of
+            Listings 1 filterParams ->
+                "listings/" ++ filtersToQueryString filterParams
 
-        Listings page filterParams ->
-            "/directory/listings/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+            Listings page filterParams ->
+                "listings/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+
+            Communes 1 filterParams ->
+                "communes/" ++ filtersToQueryString filterParams
+
+            Communes page filterParams ->
+                "communes/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+
+            Ecovillages 1 filterParams ->
+                "ecovillages/" ++ filtersToQueryString filterParams
+
+            Ecovillages page filterParams ->
+                "ecovillages/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+
+            CohousingCommunities 1 filterParams ->
+                "cohousing-communities/" ++ filtersToQueryString filterParams
+
+            CohousingCommunities page filterParams ->
+                "cohousing-communities/" ++ toString int ++ "/" ++ filtersToQueryString filterParams
+
+            Coops 1 filterParams ->
+                "co-ops/" ++ filtersToQueryString filterParams
+
+            Coops page filterParams ->
+                "co-ops/" ++ toString int ++ "/" ++ filtersToQueryString filterParams
+
+            JewishCommunities 1 filterParams ->
+                "jewish-communities/" ++ filtersToQueryString filterParams
+
+            JewishCommunities page filterParams ->
+                "jewish-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+
+            ChristianCommunities 1 filterParams ->
+                "christian-communities/" ++ filtersToQueryString filterParams
+
+            ChristianCommunities page filterParams ->
+                "christian-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
 
 routeParser : Navigation.Location -> Route

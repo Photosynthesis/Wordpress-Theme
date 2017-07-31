@@ -5,7 +5,7 @@ import Messages exposing (Msg(..))
 import Model exposing (Model, paginationConfig)
 import Pagination exposing (Pagination)
 import Ports
-import Routing exposing (Route(..), reverse)
+import Routing exposing (Route(..), FilterParam(..), reverse)
 
 
 updateUrl : Route -> Model -> ( Model, Cmd Msg )
@@ -25,18 +25,19 @@ updateUrl route model =
 
         communityFilters =
             Pagination.getFilters model.communities
+
+        ( page, filters ) =
+            Routing.getPageAndFilters route
     in
-        case route of
-            Listings page filters ->
-                if filters /= communityFilters then
-                    Pagination.updateFilters paginationConfig model.communities filters
-                        |> (\( m, c ) ->
-                                ( { withUpdatedRoute | communities = m }, Cmd.map CommunityPagination c )
-                           )
-                else if page /= Pagination.getPage model.communities then
-                    jumpToPage page
-                else
-                    ( model, Cmd.none )
+        if filters /= communityFilters then
+            Pagination.updateFilters paginationConfig model.communities filters
+                |> (\( m, c ) ->
+                        ( { withUpdatedRoute | communities = m }, Cmd.map CommunityPagination c )
+                   )
+        else if page /= Pagination.getPage model.communities then
+            jumpToPage page
+        else
+            ( model, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

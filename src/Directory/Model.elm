@@ -14,15 +14,18 @@ type alias Model =
     }
 
 
-initial : Int -> List FilterParam -> ( Model, Cmd (Pagination.Msg Community) )
-initial page filters =
+initial : Route -> ( Model, Cmd (Pagination.Msg Community) )
+initial route =
     let
+        ( page, filters ) =
+            Routing.getPageAndFilters route
+
         ( communitiesPagination, paginationCmd ) =
             Pagination.initial paginationConfig filters page
     in
         ( { communities = communitiesPagination
           , currentDate = Nothing
-          , route = Listings page filters
+          , route = route
           }
         , paginationCmd
         )

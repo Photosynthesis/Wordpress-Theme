@@ -26,6 +26,27 @@ filterToApiQuery filter =
         FICMemberFilter ->
             "membership[]=Yes"
 
+        CommunesFilter ->
+            "type[]=Commune"
+
+        EcovillagesFilter ->
+            "type[]=Ecovillage"
+
+        CohousingFilter ->
+            "type[]=Cohousing"
+
+        CoopFilter ->
+            "description[]=coop"
+
+        ReligiousFilter ->
+            "type[]=Spiritual"
+
+        JewishFilter ->
+            "spiritual[]=Jewish"
+
+        ChristianFilter ->
+            "spiritual[]=Christian"
+
 
 getCommunities : List FilterParam -> Int -> Http.Request (Pagination.FetchResponse Community)
 getCommunities filters page =
