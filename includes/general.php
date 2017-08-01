@@ -21,13 +21,25 @@ class ThemeGeneral
 
   /* Register & Enqueue Compiled Scripts & Styles */
   public static function enqueue_assets() {
+    $directory_js_filename = "";
+
     foreach (scandir(__DIR__ . "/../dist") as $dist_file) {
       $extension = pathinfo($dist_file, PATHINFO_EXTENSION);
       if ($extension === 'js') {
+        if (strpos($dist_file, "directory") !== false) {
+          $directory_js_filename = $dist_file;
+          continue;
+        }
         wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
       } else if ($extension === 'css') {
         wp_enqueue_style($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
       }
+    }
+    if ($directory_js_filename !== "") {
+      wp_enqueue_script(
+        $directory_js_filename,
+        get_stylesheet_directory_uri() . "/dist/{$directory_js_filename}",
+        array(), null);
     }
   }
 

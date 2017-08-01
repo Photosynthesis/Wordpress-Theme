@@ -17,7 +17,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname + '/dist'),
-    filename: '[chunkHash].js',
+    filename: '[name]-[chunkHash].js',
     publicPath: '/wp-content/themes/fic-theme/dist/',
   },
 
