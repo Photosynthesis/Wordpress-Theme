@@ -5,7 +5,7 @@ import Date.Distance
 import Date.Format
 import Json.Decode as Decode
 import Html exposing (Html, text)
-import Html.Attributes exposing (class, src, alt, href, name, type_, checked)
+import Html.Attributes exposing (class, src, alt, href, name, type_, checked, height, width)
 import Html.Events exposing (onClick, onWithOptions, defaultOptions)
 import Commands exposing (CommunitiesRequestData)
 import Communities exposing (..)
@@ -35,7 +35,60 @@ maybeHtml viewFunction =
 view : Model -> Html Msg
 view { communities, currentDate, route } =
     let
-        communitiesHtml =
+        maybeRssLink =
+            case route of
+                RecentlyAdded _ _ ->
+                    Just "/rss-newly-listed-directory-listings/"
+
+                RecentlyUpdated _ _ ->
+                    Just "/rss-recently-updated-directory-listings/"
+
+                _ ->
+                    Nothing
+
+        rssIcon =
+            Maybe.map
+                (\link ->
+                    Html.a [ href link, class "float-right" ]
+                        [ Html.img
+                            [ src "/wp-content/uploads/2014/01/RSS_icon.png"
+                            , width 48
+                            , height 48
+                            , alt "RSS Feed"
+                            ]
+                            []
+                        ]
+                )
+                >> Maybe.withDefault (text "")
+
+        pageHeading =
+            Html.div [ class "clearfix directory-rss" ]
+                [ rssIcon maybeRssLink
+                , Html.h1 [ class "page-title" ] [ text <| Routing.getPageTitle route ]
+                ]
+
+        listings =
+            Html.div []
+                [ links
+                , Html.div [ class "clearfix" ]
+                    [ if not <| List.isEmpty (Pagination.getCurrent communities) then
+                        resultCount communities
+                      else
+                        text ""
+                    , filterHtml route
+                    ]
+                , communitiesList
+                , if not <| List.isEmpty (Pagination.getCurrent communities) then
+                    Html.div []
+                        [ links
+                        , Html.ul [ class "pagination justify-content-center" ] <|
+                            pagination route communities
+                        ]
+                  else
+                    text ""
+                ]
+
+        communitiesList =
             if Pagination.isLoading communities then
                 Html.div [ class "loading" ]
                     [ Html.div [ class "text-primary text-center" ] [ text "Loading..." ]
@@ -54,23 +107,8 @@ view { communities, currentDate, route } =
                         Pagination.getCurrent communities
     in
         Html.div []
-            [ links
-            , Html.div [ class "clearfix" ]
-                [ if not <| List.isEmpty (Pagination.getCurrent communities) then
-                    resultCount communities
-                  else
-                    text ""
-                , filterHtml route
-                ]
-            , communitiesHtml
-            , if not <| List.isEmpty (Pagination.getCurrent communities) then
-                Html.div []
-                    [ links
-                    , Html.ul [ class "pagination justify-content-center" ] <|
-                        pagination route communities
-                    ]
-              else
-                text ""
+            [ pageHeading
+            , listings
             ]
 
 
