@@ -52,8 +52,8 @@ view { communities, searchString, currentDate, route } =
                     Html.a [ href link, class "float-right" ]
                         [ Html.img
                             [ src "/wp-content/uploads/2014/01/RSS_icon.png"
-                            , width 48
-                            , height 48
+                            , width 32
+                            , height 32
                             , alt "RSS Feed"
                             ]
                             []
