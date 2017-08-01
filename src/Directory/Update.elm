@@ -1,5 +1,8 @@
 module Update exposing (update)
 
+{-| Contains Functions For Modifying the Application State.
+-}
+
 import Commands
 import Messages exposing (Msg(..))
 import Model exposing (Model, paginationConfig)
@@ -7,6 +10,8 @@ import Pagination exposing (Pagination)
 import Routing exposing (Route(..), FilterParam(..), reverse)
 
 
+{-| Make Model Changes & Queue Commands Related to Page Changes.
+-}
 updateUrl : Route -> Model -> ( Model, Cmd Msg )
 updateUrl route model =
     let
@@ -54,6 +59,8 @@ updateUrl route model =
             ( model, Cmd.none )
 
 
+{-| Update the Model Based According to Some Message.
+-}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of

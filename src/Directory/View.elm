@@ -15,6 +15,8 @@ import Pagination exposing (Pagination)
 import Routing exposing (Route(..), FilterParam(..), reverse)
 
 
+{-| Render a Link to an Internal Application Page.
+-}
 navigateLink : Route -> String -> String -> Html Msg
 navigateLink route classes content =
     let
@@ -27,11 +29,15 @@ navigateLink route classes content =
             [ text content ]
 
 
+{-| Return an HTML Element or an Empty Node.
+-}
 maybeHtml : (a -> Html msg) -> Maybe a -> Html msg
 maybeHtml viewFunction =
     Maybe.map viewFunction >> Maybe.withDefault (text "")
 
 
+{-| Render the Application's State.
+-}
 view : Model -> Html Msg
 view { communities, searchString, currentDate, route } =
     let
@@ -130,6 +136,8 @@ view { communities, searchString, currentDate, route } =
             ]
 
 
+{-| Render the Links Appearing Above & Below the Listings.
+-}
 links : Html Msg
 links =
     let
@@ -157,6 +165,8 @@ links =
             List.intersperse (text " | ") (pageLinks ++ staticLinks)
 
 
+{-| Render the Result Count if there are Results.
+-}
 resultCount : Pagination Community CommunitiesRequestData -> Html Msg
 resultCount pagination =
     if not <| Pagination.hasNone pagination then
@@ -169,6 +179,8 @@ resultCount pagination =
         text ""
 
 
+{-| Render the Filter Checkbox Inputes.
+-}
 filterHtml : Route -> Html Msg
 filterHtml route =
     let
@@ -225,6 +237,8 @@ filterHtml route =
             List.map (annotate >> render) Routing.inlineFilters
 
 
+{-| Render the Pagination for the Listings.
+-}
 pagination : Route -> Pagination Community CommunitiesRequestData -> List (Html Msg)
 pagination route communityPagination =
     let
@@ -314,6 +328,8 @@ pagination route communityPagination =
             ]
 
 
+{-| Render a Single Community in the Listings.
+-}
 communityItem : Maybe Date -> Community -> Html msg
 communityItem maybeCurrentDate community =
     let

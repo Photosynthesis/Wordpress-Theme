@@ -1,15 +1,19 @@
 module Communities exposing (..)
 
+{-| Contains Community Data Types & Related Functions
+-}
+
 import Date exposing (Date)
 
 
--- Community Model
-
-
+{-| A Communities Unique ID is an Integer
+-}
 type CommunityID
     = CommunityID Int
 
 
+{-| The Forming Status of a Community.
+-}
 type CommunityStatus
     = Forming
     | Established
@@ -17,18 +21,24 @@ type CommunityStatus
     | Disbanded
 
 
+{-| The Visitor Policy of a Community.
+-}
 type VisitorsWelcome
     = Welcome
     | Rarely
     | NoVisitors
 
 
+{-| The Membership Application Status of a Community
+-}
 type MembersWelcome
     = Yes
     | Waitlist
     | NoMembers
 
 
+{-| The Various Types of Communities We List.
+-}
 type CommunityType
     = Commune
     | EcoVillage
@@ -41,6 +51,8 @@ type CommunityType
     | Indigenous
 
 
+{-| The Data Associated with a Specific Community.
+-}
 type alias Community =
     { id : CommunityID
     , name : String
@@ -59,6 +71,8 @@ type alias Community =
     }
 
 
+{-| Render a `CommunityStatus`.
+-}
 statusToString : CommunityStatus -> String
 statusToString status =
     case status of
@@ -75,6 +89,8 @@ statusToString status =
             "Disbanded"
 
 
+{-| Render a `VisitorsWelcome` Status.
+-}
 visitorsWelcomeToString : VisitorsWelcome -> String
 visitorsWelcomeToString welcomeStatus =
     case welcomeStatus of
@@ -88,6 +104,8 @@ visitorsWelcomeToString welcomeStatus =
             "No"
 
 
+{-| Render a `MembersWelcome` Status.
+-}
 membersWelcomeToString : MembersWelcome -> String
 membersWelcomeToString welcomeStatus =
     case welcomeStatus of
@@ -101,10 +119,9 @@ membersWelcomeToString welcomeStatus =
             "No"
 
 
-
--- TODO: make a typeToHtml with parentheticals as abbr tags
-
-
+{-| Render a `CommunityType`.
+TODO: make a typeToHtml with parentheticals as abbr tags
+-}
 typeToString : CommunityType -> String
 typeToString communityType =
     case communityType of

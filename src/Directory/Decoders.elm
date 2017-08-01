@@ -1,4 +1,4 @@
-module Decoders exposing (communityDecoder)
+module Decoders exposing (community)
 
 import Date exposing (Date)
 import Json.Decode as Decode exposing (Decoder, string)
@@ -6,18 +6,32 @@ import Json.Decode.Pipeline exposing (decode, required, optional)
 import Communities exposing (..)
 
 
-resultToDecoder : Result String a -> Decoder a
-resultToDecoder result =
-    case result of
-        Ok a ->
-            Decode.succeed a
+community : Decoder Community
+community =
+    decode Community
+        |> required "id" (Decode.map CommunityID Decode.int)
+        |> required "name" string
+        |> required "slug" string
+        |> required "imageUrl" (Decode.nullable string)
+        |> required "thumbnailUrl" (Decode.nullable string)
+        |> required "communityStatus" communityStatus
+        |> optional "city" string ""
+        |> optional "state" string ""
+        |> optional "country" string ""
+        |> required "openToVisitors" visitorsWelcome
+        |> required "openToMembership" membersWelcome
+        |> required "communityTypes"
+            (Decode.oneOf
+                [ singleton communityType
+                , Decode.list communityType
+                ]
+            )
+        |> required "updatedAt" date
+        |> required "createdAt" date
 
-        Err s ->
-            Decode.fail s
 
-
-communityStatusDecoder : Decoder CommunityStatus
-communityStatusDecoder =
+communityStatus : Decoder CommunityStatus
+communityStatus =
     let
         decode str =
             if String.contains "established" str then
@@ -32,11 +46,11 @@ communityStatusDecoder =
                 Err <| "Could not Decode " ++ str
     in
         Decode.string
-            |> Decode.andThen (String.toLower >> decode >> resultToDecoder)
+            |> Decode.andThen (String.toLower >> decode >> fromResult)
 
 
-visitorsWelcomeDecoder : Decoder VisitorsWelcome
-visitorsWelcomeDecoder =
+visitorsWelcome : Decoder VisitorsWelcome
+visitorsWelcome =
     let
         decode str =
             if str == "yes" then
@@ -49,11 +63,11 @@ visitorsWelcomeDecoder =
                 Err <| "Could not Decode " ++ str
     in
         Decode.string
-            |> Decode.andThen (String.toLower >> decode >> resultToDecoder)
+            |> Decode.andThen (String.toLower >> decode >> fromResult)
 
 
-membersWelcomeDecoder : Decoder MembersWelcome
-membersWelcomeDecoder =
+membersWelcome : Decoder MembersWelcome
+membersWelcome =
     let
         decode str =
             if str == "yes" then
@@ -66,36 +80,12 @@ membersWelcomeDecoder =
                 Err <| "Could not Decode " ++ str
     in
         Decode.string
-            |> Decode.andThen (String.toLower >> decode >> resultToDecoder)
+            |> Decode.andThen (String.toLower >> decode >> fromResult)
 
 
-dateDecoder : Decoder Date
-dateDecoder =
-    string
-        |> Decode.andThen (Date.fromString >> resultToDecoder)
-
-
-stringToEnumDecoder : List ( a, String ) -> Decoder a
-stringToEnumDecoder conversions =
-    let
-        convert maps str =
-            case maps of
-                ( enumType, enumString ) :: cs ->
-                    if str == enumString then
-                        Ok enumType
-                    else
-                        convert cs str
-
-                [] ->
-                    Err <| "Could not Decode " ++ str
-    in
-        Decode.string
-            |> Decode.andThen (String.toLower >> convert conversions >> resultToDecoder)
-
-
-communityTypeDecoder : Decoder CommunityType
-communityTypeDecoder =
-    stringToEnumDecoder
+communityType : Decoder CommunityType
+communityType =
+    stringToEnum
         [ ( CoHousing, "cohousing (individual homes within group owned property.)" )
         , ( Commune, "commune (organized around sharing almost everything.)" )
         , ( EcoVillage, "ecovillage (organized around ecology and sustainability.)" )
@@ -120,30 +110,40 @@ communityTypeDecoder =
         ]
 
 
-singletonDecoder : Decoder a -> Decoder (List a)
-singletonDecoder =
+singleton : Decoder a -> Decoder (List a)
+singleton =
     Decode.andThen (List.singleton >> Decode.succeed)
 
 
-communityDecoder : Decoder Community
-communityDecoder =
-    decode Community
-        |> required "id" (Decode.map CommunityID Decode.int)
-        |> required "name" string
-        |> required "slug" string
-        |> required "imageUrl" (Decode.nullable string)
-        |> required "thumbnailUrl" (Decode.nullable string)
-        |> required "communityStatus" communityStatusDecoder
-        |> optional "city" string ""
-        |> optional "state" string ""
-        |> optional "country" string ""
-        |> required "openToVisitors" visitorsWelcomeDecoder
-        |> required "openToMembership" membersWelcomeDecoder
-        |> required "communityTypes"
-            (Decode.oneOf
-                [ singletonDecoder communityTypeDecoder
-                , Decode.list communityTypeDecoder
-                ]
-            )
-        |> required "updatedAt" dateDecoder
-        |> required "createdAt" dateDecoder
+date : Decoder Date
+date =
+    string
+        |> Decode.andThen (Date.fromString >> fromResult)
+
+
+stringToEnum : List ( a, String ) -> Decoder a
+stringToEnum conversions =
+    let
+        convert maps str =
+            case maps of
+                ( enumType, enumString ) :: cs ->
+                    if str == enumString then
+                        Ok enumType
+                    else
+                        convert cs str
+
+                [] ->
+                    Err <| "Could not Decode " ++ str
+    in
+        Decode.string
+            |> Decode.andThen (String.toLower >> convert conversions >> fromResult)
+
+
+fromResult : Result String a -> Decoder a
+fromResult result =
+    case result of
+        Ok a ->
+            Decode.succeed a
+
+        Err s ->
+            Decode.fail s

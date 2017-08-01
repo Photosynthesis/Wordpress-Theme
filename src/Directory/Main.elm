@@ -1,5 +1,8 @@
 module Main exposing (main)
 
+{-| The Entry Point for the Application.
+-}
+
 import Date
 import Navigation
 import Task

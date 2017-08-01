@@ -1,5 +1,8 @@
 module Routing exposing (..)
 
+{-| Contains Types & Functions Related to the Application's Internal Routing.
+-}
+
 import Navigation
 import UrlParser exposing (Parser, (</>), (<?>), s, int, map, oneOf, parsePath)
 
@@ -7,6 +10,8 @@ import UrlParser exposing (Parser, (</>), (<?>), s, int, map, oneOf, parsePath)
 -- QueryString Filters
 
 
+{-| The Filters Available Through GET Parameters.
+-}
 type FilterParam
     = VisitorsFilter
     | MembersFilter
@@ -23,11 +28,15 @@ type FilterParam
     | SearchFilter String
 
 
+{-| The Filters to Display on Listings Pages.
+-}
 inlineFilters : List FilterParam
 inlineFilters =
     [ VisitorsFilter, MembersFilter, EstablishedFilter, FormingFilter, FICMemberFilter ]
 
 
+{-| Return the Value of a `FilterParam` to be Used in a GET Parameter.
+-}
 filterParamToQueryString : FilterParam -> String
 filterParamToQueryString filter =
     case filter of
@@ -68,9 +77,11 @@ filterParamToQueryString filter =
             "christian"
 
         SearchFilter str ->
-            "search=" ++ str
+            str
 
 
+{-| Attempt to Parse a String Into a `FilterParam`.
+-}
 parseFilterParam : String -> Maybe FilterParam
 parseFilterParam str =
     case str of
@@ -114,6 +125,8 @@ parseFilterParam str =
             Nothing
 
 
+{-| Parse a `FilterParam` List From the QueryString
+-}
 filterParams : UrlParser.QueryParser (List FilterParam -> b) b
 filterParams =
     UrlParser.customParam "filters"
@@ -127,12 +140,17 @@ filterParams =
         )
 
 
+{-| Parse a `SearchFilter` From the QueryString.
+-}
 searchParam : UrlParser.QueryParser (Maybe FilterParam -> b) b
 searchParam =
     UrlParser.customParam "search"
         (Maybe.map SearchFilter)
 
 
+{-| Parse a `SearchFilter` And/Or `FilterParam` List From the QueryString,
+Returning Them as a Single List.
+-}
 addQueryParams : a -> Parser a (List FilterParam -> b) -> Parser (b -> c) c
 addQueryParams route pathParser =
     let
@@ -147,6 +165,8 @@ addQueryParams route pathParser =
         map route (pathParser </> map applySearch (UrlParser.top <?> filterParams <?> searchParam))
 
 
+{-| Try to Pull a `SearchFilter` Out of a `FilterParam` List.
+-}
 getSearchFilter : List FilterParam -> Maybe String
 getSearchFilter fs =
     case fs of
@@ -160,6 +180,9 @@ getSearchFilter fs =
             getSearchFilter xs
 
 
+{-| Build a QueryString From a `FilterParam` List, With a Separate Option/Value
+for a `SearchFilter`.
+-}
 filtersToQueryString : List FilterParam -> String
 filtersToQueryString filters =
     let
@@ -211,7 +234,10 @@ filtersToQueryString filters =
 -- Routes
 
 
-{-| TODO: Expirement w/ splitting Comm Type into different Type & having a single route.
+{-| The Potential Listing Routes, With a Page Number & List of Filters.
+
+TODO: Experiment w/ splitting Comm Type into different Type & having a single route.
+
 -}
 type Route
     = Listings Int (List FilterParam)
@@ -225,6 +251,8 @@ type Route
     | RecentlyAdded Int (List FilterParam)
 
 
+{-| Return the Page Title for a Route.
+-}
 getPageTitle : Route -> String
 getPageTitle route =
     case route of
@@ -324,11 +352,15 @@ getInherentFilters route =
             []
 
 
+{-| Get Both the Inherent & Additional Filters for a Route.
+-}
 getFilters : Route -> List FilterParam
 getFilters route =
     getAdditionalFilters route ++ getInherentFilters route
 
 
+{-| Return the Page Number & All Filters for a Route.
+-}
 getPageAndFilters : Route -> ( Int, List FilterParam )
 getPageAndFilters route =
     flip (,) (getFilters route) <|
@@ -361,6 +393,9 @@ getPageAndFilters route =
                 page
 
 
+{-| Return a Function that Will Return the First Page of a Route When Given a
+`FilterParam` List.
+-}
 toPageOne : Route -> (List FilterParam -> Route)
 toPageOne route =
     case route of
@@ -392,6 +427,8 @@ toPageOne route =
             RecentlyAdded 1
 
 
+{-| Map Transformations to Both the Page & `FilterParam` List of a Route.
+-}
 mapBoth : (Int -> Int) -> (List FilterParam -> List FilterParam) -> Route -> Route
 mapBoth func1 func2 route =
     case route of
@@ -423,21 +460,29 @@ mapBoth func1 func2 route =
             RecentlyAdded (func1 page) (func2 filters)
 
 
+{-| Map a Transformation to the Page Number of a Route.
+-}
 mapPage : (Int -> Int) -> Route -> Route
 mapPage func =
     mapBoth func identity
 
 
+{-| Map a Transformation to the `FilterParam` List of a Route.
+-}
 mapFilters : (List FilterParam -> List FilterParam) -> Route -> Route
 mapFilters =
     mapBoth identity
 
 
+{-| An `Ordering` Represents the Inherent Ordering of a Route.
+-}
 type Ordering
     = UpdatedDate
     | CreatedDate
 
 
+{-| Return the `Ordering` of a `Route`, for Route's That Have Orderings.
+-}
 getOrdering : Route -> Maybe Ordering
 getOrdering route =
     case route of
@@ -451,6 +496,8 @@ getOrdering route =
             Nothing
 
 
+{-| Return a Parser for all Routes.
+-}
 parser : Parser (Route -> a) a
 parser =
     oneOf
@@ -475,6 +522,8 @@ parser =
         ]
 
 
+{-| Return the Path for a `Route`.
+-}
 reverse : Route -> String
 reverse route =
     "/directory/"
@@ -534,6 +583,8 @@ reverse route =
                 "newest-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
 
+{-| Parse a Path into a Route, Defaulting to the Listings Route.
+-}
 routeParser : Navigation.Location -> Route
 routeParser =
     parsePath parser >> Maybe.withDefault (Listings 1 [])

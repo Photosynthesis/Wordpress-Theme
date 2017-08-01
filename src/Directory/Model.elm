@@ -7,6 +7,8 @@ import Pagination exposing (Pagination)
 import Routing exposing (Route(..), FilterParam(..))
 
 
+{-| Contains the State Used Throughout The Application
+-}
 type alias Model =
     { communities : Pagination Community CommunitiesRequestData
     , searchString : String

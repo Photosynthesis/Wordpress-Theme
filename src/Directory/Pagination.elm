@@ -28,15 +28,16 @@ module Pagination
         , update
         )
 
-{- For paginating responses
+{-| For paginating responses
 
-   TODO: Eventually -
-    document everything + examples
-    fetchRequest per-args cache?
-        toString on args to get a (Dict String (Dict PageNumber Chunk))?
-    custom page sizes(+ reorganize items when changed)
-    publish as separate package
-    how to handle filtering/re-ordering/searching?
+TODO: Eventually:
+
+  - examples
+  - fetchRequest per-args cache?
+      - toString on args to get a (Dict String (Dict PageNumber Chunk))?
+  - custom page sizes(+ reorganize items when changed)
+  - publish as separate package
+
 -}
 
 import Dict exposing (Dict)
