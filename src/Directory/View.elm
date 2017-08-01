@@ -5,8 +5,8 @@ import Date.Distance
 import Date.Format
 import Json.Decode as Decode
 import Html exposing (Html, text)
-import Html.Attributes exposing (class, src, alt, href, name, type_, checked, height, width)
-import Html.Events exposing (onClick, onWithOptions, defaultOptions)
+import Html.Attributes exposing (class, src, alt, href, name, type_, checked, height, width, value)
+import Html.Events exposing (onClick, onInput, onSubmit, onWithOptions, defaultOptions)
 import Commands exposing (CommunitiesRequestData)
 import Communities exposing (..)
 import Messages exposing (Msg(..))
@@ -33,7 +33,7 @@ maybeHtml viewFunction =
 
 
 view : Model -> Html Msg
-view { communities, currentDate, route } =
+view { communities, searchString, currentDate, route } =
     let
         maybeRssLink =
             case route of
@@ -69,7 +69,8 @@ view { communities, currentDate, route } =
 
         listings =
             Html.div []
-                [ links
+                [ searchForm
+                , links
                 , Html.div [ class "clearfix" ]
                     [ if not <| List.isEmpty (Pagination.getCurrent communities) then
                         resultCount communities
@@ -86,6 +87,23 @@ view { communities, currentDate, route } =
                         ]
                   else
                     text ""
+                ]
+
+        searchForm =
+            Html.form [ class "justify-content-center form-inline", onSubmit SubmitSearchForm ]
+                [ Html.input
+                    [ class "d-inline-block mr-2 form-control"
+                    , value searchString
+                    , onInput UpdateSearchString
+                    , name "search"
+                    ]
+                    []
+                , Html.input
+                    [ class "btn btn-primary"
+                    , type_ "submit"
+                    , value "Search"
+                    ]
+                    []
                 ]
 
         communitiesList =

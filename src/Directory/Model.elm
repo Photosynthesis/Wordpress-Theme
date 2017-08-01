@@ -9,6 +9,7 @@ import Routing exposing (Route(..), FilterParam(..))
 
 type alias Model =
     { communities : Pagination Community CommunitiesRequestData
+    , searchString : String
     , currentDate : Maybe Date
     , route : Route
     }
@@ -25,8 +26,12 @@ initial route =
 
         ( communitiesPagination, paginationCmd ) =
             Pagination.initial paginationConfig requestData page
+
+        searchString =
+            Routing.getSearchFilter filters |> Maybe.withDefault ""
     in
         ( { communities = communitiesPagination
+          , searchString = searchString
           , currentDate = Nothing
           , route = route
           }

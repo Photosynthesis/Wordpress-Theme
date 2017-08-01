@@ -10,4 +10,6 @@ type Msg
     = SetCurrentDate Date
     | UrlChange Route
     | NavigateTo Route
+    | UpdateSearchString String
+    | SubmitSearchForm
     | CommunityPagination (Pagination.Msg Community)

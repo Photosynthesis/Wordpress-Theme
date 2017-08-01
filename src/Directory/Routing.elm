@@ -20,6 +20,7 @@ type FilterParam
     | ReligiousFilter
     | JewishFilter
     | ChristianFilter
+    | SearchFilter String
 
 
 inlineFilters : List FilterParam
@@ -65,6 +66,9 @@ filterParamToQueryString filter =
 
         ChristianFilter ->
             "christian"
+
+        SearchFilter str ->
+            "search=" ++ str
 
 
 parseFilterParam : String -> Maybe FilterParam
@@ -123,16 +127,84 @@ filterParams =
         )
 
 
+searchParam : UrlParser.QueryParser (Maybe FilterParam -> b) b
+searchParam =
+    UrlParser.customParam "search"
+        (Maybe.map SearchFilter)
+
+
+addQueryParams : a -> Parser a (List FilterParam -> b) -> Parser (b -> c) c
+addQueryParams route pathParser =
+    let
+        applySearch filters maybeSearch =
+            case maybeSearch of
+                Just filter ->
+                    filter :: filters
+
+                Nothing ->
+                    filters
+    in
+        map route (pathParser </> map applySearch (UrlParser.top <?> filterParams <?> searchParam))
+
+
+getSearchFilter : List FilterParam -> Maybe String
+getSearchFilter fs =
+    case fs of
+        [] ->
+            Nothing
+
+        (SearchFilter str) :: _ ->
+            Just str
+
+        _ :: xs ->
+            getSearchFilter xs
+
+
 filtersToQueryString : List FilterParam -> String
-filtersToQueryString =
-    List.map filterParamToQueryString
-        >> String.join ","
-        >> (\s ->
-                if not (String.isEmpty s) then
-                    "?filters=" ++ s
-                else
+filtersToQueryString filters =
+    let
+        ( searchFilters, otherFilters ) =
+            List.partition
+                (\f ->
+                    case f of
+                        SearchFilter _ ->
+                            True
+
+                        _ ->
+                            False
+                )
+                filters
+
+        filterString =
+            otherFilters
+                |> List.map filterParamToQueryString
+                |> String.join ","
+                |> (\s ->
+                        if not (String.isEmpty s) then
+                            "filters=" ++ s
+                        else
+                            ""
+                   )
+
+        searchString =
+            case List.head searchFilters of
+                Just (SearchFilter "") ->
                     ""
-           )
+
+                Just (SearchFilter str) ->
+                    "search=" ++ str
+
+                _ ->
+                    ""
+    in
+        List.filter (not << String.isEmpty) [ filterString, searchString ]
+            |> String.join "&"
+            |> (\s ->
+                    if String.isEmpty s then
+                        ""
+                    else
+                        "?" ++ s
+               )
 
 
 
@@ -320,35 +392,45 @@ toPageOne route =
             RecentlyAdded 1
 
 
-mapPage : (Int -> Int) -> Route -> Route
-mapPage func route =
+mapBoth : (Int -> Int) -> (List FilterParam -> List FilterParam) -> Route -> Route
+mapBoth func1 func2 route =
     case route of
         Listings page filters ->
-            Listings (func page) filters
+            Listings (func1 page) (func2 filters)
 
         Communes page filters ->
-            Communes (func page) filters
+            Communes (func1 page) (func2 filters)
 
         Ecovillages page filters ->
-            Ecovillages (func page) filters
+            Ecovillages (func1 page) (func2 filters)
 
         CohousingCommunities page filters ->
-            CohousingCommunities (func page) filters
+            CohousingCommunities (func1 page) (func2 filters)
 
         Coops page filters ->
-            Coops (func page) filters
+            Coops (func1 page) (func2 filters)
 
         JewishCommunities page filters ->
-            JewishCommunities (func page) filters
+            JewishCommunities (func1 page) (func2 filters)
 
         ChristianCommunities page filters ->
-            ChristianCommunities (func page) filters
+            ChristianCommunities (func1 page) (func2 filters)
 
         RecentlyUpdated page filters ->
-            RecentlyUpdated (func page) filters
+            RecentlyUpdated (func1 page) (func2 filters)
 
         RecentlyAdded page filters ->
-            RecentlyAdded (func page) filters
+            RecentlyAdded (func1 page) (func2 filters)
+
+
+mapPage : (Int -> Int) -> Route -> Route
+mapPage func =
+    mapBoth func identity
+
+
+mapFilters : (List FilterParam -> List FilterParam) -> Route -> Route
+mapFilters =
+    mapBoth identity
 
 
 type Ordering
@@ -372,24 +454,24 @@ getOrdering route =
 parser : Parser (Route -> a) a
 parser =
     oneOf
-        [ map (Listings 1) (s "directory" </> s "listings" <?> filterParams)
-        , map Listings (s "directory" </> s "listings" </> int <?> filterParams)
-        , map (Communes 1) (s "directory" </> s "communes" <?> filterParams)
-        , map Communes (s "directory" </> s "communes" </> int <?> filterParams)
-        , map (Ecovillages 1) (s "directory" </> s "ecovillages" <?> filterParams)
-        , map Ecovillages (s "directory" </> s "ecovillages" </> int <?> filterParams)
-        , map (CohousingCommunities 1) (s "directory" </> s "cohousing-communities" <?> filterParams)
-        , map CohousingCommunities (s "directory" </> s "cohousing-communities" </> int <?> filterParams)
-        , map (Coops 1) (s "directory" </> s "co-ops" <?> filterParams)
-        , map Coops (s "directory" </> s "co-ops" </> int <?> filterParams)
-        , map (JewishCommunities 1) (s "directory" </> s "jewish-communities" <?> filterParams)
-        , map JewishCommunities (s "directory" </> s "jewish-communities" </> int <?> filterParams)
-        , map (ChristianCommunities 1) (s "directory" </> s "christian-communities" <?> filterParams)
-        , map ChristianCommunities (s "directory" </> s "christian-communities" </> int <?> filterParams)
-        , map (RecentlyUpdated 1) (s "directory" </> s "recently-updated" <?> filterParams)
-        , map RecentlyUpdated (s "directory" </> s "recently-updated" </> int <?> filterParams)
-        , map (RecentlyAdded 1) (s "directory" </> s "newest-communities" <?> filterParams)
-        , map RecentlyAdded (s "directory" </> s "newest-communities" </> int <?> filterParams)
+        [ addQueryParams (Listings 1) (s "directory" </> s "listings")
+        , addQueryParams Listings (s "directory" </> s "listings" </> int)
+        , addQueryParams (Communes 1) (s "directory" </> s "communes")
+        , addQueryParams Communes (s "directory" </> s "communes" </> int)
+        , addQueryParams (Ecovillages 1) (s "directory" </> s "ecovillages")
+        , addQueryParams Ecovillages (s "directory" </> s "ecovillages" </> int)
+        , addQueryParams (CohousingCommunities 1) (s "directory" </> s "cohousing-communities")
+        , addQueryParams CohousingCommunities (s "directory" </> s "cohousing-communities" </> int)
+        , addQueryParams (Coops 1) (s "directory" </> s "co-ops")
+        , addQueryParams Coops (s "directory" </> s "co-ops" </> int)
+        , addQueryParams (JewishCommunities 1) (s "directory" </> s "jewish-communities")
+        , addQueryParams JewishCommunities (s "directory" </> s "jewish-communities" </> int)
+        , addQueryParams (ChristianCommunities 1) (s "directory" </> s "christian-communities")
+        , addQueryParams ChristianCommunities (s "directory" </> s "christian-communities" </> int)
+        , addQueryParams (RecentlyUpdated 1) (s "directory" </> s "recently-updated")
+        , addQueryParams RecentlyUpdated (s "directory" </> s "recently-updated" </> int)
+        , addQueryParams (RecentlyAdded 1) (s "directory" </> s "newest-communities")
+        , addQueryParams RecentlyAdded (s "directory" </> s "newest-communities" </> int)
         ]
 
 

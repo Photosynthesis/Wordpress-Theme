@@ -1,11 +1,13 @@
-module Commands exposing (getCommunities, CommunitiesRequestData)
+module Commands exposing (getCommunities, newPage, CommunitiesRequestData)
 
 import Http
 import Json.Decode as Decode
+import Navigation
 import Communities exposing (Community)
 import Decoders exposing (communityDecoder)
 import Pagination
-import Routing exposing (FilterParam(..), Ordering(..))
+import Ports
+import Routing exposing (Route, FilterParam(..), Ordering(..), reverse)
 
 
 filterToApiQuery : FilterParam -> String
@@ -46,6 +48,9 @@ filterToApiQuery filter =
 
         ChristianFilter ->
             "spiritual[]=Christian"
+
+        SearchFilter str ->
+            "search=" ++ str
 
 
 orderingToApiQuery : Maybe Ordering -> String
@@ -95,3 +100,12 @@ getCommunities { filters, ordering } page =
                     , orderQueryString
                     ]
                 )
+
+
+newPage : Route -> Cmd msg
+newPage newRoute =
+    Cmd.batch
+        [ Navigation.newUrl <| reverse newRoute
+        , Ports.scrollTo "main"
+        , Ports.setPageTitle <| Routing.getPageTitle newRoute
+        ]

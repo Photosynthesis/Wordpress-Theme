@@ -1,25 +1,24 @@
 module Update exposing (update)
 
-import Navigation
+import Commands
 import Messages exposing (Msg(..))
 import Model exposing (Model, paginationConfig)
 import Pagination exposing (Pagination)
-import Ports
 import Routing exposing (Route(..), FilterParam(..), reverse)
 
 
 updateUrl : Route -> Model -> ( Model, Cmd Msg )
 updateUrl route model =
     let
-        withUpdatedRoute =
-            { model | route = route }
+        updatedModel =
+            { model | route = route, searchString = updatedSearchString }
 
         jumpToPage page =
             let
                 ( updatedPagination, paginationCmd ) =
                     Pagination.jumpTo paginationConfig model.communities page
             in
-                ( { withUpdatedRoute | communities = updatedPagination }
+                ( { updatedModel | communities = updatedPagination }
                 , Cmd.map CommunityPagination paginationCmd
                 )
 
@@ -40,11 +39,14 @@ updateUrl route model =
         updatedRequestData =
             Pagination.getData model.communities
                 |> (\data -> { data | filters = filters, ordering = ordering })
+
+        updatedSearchString =
+            Routing.getSearchFilter filters |> Maybe.withDefault ""
     in
         if filters /= communityFilters || ordering /= communityOrdering then
             Pagination.updateData paginationConfig model.communities updatedRequestData
                 |> (\( m, c ) ->
-                        ( { withUpdatedRoute | communities = m }, Cmd.map CommunityPagination c )
+                        ( { updatedModel | communities = m }, Cmd.map CommunityPagination c )
                    )
         else if page /= Pagination.getPage model.communities then
             jumpToPage page
@@ -62,13 +64,31 @@ update msg model =
             updateUrl newRoute model
 
         NavigateTo newRoute ->
-            ( model
-            , Cmd.batch
-                [ Navigation.newUrl <| reverse newRoute
-                , Ports.scrollTo "main"
-                , Ports.setPageTitle <| Routing.getPageTitle newRoute
-                ]
+            ( model, Commands.newPage newRoute )
+
+        UpdateSearchString newString ->
+            ( { model | searchString = newString }
+            , Cmd.none
             )
+
+        SubmitSearchForm ->
+            let
+                newRoute =
+                    Routing.mapFilters replaceSearchFilter model.route
+                        |> Routing.mapPage (always 1)
+
+                replaceSearchFilter filters =
+                    case filters of
+                        (SearchFilter _) :: fs ->
+                            SearchFilter model.searchString :: fs
+
+                        f :: fs ->
+                            f :: replaceSearchFilter fs
+
+                        [] ->
+                            [ SearchFilter model.searchString ]
+            in
+                ( model, Commands.newPage newRoute )
 
         CommunityPagination subMsg ->
             let
