@@ -2,6 +2,11 @@
 /** Directory Shortcodes **/
 class DirectoryShortcodes
 {
+  /* Return the HTML div necessary for Elm to render to */
+  public static function render_elm() {
+    return "<div id='elm-directory'></div>";
+  }
+
   /** Return an Edit link for the Directory Listing if the Current User is an
    * Administrator. This is checked by checking for the `edit_plugins`
    * permission.
@@ -439,6 +444,7 @@ HTML;
 
 }
 
+add_shortcode('directory_elm', array('DirectoryShortcodes', 'render_elm'));
 add_shortcode('directory_show_edit_link_if_admin', array('DirectoryShortcodes', 'show_edit_link'));
 add_shortcode('directory_verify_listing_link', array('DirectoryShortcodes', 'verify_link'));
 add_shortcode('frm_cmty_name', array('DirectoryShortcodes', 'community_name'));
