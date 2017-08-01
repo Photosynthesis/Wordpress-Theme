@@ -198,9 +198,9 @@ filtersToQueryString filters =
                 )
                 filters
 
-        -- TODO: Sort filters first so we get consistent query strings
         filterString =
             otherFilters
+                |> List.sortBy toString
                 |> List.map filterParamToQueryString
                 |> String.join ","
                 |> (\s ->

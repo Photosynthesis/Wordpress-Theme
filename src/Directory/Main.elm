@@ -13,9 +13,6 @@ import Update exposing (update)
 import View exposing (view)
 
 
--- TODO: Docstrings for everything
-
-
 main : Program Never Model Msg
 main =
     Navigation.program (routeParser >> UrlChange)
