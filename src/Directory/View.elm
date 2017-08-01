@@ -36,8 +36,8 @@ view { communities, currentDate, route } =
     let
         communitiesHtml =
             if Pagination.isLoading communities then
-                Html.div [ class "loading my-4" ]
-                    [ Html.div [ class "text-primary text-center" ] [ text "Loading the latest Communities, please wait..." ]
+                Html.div [ class "loading" ]
+                    [ Html.div [ class "text-primary text-center" ] [ text "Loading..." ]
                     , Html.div [ class "progress align-middle" ]
                         [ Html.div [ class "progress-bar progress-bar-striped progress-bar-animated w-100" ] [] ]
                     ]
