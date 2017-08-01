@@ -29,6 +29,7 @@ class APIDirectory
    *    - visitors
    *    - members
    *    - membership
+   *    - search
    *
    * You can separate multiple choices with commas, or by submitting arrays
    * (`?visitors[]=Yes&visitors[]=No`).
@@ -99,6 +100,7 @@ class APIDirectory
         'id' => DirectoryDB::$spiritual_practices_field_id, 'compare' => '%LIKE%'),
     );
 
+    // Add Meta Filters
     foreach ($filters as $filter_param => $filter) {
       $filter_value = $data[$filter_param];
       if ($filter_value) {
@@ -127,6 +129,23 @@ SQL;
         $where_clauses = "(" . join(" OR ", $where_clauses) . ")";
         $wheres .= " AND {$where_clauses}";
       }
+    }
+
+    // Add Search Filter
+    if ($data['search']) {
+      $post_content_select = ", post_content";
+      if (is_array($data['search'])) { $data['search'] = join(" ", $data['search']); }
+      $search_values = explode(" ", $data['search']);
+      $selects[] = "posts.post_content";
+      $where_clauses = array();
+      foreach ($search_values as $search_value) {
+        $where_clauses[] = "posts.post_content LIKE '%{$search_value}%'";
+        $where_clauses[] = "posts.post_title LIKE '%{$search_value}%'";
+      }
+      $where_clauses = "(" . join(" OR ", $where_clauses) . ")";
+      $wheres .= " AND {$where_clauses}";
+    } else {
+      $post_content_select = "";
     }
 
     if (sizeof($selects) > 0) {
@@ -168,7 +187,7 @@ SELECT
   image_post_id_metas.meta_value AS image_post_id {$selects}
 FROM {$wpdb->prefix}frm_items AS items
 INNER JOIN
-  (SELECT ID, post_type, post_status, post_title, post_name
+  (SELECT ID, post_type, post_status, post_title, post_name {$post_content_select}
    FROM {$wpdb->prefix}posts AS posts
    WHERE (`post_type`='directory' AND `post_status`='publish')
   ) AS posts ON posts.ID=items.post_id
@@ -238,6 +257,7 @@ SQL;
     $entry['updated_at'] = date('c', strtotime($entry['updated_at']));
     $entry['created_at'] = date('c', strtotime($entry['created_at']));
     unset($entry['image_post_id']);
+    unset($entry['post_content']);
 
     if ($entry['post_title']) {
       $entry['name'] = $entry['post_title'];
