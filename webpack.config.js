@@ -2,6 +2,8 @@ var path = require("path");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 
+var isProduction = process.env.NODE_ENV == 'production';
+
 module.exports = {
   entry: {
     styles: [
@@ -26,7 +28,8 @@ module.exports = {
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/,],
-        loader: 'elm-webpack-loader?warn=true,verbose=true,debug=true',
+        loader: 'elm-webpack-loader?warn=true,verbose=true' +
+          (isProduction ? '' : ',debug=true'),
       },
       {
         test: /\.html$/,
