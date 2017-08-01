@@ -100,8 +100,23 @@ update msg model =
         CommunityPagination subMsg ->
             let
                 ( paginationModel, paginationCmd ) =
-                    Pagination.update subMsg model.communities
+                    Pagination.update paginationConfig subMsg model.communities
+
+                hasPageChanged =
+                    Tuple.first (Routing.getPageAndFilters model.route)
+                        /= Pagination.getPage paginationModel
+
+                pageChangeCmd =
+                    if hasPageChanged then
+                        model.route
+                            |> Routing.mapPage (always <| Pagination.getPage paginationModel)
+                            |> Commands.newPage
+                    else
+                        Cmd.none
             in
                 ( { model | communities = paginationModel }
-                , Cmd.map CommunityPagination paginationCmd
+                , Cmd.batch
+                    [ Cmd.map CommunityPagination paginationCmd
+                    , pageChangeCmd
+                    ]
                 )

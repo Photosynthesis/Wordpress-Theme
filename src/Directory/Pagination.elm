@@ -55,7 +55,7 @@ type Chunk a
 
 
 {-| The `Pagination` type is responsible for storing the fetched items, current
-page number, total count and a list of filters being applied to the items.
+page number, total count, and additional data to pass to the fetch command.
 -}
 type Pagination a b
     = Pagination
@@ -75,8 +75,8 @@ type alias FetchResponse a =
     }
 
 
-{-| The `Config` type is used to build a Fetch Request, given a list of Filters
-& a Page Number.
+{-| The `Config` type is used to build a Fetch Request, given the Pagination's
+Request Data & a Page Number.
 -}
 type Config a b
     = Config
@@ -160,8 +160,7 @@ getData (Pagination { requestData }) =
     requestData
 
 
-{-| Does the current page have no items? This will only be true if the page was
-fetched successfully but returned no items.
+{-| Did the current page load successfully but return no items?
 -}
 hasNone : Pagination a b -> Bool
 hasNone (Pagination { items, currentPage }) =
@@ -274,12 +273,23 @@ updateData config ((Pagination pagination) as model) newData =
 -- Update
 
 
+{-| Wrap an Http Response for a Page, to be handled in the `update` function.
+-}
 type Msg a
     = FetchPage Int (WebData (FetchResponse a))
 
 
-update : Msg a -> Pagination a b -> ( Pagination a b, Cmd (Msg a) )
-update msg (Pagination model) =
+{-| Update the Pagination Model on Fetch Completion.
+
+If the Page Number of the Returned Model is Different than the Given Model,
+We Were On a Page That Didn't Exist, So We Changed to the Last Page.
+
+You Should Handle this Special Case in your Update Function, so that You can
+Modify the Page URL.
+
+-}
+update : Config a b -> Msg a -> Pagination a b -> ( Pagination a b, Cmd (Msg a) )
+update config msg (Pagination model) =
     case msg of
         FetchPage page ((RemoteData.Failure e) as data) ->
             let
@@ -305,8 +315,14 @@ update msg (Pagination model) =
                             | totalCount = totalCount
                             , items = Dict.insert page (RemoteData.succeed newChunk) model.items
                         }
+
+                pageIsEmptyButPagesExist =
+                    List.isEmpty items && getTotalPages updatedModel > 0
             in
-                ( updatedModel, Cmd.none )
+                if pageIsEmptyButPagesExist && page == model.currentPage then
+                    jumpTo config updatedModel (getTotalPages updatedModel)
+                else
+                    ( updatedModel, Cmd.none )
 
         FetchPage page data ->
             let

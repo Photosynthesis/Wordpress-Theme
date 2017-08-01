@@ -248,7 +248,7 @@ pagination route communityPagination =
         backArrow =
             if Pagination.hasPrevious communityPagination then
                 Html.li [ class "page-item" ]
-                    [ navigateLink (Routing.mapPage (\x -> x - 1) route) "page-link" ("«") ]
+                    [ navigateLink (Routing.mapPage (always <| currentPage - 1) route) "page-link" ("«") ]
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "«" ] ]
@@ -256,7 +256,7 @@ pagination route communityPagination =
         forwardArrow =
             if Pagination.hasNext communityPagination then
                 Html.li [ class "page-item" ]
-                    [ navigateLink (Routing.mapPage (\x -> x + 1) route) "page-link" ("»") ]
+                    [ navigateLink (Routing.mapPage (always <| currentPage + 1) route) "page-link" ("»") ]
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "»" ] ]
