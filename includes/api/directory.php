@@ -16,9 +16,11 @@ class APIDirectory
    *
    * Responses are paginated by a fixed amount(currently 15). The page number
    * may be set via the `page` query parameter. The total item count is nested
-   * under the `totalCount` key.
+   * under the `totalCount` key. The entries are nested under the `listings`
+   * key.
    *
-   * Filtering may be done via the following query paramters:
+   *
+   * Filtering may be done via the following query parameters:
    *
    *    - description
    *    - status
@@ -31,9 +33,13 @@ class APIDirectory
    * You can separate multiple choices with commas, or by submitting arrays
    * (`?visitors[]=Yes&visitors[]=No`).
    *
-   * No ordering is currently supported.
    *
-   * The entries are nested under the `listings` key.
+   * Ordering may be done via the `order` query parameter. By default, the
+   * route will order results by Community Name. Valid values are:
+   *
+   *    - updated
+   *    - created
+   *
    *
    * Each entry has the following fields:
    *
@@ -45,12 +51,13 @@ class APIDirectory
    *    - createdAt
    *    - updatedAt
    *    - communityStatus
-   *    - communityType
+   *    - communityTypes
    *    - city
    *    - state
    *    - country
    *    - openToMembership
    *    - openToVisitors
+   *
    */
   public static function entries($data) {
     global $wpdb;
@@ -140,6 +147,19 @@ SQL;
     $limit = "LIMIT {$start}, {$per_page}";
 
 
+    // Build the Ordering
+    $ordering = $data['order'];
+    if ($ordering === 'updated') {
+      $order_by = "items.updated_at DESC";
+    } else if ($ordering === 'created') {
+      $order_by = "items.created_at DESC";
+    } else {
+      $order_by = "posts.post_title";
+    }
+    $order_by = "ORDER BY {$order_by}";
+
+
+    // Build & Run the Results Query
     $query = <<<SQL
 SELECT
   items.id, items.name, items.created_at, items.updated_at,
@@ -161,19 +181,23 @@ LEFT JOIN
    FROM {$wpdb->prefix}posts
    WHERE `post_type`='attachment'
   ) AS post_images ON post_images.ID={$meta_fields[DirectoryDB::$primary_image_field_id]}_metas.meta_value
+
 {$joins}
 
 WHERE (items.is_draft=0 AND items.form_id=2 {$wheres})
-ORDER BY posts.post_title
+
+{$order_by}
 {$limit}
 SQL;
 
     $entries = $wpdb->get_results($query, ARRAY_A);
 
+
     // Remove the Fields That Are Only Used For Filtering
     unset($meta_fields[DirectoryDB::$is_member_field_id]);
     unset($meta_fields[DirectoryDB::$description_field_id]);
 
+    // Get & Assign the Metas for each Entry
     foreach ($entries as &$entry) {
       $metas = DirectoryDB::get_metas($entry['id'], array_keys($meta_fields));
       foreach ($metas as $meta) {
@@ -183,11 +207,12 @@ SQL;
 
     $entries = array_map(array(self, 'clean_list_entry'), $entries);
 
+    // TODO: Remove after initial development & correctly handle no results in client
     if (empty($entries)) {
       return str_replace("\n", ' ', $query);
     }
 
-    // Get Total Listing Count
+    // Get Total Listing Count for the specified Query Parameters
     $total_count_query = <<<SQL
 SELECT COUNT(posts.ID) AS count {$selects}
 FROM {$wpdb->prefix}posts AS posts
