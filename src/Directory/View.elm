@@ -55,7 +55,10 @@ view { communities, currentDate, route } =
         Html.div []
             [ links
             , Html.div [ class "clearfix" ]
-                [ resultCount communities
+                [ if not <| List.isEmpty (Pagination.getCurrent communities) then
+                    resultCount communities
+                  else
+                    text ""
                 , filterHtml route
                 ]
             , communitiesHtml
