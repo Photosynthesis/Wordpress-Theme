@@ -24,13 +24,25 @@ updateUrl route model =
                 )
 
         communityFilters =
-            Pagination.getFilters model.communities
+            Pagination.getData model.communities
+                |> (\{ filters } -> filters)
+
+        communityOrdering =
+            Pagination.getData model.communities
+                |> (\{ ordering } -> ordering)
 
         ( page, filters ) =
             Routing.getPageAndFilters route
+
+        ordering =
+            Routing.getOrdering route
+
+        updatedRequestData =
+            Pagination.getData model.communities
+                |> (\data -> { data | filters = filters, ordering = ordering })
     in
-        if filters /= communityFilters then
-            Pagination.updateFilters paginationConfig model.communities filters
+        if filters /= communityFilters || ordering /= communityOrdering then
+            Pagination.updateData paginationConfig model.communities updatedRequestData
                 |> (\( m, c ) ->
                         ( { withUpdatedRoute | communities = m }, Cmd.map CommunityPagination c )
                    )

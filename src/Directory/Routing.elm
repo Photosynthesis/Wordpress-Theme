@@ -149,6 +149,8 @@ type Route
     | Coops Int (List FilterParam)
     | JewishCommunities Int (List FilterParam)
     | ChristianCommunities Int (List FilterParam)
+    | RecentlyUpdated Int (List FilterParam)
+    | RecentlyAdded Int (List FilterParam)
 
 
 getPageTitle : Route -> String
@@ -174,6 +176,12 @@ getPageTitle route =
 
         ChristianCommunities _ _ ->
             "Christian Communities"
+
+        RecentlyUpdated _ _ ->
+            "Recently Updated Communities"
+
+        RecentlyAdded _ _ ->
+            "Newest Communities"
 
 
 {-| Get filters that aren't inherent to the Route. For example, the `Communes`
@@ -203,6 +211,12 @@ getAdditionalFilters route =
         ChristianCommunities _ filters ->
             filters
 
+        RecentlyUpdated _ filters ->
+            filters
+
+        RecentlyAdded _ filters ->
+            filters
+
 
 {-| Get the filters that are inherent to a Route, ignoring any additional ones.
 For example, the `Communes` route will always return `[ CommunesFilter ]`.
@@ -230,6 +244,12 @@ getInherentFilters route =
 
         ChristianCommunities _ _ ->
             [ ReligiousFilter, ChristianFilter ]
+
+        RecentlyUpdated _ _ ->
+            []
+
+        RecentlyAdded _ _ ->
+            []
 
 
 getFilters : Route -> List FilterParam
@@ -262,6 +282,12 @@ getPageAndFilters route =
             ChristianCommunities page _ ->
                 page
 
+            RecentlyUpdated page _ ->
+                page
+
+            RecentlyAdded page _ ->
+                page
+
 
 toPageOne : Route -> (List FilterParam -> Route)
 toPageOne route =
@@ -286,6 +312,12 @@ toPageOne route =
 
         ChristianCommunities _ _ ->
             ChristianCommunities 1
+
+        RecentlyUpdated _ _ ->
+            RecentlyUpdated 1
+
+        RecentlyAdded _ _ ->
+            RecentlyAdded 1
 
 
 mapPage : (Int -> Int) -> Route -> Route
@@ -312,6 +344,30 @@ mapPage func route =
         ChristianCommunities page filters ->
             ChristianCommunities (func page) filters
 
+        RecentlyUpdated page filters ->
+            RecentlyUpdated (func page) filters
+
+        RecentlyAdded page filters ->
+            RecentlyAdded (func page) filters
+
+
+type Ordering
+    = UpdatedDate
+    | CreatedDate
+
+
+getOrdering : Route -> Maybe Ordering
+getOrdering route =
+    case route of
+        RecentlyUpdated _ _ ->
+            Just UpdatedDate
+
+        RecentlyAdded _ _ ->
+            Just CreatedDate
+
+        _ ->
+            Nothing
+
 
 parser : Parser (Route -> a) a
 parser =
@@ -330,6 +386,10 @@ parser =
         , map JewishCommunities (s "directory" </> s "jewish-communities" </> int <?> filterParams)
         , map (ChristianCommunities 1) (s "directory" </> s "christian-communities" <?> filterParams)
         , map ChristianCommunities (s "directory" </> s "christian-communities" </> int <?> filterParams)
+        , map (RecentlyUpdated 1) (s "directory" </> s "recently-updated" <?> filterParams)
+        , map RecentlyUpdated (s "directory" </> s "recently-updated" </> int <?> filterParams)
+        , map (RecentlyAdded 1) (s "directory" </> s "newest-communities" <?> filterParams)
+        , map RecentlyAdded (s "directory" </> s "newest-communities" </> int <?> filterParams)
         ]
 
 
@@ -378,6 +438,18 @@ reverse route =
 
             ChristianCommunities page filterParams ->
                 "christian-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+
+            RecentlyUpdated 1 filterParams ->
+                "recently-updated/" ++ filtersToQueryString filterParams
+
+            RecentlyUpdated page filterParams ->
+                "recently-updated/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+
+            RecentlyAdded 1 filterParams ->
+                "newest-communities/" ++ filtersToQueryString filterParams
+
+            RecentlyAdded page filterParams ->
+                "newest-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
 
 routeParser : Navigation.Location -> Route

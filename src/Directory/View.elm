@@ -7,6 +7,7 @@ import Json.Decode as Decode
 import Html exposing (Html, text)
 import Html.Attributes exposing (class, src, alt, href, name, type_, checked)
 import Html.Events exposing (onClick, onWithOptions, defaultOptions)
+import Commands exposing (CommunitiesRequestData)
 import Communities exposing (..)
 import Messages exposing (Msg(..))
 import Model exposing (Model)
@@ -73,24 +74,34 @@ view { communities, currentDate, route } =
             ]
 
 
-links : Html msg
+links : Html Msg
 links =
-    Html.div [ class "directory-header-links" ] <|
-        List.intersperse (text " | ") <|
+    let
+        staticLinks =
             List.map
                 (\( content, slug ) ->
                     Html.a [ href <| "/directory/" ++ slug ] [ text content ]
                 )
-                [ ( "Newest Communities", "newest-communities" )
-                , ( "Recently Updated", "recently-updated" )
-                , ( "Types", "community-types" )
+                [ ( "Types", "community-types" )
                 , ( "State/Country List", "intentional-communities-by-country" )
                 , ( "Maps", "map" )
                 , ( "Advanced Search", "search" )
                 ]
 
+        pageLinks =
+            List.map
+                (\( content, route ) ->
+                    navigateLink (route 1 []) "" content
+                )
+                [ ( "Newest Communities", RecentlyAdded )
+                , ( "Recently Updated", RecentlyUpdated )
+                ]
+    in
+        Html.div [ class "directory-header-links" ] <|
+            List.intersperse (text " | ") (pageLinks ++ staticLinks)
 
-resultCount : Pagination Community FilterParam -> Html Msg
+
+resultCount : Pagination Community CommunitiesRequestData -> Html Msg
 resultCount pagination =
     if not <| Pagination.hasNone pagination then
         Html.div [ class "float-left" ]
@@ -158,7 +169,7 @@ filterHtml route =
             List.map (annotate >> render) Routing.inlineFilters
 
 
-pagination : Route -> Pagination Community FilterParam -> List (Html Msg)
+pagination : Route -> Pagination Community CommunitiesRequestData -> List (Html Msg)
 pagination route communityPagination =
     let
         currentPage =
@@ -237,7 +248,7 @@ pagination route communityPagination =
                     text ""
               ]
             , middleNumbers
-            , [ if not (List.isEmpty endNumbers) then
+            , [ if not splitSections then
                     dots
                 else
                     text ""

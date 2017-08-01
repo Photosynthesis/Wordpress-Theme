@@ -12,7 +12,7 @@ module Pagination
         , getTotalPages
         , getTotalItems
         , getError
-        , getFilters
+        , getData
           -- Querying
         , isLoading
         , hasNone
@@ -22,9 +22,7 @@ module Pagination
         , moveNext
         , movePrevious
         , jumpTo
-        , addFilter
-        , removeFilter
-        , updateFilters
+        , updateData
           -- Update / Messages
         , Msg
         , update
@@ -63,7 +61,7 @@ type Pagination a b
         { items : Dict Int (WebData (Chunk a))
         , currentPage : Int
         , totalCount : Int
-        , filters : List b
+        , requestData : b
         }
 
 
@@ -81,13 +79,13 @@ type alias FetchResponse a =
 -}
 type Config a b
     = Config
-        { fetchRequest : List b -> Int -> Http.Request (FetchResponse a)
+        { fetchRequest : b -> Int -> Http.Request (FetchResponse a)
         }
 
 
 {-| Make a `Config` from a function that takes a list of Filters & a Page Number.
 -}
-makeConfig : (List b -> Int -> Http.Request (FetchResponse a)) -> Config a b
+makeConfig : (b -> Int -> Http.Request (FetchResponse a)) -> Config a b
 makeConfig fetchRequest =
     Config { fetchRequest = fetchRequest }
 
@@ -95,15 +93,15 @@ makeConfig fetchRequest =
 {-| Get an initial Pagination & Fetch Commands from a `Config`, list of Filters,
 & Page Number.
 -}
-initial : Config a b -> List b -> Int -> ( Pagination a b, Cmd (Msg a) )
-initial config filters page =
+initial : Config a b -> b -> Int -> ( Pagination a b, Cmd (Msg a) )
+initial config requestData page =
     let
         initialModel =
             Pagination
                 { items = Dict.empty
                 , currentPage = page
                 , totalCount = 0
-                , filters = filters
+                , requestData = requestData
                 }
     in
         ( initialModel
@@ -154,11 +152,11 @@ getError (Pagination { items, currentPage }) =
             Nothing
 
 
-{-| Return the Filters for the current Pagination.
+{-| Return the Extra Request Data for the current Pagination.
 -}
-getFilters : Pagination a b -> List b
-getFilters (Pagination { filters }) =
-    filters
+getData : Pagination a b -> b
+getData (Pagination { requestData }) =
+    requestData
 
 
 {-| Does the current page have no items? This will only be true if the page was
@@ -260,37 +258,15 @@ jumpTo (Config config) ((Pagination pagination) as model) page =
         ( updatedModel, getFetches (Config config) updatedModel )
 
 
-{-| Add a Filter to the Pagination, jumping to page 1 & performing new fetch
-requests. Does nothing if the Filter is already present.
+{-| Replace the current Extra Request Data, jumping to page 1 & performing new
+fetch requests. Does nothing if the Data is equal to existing Data.
 -}
-addFilter : Config a b -> Pagination a b -> b -> ( Pagination a b, Cmd (Msg a) )
-addFilter config ((Pagination pagination) as model) newFilter =
-    if List.member newFilter pagination.filters then
+updateData : Config a b -> Pagination a b -> b -> ( Pagination a b, Cmd (Msg a) )
+updateData config ((Pagination pagination) as model) newData =
+    if newData == pagination.requestData then
         ( model, Cmd.none )
     else
-        initial config (newFilter :: pagination.filters) 1
-
-
-{-| Remove a Filter from the Pagination, jumping to page 1 & performing new
-fetch requests. Does nothing if the Filter is not present.
--}
-removeFilter : Config a b -> Pagination a b -> b -> ( Pagination a b, Cmd (Msg a) )
-removeFilter config ((Pagination pagination) as model) filterToRemove =
-    if List.member filterToRemove pagination.filters then
-        initial config (List.filter (\f -> f /= filterToRemove) pagination.filters) 1
-    else
-        ( model, Cmd.none )
-
-
-{-| Replace the currents Filters with a new list of Filters, jumping to page 1
-& performing new fetch requests. Does nothing if the Filters are identical.
--}
-updateFilters : Config a b -> Pagination a b -> List b -> ( Pagination a b, Cmd (Msg a) )
-updateFilters config ((Pagination pagination) as model) newFilters =
-    if newFilters == pagination.filters then
-        ( model, Cmd.none )
-    else
-        initial config newFilters 1
+        initial config newData 1
 
 
 
@@ -373,7 +349,7 @@ getFetches (Config config) (Pagination pagination) =
 
         currentFetch =
             if not <| hasItems 0 then
-                config.fetchRequest pagination.filters currentPage
+                config.fetchRequest pagination.requestData currentPage
                     |> RemoteData.sendRequest
                     |> Cmd.map (FetchPage currentPage)
             else
@@ -381,7 +357,7 @@ getFetches (Config config) (Pagination pagination) =
 
         previousFetch =
             if not <| hasItems -1 then
-                config.fetchRequest pagination.filters (currentPage - 1)
+                config.fetchRequest pagination.requestData (currentPage - 1)
                     |> RemoteData.sendRequest
                     |> Cmd.map (FetchPage <| currentPage - 1)
             else
@@ -389,7 +365,7 @@ getFetches (Config config) (Pagination pagination) =
 
         nextFetch =
             if not <| hasItems 1 then
-                config.fetchRequest pagination.filters (currentPage + 1)
+                config.fetchRequest pagination.requestData (currentPage + 1)
                     |> RemoteData.sendRequest
                     |> Cmd.map (FetchPage <| currentPage + 1)
             else

@@ -1,14 +1,14 @@
 module Model exposing (Model, initial, paginationConfig)
 
 import Date exposing (Date)
-import Commands exposing (getCommunities)
+import Commands exposing (getCommunities, CommunitiesRequestData)
 import Communities exposing (Community)
 import Pagination exposing (Pagination)
 import Routing exposing (Route(..), FilterParam(..))
 
 
 type alias Model =
-    { communities : Pagination Community FilterParam
+    { communities : Pagination Community CommunitiesRequestData
     , currentDate : Maybe Date
     , route : Route
     }
@@ -20,8 +20,11 @@ initial route =
         ( page, filters ) =
             Routing.getPageAndFilters route
 
+        requestData =
+            CommunitiesRequestData filters (Routing.getOrdering route)
+
         ( communitiesPagination, paginationCmd ) =
-            Pagination.initial paginationConfig filters page
+            Pagination.initial paginationConfig requestData page
     in
         ( { communities = communitiesPagination
           , currentDate = Nothing
@@ -31,6 +34,6 @@ initial route =
         )
 
 
-paginationConfig : Pagination.Config Community FilterParam
+paginationConfig : Pagination.Config Community CommunitiesRequestData
 paginationConfig =
     Pagination.makeConfig getCommunities
