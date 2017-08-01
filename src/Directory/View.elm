@@ -286,7 +286,7 @@ pagination route communityPagination =
                     text ""
               ]
             , middleNumbers
-            , [ if not splitSections then
+            , [ if splitSections then
                     dots
                 else
                     text ""
