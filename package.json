@@ -19,7 +19,7 @@
     "bootstrap"
   ],
   "author": "Pavan Rikhi",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
     "css-loader": "^0.26.1",
