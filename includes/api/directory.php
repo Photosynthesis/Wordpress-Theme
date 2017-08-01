@@ -226,11 +226,6 @@ SQL;
 
     $entries = array_map(array(self, 'clean_list_entry'), $entries);
 
-    // TODO: Remove after initial development & correctly handle no results in client
-    if (empty($entries)) {
-      return str_replace("\n", ' ', $query);
-    }
-
     // Get Total Listing Count for the specified Query Parameters
     $total_count_query = <<<SQL
 SELECT COUNT(posts.ID) AS count {$selects}
