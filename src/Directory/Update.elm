@@ -54,6 +54,7 @@ update msg model =
             , Cmd.batch
                 [ Navigation.newUrl <| reverse newRoute
                 , Ports.scrollTo "main"
+                , Ports.setPageTitle <| Routing.getPageTitle newRoute
                 ]
             )
 

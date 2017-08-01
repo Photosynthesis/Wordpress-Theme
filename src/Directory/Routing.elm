@@ -151,6 +151,31 @@ type Route
     | ChristianCommunities Int (List FilterParam)
 
 
+getPageTitle : Route -> String
+getPageTitle route =
+    case route of
+        Listings _ _ ->
+            "Listings"
+
+        Communes _ _ ->
+            "Communes"
+
+        Ecovillages _ _ ->
+            "Ecovillages"
+
+        CohousingCommunities _ _ ->
+            "Cohousing Communities"
+
+        Coops _ _ ->
+            "Co-ops"
+
+        JewishCommunities _ _ ->
+            "Jewish Communities"
+
+        ChristianCommunities _ _ ->
+            "Christian Communities"
+
+
 {-| Get filters that aren't inherent to the Route. For example, the `Communes`
 route will never return a `CommunesFilter`.
 -}
