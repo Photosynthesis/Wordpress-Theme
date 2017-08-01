@@ -55,7 +55,7 @@ type Chunk a
 
 
 {-| The `Pagination` type is responsible for storing the fetched items, current
-page number, total count, and additional data to pass to the fetch command.
+page number, total count, and additional data to pass to the fetch command..
 -}
 type Pagination a b
     = Pagination

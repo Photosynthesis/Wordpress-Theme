@@ -114,7 +114,7 @@ view { communities, searchString, currentDate, route } =
 
         communitiesList =
             if Pagination.isLoading communities then
-                Html.div [ class "loading" ]
+                Html.div [ class "tall" ]
                     [ Html.div [ class "text-primary text-center" ] [ text "Loading..." ]
                     , Html.div [ class "progress align-middle" ]
                         [ Html.div [ class "progress-bar progress-bar-striped progress-bar-animated w-100" ] [] ]
@@ -125,6 +125,9 @@ view { communities, searchString, currentDate, route } =
                     , Html.a [ href "mailto:directory@ic.org" ] [ text "directory@ic.org" ]
                     , text "."
                     ]
+            else if Pagination.hasNone communities then
+                Html.div [ class "tall text-danger text-center" ]
+                    [ text "Sorry, we couldn't find any matching Communities." ]
             else
                 Html.div [ class "list-group directory-listings mt-2" ] <|
                     List.map (communityItem currentDate) <|
