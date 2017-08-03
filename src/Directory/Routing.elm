@@ -258,7 +258,7 @@ getPageTitle : Route -> String
 getPageTitle route =
     case route of
         Listings _ _ ->
-            "Listings"
+            "Community Directory"
 
         Communes _ _ ->
             "Communes"
