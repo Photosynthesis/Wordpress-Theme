@@ -25,10 +25,10 @@
 <div class='container-fluid nav-outer-container'>
 <div class='container'>
   <div id="nav-menu" class="row">
-    <div class="col-24 col-sm-12 push-sm-12 col-md-6 push-md-0 push-lg-18">
+    <div class="hidden visible-lg visible-xl col-lg-4 push-lg-20">
       <div class="google-search-div"><gcse:search></gcse:search></div>
     </div>
-    <div class="col-24 col-sm-12 pull-sm-12 col-md-24 pull-md-0 col-lg-18 pull-lg-6">
+    <div class="col-24 col-sm-12 pull-sm-12 col-md-24 pull-md-0 col-lg-20 pull-lg-4">
       <nav class="navbar navbar-inverse navbar-toggleable-sm">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
                 aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
