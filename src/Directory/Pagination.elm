@@ -131,7 +131,7 @@ getPage (Pagination { currentPage }) =
 -}
 getTotalPages : Pagination a b -> Int
 getTotalPages (Pagination { totalCount }) =
-    ceiling <| toFloat totalCount / toFloat 15
+    ceiling <| toFloat totalCount / toFloat 25
 
 
 {-| Get the total item count.

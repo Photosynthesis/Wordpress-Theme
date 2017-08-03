@@ -14,7 +14,7 @@ class APIDirectory
 
   /* Return All Published Entries.
    *
-   * Responses are paginated by a fixed amount(currently 15). The page number
+   * Responses are paginated by a fixed amount(currently 25). The page number
    * may be set via the `page` query parameter. The total item count is nested
    * under the `totalCount` key. The entries are nested under the `listings`
    * key.
@@ -158,7 +158,7 @@ SQL;
 
     // Build the Limit
     // TODO: Configurable per_page value
-    $per_page = 15;
+    $per_page = 25;
     $page = (int) $data['page'];
     $page = $page ? $page : 1;
     $page--;
