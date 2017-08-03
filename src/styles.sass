@@ -1,10 +1,9 @@
 $blue: #596A96
-$orange: #FBAF3B
+$orange: #F2663A
 $light-blue: #F0F8FF
 
 $header-blue: #586A96
 $background-blue: #666698
-$menu-orange: #F57241
 
 $brand-primary: $blue
 $brand-info: $light-blue
@@ -18,7 +17,9 @@ $grid-gutter-width-base: 15px
 $headings-font-family: Lora
 $font-size-base: 0.8rem
 
-$navbar-light-active-color: $menu-orange
+$navbar-inverse-color: black
+$navbar-inverse-active-color: white
+$navbar-inverse-toggler-border: rgba(black, .3)
 $navbar-padding-x: 0
 $navbar-padding-y: 0.2rem
 
@@ -69,6 +70,9 @@ h1, h2, h3, h4, h5
 .nav-outer-container
   background-color: $orange
   box-shadow: black 0px 6px 16px
+  .container
+    +media-breakpoint-down(md)
+      width: 100%
 
 #nav-menu
   nav.navbar
@@ -93,7 +97,7 @@ h1, h2, h3, h4, h5
         padding: 0.75em 1.25em
         color: black
       &.active > a
-        color: #F57241
+        color: white
       ul
         /* Remove Spacing for Continuous Hover Event */
         margin-top: 0
@@ -153,6 +157,7 @@ div.google-search-div
   div#google-search-div .gsib_b
     display: none
   td.gsc-search-button input.gsc-search-button
+    background-color: $orange
     /* Reduce width of search button */
     padding: 6px 15px
     /* Darken button border */
