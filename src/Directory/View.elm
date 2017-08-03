@@ -236,7 +236,7 @@ filterHtml route =
                 , Html.span [] [ text <| " " ++ filterText ]
                 ]
     in
-        Html.div [ class "float-right small directory-filters" ] <|
+        Html.div [ class "float-right directory-filters" ] <|
             List.map (annotate >> render) Routing.inlineFilters
 
 
