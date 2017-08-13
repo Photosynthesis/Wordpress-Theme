@@ -104,7 +104,9 @@ class APIDirectory
     foreach ($filters as $filter_param => $filter) {
       $filter_value = $data[$filter_param];
       if ($filter_value) {
-        $filter_value = join(",", $filter_value);
+        if (is_array($filter_value)) {
+          $filter_value = join(",", $filter_value);
+        }
         $field_id = $filter['id'];
         $selects[] = "{$meta_fields[$field_id]}_metas.meta_value AS {$meta_fields[$field_id]}";
         $joins[] = <<<SQL
@@ -132,6 +134,7 @@ SQL;
     }
 
     // Add Search Filter
+    // TODO: Will need to change this when we write our own detail view
     if ($data['search']) {
       $post_content_select = ", post_content";
       if (is_array($data['search'])) { $data['search'] = join(" ", $data['search']); }
