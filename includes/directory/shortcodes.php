@@ -298,13 +298,13 @@ class DirectoryShortcodes
           $countries_html = '';
           foreach ($countries as $country => $regions) {
               $country_total = array_sum($regions);
-              $country_url = "/directory/listings/?cmty-country=$country";
+              $country_url = "/directory/listings/?country=$country";
               if ($country === "United States")  {
                   $country_class = 'geo-us-state';
-                  $region_get_parameter = 'cmty-state';
+                  $region_get_parameter = 'state';
               } else {
                   $country_class = 'geo-state';
-                  $region_get_parameter = 'cmty-prov';
+                  $region_get_parameter = 'province';
               }
               $region_html = '';
               foreach ($regions as $region => $count) {
