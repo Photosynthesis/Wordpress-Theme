@@ -25,6 +25,9 @@ type FilterParam
     | ReligiousFilter
     | JewishFilter
     | ChristianFilter
+    | CountryFilter String
+    | StateFilter String
+    | ProvinceFilter String
     | SearchFilter String
 
 
@@ -75,6 +78,15 @@ filterParamToQueryString filter =
 
         ChristianFilter ->
             "christian"
+
+        CountryFilter str ->
+            str
+
+        StateFilter str ->
+            str
+
+        ProvinceFilter str ->
+            str
 
         SearchFilter str ->
             str
@@ -140,29 +152,33 @@ filterParams =
         )
 
 
-{-| Parse a `SearchFilter` From the QueryString.
--}
-searchParam : UrlParser.QueryParser (Maybe FilterParam -> b) b
-searchParam =
-    UrlParser.customParam "search"
-        (Maybe.map SearchFilter)
-
-
 {-| Parse a `SearchFilter` And/Or `FilterParam` List From the QueryString,
 Returning Them as a Single List.
 -}
 addQueryParams : a -> Parser a (List FilterParam -> b) -> Parser (b -> c) c
 addQueryParams route pathParser =
     let
-        applySearch filters maybeSearch =
+        addFilterIfExists filters maybeSearch =
             case maybeSearch of
                 Just filter ->
                     filter :: filters
 
                 Nothing ->
                     filters
+
+        withTopLevelFilter name filter parser =
+            map addFilterIfExists
+                (parser <?> UrlParser.customParam name (Maybe.map filter))
+
+        queryParser =
+            UrlParser.top
+                <?> filterParams
+                |> withTopLevelFilter "search" SearchFilter
+                |> withTopLevelFilter "country" CountryFilter
+                |> withTopLevelFilter "state" StateFilter
+                |> withTopLevelFilter "province" ProvinceFilter
     in
-        map route (pathParser </> map applySearch (UrlParser.top <?> filterParams <?> searchParam))
+        map route (pathParser </> queryParser)
 
 
 {-| Try to Pull a `SearchFilter` Out of a `FilterParam` List.
@@ -186,17 +202,53 @@ for a `SearchFilter`.
 filtersToQueryString : List FilterParam -> String
 filtersToQueryString filters =
     let
-        ( searchFilters, otherFilters ) =
-            List.partition
-                (\f ->
-                    case f of
-                        SearchFilter _ ->
-                            True
+        isSearch filter =
+            case filter of
+                SearchFilter _ ->
+                    True
 
-                        _ ->
-                            False
+                _ ->
+                    False
+
+        isCountry filter =
+            case filter of
+                CountryFilter _ ->
+                    True
+
+                _ ->
+                    False
+
+        isState filter =
+            case filter of
+                StateFilter _ ->
+                    True
+
+                _ ->
+                    False
+
+        isProvince filter =
+            case filter of
+                ProvinceFilter _ ->
+                    True
+
+                _ ->
+                    False
+
+        ( topLevelFilterString, otherFilters ) =
+            List.foldl
+                (\( topLevelFilter, topLevelParameterName ) ( topLevelFilterString, otherFilters ) ->
+                    List.partition topLevelFilter otherFilters
+                        |> Tuple.mapFirst (List.map (makeTopLevelParameter topLevelParameterName) >> String.join "&")
                 )
-                filters
+                ( "", filters )
+                [ ( isSearch, "search" )
+                , ( isCountry, "country" )
+                , ( isState, "state" )
+                , ( isProvince, "province" )
+                ]
+
+        makeTopLevelParameter parameterName filter =
+            parameterName ++ "=" ++ filterParamToQueryString filter
 
         filterString =
             otherFilters
@@ -209,19 +261,8 @@ filtersToQueryString filters =
                         else
                             ""
                    )
-
-        searchString =
-            case List.head searchFilters of
-                Just (SearchFilter "") ->
-                    ""
-
-                Just (SearchFilter str) ->
-                    "search=" ++ str
-
-                _ ->
-                    ""
     in
-        List.filter (not << String.isEmpty) [ filterString, searchString ]
+        List.filter (not << String.isEmpty) [ filterString, topLevelFilterString ]
             |> String.join "&"
             |> (\s ->
                     if String.isEmpty s then

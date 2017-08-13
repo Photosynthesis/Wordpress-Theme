@@ -109,6 +109,15 @@ filterToApiQuery filter =
         ChristianFilter ->
             "spiritual[]=Christian"
 
+        CountryFilter str ->
+            "country=" ++ str
+
+        StateFilter str ->
+            "state=" ++ str
+
+        ProvinceFilter str ->
+            "province=" ++ str
+
         SearchFilter str ->
             "search=" ++ str
 
