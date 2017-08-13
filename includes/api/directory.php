@@ -98,6 +98,12 @@ class APIDirectory
         'id' => DirectoryDB::$description_field_id, 'compare' => '%LIKE%'),
       'spiritual' => array(
         'id' => DirectoryDB::$spiritual_practices_field_id, 'compare' => '%LIKE%'),
+      'country' => array(
+        'id' => DirectoryDB::$country_field_id, 'compare' => '='),
+      'state' => array(
+        'id' => DirectoryDB::$state_field_id, 'compare' => '='),
+      'province' => array(
+        'id' => DirectoryDB::$province_field_id, 'compare' => '='),
     );
 
     // Add Meta Filters
