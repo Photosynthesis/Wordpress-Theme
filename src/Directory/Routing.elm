@@ -238,7 +238,11 @@ filtersToQueryString filters =
             List.foldl
                 (\( topLevelFilter, topLevelParameterName ) ( topLevelFilterString, otherFilters ) ->
                     List.partition topLevelFilter otherFilters
-                        |> Tuple.mapFirst (List.map (makeTopLevelParameter topLevelParameterName) >> String.join "&")
+                        |> Tuple.mapFirst
+                            (List.map (makeTopLevelParameter topLevelParameterName)
+                                >> (::) topLevelFilterString
+                                >> String.join "&"
+                            )
                 )
                 ( "", filters )
                 [ ( isSearch, "search" )
