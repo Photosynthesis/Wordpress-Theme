@@ -161,7 +161,7 @@ class ThemeWooCommerce
 
   /* Add A Flat Rate Shipping Charge for Applicable Items */
   const flat_shipping_rate_id = "flat_rate:6";
-  const flat_rate_product_ids = array(241496, 241521, 241526, 241530);
+  const flat_rate_variation_ids = array(241498, 241528, 241523);
   const us_flat_rate_cost = 7;
   const global_flat_rate_cost = 15;
   public static function add_flat_rate_charges($rates, $package) {
@@ -169,7 +169,7 @@ class ThemeWooCommerce
     $flat_rate_count = 0;
     foreach ($package['contents'] as $product) {
       $total_count += $product['quantity'];
-      if (array_search($product['product_id'], self::flat_rate_product_ids) !== false) {
+      if (array_search($product['variation_id'], self::flat_rate_variation_ids) !== false) {
         $flat_rate_count += $product['quantity'];
       }
     }
@@ -199,7 +199,7 @@ class ThemeWooCommerce
       $item_key = key($package['contents']);
       reset($package['contents']);
       $item = array_pop($package['contents']);
-      if (array_search($item['product_id'], self::flat_rate_product_ids) === false) {
+      if (array_search($item['variation_id'], self::flat_rate_variant_ids) === false) {
         $normal_items[$item_key] = $item;
       }
     }
