@@ -33,9 +33,6 @@
           <a href="http://www.communa.org.il/icsa" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sponsor_ICSA']); ">
             <img src="<?php echo $footer_logo_path; ?>icsa.jpg" alt="ICSA" title="ICSA" height="40" hspace="4" border="0">
           </a>
-          <a href="http://nica.ic.org/" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sponsor_NICA']); ">
-            <img src="<?php echo $footer_logo_path; ?>nica.jpg" alt="NICA" title="NICA" height="40" hspace="4" border="0">
-          </a>
           <a id="csa-footer-logo" href="http://www.communalstudies.org/" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sponsor_CSA']); ">
             <img src="<?php echo $footer_logo_path; ?>csa.gif" alt="Communal Studies Association" title="Communal Studies Association" height="50" hspace="4" border="0">
           </a>
