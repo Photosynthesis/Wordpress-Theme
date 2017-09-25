@@ -42,6 +42,8 @@ BACKUP_EMAIL_FIELD_ID = 284
 # The ID Number of the Formidable Field of the Year the Listing was Made
 LISTING_CREATED_FIELD_ID = 725
 
+LISTING_TYPE_FIELD_ID = 262
+
 # Whether or not to include all emails of a community, or just one
 INCLUDE_ALL_EMAILS = True
 
@@ -55,7 +57,10 @@ FILTER_LAST_UPDATED_AFTER = None
 
 # Filter out communities that have been last updated before this date. Set to
 # None to disable filtering.
-FILTER_LAST_UPDATED_BEFORE = datetime.datetime(2016, 2, 16)
+FILTER_LAST_UPDATED_BEFORE = None
+
+# Filter out communities that not of this type.
+FILTER_COMMUNITY_TYPE = 'ecovillage'
 
 
 def main():
@@ -87,7 +92,10 @@ def get_listing_contact_rows():
         LEFT JOIN (SELECT meta_value AS backup_email, item_id
                    FROM 3uOgy46w_frm_item_metas
                    WHERE field_id={4})
-             AS backup_metas ON items.id=backup_metas.item_id
+        LEFT JOIN (SELECT meta_value AS community_type, item_id
+                   FROM 3uOgy46w_frm_item_metas
+                   WHERE field_id={5})
+             AS community_types ON items.id=community_types.item_id
         LEFT JOIN (SELECT post_title, post_author, ID FROM 3uOgy46w_posts)
              AS posts ON items.post_id=posts.ID
         LEFT JOIN (SELECT user_email, display_name, ID FROM 3uOgy46w_users)
@@ -95,7 +103,8 @@ def get_listing_contact_rows():
         WHERE items.form_id={0}""".format(FORM_ID, CONTACT_EMAIL_FIELD_ID,
                                           CONTACT_NAME_FIELD_ID,
                                           LISTING_CREATED_FIELD_ID,
-                                          BACKUP_EMAIL_FIELD_ID)
+                                          BACKUP_EMAIL_FIELD_ID,
+                                          LISTING_TYPE_FIELD_ID)
     cursor = get_cursor()
     cursor.execute(listing_contacts_query)
     listing_rows = cursor.fetchall()
@@ -117,6 +126,9 @@ def filter_listing_rows(rows):
     if FILTER_LAST_UPDATED_BEFORE is not None:
         rows = [row for row in rows
                 if row['updated_at'] < FILTER_LAST_UPDATED_BEFORE]
+    if FILTER_COMMUNITY_TYPE is not None:
+        rows = [row for row in rows
+                if FILTER_COMMUNITY_TYPE.lower() in row['community_type'].lower()]
     return rows
 
 
