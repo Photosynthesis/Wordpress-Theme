@@ -17,7 +17,7 @@
             <img src="<?php echo $footer_logo_path; ?>nasco.jpg" alt="North American Students of Cooperation" title="North American Students of Cooperation" width="105" height="40" hspace="4" border="0">
           </a>
           <a href="http://gen.ecovillage.org" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sister_org_GEN']); ">
-            <img src="<?php echo $footer_logo_path; ?>gen.png" alt="Global Ecovillage Network" title="Global Ecovillage Network" width="105" height="40" hspace="4" border="0">
+            <img src="<?php echo $footer_logo_path; ?>gen.png" alt="Global Ecovillage Network" title="Global Ecovillage Network" width="168" height="40" hspace="4" border="0">
           </a>
         </div>
         <div class="mt-1 mb-1">
