@@ -202,6 +202,10 @@ INNER JOIN
   ) AS posts ON posts.ID=items.post_id
 LEFT JOIN
   (SELECT item_id, field_id, meta_value
+   FROM {$wpdb->prefix}frm_item_metas WHERE field_id=218)
+  AS public_metas ON public_metas.item_id=items.id
+LEFT JOIN
+  (SELECT item_id, field_id, meta_value
    FROM {$wpdb->prefix}frm_item_metas WHERE field_id=228)
   AS image_post_id_metas ON image_post_id_metas.item_id=items.id
 LEFT JOIN
@@ -212,7 +216,7 @@ LEFT JOIN
 
 {$joins}
 
-WHERE (items.is_draft=0 AND items.form_id=2 {$wheres})
+WHERE (items.is_draft=0 AND items.form_id=2 AND public_metas.meta_value <> "No" {$wheres})
 
 {$order_by}
 {$limit}
@@ -244,8 +248,12 @@ INNER JOIN
    FROM {$wpdb->prefix}frm_items
    WHERE form_id=2 AND is_draft=0
   ) AS items ON items.post_id=posts.ID
+LEFT JOIN
+  (SELECT item_id, field_id, meta_value
+   FROM {$wpdb->prefix}frm_item_metas WHERE field_id=218)
+  AS public_metas ON public_metas.item_id=items.id
 {$joins}
-WHERE post_type='directory' AND post_status='publish' {$wheres}
+WHERE post_type='directory' AND post_status='publish' AND public_metas.meta_value <> "No" {$wheres}
 SQL;
     $total_count = (int) $wpdb->get_row($total_count_query, ARRAY_A)['count'];
 
