@@ -24,6 +24,8 @@ load_include('users.php');
 /** Plugins **/
 /* Directory */
 load_include('directory.php');
+/* Newsletter - MailPoet & Hustle Pro */
+load_include('newsletter.php');
 /* WooCommerce */
 load_include('woocommerce.php');
 /* WPAdverts */
