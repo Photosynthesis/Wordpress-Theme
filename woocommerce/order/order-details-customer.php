@@ -10,78 +10,54 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see 	https://docs.woocommerce.com/document/template-structure/
+ * @see   https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.0.0
+ * @version 3.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+  exit;
 }
 ?>
-
 <section class="woocommerce-customer-details">
 
-	<h2><?php _e( 'Customer details', 'woocommerce' ); ?></h2>
+  <?php if ( ! wc_ship_to_billing_address_only() && $order->needs_shipping_address() ) : ?>
 
-	<table class="table table-sm woocommerce-table woocommerce-table--customer-details shop_table customer_details">
+  <section class="woocommerce-columns woocommerce-columns--2 woocommerce-columns--addresses col2-set addresses row">
 
-		<?php if ( $order->get_customer_note() ) : ?>
-			<tr>
-				<th><?php _e( 'Note:', 'woocommerce' ); ?></th>
-				<td><?php echo wptexturize( $order->get_customer_note() ); ?></td>
-			</tr>
-		<?php endif; ?>
+    <div class="woocommerce-column woocommerce-column--1 woocommerce-column--billing-address col-12">
 
-		<?php if ( $order->get_billing_email() ) : ?>
-			<tr>
-				<th><?php _e( 'Email:', 'woocommerce' ); ?></th>
-				<td><?php echo esc_html( $order->get_billing_email() ); ?></td>
-			</tr>
-		<?php endif; ?>
+      <?php endif; ?>
 
-		<?php if ( $order->get_billing_phone() ) : ?>
-			<tr>
-				<th><?php _e( 'Phone:', 'woocommerce' ); ?></th>
-				<td><?php echo esc_html( $order->get_billing_phone() ); ?></td>
-			</tr>
-		<?php endif; ?>
+      <h3 class="woocommerce-column__title"><?php _e( 'Billing address', 'woocommerce' ); ?></h3>
 
-		<?php do_action( 'woocommerce_order_details_after_customer_details', $order ); ?>
+      <address>
+        <?php echo ( $address = $order->get_formatted_billing_address() ) ? $address : __( 'N/A', 'woocommerce' ); ?>
+          <?php if ( $order->get_billing_phone() ) : ?>
+            <p class="woocommerce-customer-details--phone"><?php echo esc_html( $order->get_billing_phone() ); ?></p>
+          <?php endif; ?>
+          <?php if ( $order->get_billing_email() ) : ?>
+            <p class="woocommerce-customer-details--email"><?php echo esc_html( $order->get_billing_email() ); ?></p>
+          <?php endif; ?>
+        </address>
 
-	</table>
+      <?php if ( ! wc_ship_to_billing_address_only() && $order->needs_shipping_address() ) : ?>
 
-	<?php if ( ! wc_ship_to_billing_address_only() && $order->needs_shipping_address() ) : ?>
+    </div><!-- /.col-1 -->
 
-	<section class="woocommerce-columns woocommerce-columns--2 woocommerce-columns--addresses col2-set addresses row">
+    <div class="woocommerce-column woocommerce-column--2 woocommerce-column--shipping-address col-12">
 
-		<div class="woocommerce-column woocommerce-column--1 woocommerce-column--billing-address col-12">
+      <h3 class="woocommerce-column__title"><?php _e( 'Shipping address', 'woocommerce' ); ?></h3>
 
-			<?php endif; ?>
+      <address>
+        <?php echo ( $address = $order->get_formatted_shipping_address() ) ? $address : __( 'N/A', 'woocommerce' ); ?>
+      </address>
 
-			<h3 class="woocommerce-column__title"><?php _e( 'Billing address', 'woocommerce' ); ?></h3>
+    </div><!-- /.col-2 -->
 
-			<address>
-				<?php echo ( $address = $order->get_formatted_billing_address() ) ? $address : __( 'N/A', 'woocommerce' ); ?>
-			</address>
+  </section><!-- /.col2-set -->
 
-			<?php if ( ! wc_ship_to_billing_address_only() && $order->needs_shipping_address() ) : ?>
-
-		</div><!-- /.col-1 -->
-
-		<div class="woocommerce-column woocommerce-column--2 woocommerce-column--shipping-address col-12">
-
-			<h3 class="woocommerce-column__title"><?php _e( 'Shipping address', 'woocommerce' ); ?></h3>
-
-			<address>
-				<?php echo ( $address = $order->get_formatted_shipping_address() ) ? $address : __( 'N/A', 'woocommerce' ); ?>
-			</address>
-
-		</div><!-- /.col-2 -->
-
-	</section><!-- /.col2-set -->
-
-	<?php endif; ?>
+  <?php endif; ?>
 
 </section>

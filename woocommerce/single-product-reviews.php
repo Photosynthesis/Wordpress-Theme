@@ -13,7 +13,7 @@
  * @see       https://docs.woocommerce.com/document/template-structure/
  * @author    WooThemes
  * @package   WooCommerce/Templates
- * @version     2.3.2
+ * @version     3.2.0
  */
 if ( ! defined( 'ABSPATH' ) ) {
   exit; // Exit if accessed directly
@@ -28,6 +28,15 @@ if ( ! comments_open() ) {
 ?>
 <div id="reviews" class="woocommerce-Reviews">
   <div id="comments">
+    <h2 class="woocommerce-Reviews-title"><?php
+      if ( get_option( 'woocommerce_enable_review_rating' ) === 'yes' && ( $count = $product->get_review_count() ) ) {
+        /* translators: 1: reviews count 2: product name */
+        printf( esc_html( _n( '%1$s review for %2$s', '%1$s reviews for %2$s', $count, 'woocommerce' ) ), esc_html( $count ), '<span>' . get_the_title() . '</span>' );
+      } else {
+        _e( 'Reviews', 'woocommerce' );
+      }
+    ?></h2>
+
     <?php if ( have_comments() ) : ?>
 
       <ol class="commentlist">
