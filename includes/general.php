@@ -173,6 +173,44 @@ CSS;
     echo "\n</div></div>\n";
     get_footer();
   }
+
+  /* Disable Automatic Paragraph Breaks on Specific Posts & Post Types. */
+  public static function auto_paragraphs($post_content) {
+    global $post;
+    $home_page_id = 14986;
+    $excluded =
+      (get_post_type() == 'directory')
+      || ($post->ID === $home_page_id);
+    if ($excluded) {
+      return $post_content;
+    }
+    return wpautop($post_content);
+  }
+
+  /* Generate the Recent Posts Section of the Home Page */
+  public static function recent_posts() {
+    $posts = wp_get_recent_posts(array(
+      'numberposts' => 4,
+      'post_type' => 'post',
+      'post_status' => 'publish',
+    ), OBJECT);
+    $output = "";
+    foreach ($posts as $recent_post) {
+      $thumbnail_element = get_the_post_thumbnail(
+        $recent_post, array(0, 250), array('class' => 'img-fluid mb-2', 'style' => 'height:200px;')
+      );
+      $post_title = $recent_post->post_title;
+      $post_name = $recent_post->post_name;
+      $post_author = get_the_author($recent_post->post_author);
+
+      $output .= "<div class='col-sm-12 col-md-6'>\n";
+      $output .= "<a href='/{$post_name}'>" . $thumbnail_element . "</a>\n";
+      $output .= "<h4><a href='/{$post_name}'>{$post_title}</a></h4>\n";
+      $output .= "<div class='text-muted'>By {$post_author}.</div>";
+      $output .= "</div>\n";
+    }
+    return $output;
+  }
 }
 
 ThemeGeneral::enable_support();
@@ -188,5 +226,8 @@ add_action('login_headerurl', array('ThemeGeneral', 'customize_login_logo_url'))
 add_action('login_headertitle', array('ThemeGeneral', 'customize_login_logo_title'));
 add_filter('excerpt_more', array('ThemeGeneral', 'post_excerpt_link'));
 add_filter('comments_array', array('ThemeGeneral', 'reverse_comments'));
+remove_filter('the_content', 'wpautop');
+add_filter('the_content', array('ThemeGeneral', 'auto_paragraphs'));
+add_shortcode('homepage_recent_posts_widget', array('ThemeGeneral', 'recent_posts'));
 
 ?>
