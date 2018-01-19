@@ -240,5 +240,6 @@ remove_filter('the_content', 'wpautop');
 add_filter('the_content', array('ThemeGeneral', 'auto_paragraphs'));
 add_filter('user_can_richedit', array('ThemeGeneral', 'remove_richtext_editor'));
 add_shortcode('homepage_recent_posts_widget', array('ThemeGeneral', 'recent_posts'));
+add_filter('category_description', 'do_shortcode');
 
 ?>
