@@ -25,7 +25,7 @@
 <div class='container-fluid nav-outer-container'>
 <div class='container'>
   <div id="nav-menu" class="row">
-    <div class="hidden visible-lg visible-xl col-lg-4 push-lg-20">
+    <div class="d-none d-lg-block col-lg-4 push-lg-20">
       <div class="google-search-div"><gcse:search></gcse:search></div>
     </div>
     <div class="col-24 col-sm-12 pull-sm-12 col-md-24 pull-md-0 col-lg-20 pull-lg-4">
@@ -65,7 +65,7 @@
         <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-fic.png'; ?>" alt="FIC" />
       </a>
     </div>
-    <div class="col text-right hidden-xs-down">
+    <div class="col text-right d-none d-sm-block">
       <div id="greeting-logout"><?php
           $current_user = wp_get_current_user();
           if (is_user_logged_in()) {
@@ -85,7 +85,7 @@
         <a class="btn btn-sm btn-secondary" href='<?php echo get_permalink(14602); ?>'>Membership</a>
         <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>Donate</a>
       </div>
-      <div class="google-search-div hidden-sm-down hidden-lg-up">
+      <div class="google-search-div d-none d-sm-block d-lg-none">
         <script>
           (function() {
             var cx = 'partner-pub-4810885975061329:dhwcft-rc6r';
