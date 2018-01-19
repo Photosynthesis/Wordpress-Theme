@@ -187,6 +187,16 @@ CSS;
     return wpautop($post_content);
   }
 
+  /* Disable the Visual Editor on Specific Pages */
+  public static function remove_richtext_editor($can_use) {
+    global $post;
+
+    if ($post->ID == 14986) {
+      return false;
+    }
+    return $can_use;
+  }
+
   /* Generate the Recent Posts Section of the Home Page */
   public static function recent_posts() {
     $posts = wp_get_recent_posts(array(
@@ -228,6 +238,7 @@ add_filter('excerpt_more', array('ThemeGeneral', 'post_excerpt_link'));
 add_filter('comments_array', array('ThemeGeneral', 'reverse_comments'));
 remove_filter('the_content', 'wpautop');
 add_filter('the_content', array('ThemeGeneral', 'auto_paragraphs'));
+add_filter('user_can_richedit', array('ThemeGeneral', 'remove_richtext_editor'));
 add_shortcode('homepage_recent_posts_widget', array('ThemeGeneral', 'recent_posts'));
 
 ?>
