@@ -207,16 +207,17 @@ CSS;
     $output = "";
     foreach ($posts as $recent_post) {
       $thumbnail_element = get_the_post_thumbnail(
-        $recent_post, array(0, 250), array('class' => 'img-fluid mb-2', 'style' => 'height:200px;')
+        $recent_post, array(0, 250), array('class' => 'img-fluid mb-2')
       );
       $post_title = $recent_post->post_title;
       $post_name = $recent_post->post_name;
-      $post_author = get_the_author($recent_post->post_author);
+      $post_author = get_the_author_meta('display_name', $recent_post->post_author);
+      $author_url = get_author_posts_url($recent_post->post_author);
 
-      $output .= "<div class='col-sm-12 col-md-6'>\n";
-      $output .= "<a href='/{$post_name}'>" . $thumbnail_element . "</a>\n";
-      $output .= "<h4><a href='/{$post_name}'>{$post_title}</a></h4>\n";
-      $output .= "<div class='text-muted'>By {$post_author}.</div>";
+      $output .= "<div class='col-sm-12 col-lg-6 d-flex flex-column text-center mb-3'>\n";
+      $output .= "<a href='/{$post_name}' class='my-auto'>" . $thumbnail_element . "</a>\n";
+      $output .= "<h4 class='mt-auto'><a href='/{$post_name}'>{$post_title}</a></h4>\n";
+      $output .= "<div class='text-muted'>By <a href='{$author_url}'>{$post_author}</a>.</div>";
       $output .= "</div>\n";
     }
     return $output;
