@@ -596,13 +596,13 @@ reverse route =
                 "cohousing-communities/" ++ filtersToQueryString filterParams
 
             CohousingCommunities page filterParams ->
-                "cohousing-communities/" ++ toString int ++ "/" ++ filtersToQueryString filterParams
+                "cohousing-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
             Coops 1 filterParams ->
                 "co-ops/" ++ filtersToQueryString filterParams
 
             Coops page filterParams ->
-                "co-ops/" ++ toString int ++ "/" ++ filtersToQueryString filterParams
+                "co-ops/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
             JewishCommunities 1 filterParams ->
                 "jewish-communities/" ++ filtersToQueryString filterParams
