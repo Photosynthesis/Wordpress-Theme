@@ -176,6 +176,7 @@ class ThemeWooCommerce
 
     $flat_rate_cost = $package['destination']['country'] === 'US' ?
       self::us_flat_rate_cost : self::global_flat_rate_cost;
+    $flat_rate_cost *= $flat_rate_count;
 
     if ($flat_rate_count === $total_count) {
       // No Items
