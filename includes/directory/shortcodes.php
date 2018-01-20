@@ -180,7 +180,7 @@ class DirectoryShortcodes
                 'text' => 'Accepting New Members'),
           array('param' => 'community_status', 'value' => 'Established',
                 'text' => 'Established'),
-          array('param' => 'community_status', 'value' => 'Forming,%20Re-forming',
+          array('param' => 'community_status', 'value' => 'Forming, Re-forming',
                 'text' => 'Forming'),
           array('param' => 'fic_member', 'value' => 'Yes', 'text' => 'FIC Member')
 
@@ -189,7 +189,7 @@ class DirectoryShortcodes
       // Check if a filter is used
       foreach ($filters as &$filter) {
           $filter['used'] = array_key_exists($filter['param'], $_GET) &&
-              strpos($_GET[$filter['param']], $filter['value']) !== false;
+              strpos(urldecode($_GET[$filter['param']]), $filter['value']) !== false;
       }
 
       // Build the HTML
