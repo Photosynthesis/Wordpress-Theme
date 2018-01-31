@@ -2,6 +2,10 @@
 /** General Site & Layout Functions **/
 class ThemeGeneral
 {
+  /** Special Page IDs **/
+  public static $home_page_id = 14986;
+  public static $development_page_id = 255787;
+
   /** General Theme Functions **/
 
   /* Enable Support for Various Theme Features */
@@ -177,10 +181,10 @@ CSS;
   /* Disable Automatic Paragraph Breaks on Specific Posts & Post Types. */
   public static function auto_paragraphs($post_content) {
     global $post;
-    $home_page_id = 14986;
     $excluded =
       (get_post_type() == 'directory')
-      || ($post->ID === $home_page_id);
+      || ($post->ID === ThemeGeneral::$home_page_id)
+      || ($post->ID === ThemeGeneral::$development_page_id);
     if ($excluded) {
       return $post_content;
     }
@@ -191,7 +195,8 @@ CSS;
   public static function remove_richtext_editor($can_use) {
     global $post;
 
-    if ($post->ID == 14986) {
+    if ($post->ID === ThemeGeneral::$home_page_id ||
+        $post->ID === ThemeGeneral::$development_page_id) {
       return false;
     }
     return $can_use;
