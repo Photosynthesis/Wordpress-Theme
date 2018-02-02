@@ -13,7 +13,7 @@
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.1.0
+ * @version 3.3.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,10 +32,10 @@ do_action( 'woocommerce_before_cart' ); ?>
     <thead>
       <tr>
         <th class="product-thumbnail">&nbsp;</th>
-        <th class="product-name"><?php _e( 'Product', 'woocommerce' ); ?></th>
-        <th class="product-price"><?php _e( 'Price', 'woocommerce' ); ?></th>
-        <th class="product-quantity text-center"><?php _e( 'Quantity', 'woocommerce' ); ?></th>
-        <th class="product-subtotal"><?php _e( 'Total', 'woocommerce' ); ?></th>
+        <th class="product-name"><?php esc_html_e( 'Product', 'woocommerce' ); ?></th>
+        <th class="product-price"><?php esc_html_e( 'Price', 'woocommerce' ); ?></th>
+        <th class="product-quantity text-center"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?></th>
+        <th class="product-subtotal"><?php esc_html_e( 'Total', 'woocommerce' ); ?></th>
         <th class="product-remove">&nbsp;</th>
       </tr>
     </thead>
@@ -75,7 +75,7 @@ do_action( 'woocommerce_before_cart' ); ?>
               </strong><?php
 
                 // Meta data
-                echo WC()->cart->get_item_data( $cart_item );
+                echo wc_get_formatted_cart_item_data( $cart_item );
 
                 // Backorder notification
                 if ( $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ) {
@@ -100,6 +100,7 @@ do_action( 'woocommerce_before_cart' ); ?>
                     'input_value' => $cart_item['quantity'],
                     'max_value'   => $_product->get_max_purchase_quantity(),
                     'min_value'   => '0',
+                    'product_name' => $_product->get_name(),
                   ), $_product, false );
                   $product_quantity = str_replace('col-6', '', $product_quantity);
                 }
@@ -118,7 +119,7 @@ do_action( 'woocommerce_before_cart' ); ?>
               <?php
                 echo apply_filters( 'woocommerce_cart_item_remove_link', sprintf(
                   '<a href="%s" class="text-danger h4 remove" aria-label="%s" data-product_id="%s" data-product_sku="%s">&times;</a>',
-                  esc_url( WC()->cart->get_remove_url( $cart_item_key ) ),
+                  esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
                   __( 'Remove this item', 'woocommerce' ),
                   esc_attr( $product_id ),
                   esc_attr( $_product->get_sku() )
@@ -140,13 +141,15 @@ do_action( 'woocommerce_before_cart' ); ?>
           <?php if ( wc_coupons_enabled() ) { ?>
             <div class='form-inline d-inline'>
               <div class="coupon float-left">
-                <label class='sr-only' for="coupon_code"><?php _e( 'Coupon:', 'woocommerce' ); ?></label> <input type="text" name="coupon_code" class="form-control form-control-sm input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" /> <input type="submit" class="button btn btn-sm btn-secondary" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>" />
+                <label class='sr-only' for="coupon_code"><?php esc_html_e( 'Coupon:', 'woocommerce' ); ?></label> <input type="text" name="coupon_code" class="form-control form-control-sm input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" /> <input type="submit" class="button btn btn-sm btn-secondary" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>" />
                 <?php do_action( 'woocommerce_cart_coupon' ); ?>
               </div>
             </div>
           <?php } ?>
 
-          <input type="submit" class="float-right button btn btn-secondary btn-sm" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'woocommerce' ); ?>" />
+          <button type="submit" class="float-right button btn btn-secondary btn-sm" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'woocommerce' ); ?>">
+            <?php esc_html_e('Update cart', 'woocommerce'); ?>
+          </button>
 
           <?php do_action( 'woocommerce_cart_actions' ); ?>
 
@@ -164,7 +167,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 <div class="cart-collaterals clearfix">
   <?php
     /**
-     * woocommerce_cart_collaterals hook.
+     * Cart collaterals hook.
      *
      * @hooked woocommerce_cross_sell_display
      * @hooked woocommerce_cart_totals - 10

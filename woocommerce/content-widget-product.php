@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying product widget entries
+ * The template for displaying product widget entries.
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/content-widget-product.php.
  *
@@ -13,10 +13,9 @@
  * @see   https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.5.0
+ * @version 3.3.0
  */
 
-// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
@@ -24,10 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $product; ?>
 
 <a class='list-group-item list-group-item-action text-center' href="<?php echo esc_url( $product->get_permalink() ); ?>">
+  <?php do_action('woocommerce_widget_product_item_start', $args); ?>
   <?php echo $product->get_image('post-thumbnail', array('class' => 'mw-100 h-auto mx-auto')); ?>
   <h5 class="product-title mt-2 w-100"><?php echo $product->get_name(); ?></h5>
   <?php if ( ! empty( $show_rating ) ) : ?>
     <?php echo wc_get_rating_html( $product->get_average_rating() ); ?>
   <?php endif; ?>
   <span class='font-weight-bold price w-100'><?php echo $product->get_price_html(); ?></span>
+  <?php do_action('woocommerce_widget_product_item_end', $args); ?>
 </a>

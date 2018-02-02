@@ -15,7 +15,7 @@
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.2.0
+ * @version 3.3.0
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -58,7 +58,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                   <?php echo $product_name; ?>
                 </a>
               <?php endif; ?><br />
-              <?php echo WC()->cart->get_item_data( $cart_item ); ?>
+              <?php echo wc_get_formatted_cart_item_data( $cart_item ); ?>
               <?php echo apply_filters( 'woocommerce_widget_cart_item_quantity', '<span class="quantity">' . sprintf( '<small class="text-muted">%s &times;</small> <span class="price">%s</span>', $cart_item['quantity'], $product_price ) . '</span>', $cart_item, $cart_item_key ); ?>
             </td>
 
@@ -66,7 +66,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
               <?php
               echo apply_filters( 'woocommerce_cart_item_remove_link', sprintf(
                 '<a href="%s" class="text-danger remove remove_from_cart_button aria-label="%s" data-product_id="%s" data-cart_item_key="%s" data-product_sku="%s">&times;</a>',
-                esc_url( WC()->cart->get_remove_url( $cart_item_key ) ),
+                esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
                 __( 'Remove this item', 'woocommerce' ),
                 esc_attr( $product_id ),
                 esc_attr( $cart_item_key ),

@@ -13,11 +13,11 @@
  * @see       https://docs.woocommerce.com/document/template-structure/
  * @author    WooThemes
  * @package   WooCommerce/Templates
- * @version     1.6.4
+ * @version   3.3.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-  exit; // Exit if accessed directly
+  exit;
 }
 
 if ( ! $messages ) {
@@ -25,7 +25,7 @@ if ( ! $messages ) {
 }
 
 ?>
-<div class="alert alert-danger woocommerce-error clearfix">
+<div class="alert alert-danger woocommerce-error clearfix" role='alert'>
 <?php
   if (sizeof($messages) > 1) { echo '<ul>'; }
     foreach ( $messages as $message ) {

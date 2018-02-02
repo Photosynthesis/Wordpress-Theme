@@ -13,11 +13,11 @@
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.2
+ * @version 3.3.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-  exit; // Exit if accessed directly
+  exit; // Exit if accessed directly.
 }
 
 if ( ! wc_coupons_enabled() ) {
@@ -35,7 +35,7 @@ if ( empty( WC()->cart->applied_coupons ) ) {
     <div class='form-inline'>
       <div class='form-group'>
         <input type="text" name="coupon_code" class="mr-2 form-control input-text" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" id="coupon_code" value="" />
-        <input type="submit" class="btn btn-secondary button" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>" />
+        <button type="submit" class="btn btn-secondary button" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e('Apply coupon', 'woocommerce'); ?></button>
       </div>
     </div>
   </div></div>
