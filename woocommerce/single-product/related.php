@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( $related_products ) : ?>
 
-  <section class="related products">
+  <section class="related products w-100">
 
     <h2 class='mt-1 mb-4'><?php esc_html_e( 'Related Products', 'woocommerce' ); ?></h2>
 

@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( $upsells ) : ?>
 
-    <section class="up-sells upsells products">
+    <section class="up-sells upsells products w-100">
 
         <h2 class='mb-4'><?php esc_html_e( 'You may also like&hellip;', 'woocommerce' ) ?></h2>
 
