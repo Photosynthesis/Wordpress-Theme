@@ -19,18 +19,15 @@ class ThemeNewsletter
 
       $user_data = array('email' => $form_data['email']);
       if (isset($form_data['first_name'])) {
-      $user_data['firstname'] = $form_data['first_name'];
+      $user_data['first_name'] = $form_data['first_name'];
       }
       if (isset($form_data['last_name'])) {
-      $user_data['lastname'] = $form_data['last_name'];
+      $user_data['last_name'] = $form_data['last_name'];
       }
 
-      $mailpoet_data = array(
-      'user' => $user_data,
-      'user_list' => array('list_ids' => array('1')),
-      );
-      $mp_helper = WYSIJA::get('user', 'helper');
-      $mp_helper->addSubscriber($mailpoet_data);
+      try {
+        \MailPoet\API\API::MP('v1')->addSubscriber($user_data, array('3'));
+      } catch (Exception $e) {}
     }
 
     $hustle_ajax = new Opt_In_Front_Ajax($hustle);
