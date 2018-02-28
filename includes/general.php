@@ -227,6 +227,14 @@ CSS;
     }
     return $output;
   }
+
+  /* Allow eBook Uploads */
+  public static function allow_ebook_mimes($mimes) {
+    return array_merge($mimes, array(
+      'epub' => 'application/epub+zip',
+      'mobi' => 'application/x-mobipocket-ebook',
+    ));
+  }
 }
 
 ThemeGeneral::enable_support();
@@ -247,5 +255,6 @@ add_filter('the_content', array('ThemeGeneral', 'auto_paragraphs'));
 add_filter('user_can_richedit', array('ThemeGeneral', 'remove_richtext_editor'));
 add_shortcode('homepage_recent_posts_widget', array('ThemeGeneral', 'recent_posts'));
 add_filter('category_description', 'do_shortcode');
+add_filter('upload_mimes', array('ThemeGeneral', 'allow_ebook_mimes'));
 
 ?>
