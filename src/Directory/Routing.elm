@@ -22,6 +22,8 @@ type FilterParam
     | EcovillagesFilter
     | CohousingFilter
     | CoopFilter
+    | SharedHousingFilter
+    | StudentHousingFilter
     | ReligiousFilter
     | JewishFilter
     | ChristianFilter
@@ -69,6 +71,12 @@ filterParamToQueryString filter =
 
         CoopFilter ->
             "coops"
+
+        SharedHousingFilter ->
+            "sharedHousing"
+
+        StudentHousingFilter ->
+            "studentHousing"
 
         ReligiousFilter ->
             "religious"
@@ -123,6 +131,12 @@ parseFilterParam str =
 
         "coops" ->
             Just CoopFilter
+
+        "sharedHousing" ->
+            Just SharedHousingFilter
+
+        "studentHousing" ->
+            Just SharedHousingFilter
 
         "religious" ->
             Just ReligiousFilter
@@ -291,6 +305,9 @@ type Route
     | Ecovillages Int (List FilterParam)
     | CohousingCommunities Int (List FilterParam)
     | Coops Int (List FilterParam)
+    | SharedHousing Int (List FilterParam)
+    | StudentHousing Int (List FilterParam)
+    | ReligiousCommunities Int (List FilterParam)
     | JewishCommunities Int (List FilterParam)
     | ChristianCommunities Int (List FilterParam)
     | RecentlyUpdated Int (List FilterParam)
@@ -316,6 +333,15 @@ getPageTitle route =
 
         Coops _ _ ->
             "Co-ops"
+
+        SharedHousing _ _ ->
+            "Shared Housing, Cohouseholding, & Coliving Communities"
+
+        StudentHousing _ _ ->
+            "Student Housing & Student Co-ops"
+
+        ReligiousCommunities _ _ ->
+            "Spiritual & Religious Communities"
 
         JewishCommunities _ _ ->
             "Jewish Communities"
@@ -351,6 +377,15 @@ getAdditionalFilters route =
         Coops _ filters ->
             filters
 
+        StudentHousing _ filters ->
+            filters
+
+        SharedHousing _ filters ->
+            filters
+
+        ReligiousCommunities _ filters ->
+            filters
+
         JewishCommunities _ filters ->
             filters
 
@@ -384,6 +419,15 @@ getInherentFilters route =
 
         Coops _ _ ->
             [ CoopFilter ]
+
+        StudentHousing _ _ ->
+            [ StudentHousingFilter ]
+
+        SharedHousing _ _ ->
+            [ SharedHousingFilter ]
+
+        ReligiousCommunities _ _ ->
+            [ ReligiousFilter ]
 
         JewishCommunities _ _ ->
             [ ReligiousFilter, JewishFilter ]
@@ -426,6 +470,15 @@ getPageAndFilters route =
             Coops page _ ->
                 page
 
+            SharedHousing page _ ->
+                page
+
+            StudentHousing page _ ->
+                page
+
+            ReligiousCommunities page _ ->
+                page
+
             JewishCommunities page _ ->
                 page
 
@@ -460,6 +513,15 @@ toPageOne route =
         Coops _ _ ->
             Coops 1
 
+        SharedHousing _ _ ->
+            SharedHousing 1
+
+        StudentHousing _ _ ->
+            StudentHousing 1
+
+        ReligiousCommunities _ _ ->
+            ReligiousCommunities 1
+
         JewishCommunities _ _ ->
             JewishCommunities 1
 
@@ -492,6 +554,15 @@ mapBoth func1 func2 route =
 
         Coops page filters ->
             Coops (func1 page) (func2 filters)
+
+        SharedHousing page filters ->
+            SharedHousing (func1 page) (func2 filters)
+
+        StudentHousing page filters ->
+            StudentHousing (func1 page) (func2 filters)
+
+        ReligiousCommunities page filters ->
+            ReligiousCommunities (func1 page) (func2 filters)
 
         JewishCommunities page filters ->
             JewishCommunities (func1 page) (func2 filters)
@@ -557,6 +628,12 @@ parser =
         , addQueryParams CohousingCommunities (s "directory" </> s "cohousing-communities" </> int)
         , addQueryParams (Coops 1) (s "directory" </> s "co-ops")
         , addQueryParams Coops (s "directory" </> s "co-ops" </> int)
+        , addQueryParams (SharedHousing 1) (s "directory" </> s "shared-housing")
+        , addQueryParams SharedHousing (s "directory" </> s "shared-housing" </> int)
+        , addQueryParams (StudentHousing 1) (s "directory" </> s "student-housing")
+        , addQueryParams StudentHousing (s "directory" </> s "student-housing" </> int)
+        , addQueryParams (ReligiousCommunities 1) (s "directory" </> s "spiritual-and-religious")
+        , addQueryParams ReligiousCommunities (s "directory" </> s "spiritual-and-religious" </> int)
         , addQueryParams (JewishCommunities 1) (s "directory" </> s "jewish-communities")
         , addQueryParams JewishCommunities (s "directory" </> s "jewish-communities" </> int)
         , addQueryParams (ChristianCommunities 1) (s "directory" </> s "christian-communities")
@@ -603,6 +680,24 @@ reverse route =
 
             Coops page filterParams ->
                 "co-ops/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+
+            SharedHousing 1 filterParams ->
+                "shared-housing/" ++ filtersToQueryString filterParams
+
+            SharedHousing page filterParams ->
+                "shared-housing/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+
+            StudentHousing 1 filterParams ->
+                "student-housing/" ++ filtersToQueryString filterParams
+
+            StudentHousing page filterParams ->
+                "student-housing/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+
+            ReligiousCommunities 1 filterParams ->
+                "spiritual-and-religious/" ++ filtersToQueryString filterParams
+
+            ReligiousCommunities page filterParams ->
+                "spiritual-and-religious" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
             JewishCommunities 1 filterParams ->
                 "jewish-communities/" ++ filtersToQueryString filterParams

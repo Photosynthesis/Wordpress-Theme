@@ -97,6 +97,12 @@ filterToApiQuery filter =
         CohousingFilter ->
             "type[]=Cohousing"
 
+        SharedHousingFilter ->
+            "type[]=Shared Housing"
+
+        StudentHousingFilter ->
+            "type[]=Student Housing"
+
         CoopFilter ->
             "description[]=coop"
 
