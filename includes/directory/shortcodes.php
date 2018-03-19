@@ -442,6 +442,106 @@ HTML;
     return str_replace('  ', ' ', str_replace("\n", ' ', $content));
   }
 
+
+  /* Display 3 Featured FIC-Member Communities for the Main Page */
+  public static function featured_communities() {
+    global $wpdb;
+
+    $query = "
+      SELECT
+          posts.post_title, posts.post_name, status.meta_value AS community_status,
+          countries.meta_value AS country, states.meta_value AS state,
+          provinces.meta_value AS province, cities.meta_value AS city,
+          visitors.meta_value AS visitors_accepted, members.meta_value AS members_accepted,
+          types.meta_value AS type, images.meta_value AS image
+      FROM {$wpdb->prefix}frm_items as entries
+      INNER JOIN {$wpdb->prefix}posts AS posts ON entries.post_id=posts.ID
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=291)
+        AS status ON status.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=424)
+        AS countries ON countries.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=815)
+        AS states ON states.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=816)
+        AS provinces ON provinces.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=427)
+        AS cities ON cities.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=256)
+        AS visitors ON visitors.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=257)
+        AS members ON members.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=262)
+        AS types ON types.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=228)
+        AS images ON images.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=933 AND meta_value='Yes')
+        AS fic_member ON fic_member.item_id=entries.id
+      WHERE entries.form_id=2 AND posts.post_status='publish'
+      ORDER BY RAND()
+      LIMIT 3
+      ;";
+    $results = $wpdb->get_results($query);
+
+    $output = "<div class='row featured-communities'>";
+    foreach ($results as $listing) {
+      if (is_array(unserialize($listing->type))) {
+        $types = implode(', ', unserialize($listing->type));
+      } else {
+        $types = $listing->type;
+      }
+      if ($types !== "") {
+        $types = "<b>Community Types:</b> " . $types;
+      }
+      $image_src = wp_get_attachment_image_src($listing->image, 'card-image')[0];
+      $region = $listing->state == "" ? $listing->province : $listing->state;
+      $location = implode(', ', array_filter(array($listing->city, $region, $listing->country)));
+      if (strpos($listing->community_status, "Established") !== false) {
+        $status = "Established (4+ adults, 2+ years)";
+      } else if (strpos($listing->community_status, "Forming") !== false) {
+        $status = "Forming";
+      } else if (strpos($listing->community_status, "Re-forming") !== false) {
+        $status = "Re-Forming";
+      } else {
+        $status = "Disbanded";
+      }
+      $output .= <<<HTML
+        <div class='col-md-8'>
+          <div class="card h-100">
+            <a href="/directory/{$listing->post_name}/" class="h-100">
+              <div class='text-center d-flex flex-column mb-3 community-img'
+                   style='background-image:url("{$image_src}");'>
+              </div>
+              <div class="card-body px-4 pb-4 mt-auto">
+                <h3 class="card-title">{$listing->post_title}</h3>
+                <h5 class="card-text">{$location}</h5>
+                <h6><em>{$status}</em></h6>
+                <b>Visitors Accepted:</b> {$listing->visitors_accepted}
+                <br />
+                <b>Open to New Members:</b> {$listing->members_accepted}
+                <br />
+                {$types}
+              </div>
+            </a>
+          </div>
+        </div>
+HTML;
+    }
+
+    $output .= "</div>";
+
+    return $output;
+  }
+
 }
 
 add_shortcode('directory_elm', array('DirectoryShortcodes', 'render_elm'));
@@ -454,5 +554,6 @@ add_shortcode('show_directory_search_filters', array('DirectoryShortcodes', 'sea
 add_shortcode('show_directory_geo_list', array('DirectoryShortcodes', 'geo_list'));
 add_shortcode('directory_search_terms', array('DirectoryShortcodes', 'search_terms'));
 add_shortcode('directory_twelve_tribes_statement', array('DirectoryShortcodes', 'twelve_tribes_statement'));
+add_shortcode('directory_featured_communities', array('DirectoryShortcodes', 'featured_communities'));
 
 ?>

@@ -183,6 +183,7 @@ CSS;
     global $post;
     $excluded =
       (get_post_type() == 'directory')
+      || ($post->post_name === 'directory')
       || ($post->ID === ThemeGeneral::$home_page_id)
       || ($post->ID === ThemeGeneral::$development_page_id);
     if ($excluded) {
@@ -196,7 +197,8 @@ CSS;
     global $post;
 
     if ($post->ID === ThemeGeneral::$home_page_id ||
-        $post->ID === ThemeGeneral::$development_page_id) {
+        $post->ID === ThemeGeneral::$development_page_id ||
+        $post->post_name === 'directory') {
       return false;
     }
     return $can_use;

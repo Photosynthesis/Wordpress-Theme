@@ -385,6 +385,52 @@ body.home
     margin-bottom: 15px
 
 
+/** Directory Home **/
+body.page-id-17
+  article#post-17
+    /* Fix the Ordering & Borders of the Input Element.
+     *
+     * The HTML is out of order so we can use the ~ sibling selector to style
+     * the border of the entire input group when the input element is focused.
+     */
+    form#directory-search
+      div.input-group
+        input ~ .ig-left
+          order: 1
+          border-left: $border-width solid $input-border-color
+          border-top-left-radius: $input-border-radius
+          border-bottom-left-radius: $input-border-radius
+        input
+          order: 2
+          border-top-left-radius: 0
+          border-bottom-left-radius: 0
+        input ~ .ig-right
+          order: 3
+          border-left-style: none
+        input:focus ~ span
+          border-top-color: $input-border-focus
+          border-bottom-color: $input-border-focus
+        input:focus ~ .ig-left
+          border-left-color: $input-border-focus
+        input:focus ~ .ig-right
+          border-right-color: $input-border-focus
+
+    /* Color all Card links like list-group items when hovered & clicked. */
+    .card > a
+      &, &:hover, &:active
+        color: $body-color
+      &:hover, &:active
+        background-color: $list-group-hover-bg
+        text-decoration: none
+
+    /* Position & Scale the Featured Community images */
+    .featured-communities .community-img
+      height: 300px
+      background-position: center
+      background-repeat: no-repeat
+      background-size: cover
+
+
 /** Development Home **/
 body.page-id-255787
   /* Increase the Regular Text Size to ~14pt */
