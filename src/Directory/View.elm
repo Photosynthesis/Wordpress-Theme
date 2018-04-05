@@ -1,18 +1,18 @@
-module View exposing (view)
+module Directory.View exposing (view)
 
 import Date exposing (Date)
 import Date.Distance
 import Date.Format
-import Json.Decode as Decode
+import Directory.Commands exposing (CommunitiesRequestData)
+import Directory.Communities exposing (..)
+import Directory.Messages exposing (Msg(..))
+import Directory.Model exposing (Model)
+import Directory.Pagination as Pagination exposing (Pagination)
+import Directory.Routing as Routing exposing (Route(..), FilterParam(..), reverse)
 import Html exposing (Html, text)
 import Html.Attributes exposing (class, src, alt, href, name, type_, checked, height, width, value)
 import Html.Events exposing (onClick, onInput, onSubmit, onWithOptions, defaultOptions)
-import Commands exposing (CommunitiesRequestData)
-import Communities exposing (..)
-import Messages exposing (Msg(..))
-import Model exposing (Model)
-import Pagination exposing (Pagination)
-import Routing exposing (Route(..), FilterParam(..), reverse)
+import Json.Decode as Decode
 
 
 {-| Render a Link to an Internal Application Page.

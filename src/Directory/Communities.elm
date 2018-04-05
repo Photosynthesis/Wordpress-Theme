@@ -1,4 +1,4 @@
-module Communities exposing (..)
+module Directory.Communities exposing (..)
 
 {-| Contains Community Data Types & Related Functions
 -}

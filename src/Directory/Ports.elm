@@ -1,4 +1,4 @@
-port module Ports exposing (..)
+port module Directory.Ports exposing (..)
 
 {-| Contains Every Javascript Port Used in the Application.
 -}

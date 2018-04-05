@@ -1,4 +1,4 @@
-module Pagination
+module Directory.Pagination
     exposing
         ( Pagination
         , initial

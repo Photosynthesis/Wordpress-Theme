@@ -1,13 +1,13 @@
-module Update exposing (update)
+module Directory.Update exposing (update)
 
 {-| Contains Functions For Modifying the Application State.
 -}
 
-import Commands
-import Messages exposing (Msg(..))
-import Model exposing (Model, paginationConfig)
-import Pagination exposing (Pagination)
-import Routing exposing (Route(..), FilterParam(..), reverse)
+import Directory.Commands as Commands
+import Directory.Messages exposing (Msg(..))
+import Directory.Model exposing (Model, paginationConfig)
+import Directory.Pagination as Pagination exposing (Pagination)
+import Directory.Routing as Routing exposing (Route(..), FilterParam(..), reverse)
 
 
 {-| Make Model Changes & Queue Commands Related to Page Changes.

@@ -6,7 +6,7 @@ $(document).ready(function() {
   var Elm = require('./Directory/Main.elm');
   var node = document.getElementById('elm-directory');
   if (node) {
-    var app = Elm.Main.embed(node);
+    var app = Elm.Directory.Main.embed(node);
 
     /* Scroll to the top of the main content, if we've scrolled past it. */
     app.ports.scrollTo.subscribe(function (elementId) {

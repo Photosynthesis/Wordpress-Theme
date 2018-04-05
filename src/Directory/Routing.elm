@@ -1,4 +1,4 @@
-module Routing exposing (..)
+module Directory.Routing exposing (..)
 
 {-| Contains Types & Functions Related to the Application's Internal Routing.
 -}
@@ -297,6 +297,7 @@ filtersToQueryString filters =
 {-| The Potential Listing Routes, With a Page Number & List of Filters.
 
 TODO: Experiment w/ splitting Comm Type into different Type & having a single route.
+Or refactor parameters into single record type w/ `getParameters : Route -> ...`
 
 -}
 type Route

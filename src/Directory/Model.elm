@@ -1,10 +1,10 @@
-module Model exposing (Model, initial, paginationConfig)
+module Directory.Model exposing (Model, initial, paginationConfig)
 
 import Date exposing (Date)
-import Commands exposing (getCommunities, CommunitiesRequestData)
-import Communities exposing (Community)
-import Pagination exposing (Pagination)
-import Routing exposing (Route(..), FilterParam(..))
+import Directory.Commands exposing (getCommunities, CommunitiesRequestData)
+import Directory.Communities exposing (Community)
+import Directory.Pagination as Pagination exposing (Pagination)
+import Directory.Routing as Routing exposing (Route(..), FilterParam(..))
 
 
 {-| Contains the State Used Throughout The Application

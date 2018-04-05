@@ -1,4 +1,4 @@
-module Main exposing (main)
+module Directory.Main exposing (main)
 
 {-| The Entry Point for the Application.
 -}
@@ -6,11 +6,11 @@ module Main exposing (main)
 import Date
 import Navigation
 import Task
-import Messages exposing (Msg(SetCurrentDate, UrlChange, CommunityPagination))
-import Model exposing (Model, paginationConfig)
-import Routing exposing (Route(..), FilterParam(..), routeParser)
-import Update exposing (update)
-import View exposing (view)
+import Directory.Messages exposing (Msg(SetCurrentDate, UrlChange, CommunityPagination))
+import Directory.Model exposing (Model, paginationConfig)
+import Directory.Routing exposing (Route(..), FilterParam(..), routeParser)
+import Directory.Update exposing (update)
+import Directory.View exposing (view)
 
 
 main : Program Never Model Msg
@@ -30,7 +30,7 @@ initialize location =
             routeParser location
 
         ( model, paginationCmd ) =
-            Model.initial route
+            Directory.Model.initial route
     in
         ( model
         , Cmd.batch

@@ -1,9 +1,9 @@
-module Decoders exposing (community)
+module Directory.Decoders exposing (community)
 
 import Date exposing (Date)
 import Json.Decode as Decode exposing (Decoder, string)
 import Json.Decode.Pipeline exposing (decode, required, optional)
-import Communities exposing (..)
+import Directory.Communities exposing (..)
 
 
 community : Decoder Community

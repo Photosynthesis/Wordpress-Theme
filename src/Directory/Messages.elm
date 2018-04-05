@@ -1,9 +1,9 @@
-module Messages exposing (..)
+module Directory.Messages exposing (..)
 
 import Date exposing (Date)
-import Communities exposing (Community)
-import Pagination
-import Routing exposing (Route, FilterParam)
+import Directory.Communities exposing (Community)
+import Directory.Pagination as Pagination
+import Directory.Routing exposing (Route, FilterParam)
 
 
 type Msg

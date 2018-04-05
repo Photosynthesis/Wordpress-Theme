@@ -1,16 +1,16 @@
-module Commands exposing (CommunitiesRequestData, getCommunities, newPage)
+module Directory.Commands exposing (CommunitiesRequestData, getCommunities, newPage)
 
 {-| Contains Commands & Relevant Types Used in the Application.
 -}
 
+import Directory.Communities exposing (Community)
+import Directory.Decoders as Decoders
+import Directory.Pagination as Pagination
+import Directory.Ports as Ports
+import Directory.Routing exposing (Route, FilterParam(..), Ordering(..), reverse, getPageTitle)
 import Http
 import Json.Decode as Decode
 import Navigation
-import Communities exposing (Community)
-import Decoders
-import Pagination
-import Ports
-import Routing exposing (Route, FilterParam(..), Ordering(..), reverse)
 
 
 {-| The Data Type Stored by the Pagination & Passed to the Fetch Command.
@@ -64,7 +64,7 @@ newPage newRoute =
     Cmd.batch
         [ Navigation.newUrl <| reverse newRoute
         , Ports.scrollTo "main"
-        , Ports.setPageTitle <| Routing.getPageTitle newRoute
+        , Ports.setPageTitle <| getPageTitle newRoute
         ]
 
 
