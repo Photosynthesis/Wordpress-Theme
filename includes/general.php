@@ -25,13 +25,19 @@ class ThemeGeneral
 
   /* Register & Enqueue Compiled Scripts & Styles */
   public static function enqueue_assets() {
+    global $post;
+
     $directory_js_filename = "";
+    $wholesale_js_filename = "";
 
     foreach (scandir(__DIR__ . "/../dist") as $dist_file) {
       $extension = pathinfo($dist_file, PATHINFO_EXTENSION);
       if ($extension === 'js') {
         if (strpos($dist_file, "directory") !== false) {
           $directory_js_filename = $dist_file;
+          continue;
+        } else if (strpos($dist_file, "wholesale") !== false && $wholesale_js_filename === "") {
+          $wholesale_js_filename = $dist_file;
           continue;
         }
         wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
@@ -45,6 +51,15 @@ class ThemeGeneral
         get_stylesheet_directory_uri() . "/dist/{$directory_js_filename}",
         array(), null);
     }
+
+    if ($wholesale_js_filename !== "" && $post->post_name === "wholesale") {
+      wp_enqueue_script(
+        $wholesale_js_filename,
+        get_stylesheet_directory_uri() . "/dist/{$wholesale_js_filename}",
+        array(), null);
+    }
+
+    wp_enqueue_script('stripe-checkout', 'https://checkout.stripe.com/checkout.js', array());
   }
 
   /* Add Main & WooCommerce Left/Right Sidebars */

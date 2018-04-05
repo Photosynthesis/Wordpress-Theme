@@ -1,4 +1,5 @@
 var path = require("path");
+const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 
@@ -14,7 +15,10 @@ module.exports = {
     ],
     directory: [
       './src/directory.js',
-    ]
+    ],
+    wholesale: [
+      './src/wholesale.js',
+    ],
   },
 
   output: {
@@ -61,6 +65,7 @@ module.exports = {
 
   plugins: [
     new ExtractTextPlugin('[chunkHash].css'),
+    new webpack.DefinePlugin({ isProduction: isProduction }),
     new WebpackCleanupPlugin(),
   ],
 
