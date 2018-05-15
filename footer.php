@@ -36,6 +36,9 @@
           <a id="csa-footer-logo" href="http://www.communalstudies.org/" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sponsor_CSA']); ">
             <img src="<?php echo $footer_logo_path; ?>csa.gif" alt="Communal Studies Association" title="Communal Studies Association" height="50" hspace="4" border="0">
           </a>
+          <a href="http://www.transitionus.org/" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sponsor_TransitionUS']); ">
+            <img src="<?php echo $footer_logo_path; ?>transition-us.png" alt="Transition US" title="Transition US" height="50" hspace="4" border="0">
+          </a>
         </div>
       </div>
     </div>
