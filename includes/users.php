@@ -37,7 +37,15 @@ class ThemeUsers
 
   /* Display a Login Form */
   public static function login_form() {
-    $pre_text = "<p class='text-danger'>You must be logged in to view this page.</p>";
+    global $post;
+    if ($post->post_name === "new-listing") {
+      $pre_text = "<p class='text-danger font-weight-bold'>You must register and log in before you can create a directory listing.</p>\n" .
+        "<p><b>Listing in our Directory is free.</b> Membership is not required - " .
+        "though we hope you'll support the work of our non-profit organization " .
+        "by <a href='/membership/' target='_blank'>joining</a>.</p>";
+    } else {
+      $pre_text = "<p class='text-danger'>You must be logged in to view this page.</p>";
+    }
     return $pre_text . wp_login_form( array( 'echo' => false ) ) . "\n" .
       wp_register('', '', false) . " | <a href=\"" . wp_lostpassword_url( get_permalink() ) . "\" title=\"Lost your password?\">Lost your password?</a>";
   }
