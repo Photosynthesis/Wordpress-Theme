@@ -1,6 +1,6 @@
 <?php
 $is_featured = get_post(get_the_ID())->menu_order;
-$extra_class = $is_featured ? 'bg-info' : '';
+$extra_class = $is_featured ? 'featured-classified' : '';
 ?>
 <a href='<?php the_permalink(); ?>' class='list-group-item list-group-item-action <?php echo $extra_class; ?>'><?php
   $image = adverts_get_main_image(get_the_ID());

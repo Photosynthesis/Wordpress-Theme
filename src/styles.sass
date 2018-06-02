@@ -826,6 +826,12 @@ body.error404.incsub_wiki
 .adverts-show-contact-form, .adverts-single-actions span.adverts-button
   display: none !important
 
+/* Darken the Background of Featured Classifieds */
+.list-group-item.list-group-item-action.featured-classified
+  background-color: darken($brand-info, 10%)
+  &:hover, &:active, &:focus
+    background-color: darken($brand-info, 3%)
+
 /* Fix the Height of the Image Carousel */
 #advert-carousel .carousel-item > img
   height: 350px
