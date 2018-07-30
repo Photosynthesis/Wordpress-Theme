@@ -221,13 +221,31 @@ CSS;
 
   /* Generate the Recent Posts Section of the Home Page */
   public static function recent_posts() {
-    $posts = wp_get_recent_posts(array(
+    $pinned_posts = wp_get_recent_posts(array(
       'numberposts' => 8,
       'post_type' => 'post',
       'post_status' => 'publish',
+      'meta_key' => ThemeBlogPosts::$pinned_meta_field,
+      'meta_value' => 1,
+      'meta_compare' => '=',
     ), OBJECT);
+    $recent_posts = wp_get_recent_posts(array(
+      'numberposts' => 8 + sizeof($pinned_posts),
+      'post_type' => 'post',
+      'post_status' => 'publish',
+    ), OBJECT);
+
+    $posts = is_array($pinned_posts) ?  array_merge($pinned_posts, $recent_posts) : $recent_posts;
+    $rendered_ids = array();
     $output = "";
     foreach ($posts as $recent_post) {
+      if (count($rendered_ids) === 8) { break; }
+      if (in_array($recent_post->ID, $rendered_ids)) {
+        continue;
+      } else {
+        $rendered_ids[] = $recent_post->ID;
+      }
+
       $thumbnail_element = get_the_post_thumbnail(
         $recent_post, array(0, 250), array('class' => 'img-fluid mb-2')
       );

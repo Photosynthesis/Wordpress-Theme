@@ -10,6 +10,8 @@ require_once(get_template_directory() . "/depends/stripe/init.php");
 /** Utility Functions **/
 load_include('utilities.php');
 
+/** Blog Post Customizations **/
+load_include('blog_posts.php');
 /** General Site & Layout Functions **/
 load_include('general.php');
 
