@@ -222,7 +222,7 @@ CSS;
   /* Generate the Recent Posts Section of the Home Page */
   public static function recent_posts() {
     $posts = wp_get_recent_posts(array(
-      'numberposts' => 4,
+      'numberposts' => 8,
       'post_type' => 'post',
       'post_status' => 'publish',
     ), OBJECT);
