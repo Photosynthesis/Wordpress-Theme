@@ -20,6 +20,12 @@ class ThemeUsers
     return $redirect_to;
   }
 
+  /* Redirect Users to the Homepage When They Log out. */
+  public static function logout_redirect() {
+    wp_redirect(home_url());
+    exit;
+  }
+
   /* Only show the content if the user is logged in, otherwise show a login form
    *
    * @param array $atts The Shortcode Attributes
@@ -55,6 +61,8 @@ class ThemeUsers
     return home_url() . '/wp-login.php?action=lostpassword' . $redirect;
   }
 }
+
+add_action('wp_logout', array('ThemeUsers', 'logout_redirect'));
 
 add_filter('login_redirect', array('ThemeUsers', 'login_redirect'), 10, 3);
 add_shortcode('logged_in_only', array('ThemeUsers', 'logged_in_only'));
