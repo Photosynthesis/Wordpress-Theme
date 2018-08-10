@@ -44,6 +44,13 @@ class DirectoryDB
   public static $other_affiliations_field_id = 279;
   public static $keywords_field_id = 716;
   public static $update_email_date_field_id = 992;
+  public static $disbanded_year_field_id = 705;
+  public static $disbanded_info_field_id = 704;
+  public static $reforming_year_field_id = 703;
+  public static $reforming_info_field_id = 276;
+  public static $network_affiliations_field_id = 283;
+  public static $other_affiliations_field_id = 279;
+  public static $keywords_field_id = 716;
 
   /* Return an Array of every published community. */
   public static function get_published_items() {
