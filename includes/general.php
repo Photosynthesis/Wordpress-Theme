@@ -21,6 +21,7 @@ class ThemeGeneral
     add_image_size('product-thumbnail', 250, 325, array('center', 'top'));
     add_image_size('product-image', 300, 0);
     add_image_size('cart-thumbnail', 75, 0);
+    add_image_size('card-image', 0, 300);
   }
 
   /* Register & Enqueue Compiled Scripts & Styles */
@@ -247,7 +248,7 @@ CSS;
       }
 
       $thumbnail_element = get_the_post_thumbnail(
-        $recent_post, array(0, 250), array('class' => 'img-fluid mb-2')
+        $recent_post, 'card-image', array('class' => 'img-fluid mb-2')
       );
       $post_title = $recent_post->post_title;
       $post_name = $recent_post->post_name;
