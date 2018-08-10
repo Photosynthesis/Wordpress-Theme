@@ -226,9 +226,7 @@ CSS;
       'numberposts' => 8,
       'post_type' => 'post',
       'post_status' => 'publish',
-      'meta_key' => ThemeBlogPosts::$pinned_meta_field,
-      'meta_value' => 1,
-      'meta_compare' => '=',
+      'post__in' => get_option('sticky_posts'),
     ), OBJECT);
     $recent_posts = wp_get_recent_posts(array(
       'numberposts' => 8 + sizeof($pinned_posts),
