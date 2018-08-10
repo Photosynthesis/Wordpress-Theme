@@ -13,9 +13,9 @@ class DirectoryMaps
    */
   public static function update_map($entry_id, $form_id) {
     if ($form_id == 2) {
-      global $frmdb;
-      $post_id = $frmdb->get_var(
-        $frmdb->entries, array('id' => $entry_id), 'post_id'
+      global $wpdb;
+      $post_id = FrmDB::get_var(
+        $wpdb->prefix . "frm_items", array('id' => $entry_id), 'post_id'
       );
 
       do_action('mappress_update_meta', $post_id);
