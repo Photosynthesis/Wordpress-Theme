@@ -169,7 +169,7 @@ class DirectoryMaps
 
     $post_id_query = $wpdb->prepare(
       "SELECT ID FROM " . $wpdb->prefix . "posts
-      WHERE post_content=%s;",
+      WHERE post_content=%s AND post_type='directory';",
       $post_content
     );
     $posts_results = $wpdb->get_results($post_id_query);
@@ -286,7 +286,12 @@ class DirectoryMaps
           array(39.095963, -96.606447),
       );
       $pois = array();
+      $added_listings = array();
       foreach ($directory_listings as $listing) {
+          if (isset($added_listings[$listing->item_id])) {
+            continue;
+          }
+
           $address = self::get_directory_listing_address($listing);
           if (sizeof($address) == 0) {
               continue;
@@ -295,7 +300,7 @@ class DirectoryMaps
           $post_title = get_the_title($post_id);
           $post_status = get_post_status($post_id);
 
-          if ($post_title == '' || $post_status != 'publish') { continue; }
+          if (is_null($post_id) || $post_title == '' || $post_status != 'publish') { continue; }
 
           $poi_body = $address[0] . "<br />" . join(', ', array_slice($address, 1));
           $poi_info = array(
@@ -327,6 +332,7 @@ class DirectoryMaps
 
           if (!$exclude_poi) {
               array_push($pois, $poi);
+              $added_listings[$listing->item_id] = true;
           }
       }
 
@@ -402,6 +408,8 @@ class DirectoryMaps
 
       if (!empty($directory_listings)) {
           return intval($directory_listings[0]->post_id);
+      } else {
+        return NULL;
       }
   }
 
