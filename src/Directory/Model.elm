@@ -77,7 +77,7 @@ detailsInitial : Route -> ( WebData CommunityDetails, Cmd Msg )
 detailsInitial route =
     case route of
         DetailsRoute slug ->
-            ( RemoteData.NotAsked, getCommunity slug )
+            ( RemoteData.Loading, getCommunity slug )
 
         ListingsRoute _ ->
             ( RemoteData.NotAsked, Cmd.none )
