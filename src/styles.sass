@@ -364,11 +364,15 @@ body.home
   /* Increase the Regular Text Size to ~14pt */
   article
     font-size: 1.2rem
-  /* Reduce Size of Text on Top of Banner for Smallest Screens */
-  .img-banner h1
-    +media-breakpoint-only(xs)
-      font-size: 1.65rem
-      margin-bottom: 0
+  .img-banner
+    /* Fix Background Image Size in Chrome */
+    .carousel-item.active, .carousel-item-next, .carousel-item-prev
+      display: block !important
+    /* Reduce Size of Text on Top of Banner for Smallest Screens */
+    h1
+      +media-breakpoint-only(xs)
+        font-size: 1.65rem
+        margin-bottom: 0
   /* Narrow the Text Below Initial Info Cards Headings */
   .info-cards p
     +media-breakpoint-only(xl)
