@@ -89,7 +89,7 @@ class DirectoryShortcodes
             WHERE `id`=$meta_id;";
           $wpdb->get_results($update_query);
         }
-        return '<b>Listing Successfully Verfied.</b>';
+        return '<b class="text-success">Listing Successfully Verfied.</b>';
       }
       return "<a href='.?$get_parameter=1'>Verify as Up-to-Date</a>";
     }
@@ -98,7 +98,7 @@ class DirectoryShortcodes
   }
   /** Ensure that the current data for the Listing would validate the current form */
   private static function validate_entry($entry_id) {
-    $community_name_field_id = 9;
+    $exempt_field_ids = array(9, 684, 685);     // name, lat, long
 
     $entry = FrmEntry::getOne($entry_id);
     $data = array('form_id' => 2, 'item_key' => $entry->item_key, 'item_meta' => array());
@@ -107,8 +107,13 @@ class DirectoryShortcodes
       $data['item_meta'][$meta->field_id] = $meta->meta_value;
     }
     $errors = FrmEntryValidate::validate($data);
-    $name_field_key = "field{$community_name_field_id}";
-    if (array_key_exists($name_field_key, $errors)) { unset($errors[$name_field_key]); }
+
+    foreach ($exempt_field_ids as $exempt_field) {
+      $field_key = "field{$exempt_field}";
+      if (array_key_exists($field_key, $errors)) {
+        unset($errors[$field_key]);
+      }
+    }
     return empty($errors);
   }
 
