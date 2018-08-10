@@ -524,7 +524,7 @@ body.single-directory
   input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]), select, textarea
     @extend .form-control
   /* Hide Hidden Inputs */
-  .frm_form_field .frm_pos_none, .frm_ajax_loading
+  .frm_form_field .frm_pos_none, .frm_ajax_loading, .frm_hidden
     display: none !important
   /* Stack Checkbox & Radio Fields */
   .frm_opt_container > div
@@ -551,12 +551,12 @@ body.single-directory
     @extend .btn
     @extend .btn-secondary
   /* Fix The Column Sizes */
-  fieldset
+  fieldset, .frm_fields_container
     @extend .row
     > .frm_section_heading
       @extend .col-24
       @extend .row
-    .frm_top_container, .frm_none_container, > h3, .frm_section_spacing, .frm_submit
+    .frm_top_container, .frm_none_container, > h3, .frm_section_spacing, .frm_submit, .frm_html_container
       &:not(.frm_first_half):not(.frm_last_half):not(.frm_first_fourth):not(.frm_fourth):not(.frm_last_fourth)
         @extend .col-24
       &.frm_first_half, &.frm_last_half
