@@ -61,6 +61,33 @@ class ThemeWPAdverts
     ));
     return $args;
   }
+
+  /* Customize the email sent when an Ad is responded to. */
+  public static function customize_contact_email($mail, $post_id, $form) {
+    $post = get_post($post_id);
+    $mail["subject"] = $post->post_title . " - " . $mail["subject"];
+
+    $sender = $form->get_value("message_name");
+    $sender_email = $form->get_value("message_email");
+
+    $from_text = "";
+    if ($sender !== null) {
+      $from_text .= " from {$sender}";
+    }
+    if ($sender_email !== null) {
+      $from_text .= " <{$sender_email}>";
+    }
+
+    $mail['message'] =
+      "You have received a reply to your ic.org Classifieds listing{$from_text}.\n" .
+      "---\n\n" .
+      $mail['message'] . "\n\n" .
+      "---\n" .
+      "This is an automated message from the ic.org website - we do not screen any messages before relaying them to you. Please contact ads@ic.org for questions or to report abuse."
+      ;
+
+    return $mail;
+  }
 }
 
 add_action('adverts_template_load', array('ThemeWPAdverts', 'override_templates'));
@@ -70,5 +97,6 @@ add_action('adverts_register_taxonomy', array('ThemeWPAdverts', 'customize_taxon
 add_filter('adverts_form_load', array('ThemeWPAdverts', 'hide_price'));
 add_filter('adext_wc_payments_products_new', array('ThemeWPAdverts', 'allow_hidden_products'));
 add_filter('adext_wc_payments_products_renew', array('ThemeWPAdverts', 'allow_hidden_products'));
+add_filter('adverts_contact_form_email', array('ThemeWPAdverts', 'customize_contact_email'), 10, 3);
 
 ?>
