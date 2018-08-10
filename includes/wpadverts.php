@@ -54,7 +54,11 @@ class ThemeWPAdverts
 
   /* Allow Using Hidden Products as Ad Plans */
   public static function allow_hidden_products($args) {
-    $args["meta_query"][0]["value"] = array("hidden", "visible");
+    $args["meta_query"] = array(array(
+      'key' => '_visibility',
+      'value' => array("hidden", "visible"),
+      'compare' => 'IN',
+    ));
     return $args;
   }
 }
