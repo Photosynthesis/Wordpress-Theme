@@ -21,6 +21,12 @@ type CommunityStatus
     | Disbanded
 
 
+{-| Additional Information about the Communitiy's Status.
+-}
+type alias ExtraStatusInfo =
+    { year : String, info : String }
+
+
 {-| The Visitor Policy of a Community.
 -}
 type VisitorsWelcome
@@ -51,9 +57,24 @@ type CommunityType
     | Indigenous
 
 
-{-| The Data Associated with a Specific Community.
+{-| Public Street Addresses of Communities.
 -}
-type alias Community =
+type alias PublicAddress =
+    { lineOne : String
+    , lineTwo : String
+    , zipCode : String
+    , addressType : PublicAddressType
+    }
+
+
+type PublicAddressType
+    = CommunityAddress
+    | MailingAddress
+
+
+{-| The Data Associated with a Specific Community for the Listings pages.
+-}
+type alias CommunityListing =
     { id : CommunityID
     , name : String
     , slug : String
@@ -66,6 +87,42 @@ type alias Community =
     , openToVisitors : VisitorsWelcome
     , openToMembers : MembersWelcome
     , communityTypes : List CommunityType
+    , updatedAt : Date
+    , createdAt : Date
+    }
+
+
+{-| The Data Associated with a Specific Community for the Details pages.
+-}
+type alias CommunityDetails =
+    { id : CommunityID
+    , name : String
+    , slug : String
+    , missionStatement : String
+    , description : String
+    , status : CommunityStatus
+    , disbandedInfo : Maybe ExtraStatusInfo
+    , reformingInfo : Maybe ExtraStatusInfo
+    , startedPlanning : Int
+    , startedLivingTogether : Int
+    , contactName : String
+    , contactPhone : String
+    , contactAddress : Maybe PublicAddress
+    , city : String
+    , state : String
+    , country : String
+    , websiteUrl : String
+    , businessUrl : String
+    , facebookUrl : String
+    , twitterUrl : String
+    , socialUrl : String
+    , openToVisitors : VisitorsWelcome
+    , openToMembers : MembersWelcome
+    , isFicMember : Bool
+    , ficMembershipStartYear : String
+    , networkAffiliations : List String
+    , otherAffiliations : String
+    , keywords : String
     , updatedAt : Date
     , createdAt : Date
     }
@@ -151,3 +208,15 @@ typeToString communityType =
 
         Indigenous ->
             "Traditional or Indigenous"
+
+
+{-| Render a `PublicAddressType`
+-}
+addressTypeToString : PublicAddressType -> String
+addressTypeToString addressType =
+    case addressType of
+        CommunityAddress ->
+            "Community Address"
+
+        MailingAddress ->
+            "Mailing Address"

@@ -29,12 +29,12 @@ initialize location =
         route =
             routeParser location
 
-        ( model, paginationCmd ) =
+        ( model, cmd ) =
             Directory.Model.initial route
     in
         ( model
         , Cmd.batch
             [ Task.perform SetCurrentDate Date.now
-            , Cmd.map CommunityPagination paginationCmd
+            , cmd
             ]
         )

@@ -7,16 +7,26 @@ import Directory.Commands as Commands
 import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model, paginationConfig)
 import Directory.Pagination as Pagination exposing (Pagination)
-import Directory.Routing as Routing exposing (Route(..), FilterParam(..), reverse)
+import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..), reverse)
 
 
-{-| Make Model Changes & Queue Commands Related to Page Changes.
--}
 updateUrl : Route -> Model -> ( Model, Cmd Msg )
-updateUrl route model =
+updateUrl newRoute model =
+    case newRoute of
+        ListingsRoute listingsRoute ->
+            listingsUpdateUrl listingsRoute model
+
+        DetailsRoute slug ->
+            detailsUpdateUrl slug model
+
+
+{-| Make Model Changes & Queue Commands Related to ListingsRoute Page Changes.
+-}
+listingsUpdateUrl : ListingsRoute -> Model -> ( Model, Cmd Msg )
+listingsUpdateUrl route model =
     let
         updatedModel =
-            { model | route = route, searchString = updatedSearchString }
+            { model | route = ListingsRoute route, searchString = updatedSearchString }
 
         jumpToPage page =
             let
@@ -59,6 +69,13 @@ updateUrl route model =
             ( model, Cmd.none )
 
 
+{-| Make Model Changes & Queue Commands Related to DetailsRoute Page Changes.
+-}
+detailsUpdateUrl : String -> Model -> ( Model, Cmd Msg )
+detailsUpdateUrl slug model =
+    ( { model | route = DetailsRoute slug }, Cmd.none )
+
+
 {-| Update the Model Based According to Some Message.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -81,8 +98,14 @@ update msg model =
         SubmitSearchForm ->
             let
                 newRoute =
-                    Routing.mapFilters replaceSearchFilter model.route
-                        |> Routing.mapPage (always 1)
+                    case model.route of
+                        ListingsRoute listingsRoute ->
+                            Routing.mapFilters replaceSearchFilter listingsRoute
+                                |> Routing.mapPage (always 1)
+                                |> ListingsRoute
+
+                        DetailsRoute _ ->
+                            model.route
 
                 replaceSearchFilter filters =
                     case filters of
@@ -103,16 +126,27 @@ update msg model =
                     Pagination.update paginationConfig subMsg model.communities
 
                 hasPageChanged =
-                    Tuple.first (Routing.getPageAndFilters model.route)
-                        /= Pagination.getPage paginationModel
+                    case model.route of
+                        ListingsRoute listingsRoute ->
+                            Tuple.first (Routing.getPageAndFilters listingsRoute)
+                                /= Pagination.getPage paginationModel
+
+                        DetailsRoute _ ->
+                            True
 
                 pageChangeCmd =
-                    if hasPageChanged then
-                        model.route
-                            |> Routing.mapPage (always <| Pagination.getPage paginationModel)
-                            |> Commands.newPage
-                    else
-                        Cmd.none
+                    case model.route of
+                        ListingsRoute listingsRoute ->
+                            if hasPageChanged then
+                                listingsRoute
+                                    |> Routing.mapPage (always <| Pagination.getPage paginationModel)
+                                    |> ListingsRoute
+                                    |> Commands.newPage
+                            else
+                                Cmd.none
+
+                        DetailsRoute _ ->
+                            Cmd.none
             in
                 ( { model | communities = paginationModel }
                 , Cmd.batch
@@ -120,3 +154,5 @@ update msg model =
                     , pageChangeCmd
                     ]
                 )
+        FetchCommunityDetails details ->
+            ({ model | community = details }, Cmd.none)

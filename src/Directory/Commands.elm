@@ -1,16 +1,34 @@
-module Directory.Commands exposing (CommunitiesRequestData, getCommunities, newPage)
+module Directory.Commands
+    exposing
+        ( getCommunity
+        , CommunitiesRequestData
+        , getCommunities
+        , newPage
+        )
 
 {-| Contains Commands & Relevant Types Used in the Application.
 -}
 
-import Directory.Communities exposing (Community)
+import Directory.Communities exposing (CommunityListing)
 import Directory.Decoders as Decoders
 import Directory.Pagination as Pagination
 import Directory.Ports as Ports
-import Directory.Routing exposing (Route, FilterParam(..), Ordering(..), reverse, getPageTitle)
+import Directory.Routing exposing (Route(..), FilterParam(..), Ordering(..), reverse, getPageTitle)
+import Directory.Messages exposing (Msg(FetchCommunityDetails))
 import Http
 import Json.Decode as Decode
 import Navigation
+import RemoteData
+
+
+{-| Fetch the Details of a Single Community
+-}
+getCommunity : String -> Cmd Msg
+getCommunity slug =
+    Http.get (String.join "" [ "/wp-json/v1/directory/entry/", "?slug=", slug ])
+        Decoders.communityDetails
+        |> RemoteData.sendRequest
+        |> Cmd.map FetchCommunityDetails
 
 
 {-| The Data Type Stored by the Pagination & Passed to the Fetch Command.
@@ -23,7 +41,7 @@ type alias CommunitiesRequestData =
 
 {-| Fetch A Page of Communities Using The Set Filters & Ordering.
 -}
-getCommunities : CommunitiesRequestData -> Int -> Http.Request (Pagination.FetchResponse Community)
+getCommunities : CommunitiesRequestData -> Int -> Http.Request (Pagination.FetchResponse CommunityListing)
 getCommunities { filters, ordering } page =
     let
         filterQueryString =
@@ -39,7 +57,7 @@ getCommunities { filters, ordering } page =
                 ""
     in
         Decode.map2 Pagination.FetchResponse
-            (Decode.field "listings" (Decode.list Decoders.community))
+            (Decode.field "listings" (Decode.list Decoders.communityListing))
             (Decode.field "totalCount" Decode.int)
             |> Http.get
                 (String.join ""
@@ -61,11 +79,20 @@ getCommunities { filters, ordering } page =
 -}
 newPage : Route -> Cmd msg
 newPage newRoute =
-    Cmd.batch
-        [ Navigation.newUrl <| reverse newRoute
-        , Ports.scrollTo "main"
-        , Ports.setPageTitle <| getPageTitle newRoute
-        ]
+    let
+        pageTitle =
+            case newRoute of
+                ListingsRoute listings ->
+                    getPageTitle listings
+
+                DetailsRoute _ ->
+                    "Listing Details"
+    in
+        Cmd.batch
+            [ Navigation.newUrl <| reverse newRoute
+            , Ports.scrollTo "main"
+            , Ports.setPageTitle <| pageTitle
+            ]
 
 
 {-| Return the Backend API QueryString for a `FilterParam`.

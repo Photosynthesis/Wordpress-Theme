@@ -1,15 +1,50 @@
-module Directory.Decoders exposing (community)
+module Directory.Decoders exposing (communityDetails, communityListing)
 
 import Date exposing (Date)
-import Json.Decode as Decode exposing (Decoder, string)
+import Json.Decode as Decode exposing (Decoder, string, int, bool)
 import Json.Decode.Pipeline exposing (decode, required, optional)
 import Directory.Communities exposing (..)
 
 
-community : Decoder Community
-community =
-    decode Community
-        |> required "id" (Decode.map CommunityID Decode.int)
+communityDetails : Decoder CommunityDetails
+communityDetails =
+    decode CommunityDetails
+        |> required "id" communityID
+        |> required "name" string
+        |> required "slug" string
+        |> required "missionStatement" string
+        |> required "description" string
+        |> required "communityStatus" communityStatus
+        |> optional "disbandedData" (Decode.map Just extraStatusInfo) Nothing
+        |> optional "reformingData" (Decode.map Just extraStatusInfo) Nothing
+        |> required "startedPlanning" int
+        |> required "startedLivingTogether" int
+        |> optional "contactName" string ""
+        |> optional "contactPhone" string ""
+        |> optional "contactAddress" (Decode.map Just publicAddress) Nothing
+        |> optional "city" string ""
+        |> optional "state" string ""
+        |> optional "country" string ""
+        |> optional "websiteUrl" string ""
+        |> optional "businessUrl" string ""
+        |> optional "facebookUrl" string ""
+        |> optional "twitterUrl" string ""
+        |> optional "socialUrl" string ""
+        |> required "openToVisitors" visitorsWelcome
+        |> required "openToMembership" membersWelcome
+        |> required "isFicMember" bool
+        |> optional "ficMembershipStart" string ""
+        |> optional "networkAffiliations" (Decode.list string) []
+        |> optional "otherAffiliations" string ""
+        |> optional "keywords" string ""
+        |> required "updatedAt" date
+        |> required "createdAt" date
+
+
+communityListing : Decoder CommunityListing
+communityListing =
+    decode CommunityListing
+        |> required "id" communityID
         |> required "name" string
         |> required "slug" string
         |> required "imageUrl" (Decode.nullable string)
@@ -30,6 +65,11 @@ community =
         |> required "createdAt" date
 
 
+communityID : Decoder CommunityID
+communityID =
+    Decode.map CommunityID Decode.int
+
+
 communityStatus : Decoder CommunityStatus
 communityStatus =
     let
@@ -47,6 +87,13 @@ communityStatus =
     in
         Decode.string
             |> Decode.andThen (String.toLower >> decode >> fromResult)
+
+
+extraStatusInfo : Decoder ExtraStatusInfo
+extraStatusInfo =
+    decode ExtraStatusInfo
+        |> optional "year" string ""
+        |> optional "info" string ""
 
 
 visitorsWelcome : Decoder VisitorsWelcome
@@ -107,6 +154,23 @@ communityType =
         , ( StudentHousing, "student housing or student co-op" )
         , ( TransitionTown, "transition town (post-petroleum and off-grid communities.)" )
         , ( TransitionTown, "transition town or eco-neighborhood (focused on energy/resource resiliency)" )
+        ]
+
+
+publicAddress : Decoder PublicAddress
+publicAddress =
+    decode PublicAddress
+        |> optional "lineOne" string ""
+        |> optional "lineTwo" string ""
+        |> optional "zipCode" string ""
+        |> required "type" publicAddressType
+
+
+publicAddressType : Decoder PublicAddressType
+publicAddressType =
+    stringToEnum
+        [ ( CommunityAddress, "community" )
+        , ( MailingAddress, "mailing" )
         ]
 
 

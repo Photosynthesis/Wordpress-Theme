@@ -6,6 +6,10 @@ class APIDirectory
 
   /* Register the Directory Endpoints */
   public static function register_routes() {
+    register_rest_route(self::api_namespace, '/entry/', array(
+      'methods' => 'GET',
+      'callback' => array('APIDirectory', 'entry'),
+    ));
     register_rest_route(self::api_namespace, '/entries/', array(
       'methods' => 'GET',
       'callback' => array('APIDirectory', 'entries'),
@@ -14,6 +18,249 @@ class APIDirectory
       'methods' => 'GET',
       'callback' => array('APIDirectory', 'data_commons'),
     ));
+  }
+
+  /* Return Data for a Single Entry.
+   *
+   * Requires a single `slug` parameter to fetch the Entry data.
+   *
+   * The returned entry has the following field:
+   *
+   *    - id
+   *    - name
+   *    - slug
+   *    - missionStatement
+   *    - description
+   *    - createdAt
+   *    - updatedAt
+   *    - communityStatus
+   *    - startedPlanning
+   *    - startedLivingTogether
+   *    - openToMembership
+   *    - openToVisitors
+   *    - city
+   *    - state
+   *    - country
+   *    - isFicMember
+   *
+   * As well as the following optional fields:
+   *
+   *    - websiteUrl
+   *    - businessUrl
+   *    - facebookUrl
+   *    - twitterUrl
+   *    - socialUrl
+   *    - contactName
+   *    - contactPhone
+   *    - contactAddress
+   *        - lineOne
+   *        - lineTwo
+   *        - zipCode
+   *        - type
+   *    - ficMembershipStart
+   *    - disbandedData
+   *        - year
+   *        - info
+   *    - reformingData
+   *        - year
+   *        - info
+   *    - networkAffiliations
+   *    - otherAffiliations
+   *    - keywords
+   *
+   *
+   *    TODO:
+   *    * imageUrl
+   *    * thumbnailUrl
+   *    * communityTypes
+   *    * rest of fields... maybe farm each info-block to separate cleanup function.
+   *    * isOwner
+   *    * isAdmin
+   *
+   *    * Special message if hidden by user
+   *    * Create nonce in shortcode for checking user status, send to Elm, add
+   *      to AJAX req header:
+   *      https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/
+   *    * Validate listing route - just check that required fields are valid?
+   *      Validate all fields?
+   *
+   *
+   */
+  public static function entry($data) {
+    global $wpdb;
+
+    // Field ID -> JSON Key
+    $public_fields = array(
+      // Fields with more complex processing
+      DirectoryDB::$is_address_public_field_id => 'contact_address_public',
+      DirectoryDB::$public_address_type_field_id => 'contact_address_type',
+      DirectoryDB::$address_one_field_id => 'address_one',
+      DirectoryDB::$address_two_field_id => 'address_two',
+      DirectoryDB::$zipcode_field_id => 'zip_code',
+      DirectoryDB::$is_member_field_id => 'is_fic_member',
+      DirectoryDB::$membership_start_field_id => 'membership_start_date',
+      DirectoryDB::$disbanded_year_field_id => 'disbanded_year',
+      DirectoryDB::$disbanded_info_field_id => 'disbanded_info',
+      DirectoryDB::$reforming_year_field_id => 'reforming_year',
+      DirectoryDB::$reforming_info_field_id => 'reforming_info',
+      // Fields that just need simple cleanup
+      DirectoryDB::$community_status_field_id => 'communityStatus',
+      DirectoryDB::$mission_statement_field_id => 'missionStatement',
+      DirectoryDB::$description_field_id => 'description',
+      DirectoryDB::$started_planning_field_id => 'startedPlanning',
+      DirectoryDB::$started_living_together_field_id => 'startedLivingTogether',
+      DirectoryDB::$open_to_members_field_id => 'openToMembership',
+      DirectoryDB::$open_to_visitors_field_id => 'openToVisitors',
+      DirectoryDB::$website_address_field_id => 'websiteUrl',
+      DirectoryDB::$business_website_field_id => 'businessUrl',
+      DirectoryDB::$facebook_address_field_id => 'facebookUrl',
+      DirectoryDB::$twitter_address_field_id => 'twitterUrl',
+      DirectoryDB::$social_address_field_id => 'socialUrl',
+      DirectoryDB::$contact_name_field_id => 'contactName',
+      DirectoryDB::$contact_phone_public_field_id => 'contactPhone',
+      DirectoryDB::$city_field_id => 'city',
+      DirectoryDB::$state_field_id => 'state',
+      DirectoryDB::$province_field_id => 'province',
+      DirectoryDB::$country_field_id => 'country',
+      DirectoryDB::$network_affiliations_field_id => 'networkAffiliations',
+      DirectoryDB::$other_affiliations_field_id => 'otherAffiliations',
+      DirectoryDB::$keywords_field_id => 'keywords',
+    );
+
+    // Validate Parameters
+    if (!$data['slug']) {
+      return new WP_Error('no_slug', 'Missing slug parameter', array('status' => 400));
+    }
+
+    // Fetch Base Entry Data
+    $entry_query = <<<SQL
+SELECT i.id AS id, post_title AS name, post_name AS slug, updated_at, created_at, p.ID as post_ID
+FROM {$wpdb->prefix}frm_items AS i
+LEFT JOIN (SELECT * FROM {$wpdb->prefix}posts WHERE post_type='directory')
+  AS p ON p.ID=i.post_id
+WHERE form_id=2 AND post_name='{$data['slug']}'
+SQL;
+    $data = $wpdb->get_row($entry_query, ARRAY_A);
+    if (!$data) {
+      return new WP_Error('entry_not_found', 'Directory Listing Not Found', array('status' => 404));
+    }
+
+    // Fetch Entry Metas
+    $entry_id = $data['id'];
+    $entry_metas_query = <<<SQL
+SELECT field_id, id, meta_value
+FROM {$wpdb->prefix}frm_item_metas as m
+WHERE item_id={$data['id']};
+SQL;
+    $field_to_meta = $wpdb->get_results($entry_metas_query, OBJECT_K);
+
+    // Add Public Fields to Data
+    foreach ($public_fields as $field_id => $json_key) {
+      $data[$json_key] = $field_to_meta[$field_id]->meta_value;
+    }
+    // TODO: If Owner, add additional fields
+    // TODO: If Owner, add additional fields?
+    return self::clean_detail_entry($data);
+  }
+
+  /* Transform the raw database values into our API Spec */
+  public static function clean_detail_entry(&$entry) {
+    $entry['id'] = self::clean_id($entry['id']);
+    $entry['updated_at'] = self::clean_date($entry['updated_at']);
+    $entry['created_at'] = self::clean_date($entry['created_at']);
+
+    if ($entry['contact_address_public'] === 'Public') {
+      $entry_type = $entry['contact_address_type'] === 'Community address'
+        ? 'community' : 'mailing';
+      $entry['contactAddress'] = array(
+        'lineOne' => $entry['address_one'],
+        'lineTwo' => $entry['line_two'],
+        'zipCode' => $entry['zip_code'],
+        'type' => $entry_type,
+      );
+    } else {
+      $entry['contactAddress'] = null;
+    }
+    unset($entry['contact_address_public']);
+    unset($entry['contact_address_type']);
+    unset($entry['address_one']);
+    unset($entry['address_two']);
+    unset($entry['zip_code']);
+
+    if ($entry['is_fic_member'] === "Yes") {
+      $entry['isFicMember'] = true;
+      if ($entry['ficMembershipStart']) {
+        $entry['ficMembershipStart'] = date('Y', strtotime($entry['membership_start_date']));
+      } else {
+        $entry['ficMembershipStart'] = "";
+      }
+    } else {
+      $entry['isFicMember'] = false;
+    }
+    unset($entry['is_fic_member']);
+    unset($entry['membership_start_date']);
+
+    if (stripos('disbanded', $entry['communityStatus']) !== false) {
+      if ($entry['disbanded_year'] || $entry['disbanded_info']) {
+        $entry['disbandedData'] = array(
+          'year' => $entry['disbanded_year'],
+          'info' => $entry['disbanded_info'],
+        );
+      }
+    }
+    unset($entry['disbanded_year']);
+    unset($entry['disbanded_info']);
+    if (stripos('re-forming', $entry['communityStatus']) !== false) {
+      if ($entry['reforming_year'] || $entry['reforming_info']) {
+        $entry['reformingData'] = array(
+          'year' => $entry['reforming_year'],
+          'info' => $entry['reforming_info'],
+        );
+      }
+    }
+    unset($entry['reforming_year']);
+    unset($entry['reforming_info']);
+
+    self::unserialize_and_convert_case($entry);
+
+    $empty_fields = array('missionStatement', 'description') ;
+    foreach ($empty_fields as $field) {
+      if (!$entry[$field]) {
+        $entry[$field] = "";
+      }
+    }
+
+    $int_fields = array('startedPlanning', 'startedLivingTogether');
+    foreach ($int_fields as $field) {
+      $entry[$field] = (int) $entry[$field];
+    }
+
+    $entry['state'] = self::clean_state($entry['state'], $entry['province']);
+    unset($entry['province']);
+
+    if (!$entry['openToMembership']) {
+      $entry['openToMembership'] = "No";
+    }
+    if (!$entry['openToVisitors']) {
+      $entry['openToVisitors'] = "No";
+    }
+
+    $url_fields = array('websiteUrl', 'businessUrl', 'facebookUrl', 'twitterUrl', 'socialUrl');
+    foreach ($url_fields as $field) {
+      $entry[$field] = self::clean_url($entry[$field]);
+    }
+    $nullable_fields = array('contactName', 'contactPhone');
+    foreach ($nullable_fields as $field) {
+      if (!$entry[$field]) {
+        $entry[$field] = null;
+      }
+    }
+
+    if (is_string($entry['networkAffiliations'])) {
+      $entry['networkAffiliations'] = array($entry['networkAffiliations']);
+    }
+
+    return $entry;
   }
 
   /* Return All Published Entries.
@@ -272,9 +519,9 @@ SQL;
 
   /* Transform the SQL Row into our API Spec */
   public static function clean_list_entry(&$entry) {
-    $entry['id'] = (int) $entry['id'];
-    $entry['updated_at'] = date('c', strtotime($entry['updated_at']));
-    $entry['created_at'] = date('c', strtotime($entry['created_at']));
+    $entry['id'] = self::clean_id($entry['id']);
+    $entry['updated_at'] = self::clean_date($entry['updated_at']);
+    $entry['created_at'] = self::clean_date($entry['created_at']);
     unset($entry['image_post_id']);
     unset($entry['post_content']);
 
@@ -284,9 +531,7 @@ SQL;
     $entry['name'] = html_entity_decode($entry['name']);
     unset($entry['post_title']);
 
-    if (!$entry['state'] && $entry['province']) {
-      $entry['state'] = $entry['province'];
-    }
+    $entry['state'] = self::clean_state($entry['state'], $entry['province']);
     unset($entry['province']);
 
     if ($entry['imageID']) {
@@ -299,6 +544,24 @@ SQL;
     }
     unset($entry['imageID']);
 
+    self::unserialize_and_convert_case($entry);
+
+    // TODO: The communities that these are necessary for should be fixed, these are required fields!
+    if (!$entry['communityTypes']) {
+      $entry['communityTypes'] = array();
+    }
+    if (!$entry['openToMembership']) {
+      $entry['openToMembership'] = "No";
+    }
+    if (!$entry['openToVisitors']) {
+      $entry['openToVisitors'] = "No";
+    }
+
+    return $entry;
+  }
+
+  /* Attempt to unserialize all fields & convert snake case fields to camel case */
+  public static function unserialize_and_convert_case(&$entry) {
     foreach (array_keys($entry) as $key) {
       // Unserialize Arrays
       $unserialized = unserialize($entry[$key]);
@@ -313,19 +576,30 @@ SQL;
         unset($entry[$key]);
       }
     }
+  }
 
-    // TODO: The communities that these are necessary for should be fixed, these are required fields!
-    if (!$entry['communityTypes']) {
-      $entry['communityTypes'] = array();
-    }
-    if (!$entry['openToMembership']) {
-      $entry['openToMembership'] = "No";
-    }
-    if (!$entry['openToVisitors']) {
-      $entry['openToVisitors'] = "No";
-    }
+  public static function clean_id($id) {
+    return (int) $id;
+  }
 
-    return $entry;
+  public static function clean_date($date) {
+    return date('c', strtotime($date));
+  }
+
+  // Merge the state & province fields
+  public static function clean_state($state, $province) {
+    if (!$state && $province) {
+      return $province;
+    }
+    return $state;
+  }
+
+  // Return a valid URL or null
+  public static function clean_url($value) {
+    if (!filter_var($value, FILTER_VALIDATE_URL)) {
+      return null;
+    }
+    return $value;
   }
 
   /* Return Published Entries for the Data Commons Co-op to Sync With.
