@@ -67,6 +67,11 @@ class ThemeGeneral
     }
 
     wp_enqueue_script('stripe-checkout', 'https://checkout.stripe.com/checkout.js', array());
+
+    $rest_config = array(
+      'nonce' => wp_create_nonce('wp_rest'),
+    );
+    wp_localize_script('jquery', 'themeRestConfig', $rest_config);
   }
 
   /* Register & Enqueue Compiled Admin Scripts

@@ -21,7 +21,10 @@
   "author": "Pavan Rikhi",
   "license": "GPL-3.0",
   "dependencies": {
+    "@webcomponents/webcomponentsjs": "2.2.1",
     "bootstrap": "4.0.0-alpha.6",
+    "coffeekraken-s-google-map-component": "^1.0.2",
+    "coffeekraken-s-google-map-marker-component": "^1.0.2",
     "css-loader": "^0.26.4",
     "elm": "^0.18.0",
     "elm-webpack-loader": "^4.5.0",

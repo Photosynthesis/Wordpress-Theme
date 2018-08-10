@@ -1,18 +1,130 @@
-module Directory.Decoders exposing (community)
+module Directory.Decoders exposing (communityDetails, communityListing)
 
 import Date exposing (Date)
-import Json.Decode as Decode exposing (Decoder, string)
+import Json.Decode as Decode exposing (Decoder, string, int, bool)
 import Json.Decode.Pipeline exposing (decode, required, optional)
 import Directory.Communities exposing (..)
+import Map exposing (Coords)
 
 
-community : Decoder Community
-community =
-    decode Community
-        |> required "id" (Decode.map CommunityID Decode.int)
+communityDetails : Decoder CommunityDetails
+communityDetails =
+    decode CommunityDetails
+        |> required "id" communityID
         |> required "name" string
         |> required "slug" string
-        |> required "imageUrl" (Decode.nullable string)
+        |> maybe "image" imageData
+        |> required "missionStatement" string
+        |> required "description" string
+        |> required "communityStatus" communityStatus
+        |> optional "disbandedData" (Decode.map Just extraStatusInfo) Nothing
+        |> optional "reformingData" (Decode.map Just extraStatusInfo) Nothing
+        |> required "startedPlanning" int
+        |> required "startedLivingTogether" int
+        |> optional "contactName" string ""
+        |> optional "contactPhone" string ""
+        |> optional "contactAddress" (Decode.map Just publicAddress) Nothing
+        |> optional "city" string ""
+        |> optional "state" string ""
+        |> optional "country" string ""
+        |> optional "websiteUrl" string ""
+        |> optional "businessUrl" string ""
+        |> optional "facebookUrl" string ""
+        |> optional "twitterUrl" string ""
+        |> optional "socialUrl" string ""
+        |> required "openToVisitors" visitorsWelcome
+        |> required "openToMembership" membersWelcome
+        |> required "isFicMember" bool
+        |> optional "ficMembershipStart" string ""
+        |> maybe "mapCoordinates" coords
+        |> required "communityTypes" (oneOrList communityType)
+        |> required "programs" (Decode.list string)
+        |> required "location" locationType
+        |> optional "landStatus" (Decode.map Just landStatus) Nothing
+        |> optional "landSizeAmount" (Decode.map Just Decode.float) Nothing
+        |> optional "landSizeUnits" (Decode.map Just Decode.string) Nothing
+        |> required "currentResidenceTypes" (Decode.list Decode.string)
+        |> maybe "currentResidences" Decode.int
+        |> required "plannedResidenceTypes" (Decode.list Decode.string)
+        |> maybe "plannedResidences" Decode.int
+        |> required "housingAccess" (oneOrList Decode.string)
+        |> maybe "landOwner" Decode.string
+        |> maybe "housingComments" Decode.string
+        |> required "adultCount" Decode.int
+        |> maybe "childCount" Decode.int
+        |> maybe "nonmemberCount" Decode.int
+        |> maybe "percentMale" Decode.string
+        |> maybe "percentFemale" Decode.string
+        |> maybe "percentTrans" Decode.string
+        |> maybe "visitorProcess" Decode.string
+        |> maybe "membershipProcess" Decode.string
+        |> maybe "membershipComments" Decode.string
+        |> required "decisionMaking" Decode.string
+        |> required "leader" Decode.string
+        |> maybe "leadershipGroup" Decode.string
+        |> maybe "governmentComments" Decode.string
+        |> required "hasJoinFee" Decode.bool
+        |> maybe "joinFee" Decode.float
+        |> required "hasRegularFees" Decode.bool
+        |> maybe "regularFees" Decode.float
+        |> required "sharedIncome" incomeSharing
+        |> required "contributeLabor" Decode.string
+        |> maybe "laborHours" Decode.float
+        |> maybe "memberDebt" Decode.string
+        |> maybe "economicsComments" Decode.string
+        |> maybe "energyInfrastructure" Decode.string
+        |> maybe "renewablePercentage" Decode.string
+        |> maybe "renewableSources" (Decode.list Decode.string)
+        |> maybe "plannedRenewablePercentage" Decode.string
+        |> maybe "currentFoodPercentage" Decode.string
+        |> maybe "plannedFoodPercentage" Decode.string
+        |> maybe "localFoodPercentage" Decode.string
+        |> required "facilities" (Decode.list Decode.string)
+        |> maybe "internetAccess" Decode.string
+        |> maybe "internetSpeed" Decode.string
+        |> maybe "cellService" Decode.string
+        |> maybe "sharedMeals" Decode.string
+        |> required "dietaryPractices" (Decode.list Decode.string)
+        |> maybe "commonDiet" Decode.string
+        |> maybe "specialDiets" Decode.string
+        |> maybe "alcohol" Decode.string
+        |> maybe "tobacco" Decode.string
+        |> maybe "dietComments" Decode.string
+        |> required "spiritualPractices" (Decode.list Decode.string)
+        |> maybe "religionExpected" Decode.string
+        |> required "education" (oneOrList Decode.string)
+        |> maybe "commonHealthcarePractice" Decode.string
+        |> maybe "healthcareComments" Decode.string
+        |> required "healthcareOptions" (oneOrList Decode.string)
+        |> maybe "lifestyleComments" Decode.string
+        |> maybe "cohousing" cohousingData
+        |> maybe "additionalComments" Decode.string
+        |> optional "galleryImages" (Decode.list imageData) []
+        |> optional "youtubeIds" (Decode.list string) []
+        |> optional "networkAffiliations" (Decode.list string) []
+        |> optional "otherAffiliations" string ""
+        |> maybe "communityAffiliations" Decode.string
+        |> required "fairHousingComplaint" Decode.bool
+        |> optional "keywords" string ""
+        |> required "updatedAt" date
+        |> required "createdAt" date
+        |> required "isAdmin" Decode.bool
+        |> required "isOwner" Decode.bool
+
+
+{-| Decode an optional field into a Maybe value.
+-}
+maybe : String -> Decoder a -> Decoder (Maybe a -> b) -> Decoder b
+maybe key decoder =
+    optional key (Decode.map Just decoder) Nothing
+
+
+communityListing : Decoder CommunityListing
+communityListing =
+    decode CommunityListing
+        |> required "id" communityID
+        |> required "name" string
+        |> required "slug" string
         |> required "thumbnailUrl" (Decode.nullable string)
         |> required "communityStatus" communityStatus
         |> optional "city" string ""
@@ -20,20 +132,20 @@ community =
         |> optional "country" string ""
         |> required "openToVisitors" visitorsWelcome
         |> required "openToMembership" membersWelcome
-        |> required "communityTypes"
-            (Decode.oneOf
-                [ singleton communityType
-                , Decode.list communityType
-                ]
-            )
+        |> required "communityTypes" (oneOrList communityType)
         |> required "updatedAt" date
         |> required "createdAt" date
+
+
+communityID : Decoder CommunityID
+communityID =
+    Decode.map CommunityID Decode.int
 
 
 communityStatus : Decoder CommunityStatus
 communityStatus =
     let
-        decode str =
+        decoder str =
             if String.contains "established" str then
                 Ok Established
             else if String.contains "re-forming" str then
@@ -46,13 +158,20 @@ communityStatus =
                 Err <| "Could not Decode " ++ str
     in
         Decode.string
-            |> Decode.andThen (String.toLower >> decode >> fromResult)
+            |> Decode.andThen (String.toLower >> decoder >> fromResult)
+
+
+extraStatusInfo : Decoder ExtraStatusInfo
+extraStatusInfo =
+    decode ExtraStatusInfo
+        |> optional "year" string ""
+        |> optional "info" string ""
 
 
 visitorsWelcome : Decoder VisitorsWelcome
 visitorsWelcome =
     let
-        decode str =
+        decoder str =
             if str == "yes" then
                 Ok Welcome
             else if String.contains "rarely" str then
@@ -63,13 +182,13 @@ visitorsWelcome =
                 Err <| "Could not Decode " ++ str
     in
         Decode.string
-            |> Decode.andThen (String.toLower >> decode >> fromResult)
+            |> Decode.andThen (String.toLower >> decoder >> fromResult)
 
 
 membersWelcome : Decoder MembersWelcome
 membersWelcome =
     let
-        decode str =
+        decoder str =
             if str == "yes" then
                 Ok Yes
             else if str == "no" then
@@ -80,7 +199,7 @@ membersWelcome =
                 Err <| "Could not Decode " ++ str
     in
         Decode.string
-            |> Decode.andThen (String.toLower >> decode >> fromResult)
+            |> Decode.andThen (String.toLower >> decoder >> fromResult)
 
 
 communityType : Decoder CommunityType
@@ -110,9 +229,113 @@ communityType =
         ]
 
 
+publicAddress : Decoder PublicAddress
+publicAddress =
+    decode PublicAddress
+        |> optional "lineOne" string ""
+        |> optional "lineTwo" string ""
+        |> optional "zipCode" string ""
+        |> required "type" publicAddressType
+
+
+publicAddressType : Decoder PublicAddressType
+publicAddressType =
+    stringToEnum
+        [ ( CommunityAddress, "community" )
+        , ( MailingAddress, "mailing" )
+        ]
+
+
+locationType : Decoder LocationType
+locationType =
+    stringToEnum
+        [ ( Rural, "rural" )
+        , ( Urban, "urban" )
+        , ( Suburban, "suburban" )
+        , ( SmallTown, "small town" )
+        , ( SmallTown, "small town or village" )
+        , ( Mobile, "mobile" )
+        , ( LocationTBD, "to be determined" )
+        ]
+
+
+landStatus : Decoder LandStatus
+landStatus =
+    stringToEnum
+        [ ( NoLand, "we do not have land" )
+        , ( UndevelopedLand, "we have raw land" )
+        , ( UndevelopedLand, "we have undeveloped land" )
+        , ( PermittingLand, "we have land in the permitting or zoning stage" )
+        , ( DevelopedLand, "we have land we have developed on" )
+        ]
+
+
+incomeSharing : Decoder IncomeSharing
+incomeSharing =
+    stringToEnum
+        [ ( NoIncomeSharing, "none" )
+        , ( NoIncomeSharing, "members have completely independent finances" )
+        , ( PartialIncomeSharing, "partial share of income" )
+        , ( FullIncomeSharing, "100%" )
+        , ( FullIncomeSharing, "all or close to all" )
+        , ( FullIncomeSharing, "close to all income" )
+        ]
+
+
+cohousingData : Decoder CohousingData
+cohousingData =
+    decode CohousingData
+        |> maybe "siteStatus" decodeCohousingStatus
+        |> maybe "yearCompleted" Decode.int
+        |> maybe "housingUnits" Decode.int
+        |> maybe "hasSharedBuilding" Decode.bool
+        |> maybe "sharedBuildingArea" Decode.int
+        |> optional "architect" string ""
+        |> optional "developer" string ""
+        |> optional "lender" string ""
+
+
+decodeCohousingStatus : Decoder CohousingStatus
+decodeCohousingStatus =
+    stringToEnum
+        [ ( CohousingBuilding, "building" )
+        , ( CohousingCompleted, "completed" )
+        , ( CohousingDisbanded, "disbanded" )
+        , ( CohousingForming, "forming" )
+        , ( CohousingOwnSite, "own site" )
+        , ( CohousingRetrofitting, "retrofitting" )
+        , ( CohousingSeekingSite, "seeking site" )
+        , ( CohousingSiteOptioned, "site optioned" )
+        , ( CohousingUnknown, "unknown" )
+        ]
+
+
+imageData : Decoder ImageData
+imageData =
+    decode ImageData
+        |> required "thumbnailUrl" string
+        |> required "imageUrl" string
+
+
+coords : Decoder Coords
+coords =
+    decode Coords
+        |> required "latitude" Decode.float
+        |> required "longitude" Decode.float
+
+
+
+-- Misc Helpers
+
+
 singleton : Decoder a -> Decoder (List a)
 singleton =
     Decode.andThen (List.singleton >> Decode.succeed)
+
+
+oneOrList : Decoder a -> Decoder (List a)
+oneOrList decoder =
+    Decode.oneOf [ singleton decoder, Decode.list decoder ]
 
 
 date : Decoder Date

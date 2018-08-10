@@ -6,35 +6,42 @@ module Directory.Main exposing (main)
 import Date
 import Navigation
 import Task
-import Directory.Messages exposing (Msg(SetCurrentDate, UrlChange, CommunityPagination))
-import Directory.Model exposing (Model, paginationConfig)
+import Directory.Commands exposing (WPNonce(..))
+import Directory.Messages exposing (Msg(SetCurrentDate, UrlChange, GalleryMsg))
+import Directory.Model exposing (Model)
 import Directory.Routing exposing (Route(..), FilterParam(..), routeParser)
 import Directory.Update exposing (update)
 import Directory.View exposing (view)
+import Gallery
 
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-    Navigation.program (routeParser >> UrlChange)
+    Navigation.programWithFlags (routeParser >> UrlChange)
         { init = initialize
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = \m -> Sub.map GalleryMsg <| Gallery.subscriptions m.communityGallery
         , view = view
         }
 
 
-initialize : Navigation.Location -> ( Model, Cmd Msg )
-initialize location =
+type alias Flags =
+    { nonce : String
+    }
+
+
+initialize : Flags -> Navigation.Location -> ( Model, Cmd Msg )
+initialize { nonce } location =
     let
         route =
             routeParser location
 
-        ( model, paginationCmd ) =
-            Directory.Model.initial route
+        ( model, cmd ) =
+            Directory.Model.initial route (WPNonce nonce)
     in
         ( model
         , Cmd.batch
             [ Task.perform SetCurrentDate Date.now
-            , Cmd.map CommunityPagination paginationCmd
+            , cmd
             ]
         )

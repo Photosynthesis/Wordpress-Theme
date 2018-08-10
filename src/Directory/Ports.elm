@@ -1,4 +1,4 @@
-port module Directory.Ports exposing (..)
+port module Directory.Ports exposing (scrollTo, setPageTitle)
 
 {-| Contains Every Javascript Port Used in the Application.
 -}

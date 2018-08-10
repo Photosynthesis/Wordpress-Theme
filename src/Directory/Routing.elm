@@ -4,7 +4,7 @@ module Directory.Routing exposing (..)
 -}
 
 import Navigation
-import UrlParser exposing (Parser, (</>), (<?>), s, int, map, oneOf, parsePath)
+import UrlParser exposing (Parser, (</>), (<?>), s, int, string, map, oneOf, parsePath)
 
 
 -- QueryString Filters
@@ -250,11 +250,11 @@ filtersToQueryString filters =
 
         ( topLevelFilterString, otherFilters ) =
             List.foldl
-                (\( topLevelFilter, topLevelParameterName ) ( topLevelFilterString, otherFilters ) ->
-                    List.partition topLevelFilter otherFilters
+                (\( topLevelFilter, topLevelParameterName ) ( topLevelFilterString_, otherFilters_ ) ->
+                    List.partition topLevelFilter otherFilters_
                         |> Tuple.mapFirst
                             (List.map (makeTopLevelParameter topLevelParameterName)
-                                >> (::) topLevelFilterString
+                                >> (::) topLevelFilterString_
                                 >> String.join "&"
                             )
                 )
@@ -273,25 +273,30 @@ filtersToQueryString filters =
                 |> List.sortBy toString
                 |> List.map filterParamToQueryString
                 |> String.join ","
-                |> (\s ->
-                        if not (String.isEmpty s) then
-                            "filters=" ++ s
+                |> (\str ->
+                        if not (String.isEmpty str) then
+                            "filters=" ++ str
                         else
                             ""
                    )
     in
         List.filter (not << String.isEmpty) [ filterString, topLevelFilterString ]
             |> String.join "&"
-            |> (\s ->
-                    if String.isEmpty s then
+            |> (\str ->
+                    if String.isEmpty str then
                         ""
                     else
-                        "?" ++ s
+                        "?" ++ str
                )
 
 
 
 -- Routes
+
+
+type Route
+    = ListingsRoute ListingsRoute
+    | DetailsRoute String
 
 
 {-| The Potential Listing Routes, With a Page Number & List of Filters.
@@ -300,7 +305,7 @@ TODO: Experiment w/ splitting Comm Type into different Type & having a single ro
 Or refactor parameters into single record type w/ `getParameters : Route -> ...`
 
 -}
-type Route
+type ListingsRoute
     = Listings Int (List FilterParam)
     | Communes Int (List FilterParam)
     | Ecovillages Int (List FilterParam)
@@ -317,7 +322,7 @@ type Route
 
 {-| Return the Page Title for a Route.
 -}
-getPageTitle : Route -> String
+getPageTitle : ListingsRoute -> String
 getPageTitle route =
     case route of
         Listings _ _ ->
@@ -360,7 +365,7 @@ getPageTitle route =
 {-| Get filters that aren't inherent to the Route. For example, the `Communes`
 route will never return a `CommunesFilter`.
 -}
-getAdditionalFilters : Route -> List FilterParam
+getAdditionalFilters : ListingsRoute -> List FilterParam
 getAdditionalFilters route =
     case route of
         Listings _ filters ->
@@ -403,10 +408,10 @@ getAdditionalFilters route =
 {-| Get the filters that are inherent to a Route, ignoring any additional ones.
 For example, the `Communes` route will always return `[ CommunesFilter ]`.
 -}
-getInherentFilters : Route -> List FilterParam
+getInherentFilters : ListingsRoute -> List FilterParam
 getInherentFilters route =
     case route of
-        Listings _ filters ->
+        Listings _ _ ->
             []
 
         Communes _ _ ->
@@ -445,14 +450,14 @@ getInherentFilters route =
 
 {-| Get Both the Inherent & Additional Filters for a Route.
 -}
-getFilters : Route -> List FilterParam
+getFilters : ListingsRoute -> List FilterParam
 getFilters route =
     getAdditionalFilters route ++ getInherentFilters route
 
 
 {-| Return the Page Number & All Filters for a Route.
 -}
-getPageAndFilters : Route -> ( Int, List FilterParam )
+getPageAndFilters : ListingsRoute -> ( Int, List FilterParam )
 getPageAndFilters route =
     flip (,) (getFilters route) <|
         case route of
@@ -496,7 +501,7 @@ getPageAndFilters route =
 {-| Return a Function that Will Return the First Page of a Route When Given a
 `FilterParam` List.
 -}
-toPageOne : Route -> (List FilterParam -> Route)
+toPageOne : ListingsRoute -> (List FilterParam -> ListingsRoute)
 toPageOne route =
     case route of
         Listings _ _ ->
@@ -538,7 +543,7 @@ toPageOne route =
 
 {-| Map Transformations to Both the Page & `FilterParam` List of a Route.
 -}
-mapBoth : (Int -> Int) -> (List FilterParam -> List FilterParam) -> Route -> Route
+mapBoth : (Int -> Int) -> (List FilterParam -> List FilterParam) -> ListingsRoute -> ListingsRoute
 mapBoth func1 func2 route =
     case route of
         Listings page filters ->
@@ -580,14 +585,14 @@ mapBoth func1 func2 route =
 
 {-| Map a Transformation to the Page Number of a Route.
 -}
-mapPage : (Int -> Int) -> Route -> Route
+mapPage : (Int -> Int) -> ListingsRoute -> ListingsRoute
 mapPage func =
     mapBoth func identity
 
 
 {-| Map a Transformation to the `FilterParam` List of a Route.
 -}
-mapFilters : (List FilterParam -> List FilterParam) -> Route -> Route
+mapFilters : (List FilterParam -> List FilterParam) -> ListingsRoute -> ListingsRoute
 mapFilters =
     mapBoth identity
 
@@ -601,7 +606,7 @@ type Ordering
 
 {-| Return the `Ordering` of a `Route`, for Route's That Have Orderings.
 -}
-getOrdering : Route -> Maybe Ordering
+getOrdering : ListingsRoute -> Maybe Ordering
 getOrdering route =
     case route of
         RecentlyUpdated _ _ ->
@@ -614,10 +619,10 @@ getOrdering route =
             Nothing
 
 
-{-| Return a Parser for all Routes.
+{-| Return a Parser for all Listings Routes.
 -}
-parser : Parser (Route -> a) a
-parser =
+listingsParser : Parser (ListingsRoute -> a) a
+listingsParser =
     oneOf
         [ addQueryParams (Listings 1) (s "directory" </> s "listings")
         , addQueryParams Listings (s "directory" </> s "listings" </> int)
@@ -646,10 +651,18 @@ parser =
         ]
 
 
-{-| Return the Path for a `Route`.
+parser : Parser (Route -> a) a
+parser =
+    oneOf
+        [ map ListingsRoute listingsParser
+        , map DetailsRoute (s "directory" </> string)
+        ]
+
+
+{-| Return the Path for a `ListingsRoute`.
 -}
-reverse : Route -> String
-reverse route =
+listingsReverse : ListingsRoute -> String
+listingsReverse route =
     "/directory/"
         ++ case route of
             Listings 1 filterParams ->
@@ -725,8 +738,21 @@ reverse route =
                 "newest-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
 
+reverse : Route -> String
+reverse route =
+    case route of
+        ListingsRoute listingsRoute ->
+            listingsReverse listingsRoute
+
+        DetailsRoute slug ->
+            "/directory/" ++ slug ++ "/"
+
+
 {-| Parse a Path into a Route, Defaulting to the Listings Route.
+
+TODO: Add 404 route & default to it.
+
 -}
 routeParser : Navigation.Location -> Route
 routeParser =
-    parsePath parser >> Maybe.withDefault (Listings 1 [])
+    parsePath parser >> Maybe.withDefault (ListingsRoute <| Listings 1 [])

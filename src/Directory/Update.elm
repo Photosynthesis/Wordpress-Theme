@@ -6,17 +6,29 @@ module Directory.Update exposing (update)
 import Directory.Commands as Commands
 import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model, paginationConfig)
-import Directory.Pagination as Pagination exposing (Pagination)
-import Directory.Routing as Routing exposing (Route(..), FilterParam(..), reverse)
+import Directory.Pagination as Pagination
+import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..))
+import Gallery
+import RemoteData
 
 
-{-| Make Model Changes & Queue Commands Related to Page Changes.
--}
 updateUrl : Route -> Model -> ( Model, Cmd Msg )
-updateUrl route model =
+updateUrl newRoute model =
+    case newRoute of
+        ListingsRoute listingsRoute ->
+            listingsUpdateUrl listingsRoute model
+
+        DetailsRoute slug ->
+            detailsUpdateUrl slug model
+
+
+{-| Make Model Changes & Queue Commands Related to ListingsRoute Page Changes.
+-}
+listingsUpdateUrl : ListingsRoute -> Model -> ( Model, Cmd Msg )
+listingsUpdateUrl route model =
     let
         updatedModel =
-            { model | route = route, searchString = updatedSearchString }
+            { model | route = ListingsRoute route, searchString = updatedSearchString }
 
         jumpToPage page =
             let
@@ -47,8 +59,16 @@ updateUrl route model =
 
         updatedSearchString =
             Routing.getSearchFilter filters |> Maybe.withDefault ""
+
+        fromDetailsPage =
+            case model.route of
+                DetailsRoute _ ->
+                    True
+
+                ListingsRoute _ ->
+                    False
     in
-        if filters /= communityFilters || ordering /= communityOrdering then
+        if filters /= communityFilters || ordering /= communityOrdering || fromDetailsPage then
             Pagination.updateData paginationConfig model.communities updatedRequestData
                 |> (\( m, c ) ->
                         ( { updatedModel | communities = m }, Cmd.map CommunityPagination c )
@@ -57,6 +77,20 @@ updateUrl route model =
             jumpToPage page
         else
             ( model, Cmd.none )
+
+
+{-| Make Model Changes & Queue Commands Related to DetailsRoute Page Changes.
+-}
+detailsUpdateUrl : String -> Model -> ( Model, Cmd Msg )
+detailsUpdateUrl slug model =
+    ( { model
+        | route = DetailsRoute slug
+        , community = RemoteData.Loading
+        , communityGallery = Gallery.initial
+        , communityValidation = RemoteData.NotAsked
+      }
+    , Commands.getCommunity model.wpNonce slug
+    )
 
 
 {-| Update the Model Based According to Some Message.
@@ -81,8 +115,14 @@ update msg model =
         SubmitSearchForm ->
             let
                 newRoute =
-                    Routing.mapFilters replaceSearchFilter model.route
-                        |> Routing.mapPage (always 1)
+                    case model.route of
+                        ListingsRoute listingsRoute ->
+                            Routing.mapFilters replaceSearchFilter listingsRoute
+                                |> Routing.mapPage (always 1)
+                                |> ListingsRoute
+
+                        DetailsRoute _ ->
+                            model.route
 
                 replaceSearchFilter filters =
                     case filters of
@@ -103,16 +143,27 @@ update msg model =
                     Pagination.update paginationConfig subMsg model.communities
 
                 hasPageChanged =
-                    Tuple.first (Routing.getPageAndFilters model.route)
-                        /= Pagination.getPage paginationModel
+                    case model.route of
+                        ListingsRoute listingsRoute ->
+                            Tuple.first (Routing.getPageAndFilters listingsRoute)
+                                /= Pagination.getPage paginationModel
+
+                        DetailsRoute _ ->
+                            True
 
                 pageChangeCmd =
-                    if hasPageChanged then
-                        model.route
-                            |> Routing.mapPage (always <| Pagination.getPage paginationModel)
-                            |> Commands.newPage
-                    else
-                        Cmd.none
+                    case model.route of
+                        ListingsRoute listingsRoute ->
+                            if hasPageChanged then
+                                listingsRoute
+                                    |> Routing.mapPage (always <| Pagination.getPage paginationModel)
+                                    |> ListingsRoute
+                                    |> Commands.newPage
+                            else
+                                Cmd.none
+
+                        DetailsRoute _ ->
+                            Cmd.none
             in
                 ( { model | communities = paginationModel }
                 , Cmd.batch
@@ -120,3 +171,49 @@ update msg model =
                     , pageChangeCmd
                     ]
                 )
+
+        FetchCommunityDetails details ->
+            ( { model | community = details }, Cmd.none )
+
+        VerifyCommunityClicked ->
+            case model.community of
+                RemoteData.Success community ->
+                    ( { model | communityValidation = RemoteData.Loading }
+                    , Commands.validateCommunity model.wpNonce community.id
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        ValidateCommunity isValid ->
+            ( { model | communityValidation = isValid }, Cmd.none )
+
+        GalleryMsg subMsg ->
+            let
+                galleryConfig =
+                    Gallery.Config .thumbnailUrl .imageUrl
+
+                updatedModel =
+                    case model.community of
+                        RemoteData.Success community ->
+                            { model
+                                | communityGallery =
+                                    Gallery.update galleryConfig
+                                        subMsg
+                                        model.communityGallery
+                                    <|
+                                        allImages community
+                            }
+
+                        _ ->
+                            model
+
+                allImages community =
+                    case community.image of
+                        Nothing ->
+                            community.galleryImages
+
+                        Just image ->
+                            image :: community.galleryImages
+            in
+                ( updatedModel, Cmd.none )
