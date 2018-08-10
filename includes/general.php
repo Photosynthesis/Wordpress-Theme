@@ -3,8 +3,8 @@
 class ThemeGeneral
 {
   /** Special Page IDs **/
-  public static $home_page_id = 14986;
-  public static $development_page_id = 255787;
+  public static $home_page_slug = 'home';
+  public static $development_page_slug = 'support';
 
   /** General Theme Functions **/
 
@@ -200,8 +200,8 @@ CSS;
     $excluded =
       (get_post_type() == 'directory')
       || ($post->post_name === 'directory')
-      || ($post->ID === ThemeGeneral::$home_page_id)
-      || ($post->ID === ThemeGeneral::$development_page_id);
+      || ($post->post_name === ThemeGeneral::$home_page_slug)
+      || ($post->post_name === ThemeGeneral::$development_page_slug);
     if ($excluded) {
       return $post_content;
     }
@@ -212,8 +212,8 @@ CSS;
   public static function remove_richtext_editor($can_use) {
     global $post;
 
-    if ($post->ID === ThemeGeneral::$home_page_id ||
-        $post->ID === ThemeGeneral::$development_page_id ||
+    if ($post->post_name === ThemeGeneral::$home_page_slug ||
+        $post->post_name === ThemeGeneral::$development_page_slug ||
         $post->post_name === 'directory') {
       return false;
     }
