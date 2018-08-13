@@ -159,60 +159,145 @@ class ThemeWooCommerce
     }
   }
 
-  /* Add A Flat Rate Shipping Charge for Applicable Items */
-  const flat_shipping_rate_id = "flat_rate:6";
-  const flat_rate_variation_ids = array(241498, 241528, 241523);
-  const us_flat_rate_cost = 7;
-  const global_flat_rate_cost = 15;
-  public static function add_flat_rate_charges($rates, $package) {
+  const flat_rate_shipping_id = "flat_rate:6";
+  const international_base_cost = 18;
+  const dropshipped_variation_ids = array(241498, 241528, 241523);
+  const board_game_product_id = 262010;
+  const wisdom_volume_variation_ids = array(264135, 264138, 264125, 259375);
+  /* Apply various flat rate shipping plans to a cart */
+  public static function apply_flat_rate_charges($rates, $package) {
+    /* array of:
+      *  countries => (code => dollar charge)
+      *  global => fallback dollar charge
+      *  variations => [variation ids]
+      *  products => [product ids]
+      *  ignore_domestic => bool to fallback to automatic domestic prices
+      */
+    $flat_rates = array(
+      // dropshipped
+      array(
+        'countries' => array('US' => 7),
+        'global' => 15,
+        'variations' => self::dropshipped_variation_ids,
+        'products' => array(),
+        'ignore_domestic' => FALSE,
+      ),
+      // board game
+      array(
+        'countries' => array('US' => 9.50, 'CA' => 25),
+        'global' => 50,
+        'variations' => array(),
+        'products' => array(self::board_game_product_id),
+        'ignore_domestic' => FALSE,
+      ),
+      // wisdom volumes
+      array(
+        'countries' => array(),
+        'global' => 8,
+        'variations' => self::wisdom_volume_variation_ids,
+        'products' => array(),
+        'ignore_domestic' => TRUE,
+      )
+    );
+
+    /* Ignore empty carts */
+    if (count($package['contents']) === 0) { return $rates; }
+
+    $shipping_country = $package['destination']['country'];
+
+    /* Count the occurence of each flat rate's product */
+    // initialize counts
+    $flat_rate_counts = array();
+    foreach ($flat_rates as $index => $flat_rate) {
+      $flat_rate_counts[$index] = 0;
+    }
+
     $total_count = 0;
-    $flat_rate_count = 0;
+    // track products & variants for mixed cart case
+    $flat_variations_in_package = array();
+    $flat_products_in_package = array();
     foreach ($package['contents'] as $product) {
       $total_count += $product['quantity'];
-      if (array_search($product['variation_id'], self::flat_rate_variation_ids) !== false) {
-        $flat_rate_count += $product['quantity'];
+      foreach ($flat_rates as $index => $flat_rate) {
+        $variation_match = array_search($product['variation_id'], $flat_rate['variations']) !== FALSE;
+        $product_match = array_search($product['product_id'], $flat_rate['products']) !== FALSE;
+        $is_exempt_domestic = $shipping_country === 'US' && $flat_rate['ignore_domestic'] === TRUE;
+        if (($variation_match || $product_match) && !$is_exempt_domestic) {
+          $flat_rate_counts[$index] += $product['quantity'];
+          if ($variation_match) {
+            $flat_variations_in_package[] = $product['variation_id'];
+          } else {
+            $flat_products_in_package[] = $product['product_id'];
+          }
+          // Only charge one flat rate at most to each product
+          break;
+        }
+      }
+    }
+    $total_flat_rate_count = array_sum($flat_rate_counts);
+
+    /* Return the original rates or base international rate if no flat charges apply */
+    if ($total_flat_rate_count === 0) {
+      if ($shipping_country == 'US') {
+        unset($rates[self::flat_rate_shipping_id]);
+        return $rates;
+      } else {
+        $rates[self::flat_rate_shipping_id]->cost = self::international_base_cost;
+        return array(self::flat_rate_shipping_id => $rates[self::flat_rate_shipping_id]);
       }
     }
 
-    $flat_rate_cost = $package['destination']['country'] === 'US' ?
-      self::us_flat_rate_cost : self::global_flat_rate_cost;
-    $flat_rate_cost *= $flat_rate_count;
 
-    if ($flat_rate_count === $total_count) {
-      // No Items
-      if ($total_count === 0) { return $rates; }
+    /* Determine the cost for each applicable flat rate */
+    $flat_rate_costs = array();
+    foreach ($flat_rate_counts as $index => $count) {
+      $flat_rate_costs[$index] = NULL;
+      foreach ($flat_rates[$index]['countries'] as $country_code => $cost) {
+        if ($shipping_country === $country_code) {
+          $flat_rate_costs[$index] = $cost * $count;
+          break;
+        }
+      }
+      if (is_null($flat_rate_costs[$index])) {
+        $flat_rate_costs[$index] = $flat_rates[$index]['global'] * $count;
+      }
+    }
+    $total_flat_rate_cost = array_sum($flat_rate_costs);
 
-      // Only Flat Rate Items
-      $rates[self::flat_shipping_rate_id]->cost = $flat_rate_cost;
-      return array(self::flat_shipping_rate_id => $rates[self::flat_shipping_rate_id]);
+    /* Return the flat rate cost if purchasing only flat rate items */
+    if ($total_count === $total_flat_rate_count) {
+      $rates[self::flat_rate_shipping_id]->cost = $total_flat_rate_cost;
+      return array(self::flat_rate_shipping_id => $rates[self::flat_rate_shipping_id]);
     }
 
-    unset($rates[self::flat_shipping_rate_id]);
 
-    // No Flat Rate Items
-    if ($flat_rate_count === 0) { return $rates; }
+    /* If international, add base international rate to flat rate item total */
+    if ($shipping_country !== 'US') {
+      $rates[self::flat_rate_shipping_id]->cost = $total_flat_rate_cost + self::international_base_cost;
+      return array(self::flat_rate_shipping_id => $rates[self::flat_rate_shipping_id]);
+    }
 
-    // Mixed Flat Rate & Normal Items
 
+    /* Calculate the cost of the non-flat rate items & return combination */
+    // Disable the flat rate shipping option
+    unset($rates[self::flat_rate_shipping_id]);
+    // Make new contents array with no flat rate items
     $normal_items = array();
-    while (sizeof($package['contents']) > 0) {
-      end($package['contents']);
-      $item_key = key($package['contents']);
-      reset($package['contents']);
-      $item = array_pop($package['contents']);
-      if (array_search($item['variation_id'], self::flat_rate_variant_ids) === false) {
+    foreach ($package['contents'] as $item_key => $item) {
+      $variation_match = array_search($item['variation_id'], $flat_variations_in_package) !== FALSE;
+      $product_match = array_search($item['product_id'], $flat_products_in_package) !== FALSE;
+      if (!($variation_match || $product_match)) {
         $normal_items[$item_key] = $item;
       }
     }
+    // Calculate shipping cost with new contents
     $package['contents'] = $normal_items;
-
-    $shipping = WC_Shipping::instance();
-    $rates = $shipping->calculate_shipping_for_package($package)['rates'];
-
+    $wc_shipping = WC_Shipping::instance();
+    $rates = $wc_shipping->calculate_shipping_for_package($package)['rates'];
+    // Increase calculated costs by flat rate cost
     foreach ($rates as &$rate) {
-      $rate->cost += $flat_rate_cost;
+      $rate->cost += $total_flat_rate_cost;
     }
-
     return $rates;
   }
 
@@ -405,7 +490,7 @@ add_filter('manage_edit-shop_order_columns', array('ThemeWooCommerce', 'add_purc
 add_action('manage_shop_order_posts_custom_column', array('ThemeWooCommerce', 'render_purchased_column'));
 add_action('groups_created_user_group', array('ThemeWooCommerce', 'add_back_issue_access'), 10, 2);
 add_action('groups_deleted_user_group', array('ThemeWooCommerce', 'remove_back_issue_access'), 10, 2);
-add_filter('woocommerce_package_rates', array('ThemeWooCommerce', 'add_flat_rate_charges'), 99, 2);
+add_filter('woocommerce_package_rates', array('ThemeWooCommerce', 'apply_flat_rate_charges'), 99, 2);
 add_action('woocommerce_subscription_renewal_payment_failed', array('ThemeWooCommerce', 'email_customer_on_renewal_fail'));
 add_action('woocommerce_process_product_file_download_paths', array('ThemeWooCommerce', 'give_download_access_and_notify'), 11, 3);
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
