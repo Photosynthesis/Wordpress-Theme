@@ -11,18 +11,15 @@
  * the readme will list any important changes.
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
- * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.0.0
+ * @version 3.4.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-  exit; // Exit if accessed directly
-}
+defined( 'ABSPATH' ) || exit;
 
 global $product;
 
-// Ensure visibility
+// Ensure visibility.
 if ( empty( $product ) || ! $product->is_visible() ) {
   return;
 }
@@ -32,7 +29,7 @@ if ($product->is_on_sale()) {
   $card_classes .= ' card-outline-primary';
 }
 ?>
-<li <?php post_class('text-center col-12 col-sm-8 col-lg-6 mb-4'); ?>>
+<li <?php wc_product_class('text-center col-12 col-sm-8 col-lg-6 mb-4'); ?>>
   <a href='<?php the_permalink(); ?>'>
     <div class='<?php echo $card_classes; ?>'>
       <?php woocommerce_show_product_loop_sale_flash();

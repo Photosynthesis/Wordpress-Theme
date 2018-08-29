@@ -10,21 +10,18 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see       https://docs.woocommerce.com/document/template-structure/
- * @author    WooThemes
- * @package   WooCommerce/Templates
- * @version     3.0.0
+ * @see     https://docs.woocommerce.com/document/template-structure/
+ * @package WooCommerce/Templates
+ * @version 3.4.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-  exit; // Exit if accessed directly
-}
+defined( 'ABSPATH' ) || exit;
 
 ?>
 
 <?php
   /**
-   * woocommerce_before_single_product hook.
+   * Hook: woocommerce_before_single_product
    *
    * @hooked wc_print_notices - 10
    */
@@ -36,12 +33,12 @@ if ( ! defined( 'ABSPATH' ) ) {
    }
 ?>
 
-<div id="product-<?php the_ID(); ?>" <?php post_class('row'); ?>>
+<div id="product-<?php the_ID(); ?>" <?php wc_product_class('row'); ?>>
 
   <div class='col-24 col-sm-8 text-center text-sm-left'><div>
   <?php
     /**
-     * woocommerce_before_single_product_summary hook.
+     * Hook: woocommerce_before_single_product_summary
      *
      * @hooked woocommerce_show_product_sale_flash - 10
      * @hooked woocommerce_show_product_images - 20
@@ -54,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <?php
       /**
-       * woocommerce_single_product_summary hook.
+       * Hook: woocommerce_single_product_summary
        *
        * @hooked woocommerce_template_single_title - 5
        * @hooked woocommerce_template_single_rating - 10
@@ -72,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
   <?php
     /**
-     * woocommerce_after_single_product_summary hook.
+     * Hook: woocommerce_after_single_product_summary
      *
      * @hooked woocommerce_output_product_data_tabs - 10
      * @hooked woocommerce_upsell_display - 15
