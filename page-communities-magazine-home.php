@@ -18,7 +18,7 @@
       $posts_query = new WP_Query(array(
         'category_name' => 'communities-articles',
         'post_type' => 'post',
-        'posts_per_page' => 10,
+        'posts_per_page' => 15,
       ));
       if ($posts_query->have_posts()) {
         while ($posts_query->have_posts()) {
