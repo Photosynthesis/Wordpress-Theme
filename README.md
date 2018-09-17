@@ -9,7 +9,7 @@ Right now this is mostly a port of our old Headway theme, but we are slowly
 migrating to use Elm + REST & will possibly redesign various pages. We may
 slowly migrate to a Haskell/Servant backend.
 
-Right now only the Directory List pages use Elm.
+Right now only the Directory List pages & our Wholesale Order Form use Elm.
 
 
 ```
@@ -36,7 +36,9 @@ npm run watch
 
 ## Elm Code Style
 
-Autoformat all code with `elm-format`.
+* All Elm code should live in the `src` directory under as a single elm
+  project. Unrelated pages should be split up by webpack entry points.
+* Autoformat all code with `elm-format`.
 
 ## License
 
