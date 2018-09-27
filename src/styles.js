@@ -57,15 +57,22 @@ $(document).ready(function() {
 
   /* Menu Hovering */
   var menuHoverTimeout = 325;
-  var menuCloseTimeout = 100;
+  var menuCloseTimeout = 300;
   var menuHoverTimer = null;
+  var menuCloseTimers = {};
   $('li.menu-item.dropdown').hover(function() {
+    var $this = $(this);
+
     if (menuHoverTimer) {
       clearTimeout(menuHoverTimer);
       menuHoverTimer = null;
     }
+    var timerId = $this.attr('id');
+    if (menuCloseTimers[timerId]) {
+      clearTimeout(menuCloseTimers[timerId]);
+      menuCloseTimers[timerId] = null;
+    }
     /* Open Submenus on Hover In */
-    var $this = $(this);
     menuHoverTimer = setTimeout(function() {
       $this.children('.dropdown-menu').stop(true, true).slideDown('fast');
       $this.addClass('show');
@@ -77,7 +84,7 @@ $(document).ready(function() {
     }
     /* Close Submenus on Hover Out */
     var $this = $(this);
-    setTimeout(function() {
+    menuCloseTimers[$this.attr('id')] = setTimeout(function() {
       $this.children('.dropdown-menu').stop(true, true).slideUp('fast');
       $this.removeClass('show');
     }, menuCloseTimeout);
