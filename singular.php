@@ -1,31 +1,36 @@
 <?php ThemeGeneral::top(); ?>
 
+<?php ThemeGeneral::giving_tuesday(); ?>
+
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-  <div class='clearfix'><?php
-    $thumbnail = get_the_post_thumbnail(get_the_ID(), 'post-thumbnail', array('class' => 'p-1 img-fluid'));
-    if ($thumbnail != '') { ?>
-      <div class="float-sm-left mr-sm-2 mb-2">
-        <div class='text-center text-sm-left'>
-          <div class="card d-inline-block"><a href="<?php the_permalink(); ?>">
-            <?php echo $thumbnail; ?>
-          </a></div>
-        </div>
-      </div><?php
-    } ?>
-    <div>
-      <?php if (!is_page()) { ?>
-        <h1 class='entry-title'><?php the_title(); ?></h1>
-        <div>
-          <small class="text-muted pb-3">
-            Posted on <span class='updated published'><?php echo get_the_date('F j, Y'); ?></span>
-            by <span class='author'><?php the_author_posts_link(); ?></span>
-            <br class='hidden-lg-up' /><span class='hidden-md-down'> - </span>
-            <a href="<?php comments_link(); ?>"><?php comments_number("0 Comments"); ?></a>
-          </small>
-        </div>
-      <?php } ?>
+  <div class='clearfix'>
+    <div class='clearfix'><?php
+      $thumbnail = get_the_post_thumbnail(get_the_ID(), 'post-thumbnail', array('class' => 'p-1 img-fluid'));
+      if ($thumbnail != '') { ?>
+        <div class="float-sm-left mr-sm-2 mb-2">
+          <div class='text-center text-sm-left'>
+            <div class="card d-inline-block"><a href="<?php the_permalink(); ?>">
+              <?php echo $thumbnail; ?>
+            </a></div>
+          </div>
+        </div><?php
+      } ?>
+      <div>
+        <?php if (!is_page()) { ?>
+          <h1 class='entry-title'><?php the_title(); ?></h1>
+          <div>
+            <small class="text-muted pb-3">
+              Posted on <span class='updated published'><?php echo get_the_date('F j, Y'); ?></span>
+              by <span class='author'><?php the_author_posts_link(); ?></span>
+              <br class='hidden-lg-up' /><span class='hidden-md-down'> - </span>
+              <a href="<?php comments_link(); ?>"><?php comments_number("0 Comments"); ?></a>
+            </small>
+          </div>
+        <?php } ?>
+      </div>
     </div>
+
     <div class='mt-3 entry-content'><?php the_content(); ?></div>
   </div>
 
