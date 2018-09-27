@@ -126,31 +126,75 @@ class ThemeWooCommerce
   const membership_back_issues_product_id = 242058;
   const fic_membership_group_id = 4;
   const membership_back_issues_via = 'FIC-Membership';
+  const wisdom_authors_digital_product_id = 267811;
+  const wisdom_digital_group_id = 5;
+  const wisdom_digital_via = 'FIC-Wisdom-Authors';
+  // Array of orders to create when a user joins a group
+  const group_orders = array(
+    array(
+      'product_id' => self::membership_back_issues_product_id,
+      'group_id' => self::fic_membership_group_id,
+      'via' => self::membership_back_issues_via,
+      'note' => 'FIC Membership Allows Access to Back Issue Downloads',
+    ),
+    array(
+      'product_id' => self::wisdom_authors_digital_product_id,
+      'group_id' => self::wisdom_digital_group_id,
+      'via' => self::wisdom_digital_via,
+      'note' => 'Authoring a Wisdom Article Gives Access to All Wisdom Volumes',
+    )
+  );
 
-  /* Provide Back Issue Downloads For A User in the FIC Membership Group. */
-  public static function add_back_issue_access($user_id, $group_id) {
-    if ($group_id != self::fic_membership_group_id) { return; }
+  /* Add related orders for the group the user is joining */
+  public static function add_group_order($user_id, $group_id) {
+    foreach (self::group_orders as $group_order) {
+      self::add_order_on_group_join(
+        $group_order['product_id'],
+        $group_order['group_id'],
+        $group_order['via'],
+        $group_order['note'],
+        $user_id,
+        $group_id
+      );
+    }
+  }
 
-    $back_issues = wc_get_product(self::membership_back_issues_product_id);
+  /* Delete related orders for the group the user is leaving */
+  public static function remove_group_order($user_id, $group_id) {
+    foreach (self::group_orders as $group_order) {
+      self::remove_order_on_group_leave(
+        $group_order['group_id'],
+        $group_order['via'],
+        $user_id,
+        $group_id
+      );
+    }
+  }
+
+  /* Add an order for the given product if the group ids match */
+  public static function add_order_on_group_join($product_id, $target_group_id, $order_via, $note, $user_id, $group_id) {
+    if ($group_id != $target_group_id) { return; }
+
+    $product = wc_get_product($product_id);
 
     $order = wc_create_order(array(
       'customer_id' => $user_id,
-      'customer_note' => 'FIC Membership Allows Access to Back Issue Downloads',
-      'created_via' => self::membership_back_issues_via,
+      'customer_note' => $note,
+      'created_via' => $order_via,
     ));
-    $order->add_product($back_issues);
+    $order->add_product($product);
     $order->calculate_totals();
     $order->update_status('completed');
   }
 
-  /* Remove Back Issue Downloads For a User in the FIC Membership Group. */
-  public static function remove_back_issue_access($user_id, $group_id) {
-    if ($group_id != self::fic_membership_group_id) { return; }
+  /* Delete all orders with the given `via` line if the group ids match */
+  public static function remove_order_on_group_leave($target_group_id, $order_via, $user_id, $group_id) {
+    if ($group_id != $target_group_id) { return; }
 
     $orders = wc_get_orders(array(
       'customer_id' => $user_id,
-      'created_via' => self::membership_back_issues_via,
-      'limit' => 1,
+      'created_via' => $order_via,
+      'limit' => 0,
     ));
 
     foreach ($orders as $order) {
@@ -488,8 +532,8 @@ add_filter('woocommerce_before_widget_product_list', array('ThemeWooCommerce', '
 add_filter('woocommerce_after_widget_product_list', array('ThemeWooCommerce', 'products_widget_end'));
 add_filter('manage_edit-shop_order_columns', array('ThemeWooCommerce', 'add_purchased_column_header'));
 add_action('manage_shop_order_posts_custom_column', array('ThemeWooCommerce', 'render_purchased_column'));
-add_action('groups_created_user_group', array('ThemeWooCommerce', 'add_back_issue_access'), 10, 2);
-add_action('groups_deleted_user_group', array('ThemeWooCommerce', 'remove_back_issue_access'), 10, 2);
+add_action('groups_created_user_group', array('ThemeWooCommerce', 'add_group_order'), 10, 2);
+add_action('groups_deleted_user_group', array('ThemeWooCommerce', 'remove_group_order'), 10, 2);
 add_filter('woocommerce_package_rates', array('ThemeWooCommerce', 'apply_flat_rate_charges'), 99, 2);
 add_action('woocommerce_subscription_renewal_payment_failed', array('ThemeWooCommerce', 'email_customer_on_renewal_fail'));
 add_action('woocommerce_process_product_file_download_paths', array('ThemeWooCommerce', 'give_download_access_and_notify'), 11, 3);
