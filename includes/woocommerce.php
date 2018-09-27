@@ -211,6 +211,7 @@ class ThemeWooCommerce
   const wall_calendar_product_id = 267438;
   /* Apply various flat rate shipping plans to a cart */
   public static function apply_flat_rate_charges($rates, $package) {
+    $cmag_products = self::get_cmag_physical_products();
     /* array of:
       *  countries => (code => dollar charge)
       *  global => fallback dollar charge
@@ -249,6 +250,14 @@ class ThemeWooCommerce
         'global' => 18,
         'variations' => array(self::wisdom_set_variation_id),
         'products' => array(),
+        'ignore_domestic' => TRUE,
+      ),
+      // cmag issues
+      array(
+        'countries' => array('CA' => 15),
+        'global' => 22,
+        'variations' => $cmag_products['variations'],
+        'products' => $cmag_products['products'],
         'ignore_domestic' => TRUE,
       ),
       // wall calendar
@@ -349,6 +358,35 @@ class ThemeWooCommerce
       $rate->cost += $total_flat_rate_cost;
     }
     return $rates;
+  }
+
+  const bundles_category_id = 655;
+  /* Return an array of all the Communities Magazine physical products. */
+  public static function get_cmag_physical_products() {
+    $query_args = array(
+      'virtual' => false,
+      'category' => array('current-issue', 'back-issues'),
+      'limit' => -1,
+    );
+    $products = wc_get_products($query_args);
+    $variation_ids = array();
+    $product_ids = array();
+    foreach ($products as $product) {
+      $is_bundle = array_search(self::bundles_category_id, $product->get_category_ids());
+      if ($is_bundle) {
+        continue;
+      }
+      if ($product->is_type('simple')) {
+        $product_ids[] = $product->get_id();
+      } elseif ($product->is_type('variable')) {
+        foreach ($product->get_available_variations() as $variation) {
+          if ($variation['is_virtual'] === FALSE) {
+            $variation_ids[] = $variation['variation_id'];
+          }
+        }
+      }
+    }
+    return array('products' => $product_ids, 'variations' => $variation_ids);
   }
 
   /* Email Customers if their Subscription Renewal's Payment Fails */
