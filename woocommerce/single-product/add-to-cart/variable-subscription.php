@@ -4,7 +4,7 @@
  *
  * @author  Prospress
  * @package WooCommerce-Subscriptions/Templates
- * @version 2.0.9
+ * @version 2.2.20
  */
 if ( ! defined( 'ABSPATH' ) ) {
   exit;
@@ -31,6 +31,10 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
         <p class="limited-subscription-notice notice"><?php esc_html_e( 'You have an active subscription to this product already.', 'woocommerce-subscriptions' ); ?></p>
       <?php endif; ?>
     <?php else : ?>
+      <?php if ( ! empty( wp_list_filter( $available_variations, array( 'is_purchasable' => false ) ) ) ) : ?>
+        <p class="limited-subscription-notice notice"><?php esc_html_e( 'You have added a variation of this product to the cart already.', 'woocommerce-subscriptions' ); ?></p>
+      <?php endif; ?>
+
       <div class="variations">
         <?php foreach ( $attributes as $attribute_name => $options ) : ?>
           <div class='row form-group mb-2'>
@@ -42,10 +46,8 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
               ?>
             </div>
           </div>
-        <?php endforeach;?>
+        <?php endforeach; ?>
       </div>
-
-      <?php do_action( 'woocommerce_before_add_to_cart_button' ); ?>
 
       <div class="single_variation_wrap">
         <?php
@@ -69,7 +71,6 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
         ?>
       </div>
 
-      <?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
     <?php endif; ?>
   <?php endif; ?>
 
