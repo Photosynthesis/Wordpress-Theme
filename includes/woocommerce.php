@@ -204,7 +204,6 @@ class ThemeWooCommerce
   }
 
   const flat_rate_shipping_id = "flat_rate:6";
-  const international_base_cost = 18;
   const dropshipped_variation_ids = array(241498, 241528, 241523);
   const board_game_product_id = 262010;
   const wisdom_volume_variation_ids = array(264135, 264138, 264125, 259375);
@@ -298,15 +297,10 @@ class ThemeWooCommerce
     }
     $total_flat_rate_count = array_sum($flat_rate_counts);
 
-    /* Return the original rates or base international rate if no flat charges apply */
+    /* Return the original rates if no flat charges apply */
     if ($total_flat_rate_count === 0) {
-      if ($shipping_country == 'US') {
-        unset($rates[self::flat_rate_shipping_id]);
-        return $rates;
-      } else {
-        $rates[self::flat_rate_shipping_id]->cost = self::international_base_cost;
-        return array(self::flat_rate_shipping_id => $rates[self::flat_rate_shipping_id]);
-      }
+      unset($rates[self::flat_rate_shipping_id]);
+      return $rates;
     }
 
 
@@ -330,13 +324,6 @@ class ThemeWooCommerce
     /* Return the flat rate cost if purchasing only flat rate items */
     if ($total_count === $total_flat_rate_count) {
       $rates[self::flat_rate_shipping_id]->cost = $total_flat_rate_cost;
-      return array(self::flat_rate_shipping_id => $rates[self::flat_rate_shipping_id]);
-    }
-
-
-    /* If international, add base international rate to flat rate item total */
-    if ($shipping_country !== 'US') {
-      $rates[self::flat_rate_shipping_id]->cost = $total_flat_rate_cost + self::international_base_cost;
       return array(self::flat_rate_shipping_id => $rates[self::flat_rate_shipping_id]);
     }
 
