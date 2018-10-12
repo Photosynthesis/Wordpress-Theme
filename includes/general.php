@@ -262,6 +262,36 @@ CSS;
     return $output;
   }
 
+  /* Echo the Image Banner HTML */
+  public static function image_banner() {
+    global $post;
+
+    if (is_front_page() || $post->post_name === ThemeGeneral::$development_page_slug) {
+      return;
+    } else {
+      /* Randomize cmag banners */
+      if (mt_rand(0,1)) {
+        $img_url = "https://www.ic.org/wp-content/uploads/2018/08/CommunitiesMag_Fall18.jpg";
+      } else {
+        $img_url = "https://www.ic.org/wp-content/uploads/2018/08/CommunitiesMag_Fall18_2.jpg";
+      }
+      $link_url = "https://www.ic.org/community-bookstore/product/communities-magazine-networking-communities/";
+    }
+
+
+    echo <<<HTML
+  <div class="row mb-3"><div class="col-24 text-center">
+    <a target="_blank" href="{$link_url}">
+      <img
+        class="img-fluid mx-auto"
+        src="{$img_url}"
+        title="Support the FIC, Donate Today"
+      />
+    </a>
+  </div></div>
+HTML;
+  }
+
   /* Allow eBook Uploads */
   public static function allow_ebook_mimes($mimes) {
     return array_merge($mimes, array(

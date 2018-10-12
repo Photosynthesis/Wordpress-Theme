@@ -4,7 +4,10 @@ get_header(); ?>
 <div class="row">
   <!-- Content -->
   <div class="<?php echo ThemeGeneral::main_column_css_classes(); ?>" id="main">
+    <?php ThemeGeneral::image_banner(); ?>
+
     <h1 class="entry-title"><?php the_title(); ?></h1>
+
     <?php if (!post_password_required()) { ?>
       <div class="incsub_wiki incsub_wiki_single">
         <div class="clearfix wiki_tabs incsub_wiki_tabs_top"><?php echo $wiki->tabs(); ?></div>

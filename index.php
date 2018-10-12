@@ -1,6 +1,8 @@
 <?php
 ThemeGeneral::top();
 
+ThemeGeneral::image_banner();
+
 
 if (have_posts()) {
   while (have_posts()) {

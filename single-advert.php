@@ -6,7 +6,10 @@ ThemeGeneral::top();
 $post_id = get_the_ID();
 ?>
 
+<?php ThemeGeneral::image_banner(); ?>
+
 <h2><?php the_title(); ?></h2>
+
 
 <!-- Image Slider -->
 <?php

@@ -1,5 +1,7 @@
 <?php ThemeGeneral::top(); ?>
 
+<?php ThemeGeneral::image_banner(); ?>
+
 
 <div class="posts">
   <?php

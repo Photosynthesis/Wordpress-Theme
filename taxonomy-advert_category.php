@@ -1,8 +1,11 @@
 <?php ThemeGeneral::top(); ?>
 
+<?php ThemeGeneral::image_banner(); ?>
+
 
 <h1><?php echo str_replace('Category: ', '', get_the_title()); ?></h1>
 <hr class="mt-2" />
+
 <p><?php the_archive_description(); ?></p>
 <div class="posts">
   <?php

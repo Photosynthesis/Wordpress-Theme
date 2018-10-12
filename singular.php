@@ -1,6 +1,6 @@
 <?php ThemeGeneral::top(); ?>
 
-<?php ThemeGeneral::giving_tuesday(); ?>
+<?php ThemeGeneral::image_banner(); ?>
 
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>

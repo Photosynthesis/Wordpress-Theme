@@ -7,7 +7,7 @@ get_header(); ?>
 
 <div class='row'>
   <div class='col-24 mt-2'>
-    <?php ThemeGeneral::giving_tuesday(); ?>
+    <?php ThemeGeneral::image_banner(); ?>
 
     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
         <div class='clearfix'><?php

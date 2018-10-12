@@ -1,5 +1,7 @@
 <?php ThemeGeneral::top('wc'); ?>
 
+<?php ThemeGeneral::image_banner(); ?>
+
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
   <div class='mt-3'><?php woocommerce_content(); ?></div>

@@ -1,5 +1,6 @@
 <?php ThemeGeneral::top(); ?>
 
+<?php ThemeGeneral::image_banner(); ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
   <div class='clearfix'><?php

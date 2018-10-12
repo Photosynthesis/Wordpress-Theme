@@ -3,7 +3,10 @@
 <div class="row">
   <!-- Content -->
   <div class="<?php echo ThemeGeneral::main_column_css_classes(); ?>" id="main">
+    <?php ThemeGeneral::image_banner(); ?>
+
     <h2>Page Not Found</h2>
+
     <p>It appears that the page you are looking for does not exist, or has been
        moved elsewhere.</p>
     <?php
