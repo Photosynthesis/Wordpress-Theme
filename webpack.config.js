@@ -64,7 +64,7 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('[chunkHash].css'),
+    new ExtractTextPlugin('[contenthash].css'),
     new webpack.DefinePlugin({ isProduction: isProduction }),
     new WebpackCleanupPlugin(),
   ],
