@@ -19,6 +19,9 @@
           <a href="http://gen.ecovillage.org" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sister_org_GEN']); ">
             <img src="<?php echo $footer_logo_path; ?>gen.png" alt="Global Ecovillage Network" title="Global Ecovillage Network" width="168" height="40" hspace="4" border="0">
           </a>
+          <a href="https://neweconomy.net/" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sister_org_NEC']); ">
+            <img src="<?php echo $footer_logo_path; ?>nec.png" alt="New Economy Coalition" title="New Economy Coalition" width="212" height="40" hspace="4" border="0">
+          </a>
         </div>
         <div class="mt-1 mb-1">
           <a href="http://www.numundo.org/" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sponsor_NM']); ">
@@ -38,6 +41,9 @@
           </a>
           <a href="http://www.transitionus.org/" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sponsor_TransitionUS']); ">
             <img src="<?php echo $footer_logo_path; ?>transition-us.png" alt="Transition US" title="Transition US" height="40" hspace="4" border="0">
+          </a>
+          <a href="https://nwcommunities.org/" target="blank" onclick="_gaq.push(['_trackEvent', 'Click', 'sponsor_NICA']); ">
+            <img src="<?php echo $footer_logo_path; ?>nica.jpg" alt="NW Intentional Communities Association" title="NW Intentional Communities Association" width="114" height="40" hspace="4" border="0">
           </a>
         </div>
       </div>
