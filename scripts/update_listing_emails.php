@@ -1,8 +1,17 @@
 <?php
 /** Send Update Reminder Emails for Directory Listings that haven't been
- *  updated or verified in 18 months.
+ *  updated or verified in 18 months. The first update reminder will set the
+ *  `Update Email Date` field for a listing.
  *
- *  This script is run daily by cron.
+ *  30 days after a listee has been notified, they will be sent a second
+ *  reminder. 14 days after the second reminder, the contact, backup contact,
+ *  and directory manager will be sent a final notification.
+ *
+ *  No listings are automatically de-activated - that's up to the directory
+ *  manager to handle manually.
+ *
+ *  This script should be run daily by cron.
+ *
  */
 
 require_once __DIR__ . '/../../../../wp-load.php';
@@ -17,26 +26,27 @@ function main() {
 
 /* Filter Out Listings That Have Been Verified or Updated in the Past 18 Months */
 function is_old_enough($item) {
-  $upper_limit = strtotime("18 months ago");
-  $lower_limit = strtotime("18 months 1 day ago");
+  $limit = strtotime("18 months ago 00:00:00");
   $verified_date = DirectoryDB::get_item_meta_value(
     DirectoryDB::$verified_date_field_id, $item['id']);
   if ($verified_date === false) {
     $latest_date = $item['updated_at'];
   } else if ($verified_date > $item['updated_at']) {
-    $latest_date = $verified_date;
+    $latest_date = $verified_date . " 00:00:00";
   } else {
     $latest_date = $item['updated_at'];
   }
-  if ($item['id'] === 41814) { print_r($latest_date); }
-  if (strtotime($latest_date) > $upper_limit ||
-      strtotime($latest_date) < $lower_limit) {
-    return false;
-  }
-  return true;
+  return strtotime($latest_date) < $limit;
 }
 
-/* Send a Notification Email to the Community's Contact Email */
+/* Send a Notification Email to the Community's Contact Email.
+ *
+ * If we've sent the first notification email already, send one of the
+ * alternatives if it's been 30 or 44 days since then.
+ *
+ * If the contact email does not exist, the directory manager is notified.
+ *
+ */
 function send_notification_email($item) {
   $community_name = DirectoryDB::get_name($item);
   $contact_name = DirectoryDB::get_item_meta_value(
@@ -45,29 +55,103 @@ function send_notification_email($item) {
     DirectoryDB::$contact_email_field_id, $item['id']);
   $listing_link = get_permalink($item['post_id']);
 
+  $verified_date = DirectoryDB::get_item_meta_value(
+    DirectoryDB::$verified_date_field_id, $item['id']);
+  $latest_date = strtotime(
+    ($verified_date && $verified_date > $item['updated_at'])
+    ? $verified_date . '00:00:00' : $item['updated_at']
+  );
+
+  $previous_update_email_date = DirectoryDB::get_item_meta_value(
+    DirectoryDB::$update_email_date_field_id, $item['id']);
+  if ($previous_update_email_date !== FALSE) {
+    $previous_update_email_date = strtotime($previous_update_email_date . " 00:00:00");
+  }
+
+  $update_email_already_sent = $previous_update_email_date !== FALSE
+    && $previous_update_email_date >= $latest_date;
+  if ($update_email_already_sent) {
+    // If already sent, don't email unless we are 30/44 days after that
+    $is_thirty_days =
+      (strtotime('30 days ago 00:00:00') > $previous_update_email_date) &&
+      (strtotime('31 days ago 00:00:00') <= $previous_update_email_date);
+    $is_forty_four_days =
+      (strtotime('44 days ago 00:00:00') > $previous_update_email_date) &&
+      (strtotime('45 days ago 00:00:00') <= $previous_update_email_date);
+    if ($is_thirty_days) {
+      $email_type = 'second';
+    } else if ($is_forty_four_days) {
+      $email_type = 'third';
+    } else {
+      // If first email sent & not time to send others, don't send anything
+      return;
+    }
+  } else {
+    $email_type = 'first';
+  }
+
   if ($contact_email === false) {
     $admin_link = "http://www.ic.org/wp-admin/admin.php?page=formidable-entries&frm_action=edit&id={$item['id']}";
     wp_mail("directory@ic.org", "[FIC] Automated Update Reminder Failed",
-      "I couldn't send the '18 months since your last update' email because " .
-      "this community doesn't have a contact email!\n\n{$admin_link}");
+      "I couldn't send the 'Update Your Listing' email because " .
+      "this community doesn't have a contact email!\n\n{$admin_link}\n");
+    // Set the Update Email date field(even though we've sent no "Update
+    // Email") so the Directory Manager doesn't get spammed with this every
+    // day.
+    DirectoryDB::update_or_insert_item_meta(
+      DirectoryDB::$update_email_date_field_id, $item['id'], date('Y-m-d'));
     return;
   }
 
   $subject = "[FIC] Please Verify Your Listing is Up to Date";
 
   $message =
-    "Hello " . ($contact_name ? $contact_name : $community_name) . ",\n\n" .
-    "It looks like your Directory Listing, \"{$community_name}\", hasn't been " .
-    "updated or verified in over 18 months.\n\n" .
-    "Please review & update your listing if any information has changed. If everything " .
-    "is still up to date, you can simply log in & click \"Verify Listing\" on your " .
-    "Listing's page:\n\n\t\t{$listing_link}\n\n" .
-    "Thanks!\n\n" .
-    "---\n\nThis is an automated message. For support with your Listing, please contact " .
-    "directory@ic.org.\n\n";
+    "Hello " . ($contact_name ? $contact_name : $community_name) . ",\n\n";
+  if ($email_type === 'first') {
+    $message .=
+      "Your Communities Directory Listing, \"{$community_name}\", has not been " .
+      "updated or verified in at least 18 months. Please log into your account and " .
+      "update the information for your community.\n\n";
+  } else if ($email_type === 'second') {
+    $message .=
+      "Your Communities Directory Listing, \"{$community_name}\", needs your attention. " .
+      "The listing has not been updated in over 18 months and will SOON BE REMOVED from " .
+      "ic.org/directory.\n\n";
+  } else if ($email_type === 'third') {
+    $message .=
+      "This is your third email reminding you to update your Communities Directory " .
+      "listing, \"{$community_name}\". Your community will soon be removed from " .
+      "ic.org/directory.\n\n";
+  }
+  $message .=
+    "If you know your information is up-to-date, you can simply log-in & click " .
+    "\"Verify Listing\" on your Listing's page:\n\n\t\t{$listing_link}\n\n" .
 
+    "If you need help with your log-in information or with editing your listing, " .
+    "send an email to our Directory Manager at directory@ic.org with your " .
+    "Community's name in the message.\n\n" .
 
-  wp_mail($contact_email, $subject, $message);
+    "If you would like to remove your Community's listing, you can either log in " .
+    "and remove the listing, or request directory@ic.org to do it for you.\n\n" .
+
+    "Thank You!";
+
+  $headers = array('Reply-To: directory@ic.org');
+  if ($email_type === 'third') {
+    $headers[] = 'Cc: directory@ic.org';
+    $backup_email = DirectoryDB::get_item_meta_value(
+      DirectoryDB::$backup_email_field_id, $item['id']);
+    if ($backup_email) {
+      $headers[] = 'Cc: ' . $backup_email;
+    }
+  }
+
+  wp_mail($contact_email, $subject, $message, $headers);
+
+  if ($email_type === 'first') {
+    DirectoryDB::update_or_insert_item_meta(
+      DirectoryDB::$update_email_date_field_id, $item['id'], date('Y-m-d'));
+  }
 }
 
 main();

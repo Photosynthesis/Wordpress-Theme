@@ -15,10 +15,12 @@ class DirectoryDB
   public static $open_to_visitors_field_id = 256;
   public static $contact_email_field_id = 199;
   public static $contact_name_field_id = 202;
+  public static $backup_email_field_id = 284;
   public static $city_field_id = 427;
   public static $state_field_id = 815;
   public static $province_field_id = 816;
   public static $country_field_id = 424;
+  public static $update_email_date_field_id = 992;
 
   /* Return an Array of every published community. */
   public static function get_published_items() {

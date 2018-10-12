@@ -18,6 +18,14 @@ class ThemeDirectory
       }
   }
 
+  /* Reset the "Update Email Date" when an entry is updated */
+  public static function reset_update_email_date($entry_id, $form_id) {
+    if ($form_id == 2) {
+      DirectoryDB::update_or_insert_item_meta(
+        DirectoryDB::$update_email_date_field_id, $entry_id, '');
+    }
+  }
+
   /* Show Usernames instead of Display Names for the User ID field */
   public static function use_usernames($values, $field, $entry_id=false) {
       $user_field_id = 430;
@@ -69,6 +77,7 @@ class ThemeDirectory
 }
 
 add_action('frm_after_update_entry', array('ThemeDirectory', 'send_manager_notification'), 10, 2);
+add_action('frm_after_update_entry', array('ThemeDirectory', 'reset_update_email_date'), 10, 2);
 add_filter('frm_setup_new_fields_vars', array('ThemeDirectory', 'use_usernames'), 20, 2);
 add_filter('frm_setup_edit_fields_vars', array('ThemeDirectory', 'use_usernames'), 20, 3);
 add_filter('frm_validate_field_entry', array('ThemeDirectory', 'set_comment_status'), 8, 3);
