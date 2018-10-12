@@ -53,7 +53,7 @@ class ThemeGeneral
         array(), null);
     }
 
-    if ($wholesale_js_filename !== "" && $post->post_name === "wholesale") {
+    if ($wholesale_js_filename !== "") {
       wp_enqueue_script(
         $wholesale_js_filename,
         get_stylesheet_directory_uri() . "/dist/{$wholesale_js_filename}",
