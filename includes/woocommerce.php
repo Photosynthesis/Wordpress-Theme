@@ -208,6 +208,7 @@ class ThemeWooCommerce
   const board_game_product_id = 262010;
   const wisdom_volume_variation_ids = array(264135, 264138, 264125, 259375);
   const wisdom_set_variation_id = 265599;
+  const best_of_comm_set_variation_id = 169405;
   const wall_calendar_product_id = 267438;
   /* Apply various flat rate shipping plans to a cart */
   public static function apply_flat_rate_charges($rates, $package) {
@@ -247,7 +248,7 @@ class ThemeWooCommerce
       // wisdom set
       array(
         'countries' => array(),
-        'global' => 18,
+        'global' => 26,
         'variations' => array(self::wisdom_set_variation_id),
         'products' => array(),
         'ignore_domestic' => TRUE,
@@ -258,6 +259,14 @@ class ThemeWooCommerce
         'global' => 22,
         'variations' => $cmag_products['variations'],
         'products' => $cmag_products['products'],
+        'ignore_domestic' => TRUE,
+      ),
+      // best of communities set
+      array(
+        'countries' => array(),
+        'global' => 26,
+        'variations' => array(self::best_of_comm_set_variation_id),
+        'products' => array(),
         'ignore_domestic' => TRUE,
       ),
       // wall calendar
