@@ -125,12 +125,13 @@ SQL;
         $values = explode(",", $filter_value);
         $where_clauses = array();
         foreach ($values as $value) {
+          $escaped = esc_sql($value);
           if ($filter['compare'] == '=')  {
-            $comparison = "='{$value}'";
+            $comparison = "='{$escaped}'";
           } else if ($filter['compare'] == 'LIKE%') {
-            $comparison = " LIKE '{$value}%'";
+            $comparison = " LIKE '{$escaped}%'";
           } else if ($filter['compare'] == '%LIKE%') {
-            $comparison = " LIKE '%{$value}%'";
+            $comparison = " LIKE '%{$escaped}%'";
           }
           $where_clauses[] = "{$meta_fields[$field_id]}_metas.meta_value{$comparison}";
         }
@@ -148,8 +149,9 @@ SQL;
       $selects[] = "posts.post_content";
       $where_clauses = array();
       foreach ($search_values as $search_value) {
-        $where_clauses[] = "posts.post_content LIKE '%{$search_value}%'";
-        $where_clauses[] = "posts.post_title LIKE '%{$search_value}%'";
+        $escaped = esc_sql($search_value);
+        $where_clauses[] = "posts.post_content LIKE '%{$escaped}%'";
+        $where_clauses[] = "posts.post_title LIKE '%{$escaped}%'";
       }
       $where_clauses = "(" . join(" OR ", $where_clauses) . ")";
       $wheres .= " AND {$where_clauses}";
