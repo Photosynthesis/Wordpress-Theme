@@ -67,6 +67,8 @@ type alias PublicAddress =
     }
 
 
+{-| The Type of Address We Have for a Community.
+-}
 type PublicAddressType
     = CommunityAddress
     | MailingAddress
