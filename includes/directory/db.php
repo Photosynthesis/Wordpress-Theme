@@ -7,6 +7,7 @@ class DirectoryDB
   public static $membership_end_field_id = 985;
   public static $verified_date_field_id = 978;
   public static $primary_image_field_id = 228;
+  public static $mission_statement_field_id = 286;
   public static $description_field_id = 277;
   public static $community_status_field_id = 291;
   public static $community_types_field_id = 262;
@@ -16,10 +17,17 @@ class DirectoryDB
   public static $contact_email_field_id = 199;
   public static $contact_name_field_id = 202;
   public static $backup_email_field_id = 284;
+  public static $is_address_public_field_id = 285;
+  public static $public_address_type_field_id = 953;
+  public static $address_one_field_id = 425;
+  public static $address_two_field_id = 426;
   public static $city_field_id = 427;
   public static $state_field_id = 815;
   public static $province_field_id = 816;
+  public static $zipcode_field_id = 429;
   public static $country_field_id = 424;
+  public static $latitude_field_id = 684;
+  public static $longitude_field_id = 685;
   public static $update_email_date_field_id = 992;
 
   /* Return an Array of every published community. */

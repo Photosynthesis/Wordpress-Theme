@@ -10,6 +10,10 @@ class APIDirectory
       'methods' => 'GET',
       'callback' => array('APIDirectory', 'entries'),
     ));
+    register_rest_route(self::api_namespace, '/data-commons/', array(
+      'methods' => 'GET',
+      'callback' => array('APIDirectory', 'data_commons'),
+    ));
   }
 
   /* Return All Published Entries.
@@ -320,6 +324,237 @@ SQL;
     }
 
     return $entry;
+  }
+
+  /* Return Published Entries for the Data Commons Co-op to Sync With.
+   *
+   * This route is accessible via GET requests. An `apiKey` parameter is
+   * required & should match the `DCC_API_KEY` defined in `wp-config.php or
+   * `local_settings.php`. If the parameter is incorrect or not included, the
+   * route will return a 401 error. If the `DCC_API_KEY` has not been defined,
+   * a 500 error will be thrown.
+   *
+   * A successful request will return a record with a single field, `listings`,
+   * whose value is an array of records with the following fields:
+   *
+   *    - id
+   *    - name
+   *    - slug
+   *    - types
+   *    - description
+   *    - missionStatement
+   *    - latitude (decimal as a string or null)
+   *    - longitude (decimal as a string or null)
+   *    - addressLineOne (string or null)
+   *    - addressLineTwo (string or null)
+   *    - addressType ('mailing', 'community', or null)
+   *    - city
+   *    - state
+   *    - postalCode (string or null)
+   *    - country
+   *
+   * The optional address fields are included if the listing's address has been
+   * set to `Public`.
+   *
+   * Each request will include 100 listings. The page of listings can be
+   * specified via the `page` parameter.
+   *
+   */
+  public static function data_commons($data) {
+    global $wpdb;
+
+    // Check auth. 401 for wrong key, 500 for no key defined
+    if (!defined('DCC_API_KEY')) {
+      return new WP_Error(
+        'unconfigured_key',
+        'Server Config Error: Data Commons Co-Op API Key Not Defined',
+        array('status' => 500)
+      );
+    } else if (!array_key_exists('apiKey', $data->get_params())) {
+      return new WP_Error(
+        'no_api_key',
+        'Unauthorized: Route Requires API Key',
+        array('status' => 401)
+      );
+    } else if ($data['apiKey'] !== DCC_API_KEY) {
+      return new WP_Error(
+        'invalid_api_key',
+        'Unauthorized: Invalid API Key',
+        array('status' => 401)
+      );
+    }
+
+    $meta_fields = array(
+      218 => 'is_listing_public',
+      DirectoryDB::$is_address_public_field_id => 'is_address_public',
+      DirectoryDB::$community_types_field_id => 'types',
+      DirectoryDB::$description_field_id => 'description',
+      DirectoryDB::$mission_statement_field_id => 'missionStatement',
+      DirectoryDB::$latitude_field_id => 'latitude',
+      DirectoryDB::$longitude_field_id => 'longitude',
+      DirectoryDB::$address_one_field_id => 'addressLineOne',
+      DirectoryDB::$address_two_field_id => 'addressLineTwo',
+      DirectoryDB::$public_address_type_field_id => 'addressType',
+      DirectoryDB::$city_field_id => 'city',
+      DirectoryDB::$state_field_id => 'state',
+      DirectoryDB::$province_field_id => 'province',
+      DirectoryDB::$zipcode_field_id => 'postalCode',
+      DirectoryDB::$country_field_id => 'country',
+    );
+
+    $meta_selects = array();
+    $meta_joins = array();
+
+    foreach ($meta_fields as $field_id => $field_key) {
+      $meta_selects[] = $field_key . ".meta_value AS " . $field_key;
+      $meta_joins[] = <<<SQL
+        LEFT JOIN
+          (SELECT item_id, field_id, meta_value
+           FROM {$wpdb->prefix}frm_item_metas WHERE field_id={$field_id}
+          ) AS {$field_key} ON {$field_key}.item_id=items.id
+SQL;
+    }
+
+    $meta_selects = join(', ', $meta_selects);
+    $meta_joins = join("\n", $meta_joins);
+
+    $per_page = 100;
+    $page = (int) $data['page'];
+    $page = $page ? $page : 1;
+    $start = ($page - 1) * $per_page;
+    $limit = "LIMIT {$start}, {$per_page}";
+
+    $query = <<<SQL
+SELECT
+  items.id, items.name, posts.post_title, posts.post_name AS slug, {$meta_selects}
+FROM {$wpdb->prefix}frm_items as items
+INNER JOIN
+  (SELECT ID, post_type, post_status, post_title, post_name
+   FROM {$wpdb->prefix}posts AS posts
+   WHERE (`post_type`='directory' AND `post_status`='publish')
+  ) AS posts ON posts.ID=items.post_id
+
+{$meta_joins}
+
+WHERE (items.is_draft=0 AND items.form_id=2 AND is_listing_public.meta_value <> "No")
+
+ORDER BY items.id
+{$limit}
+SQL;
+
+    $entries = $wpdb->get_results($query, ARRAY_A);
+
+    $address_fields = array(
+      'latitude', 'longitude', 'addressLineOne', 'addressLineTwo',
+      'addressType', 'postalCode'
+    );
+
+    // Cleanup each entry
+    foreach ($entries as $key => $entry) {
+      $entries[$key]['id'] = (int) $entry['id'];
+      // remove fields only used in query
+      unset($entries[$key]['is_listing_public']);
+
+      // clean name
+      if (!$entry['name'] && $entry['post_title']) {
+        $entries[$key]['name'] = $entry['post_title'];
+      }
+      unset($entries[$key]['post_title']);
+
+      // clean state/province
+      if (!$entry['state'] && $entry['province']) {
+        $entries[$key]['state'] = $entry['province'];
+      }
+      unset($entries[$key]['province']);
+
+      // null address if not public
+      if ($entry['is_address_public'] === 'Private') {
+        foreach ($address_fields as $address_field) {
+          $entries[$key][$address_field] = NULL;
+        }
+      } else {
+        $entries[$key]['addressType'] =
+          ($entry['addressType'] === 'Community address')
+          ? 'community'
+          : 'mailing';
+        // Hide default/(0,0) lat/long
+        if (($entry['latitude'] == 0 && $entry['longitude'] == 0) ||
+            ($entry['latitude'] == "39.095963" && $entry['longitude'] == "-96.606447")) {
+          $entries[$key]['latitude'] = NULL;
+          $entries[$key]['longitude'] = NULL;
+        }
+      }
+      unset($entries[$key]['is_address_public']);
+
+      // unserialize & clean community types
+      $unserialized_types = unserialize($entry['types']);
+      $raw_types =
+        is_array($unserialized_types)
+        ? $unserialized_types
+        : array($entry['types']);
+      $community_types = array();
+      foreach ($raw_types as $community_type) {
+        switch (strtolower($community_type)) {
+        case "cohousing (individual homes within group owned property.)":
+          $community_types[] =
+            "Cohousing (individual homes within group property)";
+          break;
+        case "commune (organized around sharing almost everything.)":
+          $community_types[] =
+            "Commune (organized around sharing almost everything)";
+          break;
+        case "ecovillage (organized around ecology and sustainability.)":
+          $community_types[] =
+            "Ecovillage (organized around ecology and sustainability)";
+          break;
+        case "traditional or indigenous community":
+          $community_types[] =
+            "Traditional or Indigenous";
+          break;
+        case "other":
+        case "ethical business~ investment group~ or alternative currency":
+        case "land trust":
+        case "neighborhood or community housing association":
+        case "neighborhood, community housing, or homeowner\\'s association":
+        case "organizations~ resources~ or networks":
+        case "other":
+        case "school~ educational institute or experience":
+        case "unspecified, or other":
+        case "volunteer~ internship~ apprenticeship~ or wwoof’ing":
+          $community_types[] =
+            "Unspecified or Other";
+          break;
+        case "shared housing (multiple individuals sharing a dwelling.)":
+        case "shared housing or co-living (multiple individuals sharing a dwelling.)":
+        case "shared housing, cohouseholding, or coliving (multiple individuals sharing a dwelling.)":
+          $community_types[] =
+            "Shared Housing, Cohouseholding, or Coliving (multiple individuals sharing a dwelling)";
+          break;
+        case "spiritual or religious community or organization":
+        case "spiritual or religious community":
+          $community_types[] =
+            "Spiritual or Religious";
+          break;
+        case "student housing or student co-op":
+          $community_types[] =
+            "Student Housing or Student Co-Op";
+          break;
+        case "transition town (post-petroleum and off-grid communities.)":
+        case "transition town or eco-neighborhood (focused on energy/resource resiliency)":
+          $community_types[] =
+            "Transition Town or Eco-Neighborhood (focused on energy/resource resiliency)";
+          break;
+        case "":
+          break;
+        default:
+          error_log("DCC API ROUTE - No Decoder for Type\n\t{$community_type}");
+        }
+
+        $entries[$key]['types'] = $community_types;
+
+      }
+    }
+    return $entries;
   }
 
 }
