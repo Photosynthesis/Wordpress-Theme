@@ -47,7 +47,7 @@ view { communities, searchString, currentDate, route } =
                     Just "/rss-newly-listed-directory-listings/"
 
                 RecentlyUpdated _ _ ->
-                    Just "/rss-recently-updated-directory-listings/"
+                    Just "/rss-recently-updated-community-listings/"
 
                 _ ->
                     Nothing
