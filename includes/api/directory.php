@@ -442,7 +442,7 @@ ORDER BY items.id
 {$limit}
 SQL;
 
-    $entries = $wpdb->get_results($query, ARRAY_A);
+    $entries = stripslashes_deep($wpdb->get_results($query, ARRAY_A));
 
     $address_fields = array(
       'latitude', 'longitude', 'addressLineOne', 'addressLineTwo',
