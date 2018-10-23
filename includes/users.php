@@ -148,8 +148,28 @@ HTML;
     if (!current_user_can('edit_post', $post_id)) {
       return $post_id;
     }
-    $user_id = wc_get_order($post_id)->get_user_id();
+    $post_type = get_post_type($post_id);
+    if ($post_type === FALSE) {
+      return $post_id;
+    }
+    if ($post_type === 'shop_order') {
+      $user_id = wc_get_order($post_id)->get_user_id();
+    } else if ($post_type === 'shop_subscription') {
+      $user_id = wcs_get_subscription($post_id)->get_user_id();
+    } else {
+      return $post_id;
+    }
     update_user_meta($user_id, self::adb_meta_key, intval($_POST['adb_number']));
+  }
+
+  public static function get_adb_number_for_user() {
+    // this is supposed to be misspelled
+    check_ajax_referer('theme-admin-ajax', 'security');
+
+    $user_id = intval($_GET['user_id']);
+    $adb_number = get_user_meta($user_id, self::adb_meta_key, true);
+    echo json_encode(array('adb' => $adb_number));
+    exit;
   }
 }
 
@@ -164,5 +184,6 @@ add_action('edit_user_profile', array('ThemeUsers', 'show_adb_input'));
 add_action('edit_user_profile_update', array('ThemeUsers', 'update_user_adb'));
 add_action('add_meta_boxes', array('ThemeUsers', 'add_adb_meta_box'));
 add_action('save_post', array('ThemeUsers', 'update_adb_meta_box'));
+add_action('wp_ajax_get_user_adb_number', array('ThemeUsers', 'get_adb_number_for_user'));
 
 ?>

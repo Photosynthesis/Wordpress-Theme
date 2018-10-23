@@ -24,7 +24,11 @@ class ThemeGeneral
     add_image_size('card-image', 0, 300);
   }
 
-  /* Register & Enqueue Compiled Scripts & Styles */
+  /* Register & Enqueue Compiled Scripts & Styles.
+   *
+   * Ignores any scripts starting with `admin_` - those are loaded by the
+   * `enqueue_admin_assets` method.
+   */
   public static function enqueue_assets() {
     global $post;
 
@@ -39,6 +43,8 @@ class ThemeGeneral
           continue;
         } else if (strpos($dist_file, "wholesale") !== false && $wholesale_js_filename === "") {
           $wholesale_js_filename = $dist_file;
+          continue;
+        } else if (strpos($dist_file, "admin_") === 0) {
           continue;
         }
         wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
@@ -61,6 +67,24 @@ class ThemeGeneral
     }
 
     wp_enqueue_script('stripe-checkout', 'https://checkout.stripe.com/checkout.js', array());
+  }
+
+  /* Register & Enqueue Compiled Admin Scripts
+   *
+   * All admin script filenames should begin with `admin_`. Each one will be
+   * given a `themeAdminConfig` object with the AJAX url & nonce.
+   */
+  public static function enqueue_admin_assets() {
+    $admin_ajax_config = array(
+      'ajaxUrl' => admin_url('admin-ajax.php', 'https'),
+      'ajaxNonce' => wp_create_nonce('theme-admin-ajax'),
+    );
+    foreach (scandir(__DIR__ . "/../dist") as $dist_file) {
+      if (strpos($dist_file, "admin_") === 0) {
+        wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
+        wp_localize_script($dist_file, 'themeAdminConfig', $admin_ajax_config);
+      }
+    }
   }
 
   /* Add Main & WooCommerce Left/Right Sidebars */
@@ -305,6 +329,7 @@ ThemeGeneral::enable_support();
 ThemeGeneral::set_thumbnail_sizes();
 ThemeGeneral::register_menu();
 add_action('wp_enqueue_scripts', array('ThemeGeneral', 'enqueue_assets'));
+add_action('admin_enqueue_scripts', array('ThemeGeneral', 'enqueue_admin_assets'));
 add_action('widgets_init', array('ThemeGeneral', 'register_sidebars'));
 add_action('login_head', array('ThemeGeneral', 'add_favicon'));
 add_action('admin_head', array('ThemeGeneral', 'add_favicon'));

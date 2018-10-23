@@ -19,6 +19,10 @@ module.exports = {
     wholesale: [
       './src/wholesale.js',
     ],
+    // Entries for admin scripts should all start with `admin_`.
+    admin_adb: [
+      './src/admin-adb.js',
+    ],
   },
 
   output: {
