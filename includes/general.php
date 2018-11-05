@@ -290,7 +290,7 @@ CSS;
   public static function image_banner() {
     global $post;
 
-    if (is_front_page() || $post->post_name === ThemeGeneral::$development_page_slug) {
+    if (is_front_page() || $post->post_name === ThemeGeneral::$development_page_slug || $post->post_name === 'planet-community') {
       return;
     } else {
       /* Randomize cmag banners */
