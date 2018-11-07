@@ -71,18 +71,20 @@ class ThemeGeneral
 
   /* Register & Enqueue Compiled Admin Scripts
    *
-   * All admin script filenames should begin with `admin_`. Each one will be
-   * given a `themeAdminConfig` object with the AJAX url & nonce.
+   * All admin script filenames should begin with `admin_`. A global
+   * `themeAdminConfig` object is available with the AJAX url & nonce as well
+   * as a REST nonce.
    */
   public static function enqueue_admin_assets() {
     $admin_ajax_config = array(
       'ajaxUrl' => admin_url('admin-ajax.php', 'https'),
       'ajaxNonce' => wp_create_nonce('theme-admin-ajax'),
+      'restNonce' => wp_create_nonce('wp_rest'),
     );
+    wp_localize_script('jquery', 'themeAdminConfig', $admin_ajax_config);
     foreach (scandir(__DIR__ . "/../dist") as $dist_file) {
       if (strpos($dist_file, "admin_") === 0) {
         wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
-        wp_localize_script($dist_file, 'themeAdminConfig', $admin_ajax_config);
       }
     }
   }

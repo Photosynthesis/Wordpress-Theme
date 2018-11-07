@@ -11,6 +11,7 @@
 /* Load the Sub-Menu Classes */
 require(__DIR__ . '/menu/directory_user_update.php');
 require(__DIR__ . '/menu/theme_settings.php');
+require(__DIR__ . '/menu/wc_flat_rate.php');
 
 /** The ThemeMenu class is responsible for assembling the various Theme*Menu
  * classes into a single Top-Level Menu in the Wordpress Admin.
@@ -29,6 +30,9 @@ class ThemeMenu
     add_submenu_page(self::$menu_name, ThemeDirectoryUserMenu::$page_title,
       'Directory User Update', 'administrator', ThemeDirectoryUserMenu::$page_name,
       array('ThemeDirectoryUserMenu', 'render_page'));
+    add_submenu_page(self::$menu_name, ThemeFlatRateMenu::$page_title,
+      'Flat Rate Options', 'administrator', ThemeFlatRateMenu::$page_name,
+      array('ThemeFlatRateMenu', 'render_page'));
     add_submenu_page(self::$menu_name, 'FIC Theme Settings', 'Theme Settings',
       'manage_options', 'fic-theme-settings', array('ThemeSettingsMenu', 'options_page')
     );

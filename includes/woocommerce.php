@@ -203,85 +203,94 @@ class ThemeWooCommerce
     }
   }
 
+  /* Flat Rate Configuration - TODO: move to inc/wc/flat_rate.php */
   const flat_rate_shipping_id = "flat_rate:6";
-  const dropshipped_variation_ids = array(241498, 241528, 241523);
-  const board_game_product_id = 262010;
-  const wisdom_volume_variation_ids = array(264135, 264138, 264125, 259375);
-  const wisdom_set_variation_id = 265599;
-  const best_of_comm_set_variation_id = 169405;
-  const wall_calendar_product_id = 267438;
-  /* Apply various flat rate shipping plans to a cart */
-  public static function apply_flat_rate_charges($rates, $package) {
-    $cmag_products = self::get_cmag_physical_products();
-    /* array of:
-      *  countries => (code => dollar charge)
-      *  global => fallback dollar charge
-      *  variations => [variation ids]
-      *  products => [product ids]
-      *  ignore_domestic => bool to fallback to automatic domestic prices
-      */
-    $flat_rates = array(
-      // dropshipped
-      array(
-        'countries' => array('US' => 7),
-        'global' => 15,
-        'variations' => self::dropshipped_variation_ids,
-        'products' => array(),
-        'ignore_domestic' => FALSE,
-      ),
-      // board game
-      array(
-        'countries' => array('US' => 9.50, 'CA' => 25),
-        'global' => 60,
-        'variations' => array(),
-        'products' => array(self::board_game_product_id),
-        'ignore_domestic' => FALSE,
-      ),
-      // wisdom volumes
-      array(
-        'countries' => array(),
-        'global' => 8,
-        'variations' => self::wisdom_volume_variation_ids,
-        'products' => array(),
-        'ignore_domestic' => TRUE,
-      ),
-      // wisdom set
-      array(
-        'countries' => array(),
-        'global' => 26,
-        'variations' => array(self::wisdom_set_variation_id),
-        'products' => array(),
-        'ignore_domestic' => TRUE,
-      ),
-      // cmag issues
-      array(
-        'countries' => array('CA' => 15),
-        'global' => 22,
-        'variations' => $cmag_products['variations'],
-        'products' => $cmag_products['products'],
-        'ignore_domestic' => TRUE,
-      ),
-      // best of communities set
-      array(
-        'countries' => array(),
-        'global' => 26,
-        'variations' => array(self::best_of_comm_set_variation_id),
-        'products' => array(),
-        'ignore_domestic' => TRUE,
-      ),
-      // wall calendar
-      array(
-        'countries' => array('CA' => 10),
-        'global' => 14,
-        'variations' => array(),
-        'products' => array(self::wall_calendar_product_id),
+  const flat_rate_option_name = "fic_flat_rates";
+  /* Fetch the Flat Rate Options from the DB
+   *
+   * All numbers are stored as strings & the returned array has the following
+   * structure:
+   *
+   * cmag =>
+   *    global => global price
+   *    countries => array(country code => price)
+   *    ignore_domestic => bool to fallback to automatic domestic prices
+   * others =>
+   *    rate name =>
+   *        global => fallback price
+   *        countries => array(country code => price)
+   *        ignore_domestic => bool to fallback to automatic domestic prices
+   *        products => array(product ids)
+   *        variations => array(variation ids)
+   *
+   */
+  public static function get_flat_rate_options() {
+    $obj = new StdClass;    // Empty JSON object instead of list
+    $default = array(
+      'others' => $obj,
+      'cmag' => array(
+        'global' => '22',
+        'countries' => array('CA' => '15'),
         'ignore_domestic' => TRUE,
       )
     );
+    return get_option(self::flat_rate_option_name, $default);
+  }
 
+  /* Save the Flat Rate Options in the DB.
+   *
+   * Note that you should validate the format & types yourself, no validation
+   * is done in this function.
+   */
+  public static function set_flat_rate_options($options) {
+    update_option(self::flat_rate_option_name, $options, false);
+  }
+
+  /* Grab the Flat Rate Options Array w/ Coerced Values & CMag IDs. */
+  public static function get_final_flat_rate_options() {
+    $opt = self::get_flat_rate_options();
+    $data = array();
+    foreach ($opt['others'] as $option) {
+      $option_data = array(
+        'global' => (float) $option['global'],
+        'ignore_domestic' => (bool) $option['ignore_domestic'],
+        'countries' => array(),
+        'products' => array(),
+        'variations' => array(),
+      );
+      foreach ($option['countries'] as $code => $price) {
+        $option_data['countries'][$code] = (float) $price;
+      }
+      foreach ($option['products'] as $product_id) {
+        $option_data['products'][] = (int) $product_id;
+      }
+      foreach ($option['variations'] as $variation_id) {
+        $option_data['variations'][] = (int) $variation_id;
+      }
+      $data[] = $option_data;
+    }
+
+    $cmag_data = array(
+      'global' => (float) $opt['cmag']['global'],
+      'ignore_domestic' => (bool) $opt['cmag']['ignore_domestic'],
+      'countries' => array(),
+    );
+    foreach ($opt['cmag']['countries'] as $code => $price) {
+      $cmag_data['countries'][$code] = (float) $price;
+    }
+    $cmag_ids = self::get_cmag_physical_products();
+    $cmag_data['products'] = $cmag_ids['products'];
+    $cmag_data['variations'] = $cmag_ids['variations'];
+    $data[] = $cmag_data;
+    return $data;
+  }
+
+  /* Apply various flat rate shipping plans to a cart */
+  public static function apply_flat_rate_charges($rates, $package) {
     /* Ignore empty carts */
     if (count($package['contents']) === 0) { return $rates; }
 
+    $flat_rates = self::get_final_flat_rate_options();
     $shipping_country = $package['destination']['country'];
 
     /* Count the occurence of each flat rate's product */

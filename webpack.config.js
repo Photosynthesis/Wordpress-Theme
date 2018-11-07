@@ -23,6 +23,9 @@ module.exports = {
     admin_adb: [
       './src/admin-adb.js',
     ],
+    admin_flate_rate: [
+      './src/admin-flat-rate.js',
+    ],
   },
 
   output: {
