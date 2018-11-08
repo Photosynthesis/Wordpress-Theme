@@ -296,12 +296,21 @@ CSS;
       return;
     } else {
       /* Randomize cmag banners */
-      if (mt_rand(0,1)) {
+      $rand_int = mt_rand(0,2);
+      switch ($rand_int) {
+      case 0:
         $img_url = "https://www.ic.org/wp-content/uploads/2018/08/CommunitiesMag_Fall18.jpg";
-      } else {
+        $link_url = "https://www.ic.org/community-bookstore/product/communities-magazine-networking-communities/";
+        break;
+      case 1:
         $img_url = "https://www.ic.org/wp-content/uploads/2018/08/CommunitiesMag_Fall18_2.jpg";
+        $link_url = "https://www.ic.org/community-bookstore/product/communities-magazine-networking-communities/";
+        break;
+      case 2: default:
+        $img_url = "https://www.ic.org/wp-content/uploads/2018/11/planet-community-episode-2-banner.jpg";
+        $link_url = "https://www.ic.org/planet-community/";
+        break;
       }
-      $link_url = "https://www.ic.org/community-bookstore/product/communities-magazine-networking-communities/";
     }
 
 
