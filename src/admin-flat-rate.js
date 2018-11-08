@@ -8,11 +8,11 @@ $(document).ready(function() {
   var node = document.getElementById('elm-admin-flat-rate');
   if (node) {
     var app = Elm.Admin.FlatRate.embed(node, { nonce: themeAdminConfig.restNonce });
-  }
 
-  // Scroll to the top of the page, unfocusing any inputs
-  app.ports.scrollToTop.subscribe(function() {
-    $('input').blur();
-    $(window).scrollTop(0);
-  });
+    // Scroll to the top of the page, unfocusing any inputs
+    app.ports.scrollToTop.subscribe(function() {
+      $('input').blur();
+      $(window).scrollTop(0);
+    });
+  }
 });
