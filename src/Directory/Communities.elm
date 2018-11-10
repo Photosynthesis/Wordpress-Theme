@@ -74,6 +74,17 @@ type PublicAddressType
     | MailingAddress
 
 
+{-| The Type of Area the Community is Located In.
+-}
+type LocationType
+    = Rural
+    | Urban
+    | Suburban
+    | SmallTown
+    | Mobile
+    | LocationTBD
+
+
 {-| The Data Associated with a Specific Community for the Listings pages.
 -}
 type alias CommunityListing =
@@ -122,6 +133,9 @@ type alias CommunityDetails =
     , openToMembers : MembersWelcome
     , isFicMember : Bool
     , ficMembershipStartYear : String
+    , communityTypes : List CommunityType
+    , programsAndActivites : List String
+    , location : LocationType
     , networkAffiliations : List String
     , otherAffiliations : String
     , keywords : String
@@ -222,3 +236,27 @@ addressTypeToString addressType =
 
         MailingAddress ->
             "Mailing Address"
+
+
+{-| Render a `LocationType`
+-}
+locationTypeToString : LocationType -> String
+locationTypeToString locationType =
+    case locationType of
+        Rural ->
+            "Rural"
+
+        Urban ->
+            "Urban"
+
+        Suburban ->
+            "Suburban"
+
+        SmallTown ->
+            "Small Town or Village"
+
+        Mobile ->
+            "Mobile"
+
+        LocationTBD ->
+            "To Be Determined"

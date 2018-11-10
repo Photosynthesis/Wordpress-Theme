@@ -42,6 +42,9 @@ class APIDirectory
    *    - state
    *    - country
    *    - isFicMember
+   *    - communityTypes
+   *    - programs
+   *    - location
    *
    * As well as the following optional fields:
    *
@@ -72,8 +75,9 @@ class APIDirectory
    *    TODO:
    *    * imageUrl
    *    * thumbnailUrl
-   *    * communityTypes
+   *
    *    * rest of fields... maybe farm each info-block to separate cleanup function.
+   *
    *    * isOwner
    *    * isAdmin
    *
@@ -122,6 +126,9 @@ class APIDirectory
       DirectoryDB::$state_field_id => 'state',
       DirectoryDB::$province_field_id => 'province',
       DirectoryDB::$country_field_id => 'country',
+      DirectoryDB::$community_types_field_id => 'communityTypes',
+      DirectoryDB::$programs_field_id => 'programs',
+      DirectoryDB::$location_field_id => 'location',
       DirectoryDB::$network_affiliations_field_id => 'networkAffiliations',
       DirectoryDB::$other_affiliations_field_id => 'otherAffiliations',
       DirectoryDB::$keywords_field_id => 'keywords',
@@ -158,7 +165,6 @@ SQL;
     foreach ($public_fields as $field_id => $json_key) {
       $data[$json_key] = $field_to_meta[$field_id]->meta_value;
     }
-    // TODO: If Owner, add additional fields
     // TODO: If Owner, add additional fields?
     return self::clean_detail_entry($data);
   }
@@ -230,6 +236,13 @@ SQL;
       }
     }
 
+    $empty_array_fields = array('communityTypes');
+    foreach ($empty_array_fields as $field) {
+      if (!$entry[$field]) {
+        $entry[$field] = array();
+      }
+    }
+
     $int_fields = array('startedPlanning', 'startedLivingTogether');
     foreach ($int_fields as $field) {
       $entry[$field] = (int) $entry[$field];
@@ -253,6 +266,13 @@ SQL;
     foreach ($nullable_fields as $field) {
       if (!$entry[$field]) {
         $entry[$field] = null;
+      }
+    }
+
+    $tilde_array_fields = array('programs');
+    foreach ($tilde_array_fields as $field) {
+      foreach ($entry[$field] as $i => $field_value) {
+        $entry[$field][$i] = str_replace("\'", "'", str_replace('~', ',', $field_value));
       }
     }
 

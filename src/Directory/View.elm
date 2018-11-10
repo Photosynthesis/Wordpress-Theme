@@ -120,6 +120,26 @@ communityDetails maybeCurrentDate community =
                 , Html.h2 [] [ text "Community Description" ]
                 , Markdown.toHtml [] community.description
                 ]
+
+        infoBlock header content =
+            Html.div [ class "card" ]
+                [ Html.h3 [ class "card-header" ] [ text header ]
+                , Html.div [ class "card-block" ]
+                    [ Html.ul [ class "list-unstyled pl-0" ] <|
+                        List.map
+                            (\( l, c ) ->
+                                Html.li [ class "pb-2" ]
+                                    [ Html.b [] [ text l, text ":" ]
+                                    , text " "
+                                    , c
+                                    ]
+                            )
+                            content
+                    ]
+                ]
+
+        infoBlockSublist =
+            Html.ul [] << List.map (\c -> Html.li [] [ text c ])
     in
         Html.div [ class "directory-listing" ]
             [ header
@@ -127,7 +147,18 @@ communityDetails maybeCurrentDate community =
                 [ leftColumn
                 , detailRightColumn community
                 ]
-            , text "TODO: Info Blocks & Additional Sections"
+            , Html.div [ class "card-columns listing-info-blocks" ]
+                [ infoBlock "About"
+                    [ ( "Type(s)"
+                      , infoBlockSublist <| List.map typeToString community.communityTypes
+                      )
+                    , ( "Programs & Activities"
+                      , infoBlockSublist community.programsAndActivites
+                      )
+                    , ( "Location", text <| locationTypeToString community.location )
+                    ]
+                ]
+            , text "TODO: Remaining Info Blocks & Additional Sections"
             , Html.div []
                 [ Html.h3 [] [ text "Community Network or Organization Affiliations" ]
                 , Html.p []

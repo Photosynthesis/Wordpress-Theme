@@ -34,6 +34,9 @@ communityDetails =
         |> required "openToMembership" membersWelcome
         |> required "isFicMember" bool
         |> optional "ficMembershipStart" string ""
+        |> required "communityTypes" (oneOrList communityType)
+        |> required "programs" (Decode.list string)
+        |> required "location" locationType
         |> optional "networkAffiliations" (Decode.list string) []
         |> optional "otherAffiliations" string ""
         |> optional "keywords" string ""
@@ -55,12 +58,7 @@ communityListing =
         |> optional "country" string ""
         |> required "openToVisitors" visitorsWelcome
         |> required "openToMembership" membersWelcome
-        |> required "communityTypes"
-            (Decode.oneOf
-                [ singleton communityType
-                , Decode.list communityType
-                ]
-            )
+        |> required "communityTypes" (oneOrList communityType)
         |> required "updatedAt" date
         |> required "createdAt" date
 
@@ -174,9 +172,31 @@ publicAddressType =
         ]
 
 
+locationType : Decoder LocationType
+locationType =
+    stringToEnum
+        [ ( Rural, "rural" )
+        , ( Urban, "urban" )
+        , ( Suburban, "suburban" )
+        , ( SmallTown, "small town" )
+        , ( SmallTown, "small town or village" )
+        , ( Mobile, "mobile" )
+        , ( LocationTBD, "to be determined" )
+        ]
+
+
+
+-- Misc Helpers
+
+
 singleton : Decoder a -> Decoder (List a)
 singleton =
     Decode.andThen (List.singleton >> Decode.succeed)
+
+
+oneOrList : Decoder a -> Decoder (List a)
+oneOrList decoder =
+    Decode.oneOf [ singleton decoder, Decode.list decoder ]
 
 
 date : Decoder Date

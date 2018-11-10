@@ -2,9 +2,11 @@
 /** Directory Database Functions **/
 class DirectoryDB
 {
+  // membership
   public static $is_member_field_id = 933;
   public static $membership_start_field_id = 977;
   public static $membership_end_field_id = 985;
+  // overview
   public static $verified_date_field_id = 978;
   public static $primary_image_field_id = 228;
   public static $mission_statement_field_id = 286;
@@ -16,15 +18,18 @@ class DirectoryDB
   public static $spiritual_practices_field_id = 259;
   public static $open_to_members_field_id = 257;
   public static $open_to_visitors_field_id = 256;
+  // contact
   public static $contact_email_field_id = 199;
   public static $contact_name_field_id = 202;
   public static $backup_email_field_id = 284;
   public static $contact_phone_public_field_id = 201;
+  // website
   public static $website_address_field_id = 227;
   public static $business_website_field_id = 717;
   public static $facebook_address_field_id = 197;
   public static $twitter_address_field_id = 198;
   public static $social_address_field_id = 200;
+  // address
   public static $is_address_public_field_id = 285;
   public static $public_address_type_field_id = 953;
   public static $address_one_field_id = 425;
@@ -36,13 +41,19 @@ class DirectoryDB
   public static $country_field_id = 424;
   public static $latitude_field_id = 684;
   public static $longitude_field_id = 685;
+  // disbanded/reforming
   public static $disbanded_year_field_id = 705;
   public static $disbanded_info_field_id = 704;
   public static $reforming_year_field_id = 703;
   public static $reforming_info_field_id = 276;
+  // about block
+  public static $programs_field_id = 950;
+  public static $location_field_id = 952;
+  // other sections
   public static $network_affiliations_field_id = 283;
   public static $other_affiliations_field_id = 279;
   public static $keywords_field_id = 716;
+  // hidden/server/misc
   public static $update_email_date_field_id = 992;
 
   /* Return an Array of every published community. */
