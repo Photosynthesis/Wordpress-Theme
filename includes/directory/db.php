@@ -49,6 +49,32 @@ class DirectoryDB
   // about block
   public static $programs_field_id = 950;
   public static $location_field_id = 952;
+  // housing block
+  public static $land_status_field_id = 954;
+  public static $land_size_amount_field_id = 981;
+  public static $land_size_units_field_id = 982;
+  public static $current_residence_types_field_id = 956;
+  public static $planned_residence_types_field_id = 957;
+  public static $current_residences_field_id = 263;
+  public static $planned_residences_field_id = 264;
+  public static $housing_access_field_id = 958;
+  public static $land_owner_field_id = 268;
+  public static $housing_comments_field_id = 303;
+  // membership block
+  public static $adult_count_field_id = 254;
+  public static $child_count_field_id = 420;
+  public static $nonmember_count_field_id = 255;
+  public static $percent_male_field_id = 708;
+  public static $percent_female_field_id = 709;
+  public static $percent_trans_field_id = 710;
+  public static $visitor_process_field_id = 258;
+  public static $membership_process_field_id = 421;
+  public static $membership_comments_field_id = 304;
+  // government block
+  public static $decision_making_field_id = 250;
+  public static $leader_field_id = 251;
+  public static $leadership_group_field_id = 252;
+  public static $government_comments_field_id = 305;
   // other sections
   public static $network_affiliations_field_id = 283;
   public static $other_affiliations_field_id = 279;

@@ -24,7 +24,7 @@ class APIDirectory
    *
    * Requires a single `slug` parameter to fetch the Entry data.
    *
-   * The returned entry has the following field:
+   * The returned entry has the following fields:
    *
    *    - id
    *    - name
@@ -45,6 +45,12 @@ class APIDirectory
    *    - communityTypes
    *    - programs
    *    - location
+   *    - currentResidenceTypes
+   *    - plannedResidenceTypes
+   *    - housingAccess
+   *    - adultCount
+   *    - decisionMaking
+   *    - leader
    *
    * As well as the following optional fields:
    *
@@ -67,6 +73,23 @@ class APIDirectory
    *    - reformingData
    *        - year
    *        - info
+   *    - landStatus
+   *    - landSizeAmount
+   *    - landSizeUnits
+   *    - currentResidences
+   *    - plannedResidences
+   *    - landOwner
+   *    - housingComments
+   *    - childCount
+   *    - nonmemberCount
+   *    - percentMale
+   *    - percentFemale
+   *    - percentTrans
+   *    - visitorProcess
+   *    - membershipProcess
+   *    - membershipComments
+   *    - leadershipGroup
+   *    - governmentComments
    *    - networkAffiliations
    *    - otherAffiliations
    *    - keywords
@@ -129,6 +152,29 @@ class APIDirectory
       DirectoryDB::$community_types_field_id => 'communityTypes',
       DirectoryDB::$programs_field_id => 'programs',
       DirectoryDB::$location_field_id => 'location',
+      DirectoryDB::$land_status_field_id => 'landStatus',
+      DirectoryDB::$land_size_amount_field_id => 'landSizeAmount',
+      DirectoryDB::$land_size_units_field_id => 'landSizeUnits',
+      DirectoryDB::$current_residence_types_field_id => 'currentResidenceTypes',
+      DirectoryDB::$current_residences_field_id => 'currentResidences',
+      DirectoryDB::$planned_residence_types_field_id => 'plannedResidenceTypes',
+      DirectoryDB::$planned_residences_field_id => 'plannedResidences',
+      DirectoryDB::$housing_access_field_id => 'housingAccess',
+      DirectoryDB::$land_owner_field_id => 'landOwner',
+      DirectoryDB::$housing_comments_field_id => 'housingComments',
+      DirectoryDB::$adult_count_field_id => 'adultCount',
+      DirectoryDB::$child_count_field_id => 'childCount',
+      DirectoryDB::$nonmember_count_field_id => 'nonmemberCount',
+      DirectoryDB::$percent_male_field_id => 'percentMale',
+      DirectoryDB::$percent_female_field_id => 'percentFemale',
+      DirectoryDB::$percent_trans_field_id => 'percentTrans',
+      DirectoryDB::$visitor_process_field_id => 'visitorProcess',
+      DirectoryDB::$membership_process_field_id => 'membershipProcess',
+      DirectoryDB::$membership_comments_field_id => 'membershipComments',
+      DirectoryDB::$decision_making_field_id => 'decisionMaking',
+      DirectoryDB::$leader_field_id => 'leader',
+      DirectoryDB::$leadership_group_field_id => 'leadershipGroup',
+      DirectoryDB::$government_comments_field_id => 'governmentComments',
       DirectoryDB::$network_affiliations_field_id => 'networkAffiliations',
       DirectoryDB::$other_affiliations_field_id => 'otherAffiliations',
       DirectoryDB::$keywords_field_id => 'keywords',
@@ -231,21 +277,39 @@ SQL;
 
     $empty_fields = array('missionStatement', 'description') ;
     foreach ($empty_fields as $field) {
-      if (!$entry[$field]) {
+      if (!isset($entry[$field])) {
         $entry[$field] = "";
       }
     }
 
-    $empty_array_fields = array('communityTypes');
+    $empty_array_fields = array(
+      'communityTypes', 'currentResidenceTypes', 'plannedResidenceTypes',
+      'housingAccess',
+    );
     foreach ($empty_array_fields as $field) {
       if (!$entry[$field]) {
         $entry[$field] = array();
       }
     }
 
-    $int_fields = array('startedPlanning', 'startedLivingTogether');
+    $int_fields = array('startedPlanning', 'startedLivingTogether', 'adultCount');
     foreach ($int_fields as $field) {
       $entry[$field] = (int) $entry[$field];
+    }
+    $optional_int_fields = array(
+      'currentResidences', 'plannedResidences', 'childCount', 'nonmemberCount',
+    );
+    foreach ($optional_int_fields as $field) {
+      if (isset($entry[$field])) {
+        $entry[$field] = (int) $entry[$field];
+      }
+    }
+
+    $float_fields = array('landSizeAmount');
+    foreach ($float_fields as $field) {
+      if ($entry[$field]) {
+        $entry[$field] = (float) $entry[$field];
+      }
     }
 
     $entry['state'] = self::clean_state($entry['state'], $entry['province']);
@@ -262,17 +326,24 @@ SQL;
     foreach ($url_fields as $field) {
       $entry[$field] = self::clean_url($entry[$field]);
     }
-    $nullable_fields = array('contactName', 'contactPhone');
+    $nullable_fields = array('contactName', 'contactPhone', 'landStatus');
     foreach ($nullable_fields as $field) {
       if (!$entry[$field]) {
         $entry[$field] = null;
       }
     }
 
-    $tilde_array_fields = array('programs');
+    $tilde_array_fields = array('programs', 'currentResidenceTypes', 'plannedResidenceTypes');
     foreach ($tilde_array_fields as $field) {
       foreach ($entry[$field] as $i => $field_value) {
-        $entry[$field][$i] = str_replace("\'", "'", str_replace('~', ',', $field_value));
+        $entry[$field][$i] = self::clean_escapes($field_value);
+      }
+    }
+
+    $tilde_fields = array('decisionMaking', 'leader');
+    foreach ($tilde_fields as $field) {
+      if (isset($entry[$field])) {
+        $entry[$field] = self::clean_escapes($entry[$field]);
       }
     }
 
@@ -620,6 +691,11 @@ SQL;
       return null;
     }
     return $value;
+  }
+
+  // Swap tildes w/ commas & unescape quotes
+  public static function clean_escapes($value) {
+    return str_replace("\'", "'", str_replace('~', ',', $value));
   }
 
   /* Return Published Entries for the Data Commons Co-op to Sync With.

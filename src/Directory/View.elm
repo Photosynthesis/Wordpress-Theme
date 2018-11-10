@@ -120,26 +120,6 @@ communityDetails maybeCurrentDate community =
                 , Html.h2 [] [ text "Community Description" ]
                 , Markdown.toHtml [] community.description
                 ]
-
-        infoBlock header content =
-            Html.div [ class "card" ]
-                [ Html.h3 [ class "card-header" ] [ text header ]
-                , Html.div [ class "card-block" ]
-                    [ Html.ul [ class "list-unstyled pl-0" ] <|
-                        List.map
-                            (\( l, c ) ->
-                                Html.li [ class "pb-2" ]
-                                    [ Html.b [] [ text l, text ":" ]
-                                    , text " "
-                                    , c
-                                    ]
-                            )
-                            content
-                    ]
-                ]
-
-        infoBlockSublist =
-            Html.ul [] << List.map (\c -> Html.li [] [ text c ])
     in
         Html.div [ class "directory-listing" ]
             [ header
@@ -147,17 +127,7 @@ communityDetails maybeCurrentDate community =
                 [ leftColumn
                 , detailRightColumn community
                 ]
-            , Html.div [ class "card-columns listing-info-blocks" ]
-                [ infoBlock "About"
-                    [ ( "Type(s)"
-                      , infoBlockSublist <| List.map typeToString community.communityTypes
-                      )
-                    , ( "Programs & Activities"
-                      , infoBlockSublist community.programsAndActivites
-                      )
-                    , ( "Location", text <| locationTypeToString community.location )
-                    ]
-                ]
+            , detailInfoBlocks community
             , text "TODO: Remaining Info Blocks & Additional Sections"
             , Html.div []
                 [ Html.h3 [] [ text "Community Network or Organization Affiliations" ]
@@ -295,6 +265,93 @@ detailRightColumn community =
         Html.div [ class "col-24 col-sm-10" ]
             [ Html.div [ class "card" ]
                 [ Html.ul [ class "card-block list-unstyled listing-status" ] rightColumn
+                ]
+            ]
+
+
+detailInfoBlocks : CommunityDetails -> Html msg
+detailInfoBlocks community =
+    let
+        infoBlock header content =
+            Html.div [ class "card" ]
+                [ Html.h3 [ class "card-header" ] [ text header ]
+                , Html.div [ class "card-block" ]
+                    [ Html.ul [ class "list-unstyled pl-0 mb-0" ] <|
+                        List.map infoItem <|
+                            List.concat content
+                    ]
+                ]
+
+        infoItem ( title, content ) =
+            Html.li [ class "pb-2" ]
+                [ Html.b [] [ text title, text ":" ], text " ", content ]
+
+        infoBlockSublist header l =
+            case l of
+                [] ->
+                    []
+
+                x :: [] ->
+                    [ ( header, text x ) ]
+
+                _ ->
+                    [ ( header
+                      , Html.ul [] <| List.map (\c -> Html.li [] [ text c ]) l
+                      )
+                    ]
+
+        maybeInfoItem header maybeContent toHtml =
+            Maybe.map (List.singleton << (\c -> ( header, c )) << toHtml) maybeContent
+                |> Maybe.withDefault []
+
+        landAmountAndUnits amount =
+            text <|
+                toString amount
+                    ++ " "
+                    ++ Maybe.withDefault "" community.landSizeUnits
+    in
+        Html.div [ class "card-columns listing-info-blocks" ]
+            [ infoBlock "About"
+                [ infoBlockSublist "Type(s)" <| List.map typeToString community.communityTypes
+                , infoBlockSublist "Programs & Activities" community.programsAndActivites
+                , [ ( "Location", text <| locationTypeToString community.location ) ]
+                ]
+            , infoBlock "Housing"
+                [ maybeInfoItem "Status"
+                    community.landStatus
+                    (text << landStatusToString)
+                , maybeInfoItem "Area" community.landSizeAmount landAmountAndUnits
+                , infoBlockSublist "Current Residence Types" community.currentResidenceTypes
+                , maybeInfoItem "Current Number of Residences"
+                    community.currentResidences
+                    (text << toString)
+                , maybeInfoItem "Planned Number of Residences"
+                    community.plannedResidences
+                    (text << toString)
+                , infoBlockSublist "Planned Residence Types" community.plannedResidenceTypes
+                , infoBlockSublist "Housing Provided" community.housingAccess
+                , maybeInfoItem "Land Owned By" community.landOwner text
+                , maybeInfoItem "Additional Comments" community.housingComments text
+                ]
+            , infoBlock "Membership"
+                [ [ ( "Adult Members", text <| toString community.adultCount ) ]
+                , maybeInfoItem "Child Members" community.childCount (text << toString)
+                , maybeInfoItem "Non-Member Residents" community.nonmemberCount (text << toString)
+                , maybeInfoItem "Percent Women" community.percentFemale text
+                , maybeInfoItem "Percent Men" community.percentMale text
+                , maybeInfoItem "Percent Transgender" community.percentTrans text
+                , [ ( "Visitors Accepted", visitorsWelcome community.openToVisitors ) ]
+                , maybeInfoItem "Visitor Process" community.visitorProcess text
+                , [ ( "Open to New Members", membersWelcome community.openToMembers ) ]
+                , maybeInfoItem "Membership Process" community.membershipProcess text
+                , maybeInfoItem "Additional Comments" community.membershipComments text
+                ]
+            , infoBlock "Government"
+                [ [ ( "Decision Making", text community.decisionMaking )
+                  , ( "Identified Leader", text community.leader )
+                  ]
+                , maybeInfoItem "Leadership Core Group" community.leadershipGroup text
+                , maybeInfoItem "Additional Comments" community.governmentComments text
                 ]
             ]
 

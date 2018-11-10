@@ -37,11 +37,41 @@ communityDetails =
         |> required "communityTypes" (oneOrList communityType)
         |> required "programs" (Decode.list string)
         |> required "location" locationType
+        |> optional "landStatus" (Decode.map Just landStatus) Nothing
+        |> optional "landSizeAmount" (Decode.map Just Decode.float) Nothing
+        |> optional "landSizeUnits" (Decode.map Just Decode.string) Nothing
+        |> required "currentResidenceTypes" (Decode.list Decode.string)
+        |> maybe "currentResidences" Decode.int
+        |> required "plannedResidenceTypes" (Decode.list Decode.string)
+        |> maybe "plannedResidences" Decode.int
+        |> required "housingAccess" (oneOrList Decode.string)
+        |> maybe "landOwner" Decode.string
+        |> maybe "housingComments" Decode.string
+        |> required "adultCount" Decode.int
+        |> maybe "childCount" Decode.int
+        |> maybe "nonmemberCount" Decode.int
+        |> maybe "percentMale" Decode.string
+        |> maybe "percentFemale" Decode.string
+        |> maybe "percentTrans" Decode.string
+        |> maybe "visitorProcess" Decode.string
+        |> maybe "membershipProcess" Decode.string
+        |> maybe "membershipComments" Decode.string
+        |> required "decisionMaking" Decode.string
+        |> required "leader" Decode.string
+        |> maybe "leadershipGroup" Decode.string
+        |> maybe "governmentComments" Decode.string
         |> optional "networkAffiliations" (Decode.list string) []
         |> optional "otherAffiliations" string ""
         |> optional "keywords" string ""
         |> required "updatedAt" date
         |> required "createdAt" date
+
+
+{-| Decode an optional field into a Maybe value.
+-}
+maybe : String -> Decoder a -> Decoder (Maybe a -> b) -> Decoder b
+maybe key decoder =
+    optional key (Decode.map Just decoder) Nothing
 
 
 communityListing : Decoder CommunityListing
@@ -182,6 +212,17 @@ locationType =
         , ( SmallTown, "small town or village" )
         , ( Mobile, "mobile" )
         , ( LocationTBD, "to be determined" )
+        ]
+
+
+landStatus : Decoder LandStatus
+landStatus =
+    stringToEnum
+        [ ( NoLand, "We do not have land" )
+        , ( UndevelopedLand, "we have raw land" )
+        , ( UndevelopedLand, "we have undeveloped land" )
+        , ( PermittingLand, "we have land in the permitting or zoning stage" )
+        , ( DevelopedLand, "we have land we have developed on" )
         ]
 
 

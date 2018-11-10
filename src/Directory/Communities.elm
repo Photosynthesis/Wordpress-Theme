@@ -85,6 +85,15 @@ type LocationType
     | LocationTBD
 
 
+{-| The Development Status of the Community's Land.
+-}
+type LandStatus
+    = NoLand
+    | UndevelopedLand
+    | PermittingLand
+    | DevelopedLand
+
+
 {-| The Data Associated with a Specific Community for the Listings pages.
 -}
 type alias CommunityListing =
@@ -136,6 +145,29 @@ type alias CommunityDetails =
     , communityTypes : List CommunityType
     , programsAndActivites : List String
     , location : LocationType
+    , landStatus : Maybe LandStatus
+    , landSizeAmount : Maybe Float
+    , landSizeUnits : Maybe String
+    , currentResidenceTypes : List String
+    , currentResidences : Maybe Int
+    , plannedResidenceTypes : List String
+    , plannedResidences : Maybe Int
+    , housingAccess : List String
+    , landOwner : Maybe String
+    , housingComments : Maybe String
+    , adultCount : Int
+    , childCount : Maybe Int
+    , nonmemberCount : Maybe Int
+    , percentMale : Maybe String
+    , percentFemale : Maybe String
+    , percentTrans : Maybe String
+    , visitorProcess : Maybe String
+    , membershipProcess : Maybe String
+    , membershipComments : Maybe String
+    , decisionMaking : String
+    , leader : String
+    , leadershipGroup : Maybe String
+    , governmentComments : Maybe String
     , networkAffiliations : List String
     , otherAffiliations : String
     , keywords : String
@@ -260,3 +292,19 @@ locationTypeToString locationType =
 
         LocationTBD ->
             "To Be Determined"
+
+
+landStatusToString : LandStatus -> String
+landStatusToString status =
+    case status of
+        NoLand ->
+            "We do not have land"
+
+        UndevelopedLand ->
+            "We have undeveloped land"
+
+        PermittingLand ->
+            "We have land in the permitting or zoning stage"
+
+        DevelopedLand ->
+            "We have land we have developed on"
