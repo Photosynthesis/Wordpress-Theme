@@ -280,6 +280,7 @@ SQL;
     if ($entry['post_title']) {
       $entry['name'] = $entry['post_title'];
     }
+    $entry['name'] = html_entity_decode($entry['name']);
     unset($entry['post_title']);
 
     if (!$entry['state'] && $entry['province']) {
