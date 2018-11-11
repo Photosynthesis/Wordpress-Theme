@@ -128,7 +128,7 @@ communityDetails maybeCurrentDate community =
                 , detailRightColumn community
                 ]
             , detailInfoBlocks community
-            , text "TODO: Remaining Info Blocks & Additional Sections"
+            , text "TODO: Additional Sections"
             , Html.div []
                 [ Html.h3 [] [ text "Community Network or Organization Affiliations" ]
                 , Html.p []
@@ -352,6 +352,68 @@ detailInfoBlocks community =
                   ]
                 , maybeInfoItem "Leadership Core Group" community.leadershipGroup text
                 , maybeInfoItem "Additional Comments" community.governmentComments text
+                ]
+            , infoBlock "Economics"
+                [ if community.hasJoinFee then
+                    maybeInfoItem "Join Fee($)" community.joinFee (text << toString)
+                  else
+                    []
+                , [ ( "Dues, Fees, or Shared Expenses"
+                    , text <|
+                        if community.hasRegularFees then
+                            "Yes"
+                        else
+                            "No"
+                    )
+                  ]
+                , if community.hasRegularFees then
+                    maybeInfoItem "Monthly Fees($)" community.regularFees (text << toString)
+                  else
+                    []
+                , [ ( "Shared Income", text <| incomeSharingToString community.sharedIncome ) ]
+                , if community.contributeLabor == "Yes" then
+                    maybeInfoItem "Required Weekly Labor Contribution"
+                        community.laborHours
+                        (text << toString)
+                  else if community.contributeLabor == "No" then
+                    []
+                  else
+                    maybeInfoItem "Suggested Weekly Labor Contribution"
+                        community.laborHours
+                        (text << toString)
+                , maybeInfoItem "Open to Members with Existing Debt" community.memberDebt text
+                , maybeInfoItem "Additional Comments" community.economicsComments text
+                ]
+            , infoBlock "Sustainability Practices"
+                [ maybeInfoItem "Energy Infrastructure" community.energyInfrastructure text
+                , maybeInfoItem "Current Renewable Energy Generation" community.currentRenewablePercentage text
+                , infoBlockSublist "Energy Sources" <| Maybe.withDefault [] community.renewableSources
+                , maybeInfoItem "Planned Renewable Energy Generation" community.plannedRenewablePercentage text
+                , maybeInfoItem "Current Food Produced" community.currentFoodPercentage text
+                , maybeInfoItem "Planned Food Produced" community.plannedFoodPercentage text
+                , maybeInfoItem "Food Produced Locally" community.localFoodPercentage text
+                ]
+            , infoBlock "Lifestyle"
+                [ infoBlockSublist "Common Facilities" community.facilities
+                , maybeInfoItem "Internet Available" community.internetAccess text
+                , maybeInfoItem "Internet Fast?" community.internetSpeed text
+                , maybeInfoItem "Cellphone Service" community.cellService text
+                , maybeInfoItem "Shared Meals" community.sharedMeals text
+                , infoBlockSublist "Dietary Practices" community.dietaryPractices
+                , maybeInfoItem "Dietary Choice or Restrictions" community.commonDiet text
+                , maybeInfoItem "Special Diets OK" community.specialDiets text
+                , maybeInfoItem "Alcohol Use" community.alcohol text
+                , maybeInfoItem "Tobacco Use" community.tobacco text
+                , maybeInfoItem "Additional Diet Comments" community.dietComments text
+                , if not (List.isEmpty community.spiritualPractices) then
+                    infoBlockSublist "Common Spiritual Practice(s)" community.spiritualPractices
+                        ++ maybeInfoItem "Spiritual Practice Expected?" community.religionExpected text
+                  else
+                    []
+                , infoBlockSublist "Education Style(s)" community.education
+                , maybeInfoItem "Expected Healthcare Practices" community.healthcareComments text
+                , infoBlockSublist "Healthcare Options" community.healthcareOptions
+                , maybeInfoItem "Additional Comments" community.lifestyleComments text
                 ]
             ]
 

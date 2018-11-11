@@ -51,6 +51,10 @@ class APIDirectory
    *    - adultCount
    *    - decisionMaking
    *    - leader
+   *    - hasJoinFee
+   *    - hasRegularFees
+   *    - sharedIncome
+   *    - contributeLabor
    *
    * As well as the following optional fields:
    *
@@ -90,6 +94,35 @@ class APIDirectory
    *    - membershipComments
    *    - leadershipGroup
    *    - governmentComments
+   *    - joinFee
+   *    - regularFees
+   *    - laborHours
+   *    - memberDebt
+   *    - energyInfrastructure
+   *    - renewablePercentage
+   *    - renewableSources
+   *    - plannedRenewablePercentage
+   *    - currentFoodPercentage
+   *    - plannedFoodPercentage
+   *    - localFoodPercentage
+   *    - facilities
+   *    - internetAccess
+   *    - internetSpeed
+   *    - cellService
+   *    - sharedMeals
+   *    - dietaryPractices
+   *    - commonDiet
+   *    - specialDiets
+   *    - alcohol
+   *    - tobacco
+   *    - dietComments
+   *    - spiritualPractices
+   *    - religionExpected
+   *    - education
+   *    - commonHealthcarePractice
+   *    - healthcareComments
+   *    - healthcareOptions
+   *    - lifestyleComments
    *    - networkAffiliations
    *    - otherAffiliations
    *    - keywords
@@ -175,6 +208,40 @@ class APIDirectory
       DirectoryDB::$leader_field_id => 'leader',
       DirectoryDB::$leadership_group_field_id => 'leadershipGroup',
       DirectoryDB::$government_comments_field_id => 'governmentComments',
+      DirectoryDB::$has_join_fee_field_id => 'hasJoinFee',
+      DirectoryDB::$join_fee_field_id => 'joinFee',
+      DirectoryDB::$has_regular_fees_field_id => 'hasRegularFees',
+      DirectoryDB::$regular_fees_field_id => 'regularFees',
+      DirectoryDB::$share_income_field_id => 'sharedIncome',
+      DirectoryDB::$contribute_labor_field_id => 'contributeLabor',
+      DirectoryDB::$labor_hours_field_id => 'laborHours',
+      DirectoryDB::$member_debt_field_id => 'memberDebt',
+      DirectoryDB::$economics_comments_field_id => 'economicsComments',
+      DirectoryDB::$energy_infrastructure_field_id => 'energyInfrastructure',
+      DirectoryDB::$renewable_percentage_field_id => 'renewablePercentage',
+      DirectoryDB::$renewable_sources_field_id => 'renewableSources',
+      DirectoryDB::$planned_renewable_percentage_field_id => 'plannedRenewablePercentage',
+      DirectoryDB::$current_food_field_id => 'currentFoodPercentage',
+      DirectoryDB::$planned_food_field_id => 'plannedFoodPercentage',
+      DirectoryDB::$local_food_field_id => 'localFoodPercentage',
+      DirectoryDB::$facilities_field_id => 'facilities',
+      DirectoryDB::$internet_access_field_id => 'internetAccess',
+      DirectoryDB::$internet_speed_field_id => 'internetSpeed',
+      DirectoryDB::$cell_service_field_id => 'cellService',
+      DirectoryDB::$shared_meals_field_id => 'sharedMeals',
+      DirectoryDB::$diet_practices_field_id => 'dietaryPractices',
+      DirectoryDB::$common_diet_field_id => 'commonDiet',
+      DirectoryDB::$special_diets_field_id => 'specialDiets',
+      DirectoryDB::$alcohol_field_id => 'alcohol',
+      DirectoryDB::$tobacco_field_id => 'tobacco',
+      DirectoryDB::$diet_comments_field_id => 'dietComments',
+      DirectoryDB::$spiritual_practices_field_id => 'spiritualPractices',
+      DirectoryDB::$religion_expected_field_id => 'religionExpected',
+      DirectoryDB::$education_field_id => 'education',
+      DirectoryDB::$healthcare_practice_field_id => 'commonHealthcarePractice',
+      DirectoryDB::$healthcare_comments_field_id => 'healthcareComments',
+      DirectoryDB::$healthcare_options_field_id => 'healthcareOptions',
+      DirectoryDB::$lifestyle_comments_field_id => 'lifestyleComments',
       DirectoryDB::$network_affiliations_field_id => 'networkAffiliations',
       DirectoryDB::$other_affiliations_field_id => 'otherAffiliations',
       DirectoryDB::$keywords_field_id => 'keywords',
@@ -284,7 +351,7 @@ SQL;
 
     $empty_array_fields = array(
       'communityTypes', 'currentResidenceTypes', 'plannedResidenceTypes',
-      'housingAccess',
+      'housingAccess', 'education', 'healthcareOptions',
     );
     foreach ($empty_array_fields as $field) {
       if (!$entry[$field]) {
@@ -298,6 +365,7 @@ SQL;
     }
     $optional_int_fields = array(
       'currentResidences', 'plannedResidences', 'childCount', 'nonmemberCount',
+      'joinFee', 'regularFees', 'laborHours',
     );
     foreach ($optional_int_fields as $field) {
       if (isset($entry[$field])) {
@@ -309,6 +377,13 @@ SQL;
     foreach ($float_fields as $field) {
       if ($entry[$field]) {
         $entry[$field] = (float) $entry[$field];
+      }
+    }
+
+    $yes_no_fields = array('hasJoinFee', 'hasRegularFees');
+    foreach ($yes_no_fields as $field) {
+      if ($entry[$field]) {
+        $entry[$field] = $entry[$field] === "Yes";
       }
     }
 
@@ -333,14 +408,20 @@ SQL;
       }
     }
 
-    $tilde_array_fields = array('programs', 'currentResidenceTypes', 'plannedResidenceTypes');
+    $tilde_array_fields = array(
+      'programs', 'currentResidenceTypes', 'plannedResidenceTypes',
+      'dietaryPractices', 'healthcareOptions',
+    );
     foreach ($tilde_array_fields as $field) {
       foreach ($entry[$field] as $i => $field_value) {
         $entry[$field][$i] = self::clean_escapes($field_value);
       }
     }
 
-    $tilde_fields = array('decisionMaking', 'leader');
+    $tilde_fields = array(
+      'decisionMaking', 'leader', 'renewablePercentage', 'plannedRenewablePercentage',
+      'currentFoodPercentage', 'localFoodPercentage', 'alcohol', 'tobacco',
+    );
     foreach ($tilde_fields as $field) {
       if (isset($entry[$field])) {
         $entry[$field] = self::clean_escapes($entry[$field]);

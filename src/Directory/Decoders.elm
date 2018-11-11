@@ -60,6 +60,40 @@ communityDetails =
         |> required "leader" Decode.string
         |> maybe "leadershipGroup" Decode.string
         |> maybe "governmentComments" Decode.string
+        |> required "hasJoinFee" Decode.bool
+        |> maybe "joinFee" Decode.float
+        |> required "hasRegularFees" Decode.bool
+        |> maybe "regularFees" Decode.float
+        |> required "sharedIncome" incomeSharing
+        |> required "contributeLabor" Decode.string
+        |> maybe "laborHours" Decode.float
+        |> maybe "memberDebt" Decode.string
+        |> maybe "economicsComments" Decode.string
+        |> maybe "energyInfrastructure" Decode.string
+        |> maybe "renewablePercentage" Decode.string
+        |> maybe "renewableSources" (Decode.list Decode.string)
+        |> maybe "plannedRenewablePercentage" Decode.string
+        |> maybe "currentFoodPercentage" Decode.string
+        |> maybe "plannedFoodPercentage" Decode.string
+        |> maybe "localFoodPercentage" Decode.string
+        |> required "facilities" (Decode.list Decode.string)
+        |> maybe "internetAccess" Decode.string
+        |> maybe "internetSpeed" Decode.string
+        |> maybe "cellService" Decode.string
+        |> maybe "sharedMeals" Decode.string
+        |> required "dietaryPractices" (Decode.list Decode.string)
+        |> maybe "commonDiet" Decode.string
+        |> maybe "specialDiets" Decode.string
+        |> maybe "alcohol" Decode.string
+        |> maybe "tobacco" Decode.string
+        |> maybe "dietComments" Decode.string
+        |> required "spiritualPractices" (Decode.list Decode.string)
+        |> maybe "religionExpected" Decode.string
+        |> required "education" (Decode.list Decode.string)
+        |> maybe "commonHealthcarePractice" Decode.string
+        |> maybe "healthcareComments" Decode.string
+        |> required "healthcareOptions" (Decode.list Decode.string)
+        |> maybe "lifestyleComments" Decode.string
         |> optional "networkAffiliations" (Decode.list string) []
         |> optional "otherAffiliations" string ""
         |> optional "keywords" string ""
@@ -223,6 +257,18 @@ landStatus =
         , ( UndevelopedLand, "we have undeveloped land" )
         , ( PermittingLand, "we have land in the permitting or zoning stage" )
         , ( DevelopedLand, "we have land we have developed on" )
+        ]
+
+
+incomeSharing : Decoder IncomeSharing
+incomeSharing =
+    stringToEnum
+        [ ( NoIncomeSharing, "none" )
+        , ( NoIncomeSharing, "members have completely independent finances" )
+        , ( PartialIncomeSharing, "partial share of income" )
+        , ( FullIncomeSharing, "100%" )
+        , ( FullIncomeSharing, "all or close to all" )
+        , ( FullIncomeSharing, "close to all income" )
         ]
 
 

@@ -15,7 +15,6 @@ class DirectoryDB
   public static $community_types_field_id = 262;
   public static $started_planning_field_id = 273;
   public static $started_living_together_field_id = 274;
-  public static $spiritual_practices_field_id = 259;
   public static $open_to_members_field_id = 257;
   public static $open_to_visitors_field_id = 256;
   // contact
@@ -75,6 +74,43 @@ class DirectoryDB
   public static $leader_field_id = 251;
   public static $leadership_group_field_id = 252;
   public static $government_comments_field_id = 305;
+  // economics block
+  public static $has_join_fee_field_id = 246;
+  public static $join_fee_field_id = 247;
+  public static $has_regular_fees_field_id = 248;
+  public static $regular_fees_field_id = 249;
+  public static $share_income_field_id = 241;
+  public static $contribute_labor_field_id = 244;
+  public static $labor_hours_field_id = 245;
+  public static $member_debt_field_id = 243;
+  public static $economics_comments_field_id = 306;
+  // sustainibility block
+  public static $energy_infrastructure_field_id = 966;
+  public static $renewable_percentage_field_id = 299;
+  public static $renewable_sources_field_id = 295;
+  public static $planned_renewable_percentage_field_id = 297;
+  public static $current_food_field_id = 294;
+  public static $planned_food_field_id = 315;
+  public static $local_food_field_id = 301;
+  // lifestyle block
+  public static $facilities_field_id = 967;
+  public static $internet_access_field_id = 972;
+  public static $internet_speed_field_id = 974;
+  public static $cell_service_field_id = 973;
+  public static $shared_meals_field_id = 697;
+  public static $diet_practices_field_id = 236;
+  public static $common_diet_field_id = 237;
+  public static $special_diets_field_id = 975;
+  public static $alcohol_field_id = 238;
+  public static $tobacco_field_id = 239;
+  public static $diet_comments_field_id = 307;
+  public static $spiritual_practices_field_id = 259;
+  public static $religion_expected_field_id = 969;
+  public static $education_field_id = 281;
+  public static $healthcare_practice_field_id = 970;
+  public static $healthcare_comments_field_id = 971;
+  public static $healthcare_options_field_id = 282;
+  public static $lifestyle_comments_field_id = 976;
   // other sections
   public static $network_affiliations_field_id = 283;
   public static $other_affiliations_field_id = 279;

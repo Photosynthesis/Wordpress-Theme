@@ -94,6 +94,14 @@ type LandStatus
     | DevelopedLand
 
 
+{-| The Type of Income Sharing Community Members Participate In.
+-}
+type IncomeSharing
+    = NoIncomeSharing
+    | FullIncomeSharing
+    | PartialIncomeSharing
+
+
 {-| The Data Associated with a Specific Community for the Listings pages.
 -}
 type alias CommunityListing =
@@ -168,6 +176,40 @@ type alias CommunityDetails =
     , leader : String
     , leadershipGroup : Maybe String
     , governmentComments : Maybe String
+    , hasJoinFee : Bool
+    , joinFee : Maybe Float
+    , hasRegularFees : Bool
+    , regularFees : Maybe Float
+    , sharedIncome : IncomeSharing
+    , contributeLabor : String
+    , laborHours : Maybe Float
+    , memberDebt : Maybe String
+    , economicsComments : Maybe String
+    , energyInfrastructure : Maybe String
+    , currentRenewablePercentage : Maybe String
+    , renewableSources : Maybe (List String)
+    , plannedRenewablePercentage : Maybe String
+    , currentFoodPercentage : Maybe String
+    , plannedFoodPercentage : Maybe String
+    , localFoodPercentage : Maybe String
+    , facilities : List String
+    , internetAccess : Maybe String
+    , internetSpeed : Maybe String
+    , cellService : Maybe String
+    , sharedMeals : Maybe String
+    , dietaryPractices : List String
+    , commonDiet : Maybe String
+    , specialDiets : Maybe String
+    , alcohol : Maybe String
+    , tobacco : Maybe String
+    , dietComments : Maybe String
+    , spiritualPractices : List String
+    , religionExpected : Maybe String
+    , education : List String
+    , commonHealthcarePractice : Maybe String
+    , healthcareComments : Maybe String
+    , healthcareOptions : List String
+    , lifestyleComments : Maybe String
     , networkAffiliations : List String
     , otherAffiliations : String
     , keywords : String
@@ -308,3 +350,16 @@ landStatusToString status =
 
         DevelopedLand ->
             "We have land we have developed on"
+
+
+incomeSharingToString : IncomeSharing -> String
+incomeSharingToString sharing =
+    case sharing of
+        NoIncomeSharing ->
+            "None"
+
+        FullIncomeSharing ->
+            "All or Close to All"
+
+        PartialIncomeSharing ->
+            "Partial Sharing of Income"
