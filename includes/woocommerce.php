@@ -581,6 +581,12 @@ add_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display', 11)
 /* Show 24 Products Per Page */
 add_filter('loop_shop_per_page', create_function('$cols', 'return 24;'), 20);
 
+/* Remove Stripe Payment Separator on Product Pages */
+remove_action('woocommerce_after_add_to_cart_quantity',
+  array(WC_Stripe_Payment_Request::instance(), 'display_payment_request_button_html'), 1);
+remove_action('woocommerce_after_add_to_cart_quantity',
+  array(WC_Stripe_Payment_Request::instance(), 'display_payment_request_button_separator_html'), 2);
+
 add_action('after_setup_theme', array('ThemeWooCommerce', 'enable_support'));
 add_filter('woocommerce_enqueue_styles', array('ThemeWooCommerce', 'disable_css'));
 add_filter('woocommerce_loop_add_to_cart_args', array('ThemeWooCommerce', 'add_to_cart_classes'), 10, 2);
