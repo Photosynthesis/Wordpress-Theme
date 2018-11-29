@@ -316,11 +316,11 @@ CSS;
 
     echo <<<HTML
   <div class="row mb-3"><div class="col-24 text-center">
-    <a target="_blank" href="{$link_url}">
+    <a target="_blank" href="{$link_url}" onclick="ga('send', 'event', 'Theme.Banner', 'click', '{$ga_label}');">
       <img
         class="img-fluid mx-auto"
         src="{$img_url}"
-        title="Support the FIC, Donate Today"
+        title="Support FIC, Donate Today"
       />
     </a>
   </div></div>
