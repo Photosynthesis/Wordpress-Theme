@@ -8,6 +8,7 @@ import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model, paginationConfig)
 import Directory.Pagination as Pagination exposing (Pagination)
 import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..), reverse)
+import RemoteData
 
 
 updateUrl : Route -> Model -> ( Model, Cmd Msg )
@@ -57,8 +58,16 @@ listingsUpdateUrl route model =
 
         updatedSearchString =
             Routing.getSearchFilter filters |> Maybe.withDefault ""
+
+        fromDetailsPage =
+            case model.route of
+                DetailsRoute _ ->
+                    True
+
+                ListingsRoute _ ->
+                    False
     in
-        if filters /= communityFilters || ordering /= communityOrdering then
+        if filters /= communityFilters || ordering /= communityOrdering || fromDetailsPage then
             Pagination.updateData paginationConfig model.communities updatedRequestData
                 |> (\( m, c ) ->
                         ( { updatedModel | communities = m }, Cmd.map CommunityPagination c )
@@ -73,7 +82,9 @@ listingsUpdateUrl route model =
 -}
 detailsUpdateUrl : String -> Model -> ( Model, Cmd Msg )
 detailsUpdateUrl slug model =
-    ( { model | route = DetailsRoute slug }, Cmd.none )
+    ( { model | route = DetailsRoute slug, community = RemoteData.Loading }
+    , Commands.getCommunity slug
+    )
 
 
 {-| Update the Model Based According to Some Message.

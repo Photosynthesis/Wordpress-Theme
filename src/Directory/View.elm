@@ -10,7 +10,7 @@ import Directory.Model exposing (Model)
 import Directory.Pagination as Pagination exposing (Pagination)
 import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..), reverse)
 import Html exposing (Html, text)
-import Html.Attributes exposing (class, src, alt, href, name, type_, checked, height, width, value, target, id, title)
+import Html.Attributes exposing (attribute, class, src, alt, href, name, type_, checked, height, width, value, target, id, title)
 import Html.Events exposing (onClick, onInput, onSubmit, onWithOptions, defaultOptions)
 import Json.Decode as Decode
 import Markdown
@@ -22,14 +22,20 @@ import RemoteData exposing (WebData)
 -}
 navigateLink : Route -> String -> String -> Html Msg
 navigateLink route classes content =
+    Html.a (class classes :: navigateAttributes route) [ text content ]
+
+
+{-| Build the Html Attributes for an Internal Application Link.
+-}
+navigateAttributes : Route -> List (Html.Attribute Msg)
+navigateAttributes route =
     let
         onClickNoDefault =
             onWithOptions "click"
                 { defaultOptions | preventDefault = True }
                 (Decode.succeed <| NavigateTo route)
     in
-        Html.a [ href <| reverse route, class classes, onClickNoDefault ]
-            [ text content ]
+        [ href <| reverse route, onClickNoDefault ]
 
 
 {-| Return an HTML Element or an Empty Node.
@@ -861,7 +867,7 @@ pagination route communityPagination =
 
 {-| Render a Single Community in the Listings.
 -}
-communityItem : Maybe Date -> CommunityListing -> Html msg
+communityItem : Maybe Date -> CommunityListing -> Html Msg
 communityItem maybeCurrentDate community =
     let
         address { city, state, country } =
@@ -883,9 +889,9 @@ communityItem maybeCurrentDate community =
             maybeHtml (imageElement name) thumbnailUrl
     in
         Html.a
-            [ class "list-group-item list-group-item-action"
-            , href <| "/directory/" ++ community.slug
-            ]
+            (class "list-group-item list-group-item-action"
+                :: navigateAttributes (DetailsRoute community.slug)
+            )
             [ Html.div [ class "mb-2 w-100" ]
                 [ Html.div [ class "clearfix" ]
                     [ maybeImage community
