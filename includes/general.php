@@ -339,6 +339,9 @@ HTML;
   }
 }
 
+add_filter('wp_mail_from_name', function($n) { return 'Fellowship for Intentional Community'; }, 11);
+add_filter('wp_mail_from', function($e) { return 'support@ic.org'; }, 11);
+
 ThemeGeneral::enable_support();
 ThemeGeneral::set_thumbnail_sizes();
 ThemeGeneral::register_menu();
