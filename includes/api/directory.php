@@ -55,6 +55,7 @@ class APIDirectory
    *    - hasRegularFees
    *    - sharedIncome
    *    - contributeLabor
+   *    - fairHousingComplaint
    *
    * As well as the following optional fields:
    *
@@ -123,8 +124,11 @@ class APIDirectory
    *    - healthcareComments
    *    - healthcareOptions
    *    - lifestyleComments
+   *    - additionalComments
+   *    - youtubeIds
    *    - networkAffiliations
    *    - otherAffiliations
+   *    - communityAffiliations
    *    - keywords
    *
    *
@@ -163,6 +167,8 @@ class APIDirectory
       DirectoryDB::$disbanded_info_field_id => 'disbanded_info',
       DirectoryDB::$reforming_year_field_id => 'reforming_year',
       DirectoryDB::$reforming_info_field_id => 'reforming_info',
+      DirectoryDB::$fair_housing_field_id => 'fair_housing_complaint',
+      DirectoryDB::$fair_housing_exceptions_field_id => 'fair_housing_exceptions',
       // Fields that just need simple cleanup
       DirectoryDB::$community_status_field_id => 'communityStatus',
       DirectoryDB::$mission_statement_field_id => 'missionStatement',
@@ -242,8 +248,11 @@ class APIDirectory
       DirectoryDB::$healthcare_comments_field_id => 'healthcareComments',
       DirectoryDB::$healthcare_options_field_id => 'healthcareOptions',
       DirectoryDB::$lifestyle_comments_field_id => 'lifestyleComments',
+      DirectoryDB::$additional_comments_field_id => 'additionalComments',
+      DirectoryDB::$youtube_ids_field_id => 'youtubeIds',
       DirectoryDB::$network_affiliations_field_id => 'networkAffiliations',
       DirectoryDB::$other_affiliations_field_id => 'otherAffiliations',
+      DirectoryDB::$community_affiliations_field_id => 'communityAffiliations',
       DirectoryDB::$keywords_field_id => 'keywords',
     );
 
@@ -340,7 +349,25 @@ SQL;
     unset($entry['reforming_year']);
     unset($entry['reforming_info']);
 
+    $entry['fair_housing_complaint'] = $entry['fair_housing_complaint'] === "Yes";
+
     self::unserialize_and_convert_case($entry);
+
+    if (is_array($entry['youtubeIds'])) {
+      foreach ($entry['youtubeIds'] as $index => $youtubeId) {
+        $entry['youtubeIds'][$index] =
+          str_replace('http://www.youtube.com/watch?v=', '',
+          str_replace('https://www.youtube.com/watch?v=', '',
+            $youetubeId
+          )
+          );
+      }
+    }
+
+    if (!$entry['fairHousingComplaint'] && $entry['fairHousingExceptions']) {
+      $entry['fairHousingComplaint'] = true;
+    }
+    unset($entry['fairHousingExceptions']);
 
     $empty_fields = array('missionStatement', 'description') ;
     foreach ($empty_fields as $field) {

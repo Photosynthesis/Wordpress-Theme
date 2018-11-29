@@ -94,8 +94,12 @@ communityDetails =
         |> maybe "healthcareComments" Decode.string
         |> required "healthcareOptions" (Decode.list Decode.string)
         |> maybe "lifestyleComments" Decode.string
+        |> maybe "additionalComments" Decode.string
+        |> optional "youtubeIds" (Decode.list string) []
         |> optional "networkAffiliations" (Decode.list string) []
         |> optional "otherAffiliations" string ""
+        |> maybe "communityAffiliations" Decode.string
+        |> required "fairHousingComplaint" Decode.bool
         |> optional "keywords" string ""
         |> required "updatedAt" date
         |> required "createdAt" date

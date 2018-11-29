@@ -120,6 +120,56 @@ communityDetails maybeCurrentDate community =
                 , Html.h2 [] [ text "Community Description" ]
                 , Markdown.toHtml [] community.description
                 ]
+
+        section header content =
+            sectionHtml header <| Html.p [] [ text content ]
+
+        sectionHtml header htmlContent =
+            Html.div [] [ Html.h3 [] [ text header ], htmlContent ]
+
+        embedYoutube =
+            case community.youtubeIds of
+                [] ->
+                    text ""
+
+                firstId :: otherIds ->
+                    sectionHtml "Video Gallery" <|
+                        Html.iframe
+                            [ type_ "text/html"
+                            , class "embed-responsive"
+                            , width 720
+                            , height 480
+                            , src
+                                ("//www.youtube.com/embed/"
+                                    ++ firstId
+                                    ++ "?html5=1&origin=https://www.ic.org"
+                                    ++ "&playlist="
+                                    ++ String.join "," otherIds
+                                )
+                            ]
+                            []
+
+        fairHousingSection =
+            if community.fairHousingComplaint then
+                Html.div []
+                    [ Html.h3 [] [ text "Fair Housing Laws" ]
+                    , Html.p []
+                        [ text <|
+                            "This community acknowledges that their listing "
+                                ++ "does not include any potential violations "
+                                ++ "of the Fair Housing Law, or that they do "
+                                ++ "not provide housing. For any questions "
+                                ++ "about this topic please see our "
+                        , Html.a [ href "/policies/", target "_blank" ]
+                            [ text "Content Policies" ]
+                        , text " and contact FIC with any questions or concerns: "
+                        , Html.a [ href "mailto:directory@ic.org", target "_blank" ]
+                            [ text "directory@ic.org" ]
+                        , text "."
+                        ]
+                    ]
+            else
+                text ""
     in
         Html.div [ class "directory-listing" ]
             [ header
@@ -128,32 +178,45 @@ communityDetails maybeCurrentDate community =
                 , detailRightColumn community
                 ]
             , detailInfoBlocks community
-            , text "TODO: Additional Sections"
-            , Html.div []
-                [ Html.h3 [] [ text "Community Network or Organization Affiliations" ]
-                , Html.p []
-                    [ text <|
-                        String.join ", " <|
-                            List.filter (not << String.isEmpty) <|
-                                community.networkAffiliations
-                                    ++ [ community.otherAffiliations ]
-                    ]
-                ]
+            , renderMaybeString community.additionalComments <|
+                section "Additional Comments"
+            , embedYoutube
+            , Html.div [] [ text "TODO: Cohousing Section" ]
+            , section "Community Network or Organization Affiliations" <|
+                String.join ", " <|
+                    List.filter (not << String.isEmpty) <|
+                        community.networkAffiliations
+                            ++ [ community.otherAffiliations ]
+            , renderMaybeString community.communityAffiliations <|
+                section "Community Affiliations"
+            , fairHousingSection
             , renderNonEmpty community.keywords <|
-                \keywords ->
-                    Html.div []
-                        [ Html.h3 [] [ text "Keywords" ]
-                        , Html.p [] [ text keywords ]
-                        ]
+                section "Keywords"
             ]
 
 
+{-| Render non-empty strings only.
+-}
 renderNonEmpty : String -> (String -> Html msg) -> Html msg
 renderNonEmpty value renderer =
     if value == "" then
         text ""
     else
         renderer value
+
+
+{-| Render the value if present.
+-}
+renderJust : Maybe a -> (a -> Html msg) -> Html msg
+renderJust value renderer =
+    Maybe.map renderer value |> Maybe.withDefault (text "")
+
+
+{-| Render a non-empty string if present & a blank node otherwise.
+-}
+renderMaybeString : Maybe String -> (String -> Html msg) -> Html msg
+renderMaybeString m f =
+    renderJust m <| flip renderNonEmpty f
 
 
 detailRightColumn : CommunityDetails -> Html msg
@@ -249,9 +312,6 @@ detailRightColumn community =
                     , renderNonEmpty info.info <| \i -> Html.p [] [ text i ]
                     ]
                 ]
-
-        renderJust value renderer =
-            Maybe.map renderer value |> Maybe.withDefault (text "")
 
         textLink url =
             Html.a [ href url, target "_blank" ] [ text url ]

@@ -210,8 +210,12 @@ type alias CommunityDetails =
     , healthcareComments : Maybe String
     , healthcareOptions : List String
     , lifestyleComments : Maybe String
+    , additionalComments : Maybe String
+    , youtubeIds : List String
     , networkAffiliations : List String
     , otherAffiliations : String
+    , communityAffiliations : Maybe String
+    , fairHousingComplaint : Bool
     , keywords : String
     , updatedAt : Date
     , createdAt : Date

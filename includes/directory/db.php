@@ -112,8 +112,14 @@ class DirectoryDB
   public static $healthcare_options_field_id = 282;
   public static $lifestyle_comments_field_id = 976;
   // other sections
+  public static $additional_comments_field_id = 302;
+  public static $gallery_ids_field_id = 229;
+  public static $youtube_ids_field_id = 812;
   public static $network_affiliations_field_id = 283;
   public static $other_affiliations_field_id = 279;
+  public static $community_affiliations_field_id = 278;
+  public static $fair_housing_field_id = 412;
+  public static $fair_housing_exceptions_field_id = 414;
   public static $keywords_field_id = 716;
   // hidden/server/misc
   public static $update_email_date_field_id = 992;
