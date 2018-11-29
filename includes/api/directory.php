@@ -133,20 +133,17 @@ class APIDirectory
    *
    *
    *    TODO:
-   *    * imageUrl
-   *    * thumbnailUrl
-   *
-   *    * rest of fields... maybe farm each info-block to separate cleanup function.
-   *
    *    * isOwner
    *    * isAdmin
+   *    * Cohousing fields
+   *    * lat/long
    *
    *    * Special message if hidden by user
    *    * Create nonce in shortcode for checking user status, send to Elm, add
    *      to AJAX req header:
    *      https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/
-   *    * Validate listing route - just check that required fields are valid?
-   *      Validate all fields?
+   *    * Validate listing route
+   *        - turn shortcode into api route, check auth, validate, return OK or list of errors
    *
    *
    */
@@ -353,12 +350,15 @@ SQL;
 
     self::unserialize_and_convert_case($entry);
 
+    if ($entry['youtubeIds']) {
+      $entry['youtubeIds'] = explode(",", $entry['youtubeIds']);
+    }
     if (is_array($entry['youtubeIds'])) {
       foreach ($entry['youtubeIds'] as $index => $youtubeId) {
         $entry['youtubeIds'][$index] =
           str_replace('http://www.youtube.com/watch?v=', '',
           str_replace('https://www.youtube.com/watch?v=', '',
-            $youetubeId
+            $youtubeId
           )
           );
       }
@@ -378,7 +378,8 @@ SQL;
 
     $empty_array_fields = array(
       'communityTypes', 'currentResidenceTypes', 'plannedResidenceTypes',
-      'housingAccess', 'education', 'healthcareOptions',
+      'housingAccess', 'education', 'healthcareOptions', 'programs', 'facilities',
+      'dietaryPractices', 'spiritualPractices',
     );
     foreach ($empty_array_fields as $field) {
       if (!$entry[$field]) {
