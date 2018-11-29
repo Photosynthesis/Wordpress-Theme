@@ -89,10 +89,10 @@ communityDetails =
         |> maybe "dietComments" Decode.string
         |> required "spiritualPractices" (Decode.list Decode.string)
         |> maybe "religionExpected" Decode.string
-        |> required "education" (Decode.list Decode.string)
+        |> required "education" (oneOrList Decode.string)
         |> maybe "commonHealthcarePractice" Decode.string
         |> maybe "healthcareComments" Decode.string
-        |> required "healthcareOptions" (Decode.list Decode.string)
+        |> required "healthcareOptions" (oneOrList Decode.string)
         |> maybe "lifestyleComments" Decode.string
         |> maybe "additionalComments" Decode.string
         |> optional "youtubeIds" (Decode.list string) []
@@ -256,7 +256,7 @@ locationType =
 landStatus : Decoder LandStatus
 landStatus =
     stringToEnum
-        [ ( NoLand, "We do not have land" )
+        [ ( NoLand, "we do not have land" )
         , ( UndevelopedLand, "we have raw land" )
         , ( UndevelopedLand, "we have undeveloped land" )
         , ( PermittingLand, "we have land in the permitting or zoning stage" )
