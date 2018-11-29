@@ -118,7 +118,6 @@ communityListing =
         |> required "id" communityID
         |> required "name" string
         |> required "slug" string
-        |> required "imageUrl" (Decode.nullable string)
         |> required "thumbnailUrl" (Decode.nullable string)
         |> required "communityStatus" communityStatus
         |> optional "city" string ""

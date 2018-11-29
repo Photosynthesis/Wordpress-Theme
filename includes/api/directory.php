@@ -498,7 +498,6 @@ SQL;
    *    - id
    *    - name
    *    - slug
-   *    - imageUrl
    *    - thumbnailUrl
    *    - createdAt
    *    - updatedAt
@@ -645,7 +644,6 @@ SQL;
 SELECT
   items.id, items.name, items.created_at, items.updated_at,
   posts.post_title, posts.post_name AS slug,
-  post_images.ID AS imageID, post_images.guid AS imageUrl,
   image_post_id_metas.meta_value AS image_post_id {$selects}
 FROM {$wpdb->prefix}frm_items AS items
 INNER JOIN
@@ -661,11 +659,6 @@ LEFT JOIN
   (SELECT item_id, field_id, meta_value
    FROM {$wpdb->prefix}frm_item_metas WHERE field_id=228)
   AS image_post_id_metas ON image_post_id_metas.item_id=items.id
-LEFT JOIN
-  (SELECT ID, guid
-   FROM {$wpdb->prefix}posts
-   WHERE `post_type`='attachment'
-  ) AS post_images ON post_images.ID={$meta_fields[DirectoryDB::$primary_image_field_id]}_metas.meta_value
 
 {$joins}
 
@@ -722,7 +715,6 @@ SQL;
     $entry['id'] = self::clean_id($entry['id']);
     $entry['updated_at'] = self::clean_date($entry['updated_at']);
     $entry['created_at'] = self::clean_date($entry['created_at']);
-    unset($entry['image_post_id']);
     unset($entry['post_content']);
 
     if ($entry['post_title']) {
@@ -734,15 +726,13 @@ SQL;
     $entry['state'] = self::clean_state($entry['state'], $entry['province']);
     unset($entry['province']);
 
-    if ($entry['imageID']) {
-      $entry['thumbnailUrl'] = wp_get_attachment_thumb_url($entry['imageID']);
-      if (!$entry['thumbnailUrl']) {
-        $entry['thumbnailUrl'] = null;
-      }
+    if ($entry['image_post_id']) {
+      $image_data = self::get_image_data($entry['image_post_id'], 'thumbnail');
+      $entry['thumbnailUrl'] = $image_data['thumbnailUrl'];
     } else {
       $entry['thumbnailUrl'] = null;
     }
-    unset($entry['imageID']);
+    unset($entry['image_post_id']);
 
     self::unserialize_and_convert_case($entry);
 
@@ -776,6 +766,18 @@ SQL;
         unset($entry[$key]);
       }
     }
+  }
+
+  /* Fetch the src & thumbnail src for an Image post. */
+  private static function get_image_data($post_id, $size) {
+    $size_src = wp_get_attachment_image_src($post_id, $size)[0];
+    if (!$size_src) {
+      $size_src = null;
+    }
+    return array(
+      'imageUrl' => get_post($post_id)->guid,
+      'thumbnailUrl' => $size_src,
+    );
   }
 
   public static function clean_id($id) {

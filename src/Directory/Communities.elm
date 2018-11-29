@@ -108,7 +108,6 @@ type alias CommunityListing =
     { id : CommunityID
     , name : String
     , slug : String
-    , imageUrl : Maybe String
     , thumbnailUrl : Maybe String
     , status : CommunityStatus
     , city : String
