@@ -16,6 +16,7 @@ TODO:
 
   - Store list in model? Currently don't have it so thumbnails & next/prev
     could have different sets of images.
+  - Hide next/prev buttons on single item list.
   - Use elm-style-animation for transitions. Transition closing modal, sliding
     between images, & size changes.
   - Dim current & show spinner while waiting for next/prev image to load

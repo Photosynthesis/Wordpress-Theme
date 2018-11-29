@@ -29,6 +29,7 @@ class APIDirectory
    *    - id
    *    - name
    *    - slug
+   *    - image
    *    - missionStatement
    *    - description
    *    - createdAt
@@ -125,6 +126,7 @@ class APIDirectory
    *    - healthcareOptions
    *    - lifestyleComments
    *    - additionalComments
+   *    - galleryImages
    *    - youtubeIds
    *    - networkAffiliations
    *    - otherAffiliations
@@ -153,6 +155,7 @@ class APIDirectory
     // Field ID -> JSON Key
     $public_fields = array(
       // Fields with more complex processing
+      DirectoryDB::$primary_image_field_id => 'image_post_id',
       DirectoryDB::$is_address_public_field_id => 'contact_address_public',
       DirectoryDB::$public_address_type_field_id => 'contact_address_type',
       DirectoryDB::$address_one_field_id => 'address_one',
@@ -166,6 +169,7 @@ class APIDirectory
       DirectoryDB::$reforming_info_field_id => 'reforming_info',
       DirectoryDB::$fair_housing_field_id => 'fair_housing_complaint',
       DirectoryDB::$fair_housing_exceptions_field_id => 'fair_housing_exceptions',
+      DirectoryDB::$gallery_ids_field_id => 'gallery_image_ids',
       // Fields that just need simple cleanup
       DirectoryDB::$community_status_field_id => 'communityStatus',
       DirectoryDB::$mission_statement_field_id => 'missionStatement',
@@ -294,6 +298,13 @@ SQL;
     $entry['updated_at'] = self::clean_date($entry['updated_at']);
     $entry['created_at'] = self::clean_date($entry['created_at']);
 
+    if ($entry['image_post_id']) {
+      $entry['image'] = self::get_image_data($entry['image_post_id'], 'full');
+    } else {
+      $entry['image'] = null;
+    }
+    unset($entry['image_post_id']);
+
     if ($entry['contact_address_public'] === 'Public') {
       $entry_type = $entry['contact_address_type'] === 'Community address'
         ? 'community' : 'mailing';
@@ -349,6 +360,14 @@ SQL;
     $entry['fair_housing_complaint'] = $entry['fair_housing_complaint'] === "Yes";
 
     self::unserialize_and_convert_case($entry);
+
+    if (is_array($entry['galleryImageIds']) && sizeof($entry['galleryImageIds']) > 0) {
+      $entry['galleryImages'] = array();
+      foreach ($entry['galleryImageIds'] as $image_id) {
+        $entry['galleryImages'][] = self::get_image_data($image_id, 'thumbnail');
+      }
+    }
+    unset($entry['galleryImageIds']);
 
     if ($entry['youtubeIds']) {
       $entry['youtubeIds'] = explode(",", $entry['youtubeIds']);

@@ -9,6 +9,7 @@ import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model)
 import Directory.Pagination as Pagination exposing (Pagination)
 import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..), reverse)
+import Gallery
 import Html exposing (Html, text)
 import Html.Attributes exposing (attribute, class, src, alt, href, name, type_, checked, height, width, value, target, id, title)
 import Html.Events exposing (onClick, onInput, onSubmit, onWithOptions, defaultOptions)
@@ -55,13 +56,13 @@ view model =
             listingsView model.communities model.searchString model.currentDate listingsRoute
 
         DetailsRoute _ ->
-            detailsView model.currentDate model.community
+            detailsView model.currentDate model.community model.communityGallery
 
 
 {-| Render a Details Page.
 -}
-detailsView : Maybe Date -> WebData CommunityDetails -> Html Msg
-detailsView currentDate community =
+detailsView : Maybe Date -> WebData CommunityDetails -> Gallery.Model ImageData -> Html Msg
+detailsView currentDate community gallery =
     case community of
         RemoteData.NotAsked ->
             Html.div [ class "text-danger text-center my-4" ]
@@ -82,7 +83,7 @@ detailsView currentDate community =
                 ]
 
         RemoteData.Success details ->
-            communityDetails currentDate details
+            communityDetails currentDate details gallery
 
 
 loadingBar : Html msg
@@ -94,8 +95,8 @@ loadingBar =
         ]
 
 
-communityDetails : Maybe Date -> CommunityDetails -> Html Msg
-communityDetails maybeCurrentDate community =
+communityDetails : Maybe Date -> CommunityDetails -> Gallery.Model ImageData -> Html Msg
+communityDetails maybeCurrentDate community communityGallery =
     let
         area =
             [ community.city, community.state, community.country ]
@@ -121,12 +122,38 @@ communityDetails maybeCurrentDate community =
 
         leftColumn =
             Html.div [ class "col-24 col-sm-14" ]
-                [ Html.p [] [ text "TODO: Image, Lightbox" ]
+                [ renderJust (Maybe.map .imageUrl community.image) primaryImage
                 , Html.h2 [] [ text "Mission Statement" ]
                 , Html.p [] [ text community.missionStatement ]
                 , Html.h2 [] [ text "Community Description" ]
                 , Markdown.toHtml [] community.description
                 ]
+
+        primaryImage imageSrc =
+            let
+                linkWrapper inner =
+                    case community.image of
+                        Nothing ->
+                            inner
+
+                        Just ({ thumbnailUrl } as image) ->
+                            Html.a
+                                [ href thumbnailUrl
+                                , target "_blank"
+                                , Gallery.open GalleryMsg image
+                                ]
+                                [ inner ]
+            in
+                Html.div [ class "mb-2" ]
+                    [ linkWrapper <|
+                        Html.img
+                            [ src imageSrc
+                            , alt community.name
+                            , title community.name
+                            , class "img-thumbnail img-fluid d-block mx-auto"
+                            ]
+                            []
+                    ]
 
         section header content =
             sectionHtml header <| Html.p [] [ text content ]
@@ -177,6 +204,9 @@ communityDetails maybeCurrentDate community =
                     ]
             else
                 text ""
+
+        galleryConfig =
+            Gallery.Config .thumbnailUrl .imageUrl
     in
         Html.div [ class "directory-listing" ]
             [ header
@@ -187,6 +217,9 @@ communityDetails maybeCurrentDate community =
             , detailInfoBlocks community
             , renderMaybeString community.additionalComments <|
                 section "Additional Comments"
+            , sectionHtml "Photo Gallery" <|
+                Html.map GalleryMsg <|
+                    Gallery.thumbnails galleryConfig community.galleryImages
             , embedYoutube
             , Html.div [] [ text "TODO: Cohousing Section" ]
             , section "Community Network or Organization Affiliations" <|
@@ -199,6 +232,8 @@ communityDetails maybeCurrentDate community =
             , fairHousingSection
             , renderNonEmpty community.keywords <|
                 section "Keywords"
+            , Html.map GalleryMsg <|
+                Gallery.modal galleryConfig communityGallery
             ]
 
 

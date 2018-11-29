@@ -102,6 +102,12 @@ type IncomeSharing
     | PartialIncomeSharing
 
 
+type alias ImageData =
+    { thumbnailUrl : String
+    , imageUrl : String
+    }
+
+
 {-| The Data Associated with a Specific Community for the Listings pages.
 -}
 type alias CommunityListing =
@@ -127,6 +133,7 @@ type alias CommunityDetails =
     { id : CommunityID
     , name : String
     , slug : String
+    , image : Maybe ImageData
     , missionStatement : String
     , description : String
     , status : CommunityStatus
@@ -210,6 +217,7 @@ type alias CommunityDetails =
     , healthcareOptions : List String
     , lifestyleComments : Maybe String
     , additionalComments : Maybe String
+    , galleryImages : List ImageData
     , youtubeIds : List String
     , networkAffiliations : List String
     , otherAffiliations : String

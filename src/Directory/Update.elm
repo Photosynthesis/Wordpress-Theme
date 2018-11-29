@@ -8,6 +8,7 @@ import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model, paginationConfig)
 import Directory.Pagination as Pagination exposing (Pagination)
 import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..), reverse)
+import Gallery
 import RemoteData
 
 
@@ -165,5 +166,30 @@ update msg model =
                     , pageChangeCmd
                     ]
                 )
+
         FetchCommunityDetails details ->
-            ({ model | community = details }, Cmd.none)
+            ( { model | community = details }, Cmd.none )
+
+        GalleryMsg subMsg ->
+            let
+                updatedModel =
+                    case model.community of
+                        RemoteData.Success community ->
+                            { model
+                                | communityGallery =
+                                    Gallery.update subMsg model.communityGallery <|
+                                        allImages community
+                            }
+
+                        _ ->
+                            model
+
+                allImages community =
+                    case community.image of
+                        Nothing ->
+                            community.galleryImages
+
+                        Just image ->
+                            image :: community.galleryImages
+            in
+                ( updatedModel, Cmd.none )

@@ -12,6 +12,7 @@ communityDetails =
         |> required "id" communityID
         |> required "name" string
         |> required "slug" string
+        |> maybe "image" imageData
         |> required "missionStatement" string
         |> required "description" string
         |> required "communityStatus" communityStatus
@@ -95,6 +96,7 @@ communityDetails =
         |> required "healthcareOptions" (oneOrList Decode.string)
         |> maybe "lifestyleComments" Decode.string
         |> maybe "additionalComments" Decode.string
+        |> optional "galleryImages" (Decode.list imageData) []
         |> optional "youtubeIds" (Decode.list string) []
         |> optional "networkAffiliations" (Decode.list string) []
         |> optional "otherAffiliations" string ""
@@ -273,6 +275,13 @@ incomeSharing =
         , ( FullIncomeSharing, "all or close to all" )
         , ( FullIncomeSharing, "close to all income" )
         ]
+
+
+imageData : Decoder ImageData
+imageData =
+    decode ImageData
+        |> required "thumbnailUrl" string
+        |> required "imageUrl" string
 
 
 

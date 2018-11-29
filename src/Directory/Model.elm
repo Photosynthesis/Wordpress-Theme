@@ -2,10 +2,11 @@ module Directory.Model exposing (Model, initial, paginationConfig)
 
 import Date exposing (Date)
 import Directory.Commands exposing (getCommunity, getCommunities, CommunitiesRequestData)
-import Directory.Communities exposing (CommunityListing, CommunityDetails)
+import Directory.Communities exposing (CommunityListing, CommunityDetails, ImageData)
 import Directory.Pagination as Pagination exposing (Pagination)
 import Directory.Routing as Routing exposing (Route(..), FilterParam(..))
 import Directory.Messages exposing (Msg(CommunityPagination))
+import Gallery
 import RemoteData exposing (WebData)
 
 
@@ -14,6 +15,7 @@ import RemoteData exposing (WebData)
 type alias Model =
     { communities : Pagination CommunityListing CommunitiesRequestData
     , community : WebData CommunityDetails
+    , communityGallery : Gallery.Model ImageData
     , searchString : String
     , currentDate : Maybe Date
     , route : Route
@@ -31,6 +33,7 @@ initial route =
     in
         ( { communities = communitiesPagination
           , community = community
+          , communityGallery = Gallery.initial
           , searchString = searchString
           , currentDate = Nothing
           , route = route
