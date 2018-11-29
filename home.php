@@ -25,8 +25,11 @@
             <h2 class="mb-0 entry-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
             <small class="text-muted pb-3">
               Posted on <span class='published updated'><?php echo get_the_date('F j, Y'); ?></span>
-              by <span class='author'><?php the_author_posts_link(); ?></span><br />
-              <a href="<?php comments_link(); ?>"><?php comments_number("0 Comments"); ?></a>
+              by <span class='author'><?php the_author_posts_link(); ?></span>
+              <?php if (get_comments_number() > 0) { ?>
+                <br />
+                <a href="<?php comments_link(); ?>"><?php comments_number("0 Comments"); ?></a>
+              <?php } ?>
             </small>
             <div class='entry-summary'><?php the_excerpt(); ?></div>
           </div>

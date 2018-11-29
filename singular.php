@@ -24,7 +24,9 @@
               Posted on <span class='updated published'><?php echo get_the_date('F j, Y'); ?></span>
               by <span class='author'><?php the_author_posts_link(); ?></span>
               <br class='hidden-lg-up' /><span class='hidden-md-down'> - </span>
-              <a href="<?php comments_link(); ?>"><?php comments_number("0 Comments"); ?></a>
+              <?php if (get_comments_number() > 0) { ?>
+                <a href="<?php comments_link(); ?>"><?php comments_number("0 Comments"); ?></a>
+              <?php } ?>
             </small>
           </div>
         <?php } ?>
