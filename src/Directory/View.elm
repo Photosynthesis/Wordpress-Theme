@@ -12,6 +12,7 @@ import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), Filt
 import Html exposing (Html, text)
 import Html.Attributes exposing (attribute, class, src, alt, href, name, type_, checked, height, width, value, target, id, title)
 import Html.Events exposing (onClick, onInput, onSubmit, onWithOptions, defaultOptions)
+import Html.Keyed as Keyed
 import Json.Decode as Decode
 import Markdown
 import Regex exposing (HowMany(All), regex)
@@ -876,13 +877,16 @@ communityItem maybeCurrentDate community =
                 |> String.join ", "
 
         imageElement name imageUrl =
-            Html.div [ class "text-center text-sm-left" ]
-                [ Html.img
-                    [ src imageUrl
-                    , alt name
-                    , class "float-sm-left img-thumbnail mr-sm-2 mb-1"
-                    ]
-                    []
+            Keyed.node "div"
+                [ class "text-center text-sm-left" ]
+                [ ( "list-item-image-" ++ community.slug
+                  , Html.img
+                        [ src imageUrl
+                        , alt name
+                        , class "float-sm-left img-thumbnail mr-sm-2 mb-1"
+                        ]
+                        []
+                  )
                 ]
 
         maybeImage { name, thumbnailUrl } =
