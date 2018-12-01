@@ -310,7 +310,7 @@ SQL;
         ? 'community' : 'mailing';
       $entry['contactAddress'] = array(
         'lineOne' => $entry['address_one'],
-        'lineTwo' => $entry['line_two'],
+        'lineTwo' => $entry['address_two'],
         'zipCode' => $entry['zip_code'],
         'type' => $entry_type,
       );
