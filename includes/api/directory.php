@@ -794,8 +794,8 @@ SQL;
       $size_src = null;
     }
     return array(
-      'imageUrl' => get_post($post_id)->guid,
-      'thumbnailUrl' => $size_src,
+      'imageUrl' => str_replace('http://', 'https://', get_post($post_id)->guid),
+      'thumbnailUrl' => str_replace('http://', 'https://', $size_src),
     );
   }
 
