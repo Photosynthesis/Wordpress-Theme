@@ -550,10 +550,8 @@ SQL;
         default:
           error_log("DCC API ROUTE - No Decoder for Type\n\t{$community_type}");
         }
-
-        $entries[$key]['types'] = $community_types;
-
       }
+      $entries[$key]['types'] = $community_types;
     }
     return $entries;
   }
