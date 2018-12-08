@@ -193,7 +193,7 @@ CSS;
     if ($sidebar == 'wc') {
       return "col-24 col-sm-12 col-md-24 col-xl-4 sidebar";
     } else {
-      return 'col-24 col-sm-7 col-lg-6 sidebar';
+      return 'col-24 col-sm-7 col-lg-6 col-xl-5 sidebar';
     }
   }
 
