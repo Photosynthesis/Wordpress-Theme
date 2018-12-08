@@ -1,5 +1,7 @@
 # Fellowship of Intentional Communities Wordpress Theme
 
+[![Build Status](https://travis-ci.org/Fellowship-For-Intentional-Community/Wordpress-Theme.svg?branch=master)](https://travis-ci.org/Fellowship-For-Intentional-Community/Wordpress-Theme)
+
 This is the wordpress theme used by FIC. It uses Webpack for asset compilation
 & Bootstrap4 as a SASS Framework.
 
