@@ -79,6 +79,7 @@ class APIDirectory
    *    - reformingData
    *        - year
    *        - info
+   *    - mapCoordinates
    *    - landStatus
    *    - landSizeAmount
    *    - landSizeUnits
@@ -167,6 +168,8 @@ class APIDirectory
       DirectoryDB::$disbanded_info_field_id => 'disbanded_info',
       DirectoryDB::$reforming_year_field_id => 'reforming_year',
       DirectoryDB::$reforming_info_field_id => 'reforming_info',
+      DirectoryDB::$latitude_field_id => 'latitude',
+      DirectoryDB::$longitude_field_id => 'longitude',
       DirectoryDB::$fair_housing_field_id => 'fair_housing_complaint',
       DirectoryDB::$fair_housing_exceptions_field_id => 'fair_housing_exceptions',
       DirectoryDB::$gallery_ids_field_id => 'gallery_image_ids',
@@ -314,6 +317,13 @@ SQL;
         'zipCode' => $entry['zip_code'],
         'type' => $entry_type,
       );
+      if (!($entry['latitude'] == 0 && $entry['longitude'] == 0) &&
+          !($entry['latitude'] == "39.095963" && $entry['longitude'] == "-96.606447")) {
+        $entry['mapCoordinates'] = array(
+          'latitude' => (float) $entry['latitude'],
+          'longitude' => (float) $entry['longitude'],
+        );
+      }
     } else {
       $entry['contactAddress'] = null;
     }
@@ -322,6 +332,8 @@ SQL;
     unset($entry['address_one']);
     unset($entry['address_two']);
     unset($entry['zip_code']);
+    unset($entry['latitude']);
+    unset($entry['longitude']);
 
     if ($entry['is_fic_member'] === "Yes") {
       $entry['isFicMember'] = true;

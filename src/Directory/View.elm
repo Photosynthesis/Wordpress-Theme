@@ -15,6 +15,7 @@ import Html.Attributes exposing (attribute, class, src, alt, href, name, type_, 
 import Html.Events exposing (onClick, onInput, onSubmit, onWithOptions, defaultOptions)
 import Html.Keyed as Keyed
 import Json.Decode as Decode
+import Map
 import Markdown
 import Regex exposing (HowMany(All), regex)
 import RemoteData exposing (WebData)
@@ -309,9 +310,13 @@ detailRightColumn community =
                 extraStatusInfo "This Community Has Disbanded" "Year Disbanded"
             , renderJust community.reformingInfo <|
                 extraStatusInfo "This Community Is Re-Forming" "Year Re-Formed"
-            , Html.li [] [ text "TODO: Google Map" ]
+            , renderJust community.mapCoordinates <|
+                \coords ->
+                    Html.li []
+                        [ Html.h3 [ class "text-center" ] [ text "Location" ]
+                        , Map.render <| googleMap coords
+                        ]
             ]
-
 
         urlItem name value =
             renderNonEmpty value <| boldLabel name << textLink
@@ -361,6 +366,12 @@ detailRightColumn community =
                     , renderNonEmpty info.info <| \i -> Html.p [] [ text i ]
                     ]
                 ]
+
+        googleMap coords =
+            { center = Just coords
+            , zoom = 7
+            , markers = [ Map.Marker coords community.name ]
+            }
 
         textLink url =
             Html.a [ href url, target "_blank" ] [ text url ]

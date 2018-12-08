@@ -4,6 +4,7 @@ module Directory.Communities exposing (..)
 -}
 
 import Date exposing (Date)
+import Map exposing (Coords)
 
 
 {-| A Communities Unique ID is an Integer
@@ -156,6 +157,7 @@ type alias CommunityDetails =
     , openToMembers : MembersWelcome
     , isFicMember : Bool
     , ficMembershipStartYear : String
+    , mapCoordinates : Maybe Coords
     , communityTypes : List CommunityType
     , programsAndActivites : List String
     , location : LocationType

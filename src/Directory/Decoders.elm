@@ -4,6 +4,7 @@ import Date exposing (Date)
 import Json.Decode as Decode exposing (Decoder, string, int, bool)
 import Json.Decode.Pipeline exposing (decode, required, optional)
 import Directory.Communities exposing (..)
+import Map exposing (Coords)
 
 
 communityDetails : Decoder CommunityDetails
@@ -35,6 +36,7 @@ communityDetails =
         |> required "openToMembership" membersWelcome
         |> required "isFicMember" bool
         |> optional "ficMembershipStart" string ""
+        |> maybe "mapCoordinates" coords
         |> required "communityTypes" (oneOrList communityType)
         |> required "programs" (Decode.list string)
         |> required "location" locationType
@@ -282,6 +284,13 @@ imageData =
     decode ImageData
         |> required "thumbnailUrl" string
         |> required "imageUrl" string
+
+
+coords : Decoder Coords
+coords =
+    decode Coords
+        |> required "latitude" Decode.float
+        |> required "longitude" Decode.float
 
 
 

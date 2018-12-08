@@ -1,5 +1,8 @@
 'use strict';
 
+import SGoogleMapComponent from 'coffeekraken-s-google-map-component';
+import SGoogleMapMarkerComponent from 'coffeekraken-s-google-map-marker-component';
+
 var $ = window.jQuery;
 
 $(document).ready(function() {
