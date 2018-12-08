@@ -54,9 +54,8 @@ class ThemeDirectoryUserMenu
 
     /** Generate the Options for the Community Dropdown */
     public static function community_options() {
-        global $frm_form;
         $options = array();
-        $form = $frm_form->getOne(self::$directory_form_id);
+        $form = FrmForm::getOne(self::$directory_form_id);
         $entries = FrmEntry::getAll(array('it.form_id' => $form->id));
         foreach ($entries as $entry) {
             $post = get_post($entry->post_id);
