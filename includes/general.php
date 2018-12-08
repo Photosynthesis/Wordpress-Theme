@@ -93,8 +93,6 @@ class ThemeGeneral
   public static function register_sidebars() {
     $sidebars = array(
       array('name' => 'Main', 'id' => 'main-sidebar'),
-      array('name' => 'Main Left', 'id' => 'main-left'),
-      array('name' => 'Main Right', 'id' => 'main-right'),
       array('name' => 'WooCommerce Left', 'id' => 'wc-left'),
       array('name' => 'WooCommerce Right', 'id' => 'wc-right'),
     );
