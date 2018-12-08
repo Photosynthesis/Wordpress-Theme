@@ -92,6 +92,7 @@ class ThemeGeneral
   /* Add Main & WooCommerce Left/Right Sidebars */
   public static function register_sidebars() {
     $sidebars = array(
+      array('name' => 'Main', 'id' => 'main-sidebar'),
       array('name' => 'Main Left', 'id' => 'main-left'),
       array('name' => 'Main Right', 'id' => 'main-right'),
       array('name' => 'WooCommerce Left', 'id' => 'wc-left'),
@@ -188,35 +189,51 @@ CSS;
   }
 
   /* Return CSS Classes for Right Sidebars */
-  public static function right_sidebar_css_classes() {
-    return "col-24 col-sm-12 col-md-24 col-xl-4 sidebar";
+  public static function right_sidebar_css_classes($sidebar='main') {
+    if ($sidebar == 'wc') {
+      return "col-24 col-sm-12 col-md-24 col-xl-4 sidebar";
+    } else {
+      return 'col-24 col-sm-7 col-lg-6 sidebar';
+    }
   }
 
   /* Return CSS Classes for Center Column */
-  public static function main_column_css_classes() {
-    return "col-24 col-md-17 push-md-7 col-lg-19 push-lg-5 col-xl-16 push-xl-4 center-column";
+  public static function main_column_css_classes($sidebar='main') {
+    if ($sidebar == 'wc') {
+      return "col-24 col-md-17 push-md-7 col-lg-19 push-lg-5 col-xl-16 push-xl-4 center-column center-column-store";
+    } else {
+      return "col center-column";
+    }
   }
 
-  /* Echo the Header, Left Sidebar, & Opening Center Column Tag */
+  /* Echo the Header & Opening Center Column Tag */
   public static function top($sidebar='main') {
     $sidebar_class = ThemeGeneral::left_sidebar_css_classes();
-    $center_class = ThemeGeneral::main_column_css_classes();
+    $center_class = ThemeGeneral::main_column_css_classes($sidebar);
     get_header();
     echo "\n<div class='row'>";
     echo "<div id='main' class='{$center_class}'>";
   }
 
-  /* Echo the Closing Center Column Tag, Right Sidebar, & Footer */
+  /* Echo the Closing Center Column Tag, Right Sidebar, & Footer. For the wc
+   * type, show a left & right sidebar.
+   */
   public static function bottom($sidebar='main') {
-    $left_sidebar_class = ThemeGeneral::left_sidebar_css_classes();
-    $right_sidebar_class = ThemeGeneral::right_sidebar_css_classes();
     echo "</div>";
-    echo "\n<div id='left-sidebar' class='{$left_sidebar_class}'>\n";
-    dynamic_sidebar("{$sidebar}-left");
-    echo "\n</div>\n";
-    echo "<div id='right-sidebar' class='{$right_sidebar_class}'>\n";
-    dynamic_sidebar("{$sidebar}-right");
-    echo "\n</div></div>\n";
+    $right_sidebar_class = ThemeGeneral::right_sidebar_css_classes($sidebar);
+    if ($sidebar == 'wc') {
+      $left_sidebar_class = ThemeGeneral::left_sidebar_css_classes();
+      echo "\n<div id='left-sidebar' class='{$left_sidebar_class}'>\n";
+      dynamic_sidebar("{$sidebar}-left");
+      echo "\n</div>\n";
+      echo "<div id='right-sidebar' class='{$right_sidebar_class}'>\n";
+      dynamic_sidebar("{$sidebar}-right");
+      echo "\n</div></div>\n";
+    } else {
+      echo "<div id='main-sidebar' class='{$right_sidebar_class}'>\n";
+      dynamic_sidebar("{$sidebar}-sidebar");
+      echo "\n</div></div>\n";
+    }
     get_footer();
   }
 

@@ -196,10 +196,13 @@ hr#header-content-divider
 
 .sidebar
   /* Add Spacing between Nav & Content */
-  +media-breakpoint-down(sm)
-    margin-top: 0.5em
-  +media-breakpoint-up(md)
-    margin-top: 1em
+  margin-top: 0.5em
+  +media-breakpoint-up(sm)
+    margin-top: 0.25em
+  &#left-sidebar, &#right-sidebar
+    +media-breakpoint-up(xl)
+      margin-top: 2em
+
   /* Stylize Widget Headers */
   h4.widget-title
     font-size: 1.1em
@@ -224,16 +227,17 @@ hr#header-content-divider
       margin: 2.75em 0
     &:first-of-type
       margin-top: 0
-  /* Reduce Padding of Recent Blog Posts */
-  .widget_recent_entries ul
-    padding-left: 10px
-  /* Show Multiple Ads per Row on Small Screens */
-  .widget#text-22 > div
-    text-align: center
+  /* Advanced Ads Widget */
+  .widget.advads-widget
+    /* Collapse adjacent ad widget spacing */
+    margin-top: 0
+    margin-bottom: 0
+    /* Show Multiple Ads per Row on Small Screens */
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-around
     > div
       display: inline-block
-    > p
-      display: none
   /* Newsletter Signup Widget */
   .widget_wysija_cont
     /* Center Submit Button */
@@ -296,9 +300,12 @@ hr#header-content-divider
 /** General **/
 .center-column
   /* Style the Vertical Borders */
-  +media-breakpoint-up(md)
-    border-left: solid 1px darken($gray-lightest, 5%)
-  +media-breakpoint-up(xl)
+  &.center-column-store
+    +media-breakpoint-up(md)
+      border-left: solid 1px darken($gray-lightest, 5%)
+    +media-breakpoint-up(xl)
+      border-right: solid 1px darken($gray-lightest, 5%)
+  +media-breakpoint-up(sm)
     border-right: solid 1px darken($gray-lightest, 5%)
   /* Push Vertical Borders Out */
   padding: 0 15px
