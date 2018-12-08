@@ -794,6 +794,9 @@ parseIntOrZero =
 allSingleProducts : List SingleProduct
 allSingleProducts =
     [ wisdomVolumeOne
+    , wisdomVolumeTwo
+    , wisdomVolumeThree
+    , wisdomVolumeFour
     , wisdomSet
     , communitiesDirectory
     , togetherResilient
@@ -819,11 +822,56 @@ wisdomVolumeOne =
     }
 
 
+wisdomVolumeTwo : SingleProduct
+wisdomVolumeTwo =
+    { name = "Wisdom of Communities: Volume 2 - Finding a Community"
+    , slug = "finding-a-community"
+    , thumbnail = "/wp-content/uploads/2018/02/Wisdom2.png"
+    , msrp = "30"
+    , pricePerUnit = Cents 1800
+    , description =
+        div []
+            [ p [] [ text "Resources and Stories about Seeking and Joining Intentional Community: Many searches for intentional community fizzle out due to lack of adequate information, guidance, or exposure to fellow travelers’ stories. Authors share experiences, tools, advice, and perspectives that should help anyone searching for an intentional community—whether to visit or to live in—increase the likelihood of finding what they’re seeking." ]
+            , p [] [ text "Published by Fellowship for Intentional Community" ]
+            ]
+    }
+
+
+wisdomVolumeThree : SingleProduct
+wisdomVolumeThree =
+    { name = "Wisdom of Communities: Volume 3 - Communication in Community"
+    , slug = "communication-in-community"
+    , thumbnail = "/wp-content/uploads/2018/02/Wisdom3-e1519323269676.png"
+    , msrp = "30"
+    , pricePerUnit = Cents 1800
+    , description =
+        div []
+            [ p [] [ text "Resources and Stories about the Human Dimension of Cooperative Culture: Volume 3 includes articles about decision-making, governance, power, gender, class, race, relationships, intimacy, politics, and neighbor relations in cooperative group culture. These areas are key for communities to address if they are to retain members and develop strong and healthy group connection." ]
+            , p [] [ text "Published by Fellowship for Intentional Community" ]
+            ]
+    }
+
+
+wisdomVolumeFour : SingleProduct
+wisdomVolumeFour =
+    { name = "Wisdom of Communities: Volume 4 - Sustainability in Community"
+    , slug = "sustainability-in-community"
+    , thumbnail = "/wp-content/uploads/2018/01/Wisdom-4-Sustainability-in-Community-Front-Cover-600x774.png"
+    , msrp = "30"
+    , pricePerUnit = Cents 1800
+    , description =
+        div []
+            [ p [] [ text "Resources and Stories about Creating Eco-Resilience in Intentional Community: We focus on food, water, shelter, energy, land, permaculture, ecovillage design, eco-education, and resilience in cooperative culture. These areas will prove more and more essential in allowing communities to navigate changing circumstances on our planet, while growing into new, regenerative ways of living and thriving together." ]
+            , p [] [ text "Published by Fellowship for Intentional Community" ]
+            ]
+    }
+
+
 wisdomSet : SingleProduct
 wisdomSet =
     { name = "Pre-Order — Wisdom of Communities: 4-Volume Set"
     , slug = "wisdom-of-communities-volumes-1-2-3-4-complete-set"
-    , thumbnail = "/wp-content/uploads/2018/01/Wisdom_Flat_web-300x469.jpg"
+    , thumbnail = "/wp-content/uploads/2018/11/WOCsetImage-600x687.jpg"
     , msrp = "30 / book"
     , pricePerUnit = Cents 7200
     , description =
