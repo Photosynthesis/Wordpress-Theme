@@ -373,7 +373,7 @@ detailRightColumn community =
     in
         Html.div [ class "col-24 col-sm-10" ]
             [ Html.div [ class "card" ]
-                [ Html.ul [ class "card-block list-unstyled listing-status" ] rightColumn
+                [ Html.ul [ class "card-block list-unstyled listing-status mb-0" ] rightColumn
                 ]
             ]
 
