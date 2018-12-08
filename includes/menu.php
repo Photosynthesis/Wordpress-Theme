@@ -23,7 +23,7 @@ class ThemeMenu
   /* Assemble the Admin Menu */
   public static function create_menu() {
     add_menu_page('FIC Admin Menu', 'FIC Menu', 'administrator', self::$menu_name,
-      array('FIC_Menu', 'render_page'),
+      array('ThemeMenu', 'render_page'),
       get_stylesheet_directory_uri('stylesheet_directory') .  "/img/logo-admin-fic.png",
       3);
 
