@@ -212,13 +212,6 @@ hr#header-content-divider
     border-bottom: 1px solid $gray-lighter
     padding: 3px 0
     margin-bottom: 12px
-  /* Style the Sidebar Inputs */
-  select#cat, select.goog-te-combo, .widget_wysija_cont input
-    @extend .form-control
-    @extend .form-control-sm
-    width: 80% !important
-    margin-left: auto
-    margin-right: auto
   /* Space Widgets Vertically */
   .widget
     +media-breakpoint-down(sm)
@@ -238,21 +231,6 @@ hr#header-content-divider
     justify-content: space-around
     > div
       display: inline-block
-  /* Newsletter Signup Widget */
-  .widget_wysija_cont
-    /* Center Submit Button */
-    text-align: center
-    /* Fix Vertical Spacing of Inputs */
-    p
-      margin-bottom: 3px
-    /* Style Submit as Primary Button */
-    input.wysija-submit
-      margin-top: 0
-      @extend .btn
-      @extend .btn-sm
-      @extend .btn-primary
-  #adswidget3-quick-adsense, #adswidget1-quick-adsense
-    @extend .text-center
   /* WPAdverts Featured Ads Widget */
   .adverts-widget-categories
     /* Fix Font Sizes & Spacing */
