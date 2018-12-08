@@ -223,6 +223,7 @@ LEFT JOIN
 {$joins}
 
 WHERE (items.is_draft=0 AND items.form_id=2 AND public_metas.meta_value <> "No" {$wheres})
+GROUP BY slug
 
 {$order_by}
 {$limit}
