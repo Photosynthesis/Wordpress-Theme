@@ -20,6 +20,8 @@ load_include('bootstrap_comment_walker.php');
 /** Admin Menus **/
 load_include('menu.php');
 
+/** Blog Post Customizations **/
+load_include('blog_posts.php');
 /** User Customizations **/
 load_include('users.php');
 

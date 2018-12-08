@@ -6,7 +6,14 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
   <div class='clearfix'>
     <div class='clearfix'><?php
-      $thumbnail = get_the_post_thumbnail(get_the_ID(), 'post-thumbnail', array('class' => 'p-1 img-fluid'));
+      $hide_thumbnail =
+        get_post_meta(get_the_ID(), ThemeBlog::hide_thumbnail_meta_field, true)
+        !== "";
+      if (!$hide_thumbnail) {
+        $thumbnail = get_the_post_thumbnail(get_the_ID(), 'post-thumbnail', array('class' => 'p-1 img-fluid'));
+      } else {
+        $thumbnail = '';
+      }
       if ($thumbnail != '') { ?>
         <div class="float-sm-left mr-sm-2 mb-2">
           <div class='text-center text-sm-left'>
