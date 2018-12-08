@@ -207,6 +207,11 @@ communityDetails maybeCurrentDate community communityGallery =
 
         galleryConfig =
             Gallery.Config .thumbnailUrl .imageUrl
+
+        affiliations =
+            List.filter (not << String.isEmpty) <|
+                community.networkAffiliations
+                    ++ [ community.otherAffiliations ]
     in
         Html.div [ class "directory-listing" ]
             [ header
@@ -217,16 +222,15 @@ communityDetails maybeCurrentDate community communityGallery =
             , detailInfoBlocks community
             , renderMaybeString community.additionalComments <|
                 section "Additional Comments"
-            , sectionHtml "Photo Gallery" <|
-                Html.map GalleryMsg <|
-                    Gallery.thumbnails galleryConfig community.galleryImages
+            , renderIf (not <| List.isEmpty community.galleryImages) <|
+                sectionHtml "Photo Gallery" <|
+                    Html.map GalleryMsg <|
+                        Gallery.thumbnails galleryConfig community.galleryImages
             , embedYoutube
             , Html.div [] [ text "TODO: Cohousing Section" ]
-            , section "Community Network or Organization Affiliations" <|
-                String.join ", " <|
-                    List.filter (not << String.isEmpty) <|
-                        community.networkAffiliations
-                            ++ [ community.otherAffiliations ]
+            , renderIf (not <| List.isEmpty affiliations) <|
+                section "Community Network or Organization Affiliations" <|
+                    String.join ", " affiliations
             , renderMaybeString community.communityAffiliations <|
                 section "Community Affiliations"
             , fairHousingSection
@@ -261,6 +265,14 @@ renderMaybeString m f =
     renderJust m <| flip renderNonEmpty f
 
 
+renderIf : Bool -> Html msg -> Html msg
+renderIf condition html =
+    if condition then
+        html
+    else
+        text ""
+
+
 detailRightColumn : CommunityDetails -> Html msg
 detailRightColumn community =
     let
@@ -291,7 +303,7 @@ detailRightColumn community =
             , renderNonEmpty community.contactName <| boldLabelText "Contact Name"
             , renderNonEmpty community.contactPhone <| boldLabelText "Phone"
             , renderJust community.contactAddress renderAddress
-            , htmlIf community.isFicMember <|
+            , renderIf community.isFicMember <|
                 ficBadge community.ficMembershipStartYear
             , renderJust community.disbandedInfo <|
                 extraStatusInfo "This Community Has Disbanded" "Year Disbanded"
@@ -300,11 +312,6 @@ detailRightColumn community =
             , Html.li [] [ text "TODO: Google Map" ]
             ]
 
-        htmlIf condition html =
-            if condition then
-                html
-            else
-                text ""
 
         urlItem name value =
             renderNonEmpty value <| boldLabel name << textLink
