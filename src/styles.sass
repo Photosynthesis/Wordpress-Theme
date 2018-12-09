@@ -220,6 +220,8 @@ hr#header-content-divider
       margin: 2.75em 0
     &:first-of-type
       margin-top: 0
+
+#main-sidebar
   /* Advanced Ads Widget */
   .widget:nth-of-type(2), .widget:nth-of-type(3)
     /* Collapse adjacent ad widget spacing */
@@ -242,6 +244,23 @@ hr#header-content-divider
     /* Remove Location Icon */
     span.adverts-icon-location:before
       display: none
+
+.center-column
+  /* Style the Vertical Borders */
+  &.center-column-store
+    +media-breakpoint-up(md)
+      border-left: solid 1px darken($gray-lightest, 5%)
+    +media-breakpoint-up(xl)
+      border-right: solid 1px darken($gray-lightest, 5%)
+  +media-breakpoint-up(sm)
+    border-right: solid 1px darken($gray-lightest, 5%)
+  /* Push Vertical Borders Out */
+  padding: 0 15px
+  +media-breakpoint-up(sm)
+    /* Add Spacing between Nav & Content */
+    margin-top: 0.25em
+    /* Add Spacing between Vertical Borders & Footer
+    margin-bottom: 2em
 
 
 
@@ -278,23 +297,6 @@ hr#header-content-divider
 /*** Content Styles ***/
 
 /** General **/
-.center-column
-  /* Style the Vertical Borders */
-  &.center-column-store
-    +media-breakpoint-up(md)
-      border-left: solid 1px darken($gray-lightest, 5%)
-    +media-breakpoint-up(xl)
-      border-right: solid 1px darken($gray-lightest, 5%)
-  +media-breakpoint-up(sm)
-    border-right: solid 1px darken($gray-lightest, 5%)
-  /* Push Vertical Borders Out */
-  padding: 0 15px
-  +media-breakpoint-up(sm)
-    /* Add Spacing between Nav & Content */
-    margin-top: 0.25em
-    /* Add Spacing between Vertical Borders & Footer
-    margin-bottom: 2em
-
 #main
   /* Reduce Font Sizes */
   h1
