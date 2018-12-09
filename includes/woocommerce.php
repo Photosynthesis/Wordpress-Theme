@@ -572,6 +572,25 @@ SQL;
 
     return str_replace('<a', '<a target="_blank"', $text);
   }
+
+  const membership_product_id = 14602;
+  /* Change the Add to Cart Button Text for the Membership Product to "Join" */
+  public static function membership_subscribe_text($text, $product_id) {
+    error_log($product_id);
+    if ($product_id == self::membership_product_id) {
+      return "Join";
+    } else {
+      return $text;
+    }
+  }
+  /* Change the Resubscribe Button Text for the Membership Product to "Rejoin" */
+  public static function membership_resubscribe_text($text, $product_id) {
+    if ($product_id == self::membership_product_id) {
+      return "Rejoin";
+    } else {
+      return $text;
+    }
+  }
 }
 
 /* Move Cross Sells Below the Cart Totals */
@@ -607,5 +626,7 @@ add_action('woocommerce_subscription_renewal_payment_failed', array('ThemeWooCom
 add_action('woocommerce_process_product_file_download_paths', array('ThemeWooCommerce', 'give_download_access_and_notify'), 11, 3);
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
 add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'));
+add_filter('theme_store_variation_button_text', array('ThemeWooCommerce', 'membership_subscribe_text'), 10, 2);
+add_filter('theme_store_resubscribe_button_text', array('ThemeWooCommerce', 'membership_resubscribe_text'));
 
 ?>

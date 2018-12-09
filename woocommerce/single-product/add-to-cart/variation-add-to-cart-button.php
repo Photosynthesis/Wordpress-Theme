@@ -27,7 +27,7 @@ global $product;
   ?>
 
   <div class='col-18'>
-    <button type="submit" class="btn btn-primary single_add_to_cart_button button alt"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
+    <button type="submit" class="btn btn-primary single_add_to_cart_button button alt"><?php echo esc_html( apply_filters( 'theme_store_variation_button_text', $product->single_add_to_cart_text(), $product->get_id()) ); ?></button>
   </div>
 
   <?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
