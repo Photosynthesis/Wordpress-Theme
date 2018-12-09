@@ -17,6 +17,7 @@ before_install:
   - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 install:
+  - nvm use
   - node --version
   - npm --version
   - npm install --exact
