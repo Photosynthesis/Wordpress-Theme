@@ -122,7 +122,7 @@ class ThemeClassifiedsWidget extends Adverts_Widget_Ads
         $output .= "<a href='{$permalink}' class='list-group-item list-group-item-action'>\n";
         $output .= "<div class='classified-title'>{$ad_title}</div>\n";
         if ($location) {
-          $output .= "<div class='ml-auto text-primary'><i class='fa fa-building'></i> {$location}</div>";
+          $output .= "<div class='classified-location'><i class='fa fa-building'></i> {$location}</div>";
         }
 
         $output .= "</a>\n";
