@@ -38,6 +38,7 @@ load_include('newsletter.php');
 load_include('woocommerce.php');
 /* WPAdverts */
 load_include('wpadverts.php');
+load_include('widget_classifieds.php');
 
 
 /** REST API **/

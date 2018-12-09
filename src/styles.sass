@@ -236,14 +236,21 @@ hr#header-content-divider
     img
       @extend .img-fluid
   /* WPAdverts Featured Ads Widget */
-  .adverts-widget-categories
-    /* Fix Font Sizes & Spacing */
-    .advert-widget-recent-item
-      font-size: 1.2em
-      line-height: 1.2em
-    /* Remove Location Icon */
-    span.adverts-icon-location:before
-      display: none
+  .community-classifieds-widget
+    .widget-title
+      margin-bottom: 0
+    .list-group-item
+      border-left: 0
+      border-right: 0
+      border-radius: 0
+      &:first-of-type
+        border-top: 0
+      &:last-of-type
+        border-bottom: 0
+      .classified-title
+        font-size: 1.2em
+        font-weight: bold
+        padding-bottom: 0.25em
 
 .center-column
   /* Style the Vertical Borders */
