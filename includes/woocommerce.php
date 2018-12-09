@@ -576,7 +576,6 @@ SQL;
   const membership_product_id = 14602;
   /* Change the Add to Cart Button Text for the Membership Product to "Join" */
   public static function membership_subscribe_text($text, $product_id) {
-    error_log($product_id);
     if ($product_id == self::membership_product_id) {
       return "Join";
     } else {
