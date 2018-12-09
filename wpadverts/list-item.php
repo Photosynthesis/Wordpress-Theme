@@ -6,7 +6,7 @@ $extra_class = $is_featured ? 'featured-classified' : '';
   $image = adverts_get_main_image(get_the_ID());
   $image_src = esc_attr($image); ?>
   <div class='row w-100'>
-    <div class='col-sm-8'><?php
+    <div class='col-sm-8 d-flex justify-content-center align-items-center' style='min-height:190px'><?php
       if ($image) {
         echo "<img src='{$image_src}' class='img-fluid' />";
       } ?>
