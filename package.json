@@ -22,20 +22,20 @@
   "license": "GPL-3.0",
   "dependencies": {
     "bootstrap": "4.0.0-alpha.6",
-    "css-loader": "0.26.1",
-    "elm": "0.18.0",
-    "elm-webpack-loader": "4.3.1",
-    "extract-text-webpack-plugin": "2.1.0",
-    "file-loader": "0.10.0",
-    "font-awesome": "4.7.0",
+    "css-loader": "^0.26.1",
+    "elm": "^0.18.0",
+    "elm-webpack-loader": "^4.3.1",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.10.0",
+    "font-awesome": "^4.7.0",
     "jquery": "1.12.4",
-    "node-sass": "4.5.0",
-    "sass-loader": "4.1.1",
-    "style-loader": "0.13.1",
-    "url-loader": "0.5.7",
-    "webpack": "2.2.1",
-    "webpack-cleanup-plugin": "0.5.1",
-    "webpack-dev-server": "2.3.0"
+    "node-sass": "^4.5.0",
+    "sass-loader": "^4.1.1",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^2.2.1",
+    "webpack-cleanup-plugin": "^0.5.1",
+    "webpack-dev-server": "^2.3.0"
   },
   "devDependencies": {}
 }
