@@ -1,4 +1,74 @@
 <!-- div#body-wrapper is opened -->
+  <!-- Show Membership Info, Newsletter Signup, & Social Icons --><?php
+  $excluded_membership_footer_posts = array(
+    'new-listing', 'contact-fic', 'place-ad', 'contact-communities-magazine',
+    'contact-a-community',
+  );
+  if (!(is_woocommerce() || in_array(get_post()->post_name, $excluded_membership_footer_posts))) { ?>
+  <div id='membership-footer' class='row'>
+    <div class="bg-info p-3">
+      <div class="row">
+        <div class="col-md-16 col-lg-18">
+          <h2 class="text-center">Connect to the Communities Movement</h2>
+        </div>
+        <div class="col-md-8 col-lg-6"></div>
+        <!-- Left Section -->
+        <div class="col-md-16 col-lg-18 mb-4 mb-md-0">
+          <div class="card">
+            <div class="card-block">
+              <div class="row">
+                <div class="col-sm-10 d-flex">
+                  <a class="m-auto" href="/community-bookstore/product/fic-membership/" target="_blank">
+                    <img class="img-fluid alignnone" src="/wp-content/images/fic-membership-badge.png" alt="" width="288" height="259" />
+                  </a>
+                </div>
+                <div class="col-sm-14">
+                  <p class="text-primary font-weight-bold">
+                    Support the development of intentional communities and the
+                    evolution of cooperative culture.
+                  </p>
+                  <p>
+                    <a href="/community-bookstore/product/fic-membership/">Become an FIC Member</a>
+                    to receive special updates, webinars, reports, and discounts to
+                    books, events, ads, and more.
+                  </p>
+                  <p>
+                    IC.org is a project of the Fellowship for Intentional Community, a
+                    501(c)3 nonprofit organization.
+                  </p>
+                  <p>
+                    Your Membership and donations are tax deductible. Please help to
+                    further this mission -- together we can change the world!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right Section -->
+        <div class="col-md-8 col-lg-6">
+          <!-- Newsletter Form -->
+          <div style="width: 100%;"><?php echo do_shortcode('[wd_hustle id="fic-newsletter-homepage"]'); ?></div>
+
+          <!-- Social Icons -->
+          <div class="text-center">
+            <a class="mr-2" href="https://www.facebook.com/FellowshipForIntentionalCommunity">
+              <img alt="Facebook" style="max-width: 20%;" src="/wp-content/uploads/2018/01/fb_logo.png" />
+            </a>
+            <a class="mx-auto" href="https://www.youtube.com/channel/UC_bjpd6qhVcA1SuuF8pLRIg/featured">
+              <img alt="YouTube" style="max-width: 20%;" src="/wp-content/uploads/2018/01/youtube_logo.jpg" />
+            </a>
+            <a class="ml-2" href="https://twitter.com/iCdotOrg">
+              <img alt="Twitter" style="max-width: 20%;" src="/wp-content/uploads/2018/01/twitter_logo.png" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php } ?>
+
+
   <!-- Partners -->
   <?php $footer_logo_path = get_stylesheet_directory_uri() . "/img/footer-logos/"; ?>
   <!-- Track Clicks with Google Analytics --><?php
