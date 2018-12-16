@@ -25,7 +25,8 @@ class ThemeDirectoryUserMenu
         check_admin_referer(self::$nonce_field);
         if (self::valid_form($_POST)) {
             $entry_id = sanitize_text_field($_POST[self::$community_input_name]);
-            $field_value = sanitize_text_field($_POST[self::$user_input_name]);
+            $user_name = sanitize_text_field($_POST[self::$user_input_name]);
+            $field_value = get_user_by('login', $user_name);
             $entry = FrmEntry::getOne($entry_id);
             $post = get_post($entry->post_id);
             wp_update_post(array('ID' => $post->ID, 'post_author' => $field_value));
@@ -47,7 +48,7 @@ class ThemeDirectoryUserMenu
             $valid_community = $post[self::$community_input_name] !== '' &&
                 FrmEntry::getOne($post[self::$community_input_name]) !== NULL;
             $valid_user = $post[self::$user_input_name] !== '' &&
-                get_user_by('id', $post[self::$user_input_name]) !== false;
+                get_user_by('login', $post[self::$user_input_name]) !== false;
             return $valid_community && $valid_user;
         }
     }
@@ -71,9 +72,6 @@ class ThemeDirectoryUserMenu
 
     /** Render the page **/
     public static function render_page() {
-        $user_dropdown_options = array(
-            'show_option_none' => '---', 'show' => 'user_login', 'id' => 'duu-user',
-            'orderby' => 'user_nicename', 'name' => self::$user_input_name);
 ?>
 <div class='wrap'>
   <h2><?php echo self::$page_title; ?></h2><?php
@@ -82,7 +80,7 @@ class ThemeDirectoryUserMenu
       The Community's User ID was successfully updated.
     </strong></p></div><?php
   } else if (isset($_GET['m']) && $_GET['m'] == '0') { ?>
-      <div class='error fade'><p><b>User ID Update Failed!</b></p></div><?php
+      <div class='error fade'><p><b>User ID Update Failed! Does a user with that login exist?</b></p></div><?php
   } ?>
   <p><b>This form may be used to update only the <code>User ID</code> field of
     a Directory Listing, even if other required fields are not filled in.</b></p>
@@ -94,8 +92,8 @@ class ThemeDirectoryUserMenu
       <option value='' selected>---</option>
       <?php echo self::community_options(); ?>
     </select><br />
-    <label for='duu-user'>User:</label><br />
-    <?php wp_dropdown_users($user_dropdown_options); ?><br /><br />
+    <label for='duu-user'>User Login:</label><br />
+    <input type='text' id='duu-user' name='<?php echo self::$user_input_name; ?>' required /><br />
     <input type='submit' name='submit' value='Set User' class='button-primary' />
   </form>
 </div>
