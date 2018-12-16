@@ -70,13 +70,15 @@
           $current_user = wp_get_current_user();
           if (is_user_logged_in()) {
             echo 'Hello, <strong>' . ucfirst($current_user->user_login) .
-              '</strong>! <a href="' . get_permalink(get_option('woocommerce_myaccount_page_id')) .
-              '">My Account</a>&nbsp;|&nbsp;<a href="' . wp_logout_url('/') . '">Log out</a>';
+              '</strong>&nbsp;(<a href="' . wp_logout_url('/') . '">Log out</a>)&nbsp;|&nbsp;' .
+              '<a href="' . get_permalink(get_option('woocommerce_myaccount_page_id')) .
+              '">My Account</a>';
           }
           else {
             echo '<a href="' . get_permalink(get_option('woocommerce_myaccount_page_id')) .
               '">My Account</a>&nbsp;|&nbsp;<a href="/wp-login.php">Login</a>';
           } ?>
+          &nbsp;|&nbsp;
           <a id="header-cart-icon" href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e('View your shopping cart.'); ?>">
             <i class='fa fa-shopping-cart'></i>&nbsp;&nbsp;
           </a>
