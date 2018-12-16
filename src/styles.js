@@ -91,6 +91,21 @@ $(document).ready(function() {
   });
 
 
+  /** Google Custom Search **/
+  /* Wait Until Google's JS has Finished Initializing the Input */
+  setTimeout(function() {
+    /* Cleanup Look of Search Input */
+    var $gscInput = $('input.gsc-input');
+    $gscInput.attr('placeholder', 'Search');
+    /* Google's JS Resets the Background & Indent on Every Blur */
+    $gscInput.on('blur', function() {
+      $gscInput.css('text-indent', '');
+      $gscInput.css('background', 'inherit');
+    });
+    $gscInput.blur();
+  }, 500);
+
+
   /** WooCommerce **/
   /* Fix Classes When Clicking Tabs */
   $('.woocommerce-tabs.wc-tabs-wrapper li.nav-item a').on('click', function(event) {
