@@ -26,7 +26,7 @@ class ThemeDirectoryUserMenu
         if (self::valid_form($_POST)) {
             $entry_id = sanitize_text_field($_POST[self::$community_input_name]);
             $user_name = sanitize_text_field($_POST[self::$user_input_name]);
-            $field_value = get_user_by('login', $user_name);
+            $field_value = get_user_by('login', $user_name)->ID;
             $entry = FrmEntry::getOne($entry_id);
             $post = get_post($entry->post_id);
             wp_update_post(array('ID' => $post->ID, 'post_author' => $field_value));
@@ -51,6 +51,7 @@ class ThemeDirectoryUserMenu
                 get_user_by('login', $post[self::$user_input_name]) !== false;
             return $valid_community && $valid_user;
         }
+        return false;
     }
 
     /** Generate the Options for the Community Dropdown */
