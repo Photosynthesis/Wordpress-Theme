@@ -37,7 +37,8 @@
                     501(c)3 nonprofit organization.
                   </p>
                   <p>
-                    Your Membership and donations are tax deductible. Please help to
+                    Your <a href="/community-bookstore/product/fic-membership/">Membership</a>
+                    and <a href="/support/">donations</a> are tax deductible. Please help to
                     further this mission -- together we can change the world!
                   </p>
                 </div>
