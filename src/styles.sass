@@ -571,6 +571,54 @@ body.single-directory
     max-width: 75%
     display: inline-block !important
     margin-left: 1em
+  /* Style Image Uploads */
+  .frm_dropzone
+    .dz-message
+      padding: 0.25em
+      margin-bottom: 1.5em
+      text-align: center
+      border: 1px solid $gray-light
+      .frm_upload_icon
+        display: inline-block
+        font: normal normal normal 14px/1 FontAwesome
+        -webkit-font-smoothing: antialiased
+        -moz-osx-font-smoothing: grayscale
+        &:before
+          content: "\F093"
+          font-size: 4em
+      .frm_upload_text
+        @extend .h4
+        display: block
+      .frm_compact_text
+        @extend .sr-only
+    .dz-complete.dz-preview
+      @extend .row
+      margin-bottom: 0.5rem
+      .dz-image
+        @extend .col-8
+      .dz-column
+        @extend .col-16
+        .dz-details
+          display: flex
+          align-items: center
+          > *
+            display: inline-block
+          .dz-size
+            margin-left: auto
+          // Close Button
+          .dz-remove
+            margin-left: 0.5em
+            display: inline-block
+            font: normal normal normal 14px/1 FontAwesome
+            -webkit-font-smoothing: antialiased
+            -moz-osx-font-smoothing: grayscale
+            color: $red
+            &:before
+              content: "\F00D"
+              font-size: 1.33em
+            &:hover, &:focus, &:active
+              color: darken($red, 15%)
+              text-decoration: none
   /* Style the Messages */
   .frm_message
     @extend .alert
