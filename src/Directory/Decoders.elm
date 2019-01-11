@@ -97,6 +97,7 @@ communityDetails =
         |> maybe "healthcareComments" Decode.string
         |> required "healthcareOptions" (oneOrList Decode.string)
         |> maybe "lifestyleComments" Decode.string
+        |> maybe "cohousing" cohousingData
         |> maybe "additionalComments" Decode.string
         |> optional "galleryImages" (Decode.list imageData) []
         |> optional "youtubeIds" (Decode.list string) []
@@ -276,6 +277,34 @@ incomeSharing =
         , ( FullIncomeSharing, "100%" )
         , ( FullIncomeSharing, "all or close to all" )
         , ( FullIncomeSharing, "close to all income" )
+        ]
+
+
+cohousingData : Decoder CohousingData
+cohousingData =
+    decode CohousingData
+        |> maybe "siteStatus" decodeCohousingStatus
+        |> maybe "yearCompleted" Decode.int
+        |> maybe "housingUnits" Decode.int
+        |> maybe "hasSharedBuilding" Decode.bool
+        |> maybe "sharedBuildingArea" Decode.int
+        |> optional "architect" string ""
+        |> optional "developer" string ""
+        |> optional "lender" string ""
+
+
+decodeCohousingStatus : Decoder CohousingStatus
+decodeCohousingStatus =
+    stringToEnum
+        [ ( CohousingBuilding, "building" )
+        , ( CohousingCompleted, "completed" )
+        , ( CohousingDisbanded, "disbanded" )
+        , ( CohousingForming, "forming" )
+        , ( CohousingOwnSite, "own site" )
+        , ( CohousingRetrofitting, "retrofitting" )
+        , ( CohousingSeekingSite, "seeking site" )
+        , ( CohousingSiteOptioned, "site optioned" )
+        , ( CohousingUnknown, "unknown" )
         ]
 
 

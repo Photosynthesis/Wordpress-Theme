@@ -111,6 +111,15 @@ class DirectoryDB
   public static $healthcare_comments_field_id = 971;
   public static $healthcare_options_field_id = 282;
   public static $lifestyle_comments_field_id = 976;
+  // cohousing block
+  public static $cohousing_status_field_id = 718;
+  public static $cohousing_completed_field_id = 293;
+  public static $cohousing_units_field_id = 206;
+  public static $cohousing_shared_building_field_id = 272;
+  public static $cohousing_shared_area_field_id = 719;
+  public static $cohousing_architect_field_id = 270;
+  public static $cohousing_developer_field_id = 269;
+  public static $cohousing_lender_field_id = 271;
   // other sections
   public static $additional_comments_field_id = 302;
   public static $gallery_ids_field_id = 229;

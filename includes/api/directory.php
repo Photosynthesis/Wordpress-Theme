@@ -126,6 +126,15 @@ class APIDirectory
    *    - healthcareComments
    *    - healthcareOptions
    *    - lifestyleComments
+   *    - cohousing
+   *        - siteStatus
+   *        - yearCompleted
+   *        - housingUnits
+   *        - hasSharedBuilding
+   *        - sharedBuildingArea
+   *        - architect
+   *        - developer
+   *        - lender
    *    - additionalComments
    *    - galleryImages
    *    - youtubeIds
@@ -173,6 +182,14 @@ class APIDirectory
       DirectoryDB::$fair_housing_field_id => 'fair_housing_complaint',
       DirectoryDB::$fair_housing_exceptions_field_id => 'fair_housing_exceptions',
       DirectoryDB::$gallery_ids_field_id => 'gallery_image_ids',
+      DirectoryDB::$cohousing_status_field_id => 'cohousing_status',
+      DirectoryDB::$cohousing_completed_field_id => 'cohousing_completed',
+      DirectoryDB::$cohousing_units_field_id => 'cohousing_units',
+      DirectoryDB::$cohousing_shared_building_field_id => 'cohousing_has_building',
+      DirectoryDB::$cohousing_shared_area_field_id =>'cohousing_building_area',
+      DirectoryDB::$cohousing_architect_field_id => 'cohousing_architect',
+      DirectoryDB::$cohousing_developer_field_id => 'cohousing_developer',
+      DirectoryDB::$cohousing_lender_field_id => 'cohousing_lender',
       // Fields that just need simple cleanup
       DirectoryDB::$community_status_field_id => 'communityStatus',
       DirectoryDB::$mission_statement_field_id => 'missionStatement',
@@ -301,6 +318,7 @@ SQL;
     $entry['updated_at'] = self::clean_date($entry['updated_at']);
     $entry['created_at'] = self::clean_date($entry['created_at']);
 
+    // Primary Image
     if ($entry['image_post_id']) {
       $entry['image'] = self::get_image_data($entry['image_post_id'], 'full');
     } else {
@@ -308,6 +326,7 @@ SQL;
     }
     unset($entry['image_post_id']);
 
+    // Contact Address
     if ($entry['contact_address_public'] === 'Public') {
       $entry_type = $entry['contact_address_type'] === 'Community address'
         ? 'community' : 'mailing';
@@ -335,6 +354,7 @@ SQL;
     unset($entry['latitude']);
     unset($entry['longitude']);
 
+    // Add FIC Membership Information
     if ($entry['is_fic_member'] === "Yes") {
       $entry['isFicMember'] = true;
       if ($entry['ficMembershipStart']) {
@@ -348,6 +368,7 @@ SQL;
     unset($entry['is_fic_member']);
     unset($entry['membership_start_date']);
 
+    // Add Disbanded Data
     if (stripos('disbanded', $entry['communityStatus']) !== false) {
       if ($entry['disbanded_year'] || $entry['disbanded_info']) {
         $entry['disbandedData'] = array(
@@ -358,6 +379,7 @@ SQL;
     }
     unset($entry['disbanded_year']);
     unset($entry['disbanded_info']);
+    // Add Reforming Data
     if (stripos('re-forming', $entry['communityStatus']) !== false) {
       if ($entry['reforming_year'] || $entry['reforming_info']) {
         $entry['reformingData'] = array(
@@ -369,10 +391,42 @@ SQL;
     unset($entry['reforming_year']);
     unset($entry['reforming_info']);
 
+    // Cohousing Fields
+    if (strpos(strtolower($entry['communityTypes']), 'cohousing') !== false) {
+      $cohousing_data = array(
+        'siteStatus' => $entry['cohousing_status'],
+        'yearCompleted' =>
+          isset($entry['cohousing_completed'])
+            ? (int) $entry['cohousing_completed'] : null,
+        'housingUnits' =>
+          isset($entry['cohousing_units'])
+            ? (int) $entry['cohousing_units'] : null,
+        'hasSharedBuilding' =>
+          isset($entry['cohousing_has_building'])
+            ? ($entry['cohousing_has_building'] === "Yes") : null,
+        'sharedBuildingArea' =>
+          isset($entry['cohousing_building_area'])
+            ? (int) $entry['cohousing_building_area'] : null,
+        'architect' => $entry['cohousing_architect'],
+        'developer' => $entry['cohousing_developer'],
+        'lender' => $entry['cohousing_lender'],
+      );
+      $entry['cohousing'] = $cohousing_data;
+    }
+    $coho_fields = array(
+      'status', 'completed', 'units', 'has_building', 'building_area',
+      'architect', 'developer', 'lender'
+    );
+    foreach ($coho_fields as $field) {
+      unset($entry['cohousing_' . $field]);
+    }
+
+    // FHL
     $entry['fair_housing_complaint'] = $entry['fair_housing_complaint'] === "Yes";
 
     self::unserialize_and_convert_case($entry);
 
+    // Gallery
     if (is_array($entry['galleryImageIds']) && sizeof($entry['galleryImageIds']) > 0) {
       $entry['galleryImages'] = array();
       foreach ($entry['galleryImageIds'] as $image_id) {

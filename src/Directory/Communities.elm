@@ -103,6 +103,34 @@ type IncomeSharing
     | PartialIncomeSharing
 
 
+{-| The Building Status for a Cohousing Community.
+-}
+type CohousingStatus
+    = CohousingBuilding
+    | CohousingCompleted
+    | CohousingDisbanded
+    | CohousingForming
+    | CohousingOwnSite
+    | CohousingRetrofitting
+    | CohousingSeekingSite
+    | CohousingSiteOptioned
+    | CohousingUnknown
+
+
+{-| Additional Details for Cohousing Communities.
+-}
+type alias CohousingData =
+    { siteStatus : Maybe CohousingStatus
+    , yearCompleted : Maybe Int
+    , housingUnits : Maybe Int
+    , hasSharedBuilding : Maybe Bool
+    , sharedBuildingArea : Maybe Int
+    , architect : String
+    , developer : String
+    , lender : String
+    }
+
+
 type alias ImageData =
     { thumbnailUrl : String
     , imageUrl : String
@@ -218,6 +246,7 @@ type alias CommunityDetails =
     , healthcareComments : Maybe String
     , healthcareOptions : List String
     , lifestyleComments : Maybe String
+    , cohousing : Maybe CohousingData
     , additionalComments : Maybe String
     , galleryImages : List ImageData
     , youtubeIds : List String
@@ -376,3 +405,34 @@ incomeSharingToString sharing =
 
         PartialIncomeSharing ->
             "Partial Sharing of Income"
+
+
+cohousingStatusToString : CohousingStatus -> String
+cohousingStatusToString status =
+    case status of
+        CohousingBuilding ->
+            "Building"
+
+        CohousingCompleted ->
+            "Completed"
+
+        CohousingDisbanded ->
+            "Disbanded"
+
+        CohousingForming ->
+            "Forming"
+
+        CohousingOwnSite ->
+            "Own Site"
+
+        CohousingRetrofitting ->
+            "Retrofitting"
+
+        CohousingSeekingSite ->
+            "Seeking Site"
+
+        CohousingSiteOptioned ->
+            "Site Optioned"
+
+        CohousingUnknown ->
+            "Unknown"

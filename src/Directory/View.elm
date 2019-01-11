@@ -424,11 +424,23 @@ detailInfoBlocks community =
             Maybe.map (List.singleton << (\c -> ( header, c )) << toHtml) maybeContent
                 |> Maybe.withDefault []
 
+        stringInfoItem header value =
+            if String.isEmpty value then
+                []
+            else
+                [ ( header, text value ) ]
+
         landAmountAndUnits amount =
             text <|
                 toString amount
                     ++ " "
                     ++ Maybe.withDefault "" community.landSizeUnits
+
+        boolToString val =
+            if val then
+                "Yes"
+            else
+                "No"
     in
         Html.div [ class "card-columns listing-info-blocks" ]
             [ infoBlock "About"
@@ -535,6 +547,25 @@ detailInfoBlocks community =
                 , infoBlockSublist "Healthcare Options" community.healthcareOptions
                 , maybeInfoItem "Additional Comments" community.lifestyleComments text
                 ]
+            , (\a b -> maybeHtml b a) community.cohousing <|
+                \cohousing ->
+                    infoBlock "Cohousing"
+                        [ maybeInfoItem "Building Site Status"
+                            cohousing.siteStatus
+                            (cohousingStatusToString >> text)
+                        , maybeInfoItem "Year Construction Completed"
+                            cohousing.yearCompleted
+                            (toString >> text)
+                        , maybeInfoItem "Number of Housing Units"
+                            cohousing.housingUnits
+                            (toString >> text)
+                        , maybeInfoItem "Has a Shared Common Building"
+                            cohousing.hasSharedBuilding
+                            (boolToString >> text)
+                        , stringInfoItem "Architect" cohousing.architect
+                        , stringInfoItem "Developer" cohousing.developer
+                        , stringInfoItem "Commercial Lender" cohousing.lender
+                        ]
             ]
 
 
