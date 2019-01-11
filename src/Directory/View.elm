@@ -115,6 +115,8 @@ communityDetails maybeCurrentDate community communityGallery =
                       else
                         text ""
                     ]
+
+                -- TODO: Edit/Verify links for author & admin
                 , Html.ul [ class "text-right small text-muted float-right list-unstyled" ]
                     [ Html.li [] <| updatedOn maybeCurrentDate community
                     , Html.li [] <| createdOn maybeCurrentDate community
