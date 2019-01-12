@@ -1,5 +1,6 @@
 port module Admin.FlatRate exposing (main)
 
+import Admin.Utils exposing (simpleLabel, formLabel, formRow, adminGet, adminPost)
 import Array.Hamt as Array exposing (Array)
 import Dict as Dict exposing (Dict)
 import Html exposing (..)
@@ -9,7 +10,6 @@ import Html.Attributes as A
         , step
         , value
         , checked
-        , for
         , id
         , class
         , required
@@ -19,7 +19,6 @@ import Html.Attributes as A
         , disabled
         )
 import Html.Events exposing (onCheck, onInput, onClick, onSubmit)
-import Http
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode exposing (Value)
 import RemoteData exposing (WebData)
@@ -532,8 +531,7 @@ encodeArray encoder =
 -}
 getOptions : Model -> Cmd Msg
 getOptions m =
-    Http.get ("/wp-json/v1/flat-rate/get/" ++ "?_wpnonce=" ++ m.wpNonce) decodeOptions
-        |> RemoteData.sendRequest
+    adminGet "flat-rate/get/" m decodeOptions
         |> Cmd.map FetchOptions
 
 
@@ -543,24 +541,18 @@ saveOptions : Model -> Cmd Msg
 saveOptions m =
     case m.options of
         RemoteData.Success options ->
-            Http.request
-                { method = "POST"
-                , headers = [ Http.header "X-WP-Nonce" m.wpNonce ]
-                , url = "/wp-json/v1/flat-rate/set"
-                , body =
-                    Http.jsonBody <|
-                        Encode.object [ ( "options", encodeOptions options ) ]
-                , expect =
-                    Http.expectJson <|
-                        Decode.oneOf
-                            [ Decode.map Err decodeErrors
-                            , Decode.succeed <| Ok ()
-                            ]
-                , timeout = Nothing
-                , withCredentials = False
-                }
-                |> RemoteData.sendRequest
-                |> Cmd.map SaveOptions
+            let
+                body =
+                    Encode.object [ ( "options", encodeOptions options ) ]
+
+                decoder =
+                    Decode.oneOf
+                        [ Decode.map Err decodeErrors
+                        , Decode.succeed <| Ok ()
+                        ]
+            in
+                adminPost "flat-rate/set/" m body decoder
+                    |> Cmd.map SaveOptions
 
         _ ->
             Cmd.none
@@ -873,24 +865,3 @@ ignoreDomesticInputRow prefix ignoreDomestic checkMsg =
                 , onCheck checkMsg
                 ]
                 []
-
-
-{-| Render a basic form label.
--}
-simpleLabel : String -> Html msg
-simpleLabel content =
-    label [] [ text content ]
-
-
-{-| Render an input label for a wp-admin form table row.
--}
-formLabel : String -> String -> Html msg
-formLabel elementId content =
-    label [ for elementId ] [ text content ]
-
-
-{-| Render a form row for a wp-admin form table.
--}
-formRow : Html msg -> Html msg -> Html msg
-formRow labelElement inputElement =
-    tr [] [ th [] [ labelElement ], td [] [ inputElement ] ]
