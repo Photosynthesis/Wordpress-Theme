@@ -60,31 +60,31 @@
 
   <!-- Header -->
   <div id="site-header" class="row">
-    <div class="col text-center text-sm-left">
+    <div class="col text-center text-sm-left d-flex align-items-center">
       <a href="/" class="banner-image">
         <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-fic.png'; ?>" alt="FIC" />
       </a>
     </div>
     <div class="col text-right d-none d-sm-block">
-      <div id="greeting-logout"><?php
-          $current_user = wp_get_current_user();
+      <div id="greeting-logout">
+        <div class='d-inline-block'><?php
           if (is_user_logged_in()) {
-            echo 'Hello, <strong>' . ucfirst($current_user->user_login) .
-              '</strong>&nbsp;(<a href="' . wp_logout_url('/') . '">Log out</a>)&nbsp;|&nbsp;' .
-              '<a href="' . get_permalink(get_option('woocommerce_myaccount_page_id')) .
-              '">My Account</a>';
-          }
-          else {
-            echo '<a href="' . get_permalink(get_option('woocommerce_myaccount_page_id')) .
-              '">My Account</a>&nbsp;|&nbsp;<a href="/wp-login.php">Login</a>';
+            $current_user = wp_get_current_user();
+            echo 'Hello,&nbsp;<strong>' . ucfirst($current_user->user_login) .
+              '</strong>&nbsp;(<a href="' . wp_logout_url('/') . '">Log Out</a>)';
+          } else {
+              echo '<a href="' . wp_login_url(get_permalink()) . '">Log In</a>';
           } ?>
-          &nbsp;|&nbsp;
-          <a id="header-cart-icon" href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e('View your shopping cart.'); ?>">
-            <i class='fa fa-shopping-cart'></i>&nbsp;&nbsp;
-          </a>
+        </div>
+        <a class="mx-4" href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" title="My Account">
+          <i class='fa fa-2x fa-user'></i>
+        </a>
+        <a href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e('Shopping Cart'); ?>">
+          <i class='fa fa-2x fa-shopping-cart'></i>
+        </a>
       </div>
       <div id="header-buttons">
-        <a class="btn btn-sm btn-secondary" href='<?php echo get_permalink(14602); ?>'>Membership</a>
+        <a class="btn btn-sm btn-secondary mr-2" href='<?php echo get_permalink(14602); ?>'>Membership</a>
         <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>Donate</a>
       </div>
       <div class="google-search-div d-none d-sm-block d-lg-none">
