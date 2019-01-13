@@ -352,6 +352,49 @@ HTML;
       'mobi' => 'application/x-mobipocket-ebook',
     ));
   }
+
+  /* Fetch the Board & Staff Data.
+   *
+   * This is structured like:
+   *
+   * - board: array of
+   *    - name
+   *    - bio
+   *    - image
+   * - staff: array of
+   *    - name
+   *    - bio
+   *    - image
+   *
+   */
+  const board_staff_option_name = "fic_board_staff_data";
+  public static function get_board_and_staff_data() {
+    $default = array(
+      'board' => array(),
+      'staff' => array(),
+    );
+    return get_option(self::board_staff_option_name, $default);
+  }
+
+  /* Save the Board & Staff Data to the DB.
+   *
+   * Note that you need to validate the format & types yourself, no validation
+   * is done in this function.
+   */
+  public static function set_board_and_staff_data($options) {
+    update_option(self::board_staff_option_name, $options, false);
+  }
+
+  /* Render the div for Board & Staff's Elm code to hook into, as well as the
+   * Board & Staff json as the `boardStaffData` global JS variable.
+   */
+  public static function render_board_and_staff() {
+    $data = self::get_board_and_staff_data();
+    return '<div id="elm-board-staff"></div>' .
+      '<script type="text/javascript">' .
+        'var boardStaffData = ' .  json_encode($data) .  ';' .
+      '</script>';
+  }
 }
 
 add_filter('wp_mail_from_name', function($n) { return 'Fellowship for Intentional Community'; }, 11);
@@ -377,5 +420,6 @@ add_filter('user_can_richedit', array('ThemeGeneral', 'remove_richtext_editor'))
 add_shortcode('homepage_recent_posts_widget', array('ThemeGeneral', 'recent_posts'));
 add_filter('category_description', 'do_shortcode');
 add_filter('upload_mimes', array('ThemeGeneral', 'allow_ebook_mimes'));
+add_shortcode('elm_board_staff', array('ThemeGeneral', 'render_board_and_staff'));
 
 ?>

@@ -13,6 +13,9 @@ module.exports = {
     fa: [
       'style-loader!css-loader!./node_modules/font-awesome/css/font-awesome.css',
     ],
+    board_staff: [
+      './src/board-staff.js',
+    ],
     directory: [
       './src/directory.js',
     ],
@@ -22,6 +25,9 @@ module.exports = {
     // Entries for admin scripts should all start with `admin_`.
     admin_adb: [
       './src/admin-adb.js',
+    ],
+    admin_board_staff: [
+      './src/admin-board-staff.js',
     ],
     admin_flate_rate: [
       './src/admin-flat-rate.js',

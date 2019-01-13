@@ -10,6 +10,7 @@
 
 /* Load the Sub-Menu Classes */
 require(__DIR__ . '/menu/directory_user_update.php');
+require(__DIR__ . '/menu/board_and_staff.php');
 require(__DIR__ . '/menu/theme_settings.php');
 require(__DIR__ . '/menu/wc_flat_rate.php');
 
@@ -27,6 +28,9 @@ class ThemeMenu
       get_stylesheet_directory_uri('stylesheet_directory') .  "/img/logo-admin-fic.png",
       3);
 
+    add_submenu_page(self::$menu_name, ThemeBoardStaffMenu::$page_title,
+      'Board & Staff Profiles', 'administrator', ThemeBoardStaffMenu::$page_name,
+      array('ThemeBoardStaffMenu', 'render_page'));
     add_submenu_page(self::$menu_name, ThemeDirectoryUserMenu::$page_title,
       'Directory User Update', 'administrator', ThemeDirectoryUserMenu::$page_name,
       array('ThemeDirectoryUserMenu', 'render_page'));
