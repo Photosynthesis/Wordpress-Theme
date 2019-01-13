@@ -1,6 +1,19 @@
 port module Admin.FlatRate exposing (main)
 
-import Admin.Utils exposing (simpleLabel, formLabel, formRow, adminGet, adminPost)
+import Admin.Utils
+    exposing
+        ( simpleLabel
+        , formLabel
+        , formRow
+        , adminGet
+        , adminPost
+        , SubmissionStatus(AwaitingResponse)
+        , initialSubmissionStatus
+        , submissionAwaitingResponse
+        , submissionNotice
+        , submissionSpinner
+        , statusFromWebData
+        )
 import Array.Hamt as Array exposing (Array)
 import Dict as Dict exposing (Dict)
 import Html exposing (..)
@@ -55,31 +68,6 @@ type alias Model =
     , errors : Errors
     , formStatus : SubmissionStatus
     }
-
-
-{-| Enumerate the potential status of the form submission.
--}
-type SubmissionStatus
-    = NotSent
-    | AwaitingResponse
-    | ReturnedSuccess
-    | ReturnedValidationError
-    | ReturnedOtherError String
-
-
-{-| Does the submission status indicate an error has occured?
--}
-hasSubmissionError : SubmissionStatus -> Bool
-hasSubmissionError s =
-    case s of
-        ReturnedValidationError ->
-            True
-
-        ReturnedOtherError _ ->
-            True
-
-        _ ->
-            False
 
 
 {-| All Flat Rate options
@@ -231,7 +219,7 @@ init { nonce } =
             { wpNonce = nonce
             , options = RemoteData.Loading
             , errors = Errors [] Dict.empty
-            , formStatus = NotSent
+            , formStatus = initialSubmissionStatus
             }
     in
         ( initialModel, getOptions initialModel )
@@ -275,26 +263,24 @@ update msg model =
             ( { model | options = resp }, Cmd.none )
 
         SaveOptions resp ->
-            case resp of
-                RemoteData.Success (Ok _) ->
-                    ( { model | formStatus = ReturnedSuccess, errors = Errors [] Dict.empty }
-                    , scrollToTop ()
-                    )
+            let
+                formStatus =
+                    statusFromWebData resp
 
-                RemoteData.Success (Err errors) ->
-                    ( { model | formStatus = ReturnedValidationError, errors = errors }
-                    , scrollToTop ()
-                    )
+                errors =
+                    case resp of
+                        RemoteData.Success (Ok _) ->
+                            Errors [] Dict.empty
 
-                RemoteData.Failure err ->
-                    ( { model | formStatus = ReturnedOtherError <| toString err }
-                    , scrollToTop ()
-                    )
+                        RemoteData.Success (Err errors) ->
+                            errors
 
-                _ ->
-                    ( { model | formStatus = ReturnedOtherError <| "Unexpected response status: " ++ toString resp }
-                    , scrollToTop ()
-                    )
+                        _ ->
+                            model.errors
+            in
+                ( { model | formStatus = formStatus, errors = errors }
+                , scrollToTop ()
+                )
 
         CMagCheckIgnore ignoreDomestic ->
             ( cmagUpdate model <|
@@ -571,7 +557,8 @@ view m =
             case m.options of
                 RemoteData.Success options ->
                     div []
-                        [ submissionNotice
+                        [ submissionNotice m.formStatus
+                            "The Flat Rate Options were successfully saved."
                         , optionsView options m.formStatus m.errors
                         ]
 
@@ -589,26 +576,6 @@ view m =
                         [ text "Got an error while fetching options:"
                         , pre [] [ text <| toString err ]
                         ]
-
-        submissionNotice =
-            if hasSubmissionError m.formStatus then
-                div [ class "notice notice-error" ] [ text errorText ]
-            else if m.formStatus == ReturnedSuccess then
-                div [ class "notice notice-success" ]
-                    [ text "The Flat Rate Options were successfully saved." ]
-            else
-                text ""
-
-        errorText =
-            case m.formStatus of
-                ReturnedValidationError ->
-                    "Some errors were found, please correct the items below & try re-submitting the form."
-
-                ReturnedOtherError e ->
-                    "An unexpected error occured: " ++ e
-
-                _ ->
-                    ""
     in
         div []
             [ h1 [] [ text "FIC Flat Rate Options" ]
@@ -631,13 +598,10 @@ optionsView options formStatus errors =
             [ type_ "submit"
             , class "button-primary"
             , value "Save Rates"
-            , disabled (formStatus == AwaitingResponse)
+            , disabled <| submissionAwaitingResponse formStatus
             ]
             []
-        , if formStatus == AwaitingResponse then
-            div [ class "spinner is-active" ] []
-          else
-            text ""
+        , submissionSpinner formStatus
         ]
 
 

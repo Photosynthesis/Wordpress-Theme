@@ -1,7 +1,15 @@
 module Admin.Utils
     exposing
-        ( -- Html Utils
-          simpleLabel
+        ( -- Form Submission Notices
+          SubmissionStatus(..)
+        , initialSubmissionStatus
+        , submissionAwaitingResponse
+        , hasSubmissionError
+        , submissionNotice
+        , submissionSpinner
+        , statusFromWebData
+          -- Html Utils
+        , simpleLabel
         , formLabel
         , formRow
           -- Http Utils
@@ -12,11 +20,106 @@ module Admin.Utils
 {-| Utility Functions for Interacting with the WP Admin Site
 -}
 
-import Html exposing (Html, label, text, tr, td, th)
-import Html.Attributes exposing (for)
+import Html exposing (Html, label, text, tr, td, th, div)
+import Html.Attributes exposing (for, class)
 import Http
 import Json.Decode exposing (Decoder, Value)
 import RemoteData exposing (WebData)
+
+
+{-| Enumerate the potential status of a form submission.
+-}
+type SubmissionStatus
+    = NotSent
+    | AwaitingResponse
+    | ReturnedSuccess
+    | ReturnedValidationError
+    | ReturnedOtherError String
+
+
+{-| Initial value for unsubmitted forms
+-}
+initialSubmissionStatus : SubmissionStatus
+initialSubmissionStatus =
+    NotSent
+
+
+{-| Does the submission status indicate an error has occured?
+-}
+hasSubmissionError : SubmissionStatus -> Bool
+hasSubmissionError s =
+    case s of
+        ReturnedValidationError ->
+            True
+
+        ReturnedOtherError _ ->
+            True
+
+        _ ->
+            False
+
+
+{-| Are we currently waiting for a response to a submission?
+-}
+submissionAwaitingResponse : SubmissionStatus -> Bool
+submissionAwaitingResponse =
+    (==) AwaitingResponse
+
+
+{-| Show either no notice, a success notice, or an error notice depending on
+the SubmissionStatus.
+-}
+submissionNotice : SubmissionStatus -> String -> Html msg
+submissionNotice status successText =
+    let
+        errorText =
+            case status of
+                ReturnedValidationError ->
+                    "Some errors were found, please correct the items below & try re-submitting the form."
+
+                ReturnedOtherError e ->
+                    "An unexpected error occured: " ++ e
+
+                _ ->
+                    ""
+    in
+        if hasSubmissionError status then
+            div [ class "notice notice-error" ] [ text errorText ]
+        else if status == ReturnedSuccess then
+            div [ class "notice notice-success" ]
+                [ text successText ]
+        else
+            text ""
+
+
+{-| Show a spinner while awaiting a response from a form submission.
+-}
+submissionSpinner : SubmissionStatus -> Html msg
+submissionSpinner status =
+    if status == AwaitingResponse then
+        div [ class "spinner is-active" ] []
+    else
+        text ""
+
+
+statusFromWebData : WebData (Result e a) -> SubmissionStatus
+statusFromWebData response =
+    case response of
+        RemoteData.Success (Ok _) ->
+            ReturnedSuccess
+
+        RemoteData.Success (Err _) ->
+            ReturnedValidationError
+
+        RemoteData.Failure err ->
+            ReturnedOtherError <| toString err
+
+        _ ->
+            ReturnedOtherError <| "Unexpected response status: " ++ toString response
+
+
+
+-- HTML Helpers
 
 
 {-| Render a basic form label. Use this for form rows with multiple inputs.
@@ -38,6 +141,10 @@ formLabel elementId content =
 formRow : Html msg -> Html msg -> Html msg
 formRow labelElement inputElement =
     tr [] [ th [] [ labelElement ], td [] [ inputElement ] ]
+
+
+
+-- HTTP Helpers
 
 
 {-| Send a GET request to a REST endpoint with the `wp_rest` nonce.
