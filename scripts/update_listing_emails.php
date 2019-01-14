@@ -124,8 +124,8 @@ function send_notification_email($item) {
       "ic.org/directory.\n\n";
   }
   $message .=
-    "If you know your information is up-to-date, you can simply log-in & click " .
-    "\"Verify Listing\" on your Listing's page:\n\n\t\t{$listing_link}\n\n" .
+    "If you know your information is up-to-date, please log into your account, " .
+    "select to edit the listing, and then simply select \"Update\".\n\n" .
 
     "If you need help with your log-in information or with editing your listing, " .
     "send an email to our Directory Manager at directory@ic.org with your " .

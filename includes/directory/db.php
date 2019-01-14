@@ -50,8 +50,15 @@ SQL;
   public static function get_name($item) {
     if ($item['post_title'] && $item['post_title'] !== '') {
       return $item['post_title'];
-    } else {
+    } else if ($item['name'] && $item['name'] !== '') {
       return $item['name'];
+    } else {
+      $meta_name = self::get_item_meta(9, $item['id']);
+      if ($meta_name !== false && $meta_name !== '') {
+        return $meta_name;
+      } else {
+        return "<ListingNameNotFound>";
+      }
     }
   }
 
