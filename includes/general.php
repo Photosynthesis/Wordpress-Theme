@@ -310,7 +310,7 @@ CSS;
     if (is_front_page() || $post->post_name === ThemeGeneral::$development_page_slug || $post->post_name === 'planet-community') {
       return;
     } else {
-      $img_url = "/wp-content/uploads/2010/01/fic-membership.png";
+      $img_url = "/wp-content/uploads/2019/01/fic-membership.png";
       $link_url = "/community-bookstore/product/fic-membership/";
       $ga_label = "membership";
       /* Randomize cmag banners
