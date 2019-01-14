@@ -310,7 +310,10 @@ CSS;
     if (is_front_page() || $post->post_name === ThemeGeneral::$development_page_slug || $post->post_name === 'planet-community') {
       return;
     } else {
-      /* Randomize cmag banners */
+      $img_url = "/wp-content/uploads/2010/01/fic-membership.png";
+      $link_url = "/community-bookstore/product/fic-membership/";
+      $ga_label = "membership";
+      /* Randomize cmag banners
       $rand_int = mt_rand(0,2);
       switch ($rand_int) {
       case 0:
@@ -329,6 +332,7 @@ CSS;
         $ga_label = "planet community";
         break;
       }
+      */
     }
 
 
