@@ -108,6 +108,8 @@ communityDetails =
         |> optional "keywords" string ""
         |> required "updatedAt" date
         |> required "createdAt" date
+        |> required "isAdmin" Decode.bool
+        |> required "isOwner" Decode.bool
 
 
 {-| Decode an optional field into a Maybe value.

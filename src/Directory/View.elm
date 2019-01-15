@@ -115,13 +115,35 @@ communityDetails maybeCurrentDate community communityGallery =
                       else
                         text ""
                     ]
-
-                -- TODO: Edit/Verify links for author & admin
                 , Html.ul [ class "text-right small text-muted float-right list-unstyled" ]
-                    [ Html.li [] <| updatedOn maybeCurrentDate community
+                    [ renderIf community.isAdmin <|
+                        Html.li []
+                            [ Html.a [ href adminEditLink ] [ text "Edit Listing" ] ]
+                    , renderIf community.isOwner <|
+                        Html.li []
+                            [ Html.a [ href ownerEditLink ] [ text "Edit Listing" ]
+                            ]
+                    , renderIf (community.isOwner || community.isAdmin) <|
+                        Html.li []
+                            [ Html.a [ href verifyLink ] [ text "Verify as Up-To-Date" ]
+                            ]
+                    , Html.li [] <| updatedOn maybeCurrentDate community
                     , Html.li [] <| createdOn maybeCurrentDate community
                     ]
                 ]
+
+        idParam =
+            (\(CommunityID i) -> toString i) community.id
+
+        adminEditLink =
+            "/wp-admin/admin.php?page=formidable-entries&frm_action=edit&id=" ++ idParam
+
+        ownerEditLink =
+            "/directory/edit-listing/?frm_action=edit&entry=" ++ idParam
+
+        -- TODO: AJAX Verification
+        verifyLink =
+            ".?verify_as_up_to_date=1"
 
         leftColumn =
             Html.div [ class "col-24 col-sm-14" ]

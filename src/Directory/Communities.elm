@@ -257,6 +257,8 @@ type alias CommunityDetails =
     , keywords : String
     , updatedAt : Date
     , createdAt : Date
+    , isAdmin : Bool
+    , isOwner : Bool
     }
 
 

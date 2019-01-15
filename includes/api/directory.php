@@ -190,6 +190,7 @@ class APIDirectory
       DirectoryDB::$cohousing_architect_field_id => 'cohousing_architect',
       DirectoryDB::$cohousing_developer_field_id => 'cohousing_developer',
       DirectoryDB::$cohousing_lender_field_id => 'cohousing_lender',
+      DirectoryDB::$user_id_field_id => 'user_id',
       // Fields that just need simple cleanup
       DirectoryDB::$community_status_field_id => 'communityStatus',
       DirectoryDB::$mission_statement_field_id => 'missionStatement',
@@ -423,6 +424,12 @@ SQL;
 
     // FHL
     $entry['fair_housing_complaint'] = $entry['fair_housing_complaint'] === "Yes";
+
+    // User/Admin Data
+    $current_user = wp_get_current_user();
+    $entry['is_admin'] = in_array('administrator', $current_user->roles);
+    $entry['is_owner'] = $entry['user_id'] === $current_user->ID;
+    unset($entry['user_id']);
 
     self::unserialize_and_convert_case($entry);
 

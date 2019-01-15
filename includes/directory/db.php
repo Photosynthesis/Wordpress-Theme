@@ -131,6 +131,7 @@ class DirectoryDB
   public static $fair_housing_exceptions_field_id = 414;
   public static $keywords_field_id = 716;
   // hidden/server/misc
+  public static $user_id_field_id = 430;
   public static $update_email_date_field_id = 992;
 
   /* Return an Array of every published community. */
