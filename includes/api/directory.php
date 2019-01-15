@@ -428,7 +428,7 @@ SQL;
     // User/Admin Data
     $current_user = wp_get_current_user();
     $entry['is_admin'] = in_array('administrator', $current_user->roles);
-    $entry['is_owner'] = $entry['user_id'] === $current_user->ID;
+    $entry['is_owner'] = ((int) $entry['user_id']) === $current_user->ID;
     unset($entry['user_id']);
 
     self::unserialize_and_convert_case($entry);
