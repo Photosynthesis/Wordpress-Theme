@@ -84,7 +84,7 @@ listingsUpdateUrl route model =
 detailsUpdateUrl : String -> Model -> ( Model, Cmd Msg )
 detailsUpdateUrl slug model =
     ( { model | route = DetailsRoute slug, community = RemoteData.Loading }
-    , Commands.getCommunity slug
+    , Commands.getCommunity model.wpNonce slug
     )
 
 

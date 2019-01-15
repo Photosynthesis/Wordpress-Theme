@@ -1,6 +1,7 @@
 module Directory.Commands
     exposing
-        ( getCommunity
+        ( WPNonce(..)
+        , getCommunity
         , CommunitiesRequestData
         , getCommunities
         , newPage
@@ -21,11 +22,17 @@ import Navigation
 import RemoteData
 
 
+{-| Wraps the `wp_rest` nonce passed via flags & used in API requests.
+-}
+type WPNonce
+    = WPNonce String
+
+
 {-| Fetch the Details of a Single Community
 -}
-getCommunity : String -> Cmd Msg
-getCommunity slug =
-    Http.get (String.join "" [ "/wp-json/v1/directory/entry/", "?slug=", slug ])
+getCommunity : WPNonce -> String -> Cmd Msg
+getCommunity (WPNonce wpNonce) slug =
+    Http.get (String.join "" [ "/wp-json/v1/directory/entry/", "?slug=", slug, "&_wpnonce=", wpNonce ])
         Decoders.communityDetails
         |> RemoteData.sendRequest
         |> Cmd.map FetchCommunityDetails

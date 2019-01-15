@@ -230,7 +230,6 @@ communityDetails maybeCurrentDate community communityGallery =
                     Html.map GalleryMsg <|
                         Gallery.thumbnails galleryConfig community.galleryImages
             , embedYoutube
-            , Html.div [] [ text "TODO: Cohousing Section" ]
             , renderIf (not <| List.isEmpty affiliations) <|
                 section "Community Network or Organization Affiliations" <|
                     String.join ", " affiliations

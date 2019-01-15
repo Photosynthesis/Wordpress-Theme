@@ -1,7 +1,7 @@
 module Directory.Model exposing (Model, initial, paginationConfig)
 
 import Date exposing (Date)
-import Directory.Commands exposing (getCommunity, getCommunities, CommunitiesRequestData)
+import Directory.Commands exposing (WPNonce, getCommunity, getCommunities, CommunitiesRequestData)
 import Directory.Communities exposing (CommunityListing, CommunityDetails, ImageData)
 import Directory.Pagination as Pagination exposing (Pagination)
 import Directory.Routing as Routing exposing (Route(..), FilterParam(..))
@@ -19,17 +19,18 @@ type alias Model =
     , searchString : String
     , currentDate : Maybe Date
     , route : Route
+    , wpNonce : WPNonce
     }
 
 
-initial : Route -> ( Model, Cmd Msg )
-initial route =
+initial : Route -> WPNonce -> ( Model, Cmd Msg )
+initial route nonce =
     let
         ( communitiesPagination, paginationCmd, searchString ) =
             listingsInitial route
 
         ( community, detailsCmd ) =
-            detailsInitial route
+            detailsInitial nonce route
     in
         ( { communities = communitiesPagination
           , community = community
@@ -37,6 +38,7 @@ initial route =
           , searchString = searchString
           , currentDate = Nothing
           , route = route
+          , wpNonce = nonce
           }
         , Cmd.batch [ Cmd.map CommunityPagination paginationCmd, detailsCmd ]
         )
@@ -76,11 +78,11 @@ paginationConfig =
     Pagination.makeConfig getCommunities
 
 
-detailsInitial : Route -> ( WebData CommunityDetails, Cmd Msg )
-detailsInitial route =
+detailsInitial : WPNonce -> Route -> ( WebData CommunityDetails, Cmd Msg )
+detailsInitial wpNonce route =
     case route of
         DetailsRoute slug ->
-            ( RemoteData.Loading, getCommunity slug )
+            ( RemoteData.Loading, getCommunity wpNonce slug )
 
         ListingsRoute _ ->
             ( RemoteData.NotAsked, Cmd.none )
