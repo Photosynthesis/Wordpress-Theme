@@ -2,6 +2,7 @@ module Directory.Commands
     exposing
         ( WPNonce(..)
         , getCommunity
+        , validateCommunity
         , CommunitiesRequestData
         , getCommunities
         , newPage
@@ -10,14 +11,15 @@ module Directory.Commands
 {-| Contains Commands & Relevant Types Used in the Application.
 -}
 
-import Directory.Communities exposing (CommunityListing)
+import Directory.Communities exposing (CommunityID(..), CommunityListing)
 import Directory.Decoders as Decoders
 import Directory.Pagination as Pagination
 import Directory.Ports as Ports
 import Directory.Routing exposing (Route(..), FilterParam(..), Ordering(..), reverse, getPageTitle)
-import Directory.Messages exposing (Msg(FetchCommunityDetails))
+import Directory.Messages exposing (Msg(FetchCommunityDetails, ValidateCommunity))
 import Http
 import Json.Decode as Decode
+import Json.Encode as Encode
 import Navigation
 import RemoteData
 
@@ -36,6 +38,25 @@ getCommunity (WPNonce wpNonce) slug =
         Decoders.communityDetails
         |> RemoteData.sendRequest
         |> Cmd.map FetchCommunityDetails
+
+
+{-| Validate a listing & update the Last Verified Date if there are no errors.
+-}
+validateCommunity : WPNonce -> CommunityID -> Cmd Msg
+validateCommunity (WPNonce wpNonce) (CommunityID communityID) =
+    Http.request
+        { method = "POST"
+        , headers = [ Http.header "X-WP-Nonce" wpNonce ]
+        , url = "/wp-json/v1/directory/entry/validate/"
+        , body =
+            Http.jsonBody <| Encode.object [ ( "communityId", Encode.int communityID ) ]
+        , expect =
+            Http.expectJson <| Decode.field "isValid" Decode.bool
+        , timeout = Nothing
+        , withCredentials = False
+        }
+        |> RemoteData.sendRequest
+        |> Cmd.map ValidateCommunity
 
 
 {-| The Data Type Stored by the Pagination & Passed to the Fetch Command.

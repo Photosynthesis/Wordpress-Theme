@@ -83,7 +83,12 @@ listingsUpdateUrl route model =
 -}
 detailsUpdateUrl : String -> Model -> ( Model, Cmd Msg )
 detailsUpdateUrl slug model =
-    ( { model | route = DetailsRoute slug, community = RemoteData.Loading }
+    ( { model
+        | route = DetailsRoute slug
+        , community = RemoteData.Loading
+        , communityGallery = Gallery.initial
+        , communityValidation = RemoteData.NotAsked
+      }
     , Commands.getCommunity model.wpNonce slug
     )
 
@@ -169,6 +174,19 @@ update msg model =
 
         FetchCommunityDetails details ->
             ( { model | community = details }, Cmd.none )
+
+        VerifyCommunityClicked ->
+            case model.community of
+                RemoteData.Success community ->
+                    ( { model | communityValidation = RemoteData.Loading }
+                    , Commands.validateCommunity model.wpNonce community.id
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        ValidateCommunity isValid ->
+            ( { model | communityValidation = isValid }, Cmd.none )
 
         GalleryMsg subMsg ->
             let

@@ -32,13 +32,14 @@ navigateLink route classes content =
 -}
 navigateAttributes : Route -> List (Html.Attribute Msg)
 navigateAttributes route =
-    let
-        onClickNoDefault =
-            onWithOptions "click"
-                { defaultOptions | preventDefault = True }
-                (Decode.succeed <| NavigateTo route)
-    in
-        [ href <| reverse route, onClickNoDefault ]
+    [ href <| reverse route, onClickNoDefault <| NavigateTo route ]
+
+
+onClickNoDefault : msg -> Html.Attribute msg
+onClickNoDefault msg =
+    onWithOptions "click"
+        { defaultOptions | preventDefault = True }
+        (Decode.succeed msg)
 
 
 {-| Return an HTML Element or an Empty Node.
@@ -57,13 +58,18 @@ view model =
             listingsView model.communities model.searchString model.currentDate listingsRoute
 
         DetailsRoute _ ->
-            detailsView model.currentDate model.community model.communityGallery
+            detailsView model.currentDate model.community model.communityGallery model.communityValidation
 
 
 {-| Render a Details Page.
 -}
-detailsView : Maybe Date -> WebData CommunityDetails -> Gallery.Model ImageData -> Html Msg
-detailsView currentDate community gallery =
+detailsView :
+    Maybe Date
+    -> WebData CommunityDetails
+    -> Gallery.Model ImageData
+    -> WebData Bool
+    -> Html Msg
+detailsView currentDate community gallery validation =
     case community of
         RemoteData.NotAsked ->
             Html.div [ class "text-danger text-center my-4" ]
@@ -84,7 +90,7 @@ detailsView currentDate community gallery =
                 ]
 
         RemoteData.Success details ->
-            communityDetails currentDate details gallery
+            communityDetails currentDate details gallery validation
 
 
 loadingBar : Html msg
@@ -96,8 +102,8 @@ loadingBar =
         ]
 
 
-communityDetails : Maybe Date -> CommunityDetails -> Gallery.Model ImageData -> Html Msg
-communityDetails maybeCurrentDate community communityGallery =
+communityDetails : Maybe Date -> CommunityDetails -> Gallery.Model ImageData -> WebData Bool -> Html Msg
+communityDetails maybeCurrentDate community communityGallery communityValidation =
     let
         area =
             [ community.city, community.state, community.country ]
@@ -124,9 +130,7 @@ communityDetails maybeCurrentDate community communityGallery =
                             [ Html.a [ href ownerEditLink ] [ text "Edit Listing" ]
                             ]
                     , renderIf (community.isOwner || community.isAdmin) <|
-                        Html.li []
-                            [ Html.a [ href verifyLink ] [ text "Verify as Up-To-Date" ]
-                            ]
+                        Html.li [] [ verifyLink ]
                     , Html.li [] <| updatedOn maybeCurrentDate community
                     , Html.li [] <| createdOn maybeCurrentDate community
                     ]
@@ -141,9 +145,27 @@ communityDetails maybeCurrentDate community communityGallery =
         ownerEditLink =
             "/directory/edit-listing/?frm_action=edit&entry=" ++ idParam
 
-        -- TODO: AJAX Verification
         verifyLink =
-            ".?verify_as_up_to_date=1"
+            case communityValidation of
+                RemoteData.NotAsked ->
+                    Html.a [ href "#", onClickNoDefault VerifyCommunityClicked ]
+                        [ text "Verify as Up-to-Date" ]
+
+                RemoteData.Loading ->
+                    Html.div [ class "text-primary font-weight-bold" ]
+                        [ text "Validating Your Listing..." ]
+
+                RemoteData.Success True ->
+                    Html.div [ class "text-success font-weight-bold" ]
+                        [ text "Listing Successfully Verified." ]
+
+                RemoteData.Success False ->
+                    Html.div [ class "text-danger font-weight-bold" ]
+                        [ text "Your Listing is Incomplete, Please Update It." ]
+
+                RemoteData.Failure _ ->
+                    Html.div [ class "text-danger font-weight-bold" ]
+                        [ text "An Error Occurred, Please Try Editing Your Listing." ]
 
         leftColumn =
             Html.div [ class "col-24 col-sm-14" ]

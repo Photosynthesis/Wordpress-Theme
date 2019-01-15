@@ -16,6 +16,7 @@ type alias Model =
     { communities : Pagination CommunityListing CommunitiesRequestData
     , community : WebData CommunityDetails
     , communityGallery : Gallery.Model ImageData
+    , communityValidation : WebData Bool
     , searchString : String
     , currentDate : Maybe Date
     , route : Route
@@ -35,6 +36,7 @@ initial route nonce =
         ( { communities = communitiesPagination
           , community = community
           , communityGallery = Gallery.initial
+          , communityValidation = RemoteData.NotAsked
           , searchString = searchString
           , currentDate = Nothing
           , route = route

@@ -19,3 +19,5 @@ type Msg
       -- Details
     | FetchCommunityDetails (WebData CommunityDetails)
     | GalleryMsg (Gallery.Msg ImageData)
+    | VerifyCommunityClicked
+    | ValidateCommunity (WebData Bool)
