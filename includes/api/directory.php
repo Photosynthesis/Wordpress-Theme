@@ -18,6 +18,10 @@ class APIDirectory
       'methods' => 'GET',
       'callback' => array('APIDirectory', 'data_commons'),
     ));
+    register_rest_route(self::api_namespace, '/entry/validate/', array(
+      'methods' => 'POST',
+      'callback' => array('APIDirectory', 'validate_entry'),
+    ));
   }
 
   /* Return Data for a Single Entry.
@@ -1128,6 +1132,55 @@ SQL;
       $entries[$key]['types'] = $community_types;
     }
     return $entries;
+  }
+
+  /* Ensure that the Community's data passes validation. */
+  public static function validate_entry($data) {
+    $community_id = $data['communityId'];
+    $community_user = DirectoryDB::get_item_meta_value(
+      DirectoryDB::$user_id_field_id, $community_id);
+    if (!is_int($data['communityId']) || $community_user === false) {
+      return new WP_Error(404, 'Community Not Found');
+    }
+
+    if (!(current_user_can('administrator') || ((int) $community_user) === get_current_user_id())) {
+      return new WP_Error(403, 'You do not have permission to validate this Community.');
+    }
+
+    $is_valid = empty(self::run_entry_validation($community_id));
+    if ($is_valid) {
+      DirectoryDB::update_or_insert_item_meta(
+        DirectoryDB::$verified_date_field_id, $community_id, date('Y-m-d'));
+    }
+    return array('isValid' => $is_valid);
+  }
+
+  /* Run the validation for a Community, returning any errors.
+   *
+   * Note that any errors for the Name, Latitude, or Longitude fields are
+   * ignored.
+   */
+  public static function run_entry_validation($community_id) {
+    $exempt_field_ids = array(
+      DirectoryDB::$community_name_field_id, DirectoryDB::$latitude_field_id,
+      DirectoryDB::$longitude_field_id,
+    );
+
+    $entry = FrmEntry::getOne($community_id);
+    $data = array('form_id' => 2, 'item_key' => $entry->item_key, 'item_meta' => array());
+    $metas = FrmEntryMeta::getAll(array('item_id' => $entry->id));
+    foreach ($metas as $meta) {
+      $data['item_meta'][$meta->field_id] = $meta->meta_value;
+    }
+    $errors = FrmEntryValidate::validate($data);
+
+    foreach ($exempt_field_ids as $exempt_field) {
+      $field_key = "field{$exempt_field}";
+      if (array_key_exists($field_key, $errors)) {
+        unset($errors[$field_key]);
+      }
+    }
+    return $errors;
   }
 
 }
