@@ -921,43 +921,54 @@ body.error404.incsub_wiki
       font-weight: bold
 
 
-// Elm Gallery Modals
+/* Elm Gallery Modals */
 .gallery-modal
-  /* Use opacity instead of display to show modal, allowing for transitions
-   * since display is not animateable. The prevent interaction with the
-   * transparent element, we reduce the size.
-   * TODO: use mdgriffith/elm-style-animation to queue display change followed by opacity change!
-   */
+  /* Take up the full window size */
   .modal, .modal-backdrop
-    transition: opacity 0.5s
-    width: 0
-    height: 0
-    display: flex
-    visibility: hidden
-    &.show
-      width: 100%
-      height: 100%
-      visibility: visible
-  /* Vary the maximum lightbox width for different screen sizes */
+    width: 100%
+    height: 100%
+  .modal-backdrop
+    opacity: 0.5
+  .modal-dialog-background, .modal-dialog-foreground
+    /* Show a dark grey background in non-image areas */
+    background-color: #292B2C
+    /* Center & contain the image in the modal */
+    background-size: contain
+    background-position: center
+    background-repeat: no-repeat
+    /* Fade in new images */
   .modal-dialog
+    /* Fix overlay of the control & background image dialogs */
+    position: absolute
+    /* Ignore Bootstrap's modal width & margin */
+    max-width: inherit
+    margin-top: 0
+    /* Vary the maximum lightbox width for different screen sizes */
     +media-breakpoint-only(xs)
-      max-width: 97%
+      width: 95%
+      height: 95vh
     +media-breakpoint-up(sm)
-      max-width: 90%
+      width: 90%
+      height: 90vh
     +media-breakpoint-up(lg)
-      max-width: 85%
+      width: 85%
+      height: 85vh
+    .modal-content
+      /* Hide the white modal background & border */
+      background: transparent
+      border: none
+      /* Make sure the content takes up the full modal height */
+      height: 100%
+  /* Style the icon buttons & their hover gradients */
   .modal-body
-    /* Use relative positioning so we can position the children absolutely */
-    position: relative
-    /* Have the image pushed to the edges of the modal */
-    padding: 0
+    /* Position the Close button in the upper-right */
     .modal-close
       cursor: pointer
       position: absolute
       top: 2.5%
       right: 2.5%
     .modal-prev, .modal-next
-      /* Make the previous/next icons take up almost half the image width */
+      /* Make the hover areas take up almost half the modal width */
       width: 40%
       display: flex
       align-items: center
@@ -966,10 +977,10 @@ body.error404.incsub_wiki
       position: absolute
       top: 0
       cursor: pointer
-      /* Center chevron in circle */
+      /* Center the chevron icons in their circles */
       & i.fa-inverse
         padding-top: 0.1rem
-      /* Style ::before element for gradient transition */
+      /* Use the ::before elements to show a gradient on hover */
       &:before
         transition: opacity 0.45s
         opacity: 0
@@ -979,8 +990,10 @@ body.error404.incsub_wiki
         position: absolute
         top: 0
         left: 0
+      /* Fade the gradient in using it's opacity */
       &:hover:before
         opacity: 1
+    /* Position the next/previous areas/icons & set the hover gradients */
     .modal-prev
       left: 0
       & .fa-stack
@@ -988,7 +1001,6 @@ body.error404.incsub_wiki
         /* Center chevron in circle */
         & i.fa-inverse
           padding-right: 0.3rem
-      background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0))
       &:before
         background-image: linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0))
     .modal-next
@@ -998,6 +1010,5 @@ body.error404.incsub_wiki
         /* Center chevron in circle */
         & i.fa-inverse
           padding-left: 0.3rem
-      background: linear-gradient(to left, rgba(0,0,0,0), rgba(0,0,0,0))
       &:before
         background: linear-gradient(to left, rgba(0,0,0,0.4), rgba(0,0,0,0))

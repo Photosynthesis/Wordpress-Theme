@@ -190,12 +190,18 @@ update msg model =
 
         GalleryMsg subMsg ->
             let
+                galleryConfig =
+                    Gallery.Config .thumbnailUrl .imageUrl
+
                 updatedModel =
                     case model.community of
                         RemoteData.Success community ->
                             { model
                                 | communityGallery =
-                                    Gallery.update subMsg model.communityGallery <|
+                                    Gallery.update galleryConfig
+                                        subMsg
+                                        model.communityGallery
+                                    <|
                                         allImages community
                             }
 
