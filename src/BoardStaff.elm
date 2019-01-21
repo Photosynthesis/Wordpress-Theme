@@ -54,9 +54,10 @@ update _ m =
 view : Model -> Html msg
 view m =
     div []
-        [ h1 [] [ text "FIC Staff" ]
+        [ h1 [ class "mb-4" ] [ text "FIC Staff" ]
         , div [] <| List.intersperse (hr [] []) <| List.map renderProfile m.staff
-        , h1 [ class "mt-4" ] [ text "Board of Directors" ]
+        , hr [] []
+        , h1 [ class "my-4" ] [ text "Board of Directors" ]
         , div [] <| List.intersperse (hr [] []) <| List.map renderProfile m.board
         ]
 
