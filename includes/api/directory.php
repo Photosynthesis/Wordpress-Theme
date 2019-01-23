@@ -437,6 +437,8 @@ SQL;
 
     self::unserialize_and_convert_case($entry);
 
+    $entry['name'] = html_entity_decode($entry['name']);
+
     // Gallery
     if (is_array($entry['galleryImageIds']) && sizeof($entry['galleryImageIds']) > 0) {
       $entry['galleryImages'] = array();
