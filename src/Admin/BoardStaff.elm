@@ -21,6 +21,7 @@ import Html
         , h2
         , h3
         , div
+        , span
         , form
         , table
         , tr
@@ -185,6 +186,8 @@ type ProfileMsg
     | ProfileName Int String
     | ProfileImage Int String
     | ProfileBio Int String
+    | MoveProfileUp Int
+    | MoveProfileDown Int
     | DeleteProfile Int
 
 
@@ -202,6 +205,12 @@ updateProfile msg profiles =
 
         ProfileBio index bio ->
             updateArray index profiles <| \p -> { p | bio = bio }
+
+        MoveProfileUp index ->
+            moveUp index profiles
+
+        MoveProfileDown index ->
+            moveDown index profiles
 
         DeleteProfile index ->
             deleteArray index profiles
@@ -303,6 +312,30 @@ profileForms msg prefix profiles =
             in
                 div [ style [ ( "clear", "both" ) ] ]
                     [ h3 [] [ text profile.name ]
+                    , div []
+                        [ button
+                            [ type_ "button"
+                            , class "button"
+                            , onClick <| msg <| MoveProfileUp i
+                            ]
+                            [ span
+                                [ class "dashicons dashicons-arrow-up-alt"
+                                , style [ ( "margin-top", "0.15em" ) ]
+                                ]
+                                []
+                            ]
+                        , button
+                            [ type_ "button"
+                            , class "button"
+                            , onClick <| msg <| MoveProfileDown i
+                            ]
+                            [ span
+                                [ class "dashicons dashicons-arrow-down-alt"
+                                , style [ ( "margin-top", "0.15em" ) ]
+                                ]
+                                []
+                            ]
+                        ]
                     , table [ class "form-table" ]
                         [ formRow (formLabel (makeId "name") "Name") <|
                             input
@@ -386,3 +419,37 @@ deleteArray index arr =
             Array.slice (index + 1) (Array.length arr) arr
     in
         Array.append left right
+
+
+{-| Move an index up in the array.
+-}
+moveUp : Int -> Array a -> Array a
+moveUp index array =
+    if index <= 0 then
+        array
+    else
+        swapIndexes index (index - 1) array
+
+
+{-| Move an index down in the array.
+-}
+moveDown : Int -> Array a -> Array a
+moveDown index array =
+    if index >= (Array.length array - 1) then
+        array
+    else
+        swapIndexes index (index + 1) array
+
+
+{-| Swap the values at the given indexes in an array
+-}
+swapIndexes : Int -> Int -> Array a -> Array a
+swapIndexes fromIndex toIndex initialArray =
+    Array.get toIndex initialArray
+        |> Maybe.andThen
+            (\toItem ->
+                Array.get fromIndex initialArray
+                    |> Maybe.map (\fromItem -> Array.set toIndex fromItem initialArray)
+                    |> Maybe.map (\array -> Array.set fromIndex toItem array)
+            )
+        |> Maybe.withDefault initialArray
