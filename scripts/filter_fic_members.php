@@ -9,7 +9,6 @@ $membership_sub_product_id = 14602;
 
 $user_ids = (new Groups_Group($fic_membership_group_id))->user_ids;
 
-$no_active_sub = array();
 foreach ($user_ids as $user_id) {
   $active_subs = get_posts(array(
     'numberposts' => -1,
@@ -31,12 +30,8 @@ foreach ($user_ids as $user_id) {
     if ($found_membership_sub) { break; }
   }
   if (!$found_membership_sub) {
-    $no_active_sub[] = $user_id;
+    Groups_User_Group::delete($user_id, $fic_membership_group_id);
   }
-}
-
-foreach ($no_active_sub as $user_id) {
-  Groups_User_Group::delete($user_id, $fic_membership_group_id);
 }
 
 ?>
