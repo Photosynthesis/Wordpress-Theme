@@ -33,6 +33,8 @@ class APIDirectory
    *    - id
    *    - name
    *    - slug
+   *    - isOwner
+   *    - isAdmin
    *    - image
    *    - missionStatement
    *    - description
@@ -84,6 +86,8 @@ class APIDirectory
    *        - year
    *        - info
    *    - mapCoordinates
+   *        - latitude
+   *        - longitude
    *    - landStatus
    *    - landSizeAmount
    *    - landSizeUnits
@@ -149,18 +153,7 @@ class APIDirectory
    *
    *
    *    TODO:
-   *    * isOwner
-   *    * isAdmin
-   *    * Cohousing fields
-   *    * lat/long
-   *
-   *    * Special message if hidden by user
-   *    * Create nonce in shortcode for checking user status, send to Elm, add
-   *      to AJAX req header:
-   *      https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/
-   *    * Validate listing route
-   *        - turn shortcode into api route, check auth, validate, return OK or list of errors
-   *
+   *     * Special message if hidden by user? We may remove that option though
    *
    */
   public static function entry($data) {
@@ -313,7 +306,6 @@ SQL;
     foreach ($public_fields as $field_id => $json_key) {
       $data[$json_key] = $field_to_meta[$field_id]->meta_value;
     }
-    // TODO: If Owner, add additional fields?
     return self::clean_detail_entry($data);
   }
 
