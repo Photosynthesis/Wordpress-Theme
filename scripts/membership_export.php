@@ -32,8 +32,9 @@ foreach ($user_ids as $user_id) {
 }
 
 $file = fopen('membership_export.csv', 'w');
+  fputcsv($file, array('email', 'firstname', 'lastname', 'company'), ',');
 foreach ($data as $row) {
-  fputcsv($file, array($row['email'], $row['firstname'], $row['lastname'], $row['company']), ';');
+  fputcsv($file, array($row['email'], $row['firstname'], $row['lastname'], $row['company']), ',');
 }
 fclose($file);
 
