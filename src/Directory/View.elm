@@ -216,7 +216,7 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
                     sectionHtml "Video Gallery" <|
                         Html.iframe
                             [ type_ "text/html"
-                            , class "embed-responsive"
+                            , class "embed-responsive mb-3"
                             , width 720
                             , height 480
                             , src
