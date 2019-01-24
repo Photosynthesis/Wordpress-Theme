@@ -606,30 +606,15 @@ SQL;
   /* Customize the Place Order text on the Checkout Page */
   public static function customize_place_order_button_text($button_text) {
     if (WC_Subscriptions_Cart::cart_contains_subscription()) {
-      $contains_membership = false;
-      $contains_donation = false;
-      $contains_other_product = false;
-
       foreach (WC()->cart->cart_contents as $cart_item) {
         $product = $cart_item['data'];
         $product_id = $product->is_type('variable') || $product->is_type('subscription_variation')
           ? $product->get_parent_id() : $product->get_id();
         if ($product_id === self::membership_product_id) {
-          $contains_membership = true;
+          return "Join";
         } else if ($product_id === self::general_donation_product_id) {
-          $contains_donation = true;
-        } else {
-          $contains_other_product = true;
-          // TODO: find out if we should customize the text; just return for now
-          // see issue #1393
-          return $button_text;
+          return "Donate";
         }
-      }
-
-      if ($contains_donation) {
-        return "Donate";
-      } else if ($contains_membership) {
-        return "Join";
       }
     }
     return $button_text;
