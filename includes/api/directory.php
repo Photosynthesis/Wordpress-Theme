@@ -721,23 +721,24 @@ SQL;
       }
     }
 
-    // Add Search Filter
-    // TODO: Will need to change this when we write our own detail view
+    // Handle Search Filter - filter by entries that have matching meta values
     if ($data['search']) {
-      $post_content_select = ", post_content";
       if (is_array($data['search'])) { $data['search'] = join(" ", $data['search']); }
       $search_values = explode(" ", $data['search']);
-      $selects[] = "posts.post_content";
-      $where_clauses = array();
+      $search_where_clause = array();
       foreach ($search_values as $search_value) {
         $escaped = esc_sql($search_value);
-        $where_clauses[] = "posts.post_content LIKE '%{$escaped}%'";
-        $where_clauses[] = "posts.post_title LIKE '%{$escaped}%'";
+        $search_where_clause[] = "meta_value LIKE '%{$escaped}%'";
       }
-      $where_clauses = "(" . join(" OR ", $where_clauses) . ")";
-      $wheres .= " AND {$where_clauses}";
-    } else {
-      $post_content_select = "";
+      $search_where_clause = "(" . join(" OR ", $search_where_clause) . ")";
+      $search_query = <<<SQL
+SELECT DISTINCT item_id
+FROM {$wpdb->prefix}frm_item_metas
+WHERE {$search_where_clause}
+SQL;
+      $search_entry_ids = $wpdb->get_results($search_query, ARRAY_N);
+      $search_entry_ids = array_map(function($a) { return $a[0]; }, $search_entry_ids);
+      $wheres .= " AND (items.id IN (" . join(", ", $search_entry_ids) . ") )";
     }
 
     if (sizeof($selects) > 0) {
@@ -778,7 +779,7 @@ SELECT
   image_post_id_metas.meta_value AS image_post_id {$selects}
 FROM {$wpdb->prefix}frm_items AS items
 INNER JOIN
-  (SELECT ID, post_type, post_status, post_title, post_name {$post_content_select}
+  (SELECT ID, post_type, post_status, post_title, post_name
    FROM {$wpdb->prefix}posts AS posts
    WHERE (`post_type`='directory' AND `post_status`='publish')
   ) AS posts ON posts.ID=items.post_id
