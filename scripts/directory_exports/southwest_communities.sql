@@ -1,4 +1,5 @@
 SELECT 
+    p.post_title AS community_name,
     names.meta_value AS contact_name,
     emails.meta_value as contact_email,
     countries.meta_value AS country,
@@ -6,6 +7,11 @@ SELECT
     zip_codes.meta_value AS zip_code
 
 FROM 3uOgy46w_frm_items AS i
+
+-- COMMUNITY
+RIGHT JOIN
+    (SELECT * FROM 3uOgy46w_posts WHERE post_type='directory')
+    AS p on p.ID=i.post_id
 
 -- NAME
 RIGHT JOIN
