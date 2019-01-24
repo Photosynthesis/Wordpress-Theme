@@ -437,8 +437,6 @@ SQL;
 
     self::unserialize_and_convert_case($entry);
 
-    $entry['name'] = html_entity_decode($entry['name']);
-
     // Gallery
     if (is_array($entry['galleryImageIds']) && sizeof($entry['galleryImageIds']) > 0) {
       $entry['galleryImages'] = array();
@@ -575,6 +573,21 @@ SQL;
     foreach ($required_bool_fields as $field) {
       if (!isset($entry[$field]) || is_null($entry[$field])) {
         $entry[$field] = false;
+      }
+    }
+
+    // Decode any html entities in strings or arrays of strings
+    foreach ($entry as $field => $value) {
+      $is_string_field = is_string($value);
+      $is_string_array = is_array($value) && is_string($value[0]);
+      if ($is_string_field) {
+        $entry[$field] = html_entity_decode($value);
+      } else if ($is_string_array) {
+        $new_value = array();
+        foreach ($entry[$field] as $field_value) {
+          $new_value[] = html_entity_decode($field_value);
+        }
+        $entry[$field] = $new_value;
       }
     }
 
