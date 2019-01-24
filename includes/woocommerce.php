@@ -585,6 +585,13 @@ SQL;
       return $text;
     }
   }
+  /* Name Your Price Products need their Add to Cart text changed here as well */
+  public static function customize_nyp_variation_add_to_cart_text($data, $product, $variation) {
+    if ($product->get_id() === self::general_donation_product_id) {
+      $data['add_to_cart_text'] = "Donate";
+    }
+    return $data;
+  }
   /* Change the Resubscribe Button Text for Specific Products */
   public static function customize_resubscribe_cart_button_text($text, $product_id) {
     if ($product_id == self::membership_product_id) {
@@ -663,6 +670,7 @@ add_action('woocommerce_process_product_file_download_paths', array('ThemeWooCom
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
 add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'));
 add_filter('theme_store_variation_button_text', array('ThemeWooCommerce', 'customize_variation_cart_button_text'), 10, 2);
+add_filter('woocommerce_available_variation', array('ThemeWooCommerce', 'customize_nyp_variation_add_to_cart_text'), 11, 3);
 add_filter('theme_store_resubscribe_button_text', array('ThemeWooCommerce', 'customize_resubscribe_cart_button_text'));
 add_filter('woocommerce_order_button_text', array('ThemeWooCommerce', 'customize_place_order_button_text'), 11);
 
