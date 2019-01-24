@@ -574,18 +574,23 @@ SQL;
   }
 
   const membership_product_id = 14602;
-  /* Change the Add to Cart Button Text for the Membership Product to "Join" */
-  public static function membership_subscribe_text($text, $product_id) {
+  const general_donation_product_id = 14601;
+  /* Change the Add to Cart Button Text for Variable Products */
+  public static function customize_variation_cart_button_text($text, $product_id) {
     if ($product_id == self::membership_product_id) {
       return "Join";
+    } else if ($product_id == self::general_donation_product_id) {
+      return "Donate";
     } else {
       return $text;
     }
   }
-  /* Change the Resubscribe Button Text for the Membership Product to "Rejoin" */
-  public static function membership_resubscribe_text($text, $product_id) {
+  /* Change the Resubscribe Button Text for Specific Products */
+  public static function customize_resubscribe_cart_button_text($text, $product_id) {
     if ($product_id == self::membership_product_id) {
       return "Rejoin";
+    } else if ($product_id == self::general_donation_product_id) {
+      return "Donate";
     } else {
       return $text;
     }
@@ -625,7 +630,7 @@ add_action('woocommerce_subscription_renewal_payment_failed', array('ThemeWooCom
 add_action('woocommerce_process_product_file_download_paths', array('ThemeWooCommerce', 'give_download_access_and_notify'), 11, 3);
 add_shortcode('fic_accepted_payment_methods', array('ThemeWooCommerce', 'accepted_payment_methods'));
 add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'));
-add_filter('theme_store_variation_button_text', array('ThemeWooCommerce', 'membership_subscribe_text'), 10, 2);
-add_filter('theme_store_resubscribe_button_text', array('ThemeWooCommerce', 'membership_resubscribe_text'));
+add_filter('theme_store_variation_button_text', array('ThemeWooCommerce', 'customize_variation_cart_button_text'), 10, 2);
+add_filter('theme_store_resubscribe_button_text', array('ThemeWooCommerce', 'customize_resubscribe_cart_button_text'));
 
 ?>
