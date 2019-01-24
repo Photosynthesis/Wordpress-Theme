@@ -6,8 +6,8 @@ module Directory.Update exposing (update)
 import Directory.Commands as Commands
 import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model, paginationConfig)
-import Directory.Pagination as Pagination exposing (Pagination)
-import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..), reverse)
+import Directory.Pagination as Pagination
+import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..))
 import Gallery
 import RemoteData
 

@@ -1,4 +1,4 @@
-module Map exposing (..)
+module Map exposing (Map, Coords, Marker, render)
 
 {-| This module is responsible for specifying & rendering Google Maps.
 
@@ -7,7 +7,7 @@ The webcomponents it creates are provided by the
 
 -}
 
-import Html exposing (Html, text)
+import Html exposing (Html)
 import Html.Attributes exposing (attribute)
 import Json.Encode as Encode exposing (Value)
 

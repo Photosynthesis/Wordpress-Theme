@@ -145,7 +145,7 @@ communityID =
 communityStatus : Decoder CommunityStatus
 communityStatus =
     let
-        decode str =
+        decoder str =
             if String.contains "established" str then
                 Ok Established
             else if String.contains "re-forming" str then
@@ -158,7 +158,7 @@ communityStatus =
                 Err <| "Could not Decode " ++ str
     in
         Decode.string
-            |> Decode.andThen (String.toLower >> decode >> fromResult)
+            |> Decode.andThen (String.toLower >> decoder >> fromResult)
 
 
 extraStatusInfo : Decoder ExtraStatusInfo
@@ -171,7 +171,7 @@ extraStatusInfo =
 visitorsWelcome : Decoder VisitorsWelcome
 visitorsWelcome =
     let
-        decode str =
+        decoder str =
             if str == "yes" then
                 Ok Welcome
             else if String.contains "rarely" str then
@@ -182,13 +182,13 @@ visitorsWelcome =
                 Err <| "Could not Decode " ++ str
     in
         Decode.string
-            |> Decode.andThen (String.toLower >> decode >> fromResult)
+            |> Decode.andThen (String.toLower >> decoder >> fromResult)
 
 
 membersWelcome : Decoder MembersWelcome
 membersWelcome =
     let
-        decode str =
+        decoder str =
             if str == "yes" then
                 Ok Yes
             else if str == "no" then
@@ -199,7 +199,7 @@ membersWelcome =
                 Err <| "Could not Decode " ++ str
     in
         Decode.string
-            |> Decode.andThen (String.toLower >> decode >> fromResult)
+            |> Decode.andThen (String.toLower >> decoder >> fromResult)
 
 
 communityType : Decoder CommunityType

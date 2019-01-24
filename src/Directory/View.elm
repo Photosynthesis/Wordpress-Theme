@@ -11,13 +11,12 @@ import Directory.Pagination as Pagination exposing (Pagination)
 import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..), reverse)
 import Gallery
 import Html exposing (Html, text)
-import Html.Attributes exposing (attribute, class, src, alt, href, name, type_, checked, height, width, value, target, id, title)
+import Html.Attributes exposing (class, src, alt, href, name, type_, checked, height, width, value, target, id, title)
 import Html.Events exposing (onClick, onInput, onSubmit, onWithOptions, defaultOptions)
 import Html.Keyed as Keyed
 import Json.Decode as Decode
 import Map
 import Markdown
-import Regex exposing (HowMany(All), regex)
 import RemoteData exposing (WebData)
 
 
@@ -283,25 +282,25 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
             , renderNonEmpty community.keywords <|
                 section "Keywords"
             , Html.map GalleryMsg <|
-                Gallery.modal galleryConfig communityGallery
+                Gallery.modal communityGallery
             ]
 
 
 {-| Render non-empty strings only.
 -}
 renderNonEmpty : String -> (String -> Html msg) -> Html msg
-renderNonEmpty value renderer =
-    if value == "" then
+renderNonEmpty value_ renderer =
+    if value_ == "" then
         text ""
     else
-        renderer value
+        renderer value_
 
 
 {-| Render the value if present.
 -}
 renderJust : Maybe a -> (a -> Html msg) -> Html msg
-renderJust value renderer =
-    Maybe.map renderer value |> Maybe.withDefault (text "")
+renderJust value_ renderer =
+    Maybe.map renderer value_ |> Maybe.withDefault (text "")
 
 
 {-| Render a non-empty string if present & a blank node otherwise.
@@ -363,8 +362,8 @@ detailRightColumn community =
                         ]
             ]
 
-        urlItem name value =
-            renderNonEmpty value <| boldLabel name << textLink
+        urlItem name_ value_ =
+            renderNonEmpty value_ <| boldLabel name_ << textLink
 
         renderAddress address =
             Html.li []
@@ -403,10 +402,10 @@ detailRightColumn community =
                     ]
                 ]
 
-        extraStatusInfo title label info =
+        extraStatusInfo title_ label info =
             Html.li []
                 [ Html.div []
-                    [ Html.h3 [ class "text-center" ] [ text title ]
+                    [ Html.h3 [ class "text-center" ] [ text title_ ]
                     , renderNonEmpty info.year <| boldLabelText label
                     , renderNonEmpty info.info <| \i -> Html.p [] [ text i ]
                     ]
@@ -421,11 +420,11 @@ detailRightColumn community =
         textLink url =
             Html.a [ href url, target "_blank" ] [ text url ]
 
-        boldLabel label value =
-            Html.li [] [ Html.b [] [ text <| label ++ ":" ], text " ", value ]
+        boldLabel label value_ =
+            Html.li [] [ Html.b [] [ text <| label ++ ":" ], text " ", value_ ]
 
-        boldLabelText label value =
-            boldLabel label <| text value
+        boldLabelText label value_ =
+            boldLabel label <| text value_
     in
         Html.div [ class "col-24 col-sm-10" ]
             [ Html.div [ class "card" ]
@@ -447,9 +446,9 @@ detailInfoBlocks community =
                     ]
                 ]
 
-        infoItem ( title, content ) =
+        infoItem ( title_, content ) =
             Html.li [ class "pb-2" ]
-                [ Html.b [] [ text title, text ":" ], text " ", content ]
+                [ Html.b [] [ text title_, text ":" ], text " ", content ]
 
         infoBlockSublist header l =
             case l of
@@ -469,11 +468,11 @@ detailInfoBlocks community =
             Maybe.map (List.singleton << (\c -> ( header, c )) << toHtml) maybeContent
                 |> Maybe.withDefault []
 
-        stringInfoItem header value =
-            if String.isEmpty value then
+        stringInfoItem header value_ =
+            if String.isEmpty value_ then
                 []
             else
-                [ ( header, text value ) ]
+                [ ( header, text value_ ) ]
 
         landAmountAndUnits amount =
             text <|
@@ -629,8 +628,8 @@ renderStatus status =
 visitorsWelcome : VisitorsWelcome -> Html msg
 visitorsWelcome welcomeStatus =
     let
-        visitorsWelcomeClass welcomeStatus =
-            case welcomeStatus of
+        visitorsWelcomeClass welcomeStatus_ =
+            case welcomeStatus_ of
                 Welcome ->
                     "text-success"
 
@@ -647,8 +646,8 @@ visitorsWelcome welcomeStatus =
 membersWelcome : MembersWelcome -> Html msg
 membersWelcome welcomeStatus =
     let
-        membersWelcomeClass welcomeStatus =
-            case welcomeStatus of
+        membersWelcomeClass welcomeStatus_ =
+            case welcomeStatus_ of
                 Yes ->
                     "text-success"
 
@@ -911,7 +910,7 @@ pagination route communityPagination =
                 Html.li [ class "page-item" ]
                     [ navigateLink (ListingsRoute <| Routing.mapPage (always <| currentPage - 1) route)
                         "page-link"
-                        ("«")
+                        "«"
                     ]
             else
                 Html.li [ class "page-item disabled" ]
@@ -922,7 +921,7 @@ pagination route communityPagination =
                 Html.li [ class "page-item" ]
                     [ navigateLink (ListingsRoute <| Routing.mapPage (always <| currentPage + 1) route)
                         "page-link"
-                        ("»")
+                        "»"
                     ]
             else
                 Html.li [ class "page-item disabled" ]
@@ -974,7 +973,10 @@ pagination route communityPagination =
                     [ Html.span [ class "page-link" ] [ text <| toString page ] ]
             else
                 Html.li [ class "page-item" ]
-                    [ navigateLink (ListingsRoute <| Routing.mapPage (always page) route) "page-link" (toString page) ]
+                    [ navigateLink (ListingsRoute <| Routing.mapPage (always page) route)
+                        "page-link"
+                        (toString page)
+                    ]
     in
         List.concat
             [ [ backArrow ]
@@ -1005,21 +1007,21 @@ communityItem maybeCurrentDate community =
                 |> List.filter (not << String.isEmpty)
                 |> String.join ", "
 
-        imageElement name imageUrl =
+        imageElement name_ imageUrl =
             Keyed.node "div"
                 [ class "text-center text-sm-left" ]
                 [ ( "list-item-image-" ++ community.slug
                   , Html.img
                         [ src imageUrl
-                        , alt name
+                        , alt name_
                         , class "float-sm-left img-thumbnail mr-sm-2 mb-1"
                         ]
                         []
                   )
                 ]
 
-        maybeImage { name, thumbnailUrl } =
-            maybeHtml (imageElement name) thumbnailUrl
+        maybeImage image =
+            maybeHtml (imageElement image.name) image.thumbnailUrl
     in
         Html.a
             (class "list-group-item list-group-item-action"
@@ -1029,7 +1031,7 @@ communityItem maybeCurrentDate community =
                 [ Html.div [ class "clearfix" ]
                     [ maybeImage community
                     , Html.h2 []
-                        [ text <| Regex.replace All (regex "&amp;") (always "&") community.name
+                        [ text community.name
                         , Html.br [] []
                         , Html.small []
                             [ text <| address community ++ " - "
@@ -1058,6 +1060,6 @@ communityItem maybeCurrentDate community =
                 ]
             , Html.div [ class "small text-muted" ] <|
                 updatedOn maybeCurrentDate community
-                    ++ [ text " | " ]
-                    ++ createdOn maybeCurrentDate community
+                    ++ text " | "
+                    :: createdOn maybeCurrentDate community
             ]

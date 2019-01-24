@@ -31,10 +31,10 @@ TODO:
 -}
 
 import Animation
-import Html exposing (Html, div, text, img, a)
+import Html exposing (Html, div, img, a)
 import Html.Keyed as Keyed
-import Html.Attributes exposing (class, tabindex, src, href, style)
-import Html.Events exposing (onClick, onInput, onSubmit, onWithOptions, defaultOptions, keyCode)
+import Html.Attributes exposing (class, tabindex, src, href)
+import Html.Events exposing (onWithOptions, defaultOptions, keyCode)
 import Json.Decode as Decode
 import Time exposing (millisecond)
 
@@ -264,10 +264,10 @@ calcNextPrev allItems selected =
 {-| Render the Modal. This should always be done, even if the Modal has not
 been opened.
 -}
-modal : Config a -> Model a -> Html (Msg a)
-modal c model =
+modal : Model a -> Html (Msg a)
+modal model =
     let
-        ( modal, backdrop ) =
+        ( modal_, backdrop ) =
             case model.data of
                 Nothing ->
                     ( div
@@ -284,7 +284,7 @@ modal c model =
                     , div [ class "modal-backdrop" ] []
                     )
 
-                Just { selected } ->
+                Just _ ->
                     ( div
                         [ class "modal d-flex align-items-center justify-content-center"
                         , tabindex -1
@@ -331,7 +331,7 @@ modal c model =
     in
         Keyed.node "div"
             (class "gallery-modal" :: Animation.render model.style)
-            [ ( "gallery-modal", modal ), ( "gallery-backdrop", backdrop ) ]
+            [ ( "gallery-modal", modal_ ), ( "gallery-backdrop", backdrop ) ]
 
 
 {-| Render thumbnails using the given list.

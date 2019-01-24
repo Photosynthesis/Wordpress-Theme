@@ -25,7 +25,9 @@ type CommunityStatus
 {-| Additional Information about the Communitiy's Status.
 -}
 type alias ExtraStatusInfo =
-    { year : String, info : String }
+    { year : String
+    , info : String
+    }
 
 
 {-| The Visitor Policy of a Community.

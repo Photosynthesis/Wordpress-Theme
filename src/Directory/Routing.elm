@@ -250,11 +250,11 @@ filtersToQueryString filters =
 
         ( topLevelFilterString, otherFilters ) =
             List.foldl
-                (\( topLevelFilter, topLevelParameterName ) ( topLevelFilterString, otherFilters ) ->
-                    List.partition topLevelFilter otherFilters
+                (\( topLevelFilter, topLevelParameterName ) ( topLevelFilterString_, otherFilters_ ) ->
+                    List.partition topLevelFilter otherFilters_
                         |> Tuple.mapFirst
                             (List.map (makeTopLevelParameter topLevelParameterName)
-                                >> (::) topLevelFilterString
+                                >> (::) topLevelFilterString_
                                 >> String.join "&"
                             )
                 )
@@ -273,20 +273,20 @@ filtersToQueryString filters =
                 |> List.sortBy toString
                 |> List.map filterParamToQueryString
                 |> String.join ","
-                |> (\s ->
-                        if not (String.isEmpty s) then
-                            "filters=" ++ s
+                |> (\str ->
+                        if not (String.isEmpty str) then
+                            "filters=" ++ str
                         else
                             ""
                    )
     in
         List.filter (not << String.isEmpty) [ filterString, topLevelFilterString ]
             |> String.join "&"
-            |> (\s ->
-                    if String.isEmpty s then
+            |> (\str ->
+                    if String.isEmpty str then
                         ""
                     else
-                        "?" ++ s
+                        "?" ++ str
                )
 
 
@@ -411,7 +411,7 @@ For example, the `Communes` route will always return `[ CommunesFilter ]`.
 getInherentFilters : ListingsRoute -> List FilterParam
 getInherentFilters route =
     case route of
-        Listings _ filters ->
+        Listings _ _ ->
             []
 
         Communes _ _ ->

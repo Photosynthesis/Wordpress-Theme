@@ -7,8 +7,8 @@ import Date
 import Navigation
 import Task
 import Directory.Commands exposing (WPNonce(..))
-import Directory.Messages exposing (Msg(SetCurrentDate, UrlChange, CommunityPagination, GalleryMsg))
-import Directory.Model exposing (Model, paginationConfig)
+import Directory.Messages exposing (Msg(SetCurrentDate, UrlChange, GalleryMsg))
+import Directory.Model exposing (Model)
 import Directory.Routing exposing (Route(..), FilterParam(..), routeParser)
 import Directory.Update exposing (update)
 import Directory.View exposing (view)
@@ -20,7 +20,7 @@ main =
     Navigation.programWithFlags (routeParser >> UrlChange)
         { init = initialize
         , update = update
-        , subscriptions = \m -> (Sub.map GalleryMsg <| Gallery.subscriptions m.communityGallery)
+        , subscriptions = \m -> Sub.map GalleryMsg <| Gallery.subscriptions m.communityGallery
         , view = view
         }
 

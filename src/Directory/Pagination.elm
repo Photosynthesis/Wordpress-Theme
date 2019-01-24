@@ -36,7 +36,6 @@ TODO: Eventually:
   - fetchRequest per-args cache?
       - toString on args to get a (Dict String (Dict PageNumber Chunk))?
   - custom page sizes(+ reorganize items when changed)
-  - publish as separate package
 
 -}
 
@@ -116,7 +115,7 @@ getCurrent : Pagination a b -> List a
 getCurrent (Pagination { items, currentPage }) =
     Dict.get currentPage items
         |> Maybe.andThen RemoteData.toMaybe
-        |> Maybe.map (\(Chunk { items }) -> items)
+        |> Maybe.map (\(Chunk c) -> c.items)
         |> Maybe.withDefault []
 
 
@@ -246,9 +245,6 @@ jumpTo (Config config) ((Pagination pagination) as model) page =
         canJump =
             page > 0 && page <= getTotalPages (Pagination pagination)
 
-        jumpDifference =
-            page - getPage (Pagination pagination)
-
         updatedModel =
             if canJump then
                 Pagination { pagination | currentPage = page }
@@ -291,18 +287,13 @@ Modify the Page URL.
 update : Config a b -> Msg a -> Pagination a b -> ( Pagination a b, Cmd (Msg a) )
 update config msg (Pagination model) =
     case msg of
-        FetchPage page ((RemoteData.Failure e) as data) ->
-            let
-                _ =
-                    Debug.log "Fetch Error: "
-                        data
-            in
-                ( Pagination
-                    { model
-                        | items = Dict.insert page (RemoteData.Failure e) model.items
-                    }
-                , Cmd.none
-                )
+        FetchPage page (RemoteData.Failure e) ->
+            ( Pagination
+                { model
+                    | items = Dict.insert page (RemoteData.Failure e) model.items
+                }
+            , Cmd.none
+            )
 
         FetchPage page (RemoteData.Success { items, totalCount }) ->
             let
@@ -392,7 +383,7 @@ getFetches (Config config) (Pagination pagination) =
             Cmd.batch [ currentFetch, previousFetch, nextFetch ]
         else if currentPage > 1 then
             Cmd.batch [ currentFetch, previousFetch ]
-        else if (currentPage < totalPages || totalPages == 0) then
+        else if currentPage < totalPages || totalPages == 0 then
             Cmd.batch [ currentFetch, nextFetch ]
         else
             currentFetch
