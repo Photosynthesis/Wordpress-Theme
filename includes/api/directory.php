@@ -501,7 +501,7 @@ SQL;
 
     $float_fields = array('landSizeAmount');
     foreach ($float_fields as $field) {
-      if ($entry[$field]) {
+      if (isset($entry[$field])) {
         $entry[$field] = (float) $entry[$field];
       }
     }
@@ -554,8 +554,28 @@ SQL;
       }
     }
 
-    if (is_string($entry['networkAffiliations'])) {
-      $entry['networkAffiliations'] = array($entry['networkAffiliations']);
+    $string_or_array_fields = array(
+      'networkAffiliations', 'spiritualPractices', 'renewableSources',
+      'dietaryPractices',
+    );
+    foreach ($string_or_array_fields as $field) {
+      if (is_string($entry[$field])) {
+        $entry[$field] = array($entry[$field]);
+      }
+    }
+
+    // TODO: Fix these fields, they are required for published listings!
+    if (!$entry['location']) {
+      $entry['location'] = 'to be determined';
+    }
+    if (!$entry['contributeLabor']) {
+      $entry['contributeLabor'] = "No";
+    }
+    $required_bool_fields = array('hasJoinFee', 'hasRegularFees',);
+    foreach ($required_bool_fields as $field) {
+      if (!isset($entry[$field]) || is_null($entry[$field])) {
+        $entry[$field] = false;
+      }
     }
 
     return $entry;
