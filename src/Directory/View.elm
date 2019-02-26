@@ -168,27 +168,26 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
 
         leftColumn =
             Html.div [ class "col-24 col-sm-14" ]
-                [ renderJust (Maybe.map .imageUrl community.image) primaryImage
+                [ renderJust community.image primaryImage
                 , Html.h2 [] [ text "Mission Statement" ]
                 , Html.p [] [ text community.missionStatement ]
                 , Html.h2 [] [ text "Community Description" ]
                 , Markdown.toHtml [] community.description
                 ]
 
-        primaryImage imageSrc =
+        primaryImage : ImageData -> Html Msg
+        primaryImage ({ imageUrl, thumbnailUrl } as image) =
             let
-                linkWrapper inner =
-                    case community.image of
-                        Nothing ->
-                            inner
+                imageSrc =
+                    Maybe.withDefault imageUrl thumbnailUrl
 
-                        Just ({ thumbnailUrl } as image) ->
-                            Html.a
-                                [ href thumbnailUrl
-                                , target "_blank"
-                                , Gallery.open GalleryMsg image
-                                ]
-                                [ inner ]
+                linkWrapper inner =
+                    Html.a
+                        [ href imageUrl
+                        , target "_blank"
+                        , Gallery.open GalleryMsg image
+                        ]
+                        [ inner ]
             in
                 Html.div [ class "mb-2" ]
                     [ linkWrapper <|

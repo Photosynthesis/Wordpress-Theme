@@ -43,7 +43,7 @@ import Time exposing (millisecond)
 image type.
 -}
 type alias Config a =
-    { thumbnailUrl : a -> String
+    { thumbnailUrl : a -> Maybe String
     , imageUrl : a -> String
     }
 
@@ -347,7 +347,7 @@ thumbnails c =
                     ]
                     [ img
                         [ class "img-thumbnail"
-                        , src <| c.thumbnailUrl item
+                        , src <| Maybe.withDefault (c.imageUrl item) <| c.thumbnailUrl item
                         ]
                         []
                     ]

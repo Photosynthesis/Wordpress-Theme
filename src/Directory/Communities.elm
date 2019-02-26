@@ -134,7 +134,7 @@ type alias CohousingData =
 
 
 type alias ImageData =
-    { thumbnailUrl : String
+    { thumbnailUrl : Maybe String
     , imageUrl : String
     }
 

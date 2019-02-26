@@ -313,7 +313,7 @@ decodeCohousingStatus =
 imageData : Decoder ImageData
 imageData =
     decode ImageData
-        |> required "thumbnailUrl" string
+        |> optional "thumbnailUrl" (Decode.map Just string) Nothing
         |> required "imageUrl" string
 
 

@@ -317,7 +317,7 @@ SQL;
 
     // Primary Image
     if ($entry['image_post_id']) {
-      $entry['image'] = self::get_image_data($entry['image_post_id'], 'full');
+      $entry['image'] = self::get_image_data($entry['image_post_id'], 'large');
     } else {
       $entry['image'] = null;
     }
@@ -433,7 +433,10 @@ SQL;
     if (is_array($entry['galleryImageIds']) && sizeof($entry['galleryImageIds']) > 0) {
       $entry['galleryImages'] = array();
       foreach ($entry['galleryImageIds'] as $image_id) {
-        $entry['galleryImages'][] = self::get_image_data($image_id, 'thumbnail');
+        $img_data = self::get_image_data($image_id, 'thumbnail');
+        if (!is_null($img_data)) {
+          $entry['galleryImages'][] = $img_data;
+        }
       }
     }
     unset($entry['galleryImageIds']);
@@ -529,6 +532,9 @@ SQL;
       'dietaryPractices', 'healthcareOptions',
     );
     foreach ($tilde_array_fields as $field) {
+      if (!is_array($entry[$field])) {
+        continue;
+      }
       foreach ($entry[$field] as $i => $field_value) {
         $entry[$field][$i] = self::clean_escapes($field_value);
       }
@@ -877,6 +883,9 @@ SQL;
   /* Attempt to unserialize all fields & convert snake case fields to camel case */
   public static function unserialize_and_convert_case(&$entry) {
     foreach (array_keys($entry) as $key) {
+      if (is_array($entry[$key])) {
+        continue;
+      }
       // Unserialize Arrays
       $unserialized = unserialize($entry[$key]);
       if (is_array($unserialized)) {
@@ -894,13 +903,21 @@ SQL;
 
   /* Fetch the src & thumbnail src for an Image post. */
   private static function get_image_data($post_id, $size) {
+    $post_guid = get_post($post_id)->guid;
+    if (!$post_guid) {
+      return null;
+    } else {
+      $post_guid = str_replace('http://', 'https://', $post_guid);
+    }
     $size_src = wp_get_attachment_image_src($post_id, $size)[0];
     if (!$size_src) {
       $size_src = null;
+    } else {
+      $size_src = str_replace('http://', 'https://', $size_src);
     }
     return array(
-      'imageUrl' => str_replace('http://', 'https://', get_post($post_id)->guid),
-      'thumbnailUrl' => str_replace('http://', 'https://', $size_src),
+      'imageUrl' => $post_guid,
+      'thumbnailUrl' => $size_src,
     );
   }
 
