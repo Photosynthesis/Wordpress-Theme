@@ -2,7 +2,7 @@
   <!-- Show Membership Info, Newsletter Signup, & Social Icons --><?php
   $excluded_membership_footer_posts = array(
     'new-listing', 'contact-fic', 'place-ad', 'contact-communities-magazine',
-    'contact-a-community',
+    'contact-a-community', 'support',
   );
   if (!(is_woocommerce() || in_array(get_post()->post_name, $excluded_membership_footer_posts))) { ?>
   <div id='membership-footer' class='row'>
