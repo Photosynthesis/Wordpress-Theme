@@ -711,7 +711,7 @@ listingsReverse route =
                 "spiritual-and-religious/" ++ filtersToQueryString filterParams
 
             ReligiousCommunities page filterParams ->
-                "spiritual-and-religious" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                "spiritual-and-religious/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
             JewishCommunities 1 filterParams ->
                 "jewish-communities/" ++ filtersToQueryString filterParams
