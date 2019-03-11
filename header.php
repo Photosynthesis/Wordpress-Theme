@@ -18,6 +18,14 @@
     <link rel="shortcut icon" href="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/favicon.ico">
     <meta name="msapplication-config" content="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+    <!-- Global site tag (gtag.js) - Google Ads: 824163499 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-824163499"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-824163499');
+    </script>
   </head>
     <body <?php body_class(); ?>>
 

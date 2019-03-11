@@ -619,6 +619,26 @@ SQL;
     }
     return $button_text;
   }
+
+  public static function google_adwords_tracking($order_id) {
+    $order = wc_get_order($order_id);
+    $order_total = $order->get_total();
+    echo <<<HTML
+<!-- Event snippet for Purchase conversion page -->
+<script>
+gtag(
+  'event',
+  'conversion',
+  { 'send_to': 'AW-824163499/EDs3CLTGjJYBEKv5_ogD',
+    'transaction_id': '{$order_id}',
+    'currency': 'USD',
+    'value': {$order_total},
+  }
+);
+</script>
+HTML;
+
+  }
 }
 
 /* Move Cross Sells Below the Cart Totals */
@@ -658,5 +678,6 @@ add_filter('theme_store_variation_button_text', array('ThemeWooCommerce', 'custo
 add_filter('woocommerce_available_variation', array('ThemeWooCommerce', 'customize_nyp_variation_add_to_cart_text'), 11, 3);
 add_filter('theme_store_resubscribe_button_text', array('ThemeWooCommerce', 'customize_resubscribe_cart_button_text'));
 add_filter('woocommerce_order_button_text', array('ThemeWooCommerce', 'customize_place_order_button_text'), 11);
+add_action('woocommerce_thankyou', array('ThemeWooCommerce', 'google_adwords_tracking'));
 
 ?>
