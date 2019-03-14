@@ -1,5 +1,7 @@
 'use strict';
 
+import { Elm } from './Wholesale.elm';
+
 var $ = window.jQuery;
 
 if (isProduction) {
@@ -9,10 +11,9 @@ if (isProduction) {
 }
 
 $(document).ready(function() {
-  var Elm = require('./Wholesale.elm');
   var node = document.getElementById('elm-wholesale');
   if (node) {
-    var app = Elm.Wholesale.embed(node);
+    var app = Elm.Wholesale.init({ node: node });
 
     var stripeHandler = StripeCheckout.configure({
       key: stripeApiKey,

@@ -1,13 +1,17 @@
 'use strict';
 
+import { Elm } from './Admin/FlatRate.elm';
+
 var $ = window.jQuery;
 
 $(document).ready(function() {
   // Initialize the Elm application
-  var Elm = require('./Admin/FlatRate.elm');
   var node = document.getElementById('elm-admin-flat-rate');
   if (node) {
-    var app = Elm.Admin.FlatRate.embed(node, { nonce: themeAdminConfig.restNonce });
+    var app = Elm.Admin.FlatRate.init({
+      node: node,
+      flags: { nonce: themeAdminConfig.restNonce }
+    });
 
     // Scroll to the top of the page, unfocusing any inputs
     app.ports.scrollToTop.subscribe(function() {

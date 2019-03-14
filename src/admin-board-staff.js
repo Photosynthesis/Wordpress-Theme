@@ -1,12 +1,16 @@
 'use strict';
 
+import { Elm } from './Admin/BoardStaff.elm';
+
 var $ = window.jQuery;
 
 $(document).ready(function() {
-  var Elm = require('./Admin/BoardStaff.elm');
   var node = document.getElementById('elm-admin-board-staff');
   if (node) {
-    var app = Elm.Admin.BoardStaff.embed(node, { nonce: themeAdminConfig.restNonce });
+    var app = Elm.Admin.BoardStaff.init({
+      node: node,
+      flags: { nonce: themeAdminConfig.restNonce },
+    });
 
     // Scroll to the top of the page, unfocusing any inputs
     app.ports.scrollToTop.subscribe(function() {
