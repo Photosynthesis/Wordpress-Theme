@@ -1,6 +1,7 @@
 module BoardStaff exposing (main)
 
 import Admin.BoardStaff exposing (Profile, decodeProfile)
+import Browser
 import Html exposing (Html, div, h1, h2, hr, img, text)
 import Html.Attributes exposing (class, src, style)
 import Json.Decode as Decode exposing (Value, decodeValue)
@@ -9,7 +10,7 @@ import Markdown
 
 main : Program Value Model Msg
 main =
-    Html.programWithFlags
+    Browser.element
         { init = init
         , update = update
         , view = view
@@ -64,10 +65,10 @@ view m =
 
 renderProfile : Profile -> Html msg
 renderProfile p =
-    div [ style [ ( "font-size", "1rem" ) ] ]
+    div [ style "font-size" "1rem" ]
         [ h2 [] [ Markdown.toHtml [] p.name ]
         , div [ class "clearfix" ]
-            [ img [ class "alignleft", src p.image, style [ ( "max-width", "25%" ) ] ] []
+            [ img [ class "alignleft", src p.image, style "max-width" "25%" ] []
             , Markdown.toHtml [] p.bio
             ]
         ]

@@ -45,8 +45,8 @@ module.exports = {
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/,],
-        loader: 'elm-webpack-loader?warn=true,verbose=true' +
-          (isProduction ? '' : ',debug=true'),
+        loader: 'elm-webpack-loader?verbose=true' +
+          (isProduction ? ',optimize=true' : ',optimize=false'),
       },
       {
         test: /\.html$/,

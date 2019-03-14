@@ -1,5 +1,6 @@
 port module Wholesale exposing (Cents(..), Model, Msg(..), ProductSet, ProductSetItem, ResponseStatus(..), SingleProduct, SlugQuantities, VolumeDiscountProduct, aNewWe, additionalFields, allSingleProducts, bestOfCommunities, calculateTotals, centsAdd, collectStripeToken, communitiesDirectory, communitiesMagazine, getQuantity, groupFacilitation, init, main, parseIntOrZero, placeOrder, productSetItemTotal, productSetSubTotal, productSetTotal, renderProductSet, renderSingleProduct, renderVolumeDiscountProduct, singleProductTotal, stripeTokenReceived, toDollars, togetherResilient, unitedJudgement, update, view, volumeDiscountTotal, volumeDiscountUnitPrice, wisdomSet, wisdomVolumeFour, wisdomVolumeOne, wisdomVolumeThree, wisdomVolumeTwo, withinReach)
 
+import Browser
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -9,10 +10,10 @@ import Json.Decode as Decode exposing (Value)
 import Json.Encode as Encode
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    Html.program
-        { init = init
+    Browser.element
+        { init = always init
         , update = update
         , view = view
         , subscriptions = always <| stripeTokenReceived StripeTokenReceived
@@ -71,7 +72,7 @@ type alias SlugQuantities =
 getQuantity : SlugQuantities -> String -> Maybe Int
 getQuantity quantities slug =
     Dict.get slug quantities
-        |> Maybe.andThen (String.toInt >> Result.toMaybe)
+        |> Maybe.andThen String.toInt
 
 
 type Cents
@@ -90,23 +91,23 @@ toDollars (Cents i) =
             i // 100
 
         fractional =
-            rem i 100
+            remainderBy 100 i
 
         fractionalString =
-            case String.length (toString fractional) of
+            case String.length (String.fromInt fractional) of
                 0 ->
                     "00"
 
                 1 ->
-                    "0" ++ toString fractional
+                    "0" ++ String.fromInt fractional
 
                 2 ->
-                    toString fractional
+                    String.fromInt fractional
 
                 _ ->
-                    String.left 2 <| toString fractional
+                    String.left 2 <| String.fromInt fractional
     in
-    toString wholePart ++ "." ++ fractionalString
+    String.fromInt wholePart ++ "." ++ fractionalString
 
 
 type ResponseStatus
@@ -230,7 +231,7 @@ calculateTotals model =
                 |> List.map
                     (\sp ->
                         Dict.get sp.slug model.quantityBySlug
-                            |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                            |> Maybe.andThen String.toInt
                             |> Maybe.withDefault 0
                             |> singleProductTotal sp
                     )
@@ -259,14 +260,14 @@ calculateTotals model =
                 |> List.filterMap
                     (\sp ->
                         Dict.get sp.slug model.quantityBySlug
-                            |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                            |> Maybe.andThen String.toInt
                     )
                 |> List.sum
 
         -- These should count as 4 for shipping so we add the extra 3
         wisdomSetAdditionalShippingQuantity =
             Dict.get wisdomSet.slug model.quantityBySlug
-                |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                |> Maybe.andThen String.toInt
                 |> Maybe.map ((*) 3)
                 |> Maybe.withDefault 0
 
@@ -275,7 +276,7 @@ calculateTotals model =
                 |> List.filterMap
                     (\setItem ->
                         Dict.get setItem.slug model.quantityBySlug
-                            |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                            |> Maybe.andThen String.toInt
                     )
                 |> List.sum
 
@@ -391,7 +392,7 @@ update msg model =
                             { model | formError = "Could not reach server, please check your internet connection." }
 
                         Http.BadStatus r ->
-                            { model | formError = "Received error response from server(" ++ toString r.status.code ++ ") - please contact bookstore@ic.org." }
+                            { model | formError = "Received error response from server(" ++ String.fromInt r.status.code ++ ") - please contact bookstore@ic.org." }
 
                         Http.BadPayload errorMessage _ ->
                             { model | formError = "Received unexpected response from server(" ++ errorMessage ++ ") - please contact bookstore@ic.org." }
@@ -588,7 +589,7 @@ renderSingleProduct quantities ({ name, slug, msrp, description, pricePerUnit } 
 
         inputValue =
             maybeQuantity
-                |> Maybe.map (\q -> [ value <| toString q ])
+                |> Maybe.map (\q -> [ value <| String.fromInt q ])
                 |> Maybe.withDefault []
     in
     [ tr []
@@ -603,7 +604,7 @@ renderSingleProduct quantities ({ name, slug, msrp, description, pricePerUnit } 
                     ]
                 ]
             , div [ class "clearfix px-4 mr-4" ]
-                [ img [ src product.thumbnail, class "pull-left mb-1 mr-3", style [ ( "max-width", "25%" ) ] ] []
+                [ img [ src product.thumbnail, class "pull-left mb-1 mr-3", style "max-width" "25%" ] []
                 , em [] [ text <| "Suggested Retail Price: $" ++ msrp ]
                 , description
                 ]
@@ -633,11 +634,11 @@ renderProductSet : ProductSet -> String -> SlugQuantities -> List (Html Msg)
 renderProductSet ({ name, msrp, pricePerItem, setPrice, items } as pSet) setQuantity quantities =
     let
         maybeSetQuantity =
-            String.toInt setQuantity |> Result.toMaybe
+            String.toInt setQuantity
 
         setInputValue =
             maybeSetQuantity
-                |> Maybe.map (\q -> [ value <| toString q ])
+                |> Maybe.map (\q -> [ value <| String.fromInt q ])
                 |> Maybe.withDefault []
 
         setTotal =
@@ -649,11 +650,11 @@ renderProductSet ({ name, msrp, pricePerItem, setPrice, items } as pSet) setQuan
         renderedItems =
             List.map renderProductSetItem items
 
-        renderProductSetItem ({ name, slug } as item) =
+        renderProductSetItem ({ slug } as item) =
             let
                 inputValue =
                     getQuantity quantities slug
-                        |> Maybe.map (\q -> [ value <| toString q ])
+                        |> Maybe.map (\q -> [ value <| String.fromInt q ])
                         |> Maybe.withDefault []
 
                 total =
@@ -670,7 +671,7 @@ renderProductSet ({ name, msrp, pricePerItem, setPrice, items } as pSet) setQuan
                 [ td []
                     [ b []
                         [ a [ href <| "/community-bookstore/product/" ++ slug ++ "/", target "_blank" ]
-                            [ text name ]
+                            [ text item.name ]
                         ]
                     ]
                 , td []
@@ -693,7 +694,7 @@ renderProductSet ({ name, msrp, pricePerItem, setPrice, items } as pSet) setQuan
         [ td [ colspan 4, class "pt-4" ]
             [ h2 [] [ b [] [ text name ] ]
             , div [ class "clearfix px-4 mr-4" ]
-                [ img [ src pSet.thumbnail, class "pull-left mr-3 mb-1", style [ ( "max-width", "25%" ) ] ] []
+                [ img [ src pSet.thumbnail, class "pull-left mr-3 mb-1", style "max-width" "25%" ] []
                 , em [] [ text <| "Suggested Retail Price: $" ++ msrp ++ " Each" ]
                 , p [ class "mr-4" ] [ text pSet.description ]
                 ]
@@ -748,7 +749,6 @@ renderVolumeDiscountProduct ({ name, thumbnail, url, description, priceTiers } a
 
         productTotal =
             String.toInt quantity
-                |> Result.toMaybe
                 |> Maybe.map (volumeDiscountTotal product >> (\s -> "$" ++ toDollars s))
                 |> Maybe.withDefault ""
                 |> text
@@ -761,7 +761,7 @@ renderVolumeDiscountProduct ({ name, thumbnail, url, description, priceTiers } a
                     ]
                 ]
             , div [ class "clearfix px-4 mr-4" ]
-                [ img [ src thumbnail, class "pull-left mr-3 mb-1", style [ ( "max-width", "25%" ) ] ] []
+                [ img [ src thumbnail, class "pull-left mr-3 mb-1", style "max-width" "25%" ] []
                 , div [] <| List.map (text >> List.singleton >> p []) description
                 , describeVolumeDiscount
                 ]
@@ -790,7 +790,7 @@ renderVolumeDiscountProduct ({ name, thumbnail, url, description, priceTiers } a
 -}
 parseIntOrZero : String -> Int
 parseIntOrZero =
-    String.toInt >> Result.toMaybe >> Maybe.withDefault 0
+    String.toInt >> Maybe.withDefault 0
 
 
 

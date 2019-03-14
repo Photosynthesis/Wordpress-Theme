@@ -2,7 +2,7 @@ port module Admin.BoardStaff exposing (Profile, decodeProfile, main)
 
 import Admin.Utils
     exposing
-        ( SubmissionStatus(AwaitingResponse)
+        ( SubmissionStatus(..)
         , adminGet
         , adminPost
         , formLabel
@@ -13,7 +13,8 @@ import Admin.Utils
         , submissionNotice
         , submissionSpinner
         )
-import Array.Hamt as Array exposing (Array)
+import Array exposing (Array)
+import Browser
 import Html
     exposing
         ( Html
@@ -55,7 +56,7 @@ import RemoteData exposing (WebData)
 
 main : Program Flags Model Msg
 main =
-    Html.programWithFlags
+    Browser.element
         { init = init
         , update = update
         , view = view
@@ -226,7 +227,7 @@ getData : Model -> Cmd Msg
 getData m =
     let
         decoder =
-            Decode.map2 (,)
+            Decode.map2 (\a b -> ( a, b ))
                 (Decode.field "board" decodeProfiles)
                 (Decode.field "staff" decodeProfiles)
 
@@ -250,8 +251,8 @@ saveData m =
 
         body =
             Encode.object
-                [ ( "board", Encode.list <| List.map encodeProfile <| Array.toList m.board )
-                , ( "staff", Encode.list <| List.map encodeProfile <| Array.toList m.staff )
+                [ ( "board", Encode.list encodeProfile <| Array.toList m.board )
+                , ( "staff", Encode.list encodeProfile <| Array.toList m.staff )
                 ]
     in
     adminPost "board-staff/set/" m body decoder
@@ -267,7 +268,7 @@ view model =
     if model.fetchError then
         div []
             [ h1 [] [ text "FIC Board & Staff Profiles" ]
-            , p [ style [ ( "color", "red" ), ( "font-weight", "bold" ) ] ]
+            , p [ style "color" "red", style "font-weight" "bold" ]
                 [ text "There was an error fetching the data. This is a bug, report it!" ]
             ]
 
@@ -284,13 +285,13 @@ view model =
                 , code [] [ text "*like so*" ]
                 , text "."
                 ]
-            , h2 [ style [ ( "font-size", "1.7em" ) ] ]
+            , h2 [ style "font-size" "1.7em" ]
                 [ text "Staff" ]
             , profileForms StaffProfile "staff" model.staff
-            , h2 [ style [ ( "margin-top", "2rem" ), ( "font-size", "1.7em" ) ] ]
+            , h2 [ style "margin-top" "2rem", style "font-size" "1.7em" ]
                 [ text "Board" ]
             , profileForms BoardProfile "board" model.board
-            , hr [ style [ ( "margin", "2rem 0" ) ] ] []
+            , hr [ style "margin" "2rem 0" ] []
             , button
                 [ type_ "submit"
                 , class "button-primary"
@@ -309,9 +310,9 @@ profileForms msg prefix profiles =
         profileForm i profile =
             let
                 makeId name =
-                    prefix ++ toString i ++ name
+                    prefix ++ String.fromInt i ++ name
             in
-            div [ style [ ( "clear", "both" ) ] ]
+            div [ style "clear" "both" ]
                 [ h3 [] [ text profile.name ]
                 , div []
                     [ button
@@ -321,7 +322,7 @@ profileForms msg prefix profiles =
                         ]
                         [ span
                             [ class "dashicons dashicons-arrow-up-alt"
-                            , style [ ( "margin-top", "0.15em" ) ]
+                            , style "margin-top" "0.15em"
                             ]
                             []
                         ]
@@ -332,7 +333,7 @@ profileForms msg prefix profiles =
                         ]
                         [ span
                             [ class "dashicons dashicons-arrow-down-alt"
-                            , style [ ( "margin-top", "0.15em" ) ]
+                            , style "margin-top" "0.15em"
                             ]
                             []
                         ]
@@ -373,7 +374,7 @@ profileForms msg prefix profiles =
                     [ type_ "button"
                     , class "button-primary"
                     , onClick <| msg <| DeleteProfile i
-                    , style [ ( "margin-bottom", "2rem" ) ]
+                    , style "margin-bottom" "2rem"
                     ]
                     [ text "Delete Profile" ]
                 ]

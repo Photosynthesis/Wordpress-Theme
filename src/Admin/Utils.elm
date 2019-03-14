@@ -107,6 +107,8 @@ submissionSpinner status =
         text ""
 
 
+{-| TODO: Remove these Debug calls so we can use the `optimize` flag.
+-}
 statusFromWebData : WebData (Result e a) -> SubmissionStatus
 statusFromWebData response =
     case response of
@@ -117,10 +119,10 @@ statusFromWebData response =
             ReturnedValidationError
 
         RemoteData.Failure err ->
-            ReturnedOtherError <| toString err
+            ReturnedOtherError <| Debug.toString err
 
         _ ->
-            ReturnedOtherError <| "Unexpected response status: " ++ toString response
+            ReturnedOtherError <| "Unexpected response status: " ++ Debug.toString response
 
 
 

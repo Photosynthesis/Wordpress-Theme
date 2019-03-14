@@ -2,7 +2,7 @@ port module Admin.FlatRate exposing (main)
 
 import Admin.Utils
     exposing
-        ( SubmissionStatus(AwaitingResponse)
+        ( SubmissionStatus(..)
         , adminGet
         , adminPost
         , formLabel
@@ -14,7 +14,8 @@ import Admin.Utils
         , submissionNotice
         , submissionSpinner
         )
-import Array.Hamt as Array exposing (Array)
+import Array exposing (Array)
+import Browser
 import Dict as Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes as A
@@ -40,7 +41,7 @@ import String exposing (toUpper)
 
 main : Program Flags Model Msg
 main =
-    Html.programWithFlags
+    Browser.element
         { init = init
         , update = update
         , view = view
@@ -272,8 +273,8 @@ update msg model =
                         RemoteData.Success (Ok _) ->
                             Errors [] Dict.empty
 
-                        RemoteData.Success (Err errors) ->
-                            errors
+                        RemoteData.Success (Err errs) ->
+                            errs
 
                         _ ->
                             model.errors
@@ -506,7 +507,7 @@ arrayToList f array =
 -}
 encodeArray : (a -> Value) -> Array a -> Value
 encodeArray encoder =
-    Encode.list << arrayToList (\_ v -> encoder v)
+    Encode.list encoder << Array.toList
 
 
 
@@ -549,6 +550,9 @@ saveOptions m =
 
 
 {-| Render the Admin Page.
+
+TODO: Remove Debug calls so we can use the `optimize` flag.
+
 -}
 view : Model -> Html Msg
 view m =
@@ -565,7 +569,7 @@ view m =
                 RemoteData.Loading ->
                     p []
                         [ text "Loading options, please wait..."
-                        , span [ class "spinner is-active", style [ ( "float", "left" ) ] ] []
+                        , span [ class "spinner is-active", style "float" "left" ] []
                         ]
 
                 RemoteData.NotAsked ->
@@ -574,7 +578,7 @@ view m =
                 RemoteData.Failure err ->
                     p []
                         [ text "Got an error while fetching options:"
-                        , pre [] [ text <| toString err ]
+                        , pre [] [ text <| Debug.toString err ]
                         ]
     in
     div []
@@ -636,36 +640,36 @@ otherRatesForms rates errors =
                 [ h3 [] [ text name ]
                 , errorList <| Maybe.withDefault [] <| Dict.get name errors
                 , table [ class "form-table" ]
-                    [ formRow (formLabel (toString index ++ "_name") "Name") <|
+                    [ formRow (formLabel (String.fromInt index ++ "_name") "Name") <|
                         input
                             [ type_ "text"
                             , required True
                             , value name
                             , placeholder "Enter Name"
                             , onInput <| OtherInputName index
-                            , id <| toString index ++ "_name"
+                            , id <| String.fromInt index ++ "_name"
                             ]
                             []
                     , formRow (simpleLabel "Countries") <|
-                        countryInputs (toString index ++ "_")
+                        countryInputs (String.fromInt index ++ "_")
                             rate.countryRates
                             (OtherInputCountryCode index)
                             (OtherInputCountryRate index)
                             (OtherRemoveCountry index)
                             (OtherAddCountry index)
-                    , globalInputRow (toString index)
+                    , globalInputRow (String.fromInt index)
                         rate.globalRate
                         (OtherInputGlobal index)
-                    , ignoreDomesticInputRow (toString index) rate.ignoreDomestic <|
+                    , ignoreDomesticInputRow (String.fromInt index) rate.ignoreDomestic <|
                         OtherCheckIgnore index
                     , formRow (simpleLabel "Product IDs") <|
-                        idInputs (toString index ++ "_products")
+                        idInputs (String.fromInt index ++ "_products")
                             rate.products
                             (OtherAddProduct index)
                             (OtherInputProduct index)
                             (OtherDeleteProduct index)
                     , formRow (simpleLabel "Variation IDs") <|
-                        idInputs (toString index ++ "_variations")
+                        idInputs (String.fromInt index ++ "_variations")
                             rate.variations
                             (OtherAddVariation index)
                             (OtherInputVariation index)
@@ -692,7 +696,7 @@ otherRatesForms rates errors =
 errorList : List String -> Html msg
 errorList errors =
     if not (List.isEmpty errors) then
-        ul [ style [ ( "color", "red" ), ( "font-weight", "bold" ) ] ] <| List.map (\e -> li [] [ text e ]) errors
+        ul [ style "color" "red", style "font-weight" "bold" ] <| List.map (\e -> li [] [ text e ]) errors
 
     else
         text ""
@@ -718,7 +722,7 @@ idInputs prefix array addMsg inputMsg deleteMsg =
                     , value productId
                     , onInput <| inputMsg index
                     , placeholder "ID"
-                    , style [ ( "width", "9em" ) ]
+                    , style "width" "9em"
                     , required True
                     ]
                     []
@@ -763,7 +767,7 @@ countryInputs prefix countries codeInputMsg rateInputMsg deleteMsg addMsg =
                     , placeholder "Code"
                     ]
                     []
-                , amountInput amount (prefix ++ "_" ++ toString index ++ "_country_amount") <| rateInputMsg index
+                , amountInput amount (prefix ++ "_" ++ String.fromInt index ++ "_country_amount") <| rateInputMsg index
                 , button
                     [ type_ "button"
                     , class "button button-link-delete"
@@ -796,7 +800,7 @@ amountInput amount elementId inputMsg =
         , id elementId
         , onInput inputMsg
         , placeholder "0.00"
-        , style [ ( "width", "6em" ) ]
+        , style "width" "6em"
         , required True
         ]
         []
