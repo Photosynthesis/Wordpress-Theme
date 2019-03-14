@@ -18,9 +18,12 @@
             "elm-explorations/markdown": "1.0.0",
             "krisajenkins/remotedata": "5.0.0",
             "mdgriffith/elm-style-animation": "4.0.0",
+            "rtfeldman/elm-iso8601-date-strings": "1.1.2",
+            "ryannhg/date-format": "2.3.0",
             "sporto/time-distance": "1.0.0"
         },
         "indirect": {
+            "elm/parser": "1.1.0",
             "elm/svg": "1.0.1",
             "elm/virtual-dom": "1.0.2"
         }
