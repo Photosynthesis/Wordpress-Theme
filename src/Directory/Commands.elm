@@ -12,14 +12,13 @@ module Directory.Commands exposing
 
 import Directory.Communities exposing (CommunityID(..), CommunityListing)
 import Directory.Decoders as Decoders
-import Directory.Messages exposing (Msg(FetchCommunityDetails, ValidateCommunity))
+import Directory.Messages exposing (Msg(..))
 import Directory.Pagination as Pagination
 import Directory.Ports as Ports
 import Directory.Routing exposing (FilterParam(..), Ordering(..), Route(..), getPageTitle, reverse)
 import Http
 import Json.Decode as Decode
 import Json.Encode as Encode
-import Navigation
 import RemoteData
 
 
@@ -92,7 +91,7 @@ getCommunities { filters, ordering } page =
             (String.join ""
                 [ "/wp-json/v1/directory/entries/"
                 , "?page="
-                , toString page
+                , String.fromInt page
                 , filterQueryString
                 , orderQueryString
                 ]
@@ -118,7 +117,7 @@ newPage newRoute =
                     "Listing Details"
     in
     Cmd.batch
-        [ Navigation.newUrl <| reverse newRoute
+        [ Ports.pushUrl <| reverse newRoute
         , Ports.scrollTo "main"
         , Ports.setPageTitle <| pageTitle
         ]

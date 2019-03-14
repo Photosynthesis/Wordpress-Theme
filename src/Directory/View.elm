@@ -1,10 +1,32 @@
 module Directory.View exposing (view)
 
-import Date exposing (Date)
-import Date.Distance
-import Date.Format
+import DateFormat
 import Directory.Commands exposing (CommunitiesRequestData)
-import Directory.Communities exposing (..)
+import Directory.Communities
+    exposing
+        ( CohousingStatus(..)
+        , CommunityDetails
+        , CommunityID(..)
+        , CommunityListing
+        , CommunityStatus(..)
+        , CommunityType(..)
+        , ImageData
+        , IncomeSharing(..)
+        , LandStatus(..)
+        , LocationType(..)
+        , MembersWelcome(..)
+        , PublicAddressType(..)
+        , VisitorsWelcome(..)
+        , addressTypeToString
+        , cohousingStatusToString
+        , incomeSharingToString
+        , landStatusToString
+        , locationTypeToString
+        , membersWelcomeToString
+        , statusToString
+        , typeToString
+        , visitorsWelcomeToString
+        )
 import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model)
 import Directory.Pagination as Pagination exposing (Pagination)
@@ -12,12 +34,15 @@ import Directory.Routing as Routing exposing (FilterParam(..), ListingsRoute(..)
 import Gallery
 import Html exposing (Html, text)
 import Html.Attributes exposing (alt, checked, class, height, href, id, name, src, target, title, type_, value, width)
-import Html.Events exposing (defaultOptions, onClick, onInput, onSubmit, onWithOptions)
+import Html.Events exposing (onClick, onInput, onSubmit, preventDefaultOn)
 import Html.Keyed as Keyed
 import Json.Decode as Decode
 import Map
 import Markdown
 import RemoteData exposing (WebData)
+import String.Conversions exposing (fromHttpError)
+import Time exposing (Posix, Zone)
+import Time.Distance
 
 
 {-| Render a Link to an Internal Application Page.
@@ -36,9 +61,7 @@ navigateAttributes route =
 
 onClickNoDefault : msg -> Html.Attribute msg
 onClickNoDefault msg =
-    onWithOptions "click"
-        { defaultOptions | preventDefault = True }
-        (Decode.succeed msg)
+    preventDefaultOn "click" <| Decode.succeed ( msg, True )
 
 
 {-| Return an HTML Element or an Empty Node.
@@ -63,7 +86,7 @@ view model =
 {-| Render a Details Page.
 -}
 detailsView :
-    Maybe Date
+    Maybe ( Posix, Zone )
     -> WebData CommunityDetails
     -> Gallery.Model ImageData
     -> WebData Bool
@@ -85,7 +108,7 @@ detailsView currentDate community gallery validation =
                 [ text "Sorry, we encountered a problem when trying to load the Community, please try again or contact "
                 , Html.a [ href "mailto:directory@ic.org" ] [ text "directory@ic.org" ]
                 , text "."
-                , Html.p [] [ text <| toString err ]
+                , Html.p [] [ text <| fromHttpError err ]
                 ]
 
         RemoteData.Success details ->
@@ -101,7 +124,7 @@ loadingBar =
         ]
 
 
-communityDetails : Maybe Date -> CommunityDetails -> Gallery.Model ImageData -> WebData Bool -> Html Msg
+communityDetails : Maybe ( Posix, Zone ) -> CommunityDetails -> Gallery.Model ImageData -> WebData Bool -> Html Msg
 communityDetails maybeCurrentDate community communityGallery communityValidation =
     let
         area =
@@ -137,7 +160,7 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
                 ]
 
         idParam =
-            (\(CommunityID i) -> toString i) community.id
+            (\(CommunityID i) -> String.fromInt i) community.id
 
         adminEditLink =
             "/wp-admin/admin.php?page=formidable-entries&frm_action=edit&id=" ++ idParam
@@ -201,11 +224,11 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
                         []
                 ]
 
-        section header content =
-            sectionHtml header <| Html.p [] [ text content ]
+        section sectionHeader content =
+            sectionHtml sectionHeader <| Html.p [] [ text content ]
 
-        sectionHtml header htmlContent =
-            Html.div [] [ Html.h3 [] [ text header ], htmlContent ]
+        sectionHtml sectionHeader htmlContent =
+            Html.div [] [ Html.h3 [] [ text sectionHeader ], htmlContent ]
 
         embedYoutube =
             case community.youtubeIds of
@@ -309,7 +332,7 @@ renderJust value_ renderer =
 -}
 renderMaybeString : Maybe String -> (String -> Html msg) -> Html msg
 renderMaybeString m f =
-    renderJust m <| flip renderNonEmpty f
+    renderJust m <| \a -> renderNonEmpty a f
 
 
 renderIf : Bool -> Html msg -> Html msg
@@ -326,8 +349,8 @@ detailRightColumn community =
     let
         rightColumn =
             [ boldLabel "Status" <| renderStatus community.status
-            , boldLabelText "Started Planning" <| toString community.startedPlanning
-            , boldLabelText "Started Living Together" <| toString community.startedLivingTogether
+            , boldLabelText "Started Planning" <| String.fromInt community.startedPlanning
+            , boldLabelText "Started Living Together" <| String.fromInt community.startedLivingTogether
             , boldLabel "Visitors Accepted" <| visitorsWelcome community.openToVisitors
             , boldLabel "Open to New Members" <| membersWelcome community.openToMembers
             , Html.li [ class "text-center mt-2 mb-3" ]
@@ -338,7 +361,9 @@ detailRightColumn community =
                     ]
                 , Html.a
                     [ class "my-1 btn btn-block btn-warning"
-                    , href <| "/directory/contact-a-community/?cmty=" ++ (\(CommunityID i) -> toString i) community.id
+                    , href <|
+                        "/directory/contact-a-community/?cmty="
+                            ++ (\(CommunityID i) -> String.fromInt i) community.id
                     ]
                     [ text "Send Message"
                     ]
@@ -480,7 +505,7 @@ detailInfoBlocks community =
 
         landAmountAndUnits amount =
             text <|
-                toString amount
+                String.fromFloat amount
                     ++ " "
                     ++ Maybe.withDefault "" community.landSizeUnits
 
@@ -505,19 +530,19 @@ detailInfoBlocks community =
             , infoBlockSublist "Current Residence Types" community.currentResidenceTypes
             , maybeInfoItem "Current Number of Residences"
                 community.currentResidences
-                (text << toString)
+                (text << String.fromInt)
             , maybeInfoItem "Planned Number of Residences"
                 community.plannedResidences
-                (text << toString)
+                (text << String.fromInt)
             , infoBlockSublist "Planned Residence Types" community.plannedResidenceTypes
             , infoBlockSublist "Housing Provided" community.housingAccess
             , maybeInfoItem "Land Owned By" community.landOwner text
             , maybeInfoItem "Additional Comments" community.housingComments text
             ]
         , infoBlock "Membership"
-            [ [ ( "Adult Members", text <| toString community.adultCount ) ]
-            , maybeInfoItem "Child Members" community.childCount (text << toString)
-            , maybeInfoItem "Non-Member Residents" community.nonmemberCount (text << toString)
+            [ [ ( "Adult Members", text <| String.fromInt community.adultCount ) ]
+            , maybeInfoItem "Child Members" community.childCount (text << String.fromInt)
+            , maybeInfoItem "Non-Member Residents" community.nonmemberCount (text << String.fromInt)
             , maybeInfoItem "Percent Women" community.percentFemale text
             , maybeInfoItem "Percent Men" community.percentMale text
             , maybeInfoItem "Percent Transgender" community.percentTrans text
@@ -536,7 +561,7 @@ detailInfoBlocks community =
             ]
         , infoBlock "Economics"
             [ if community.hasJoinFee then
-                maybeInfoItem "Join Fee($)" community.joinFee (text << toString)
+                maybeInfoItem "Join Fee($)" community.joinFee (text << String.fromFloat)
 
               else
                 []
@@ -550,7 +575,7 @@ detailInfoBlocks community =
                 )
               ]
             , if community.hasRegularFees then
-                maybeInfoItem "Monthly Fees($)" community.regularFees (text << toString)
+                maybeInfoItem "Monthly Fees($)" community.regularFees (text << String.fromFloat)
 
               else
                 []
@@ -558,7 +583,7 @@ detailInfoBlocks community =
             , if community.contributeLabor == "Yes" then
                 maybeInfoItem "Required Weekly Labor Contribution"
                     community.laborHours
-                    (text << toString)
+                    (text << String.fromFloat)
 
               else if community.contributeLabor == "No" then
                 []
@@ -566,7 +591,7 @@ detailInfoBlocks community =
               else
                 maybeInfoItem "Suggested Weekly Labor Contribution"
                     community.laborHours
-                    (text << toString)
+                    (text << String.fromFloat)
             , maybeInfoItem "Open to Members with Existing Debt" community.memberDebt text
             , maybeInfoItem "Additional Comments" community.economicsComments text
             ]
@@ -610,10 +635,10 @@ detailInfoBlocks community =
                         (cohousingStatusToString >> text)
                     , maybeInfoItem "Year Construction Completed"
                         cohousing.yearCompleted
-                        (toString >> text)
+                        (String.fromInt >> text)
                     , maybeInfoItem "Number of Housing Units"
                         cohousing.housingUnits
-                        (toString >> text)
+                        (String.fromInt >> text)
                     , maybeInfoItem "Has a Shared Common Building"
                         cohousing.hasSharedBuilding
                         (boolToString >> text)
@@ -675,31 +700,43 @@ membersWelcome welcomeStatus =
 
 {-| Return the text to display for a Listing's Updated Date.
 -}
-updatedOn : Maybe Date -> { a | updatedAt : Date } -> List (Html msg)
+updatedOn : Maybe ( Posix, Zone ) -> { a | updatedAt : Posix } -> List (Html msg)
 updatedOn currentDate community =
     [ Html.b [] [ text "Updated on: " ]
-    , text <| Date.Format.format "%b %e, %Y" community.updatedAt
-    , timeAgo currentDate community.updatedAt
+    , text <| dateFormat (Maybe.map Tuple.second currentDate) community.updatedAt
+    , timeAgo (Maybe.map Tuple.first currentDate) community.updatedAt
     ]
 
 
-createdOn : Maybe Date -> { a | createdAt : Date } -> List (Html msg)
+createdOn : Maybe ( Posix, Zone ) -> { a | createdAt : Posix } -> List (Html msg)
 createdOn currentDate community =
     [ Html.b [] [ text "Created on: " ]
-    , text <| Date.Format.format "%b %e, %Y" community.createdAt
-    , timeAgo currentDate community.createdAt
+    , text <| dateFormat (Maybe.map Tuple.second currentDate) community.createdAt
+    , timeAgo (Maybe.map Tuple.first currentDate) community.createdAt
     ]
+
+
+dateFormat : Maybe Zone -> Posix -> String
+dateFormat maybeZone =
+    DateFormat.format
+        [ DateFormat.monthNameAbbreviated
+        , DateFormat.text " "
+        , DateFormat.dayOfMonthNumber
+        , DateFormat.text ", "
+        , DateFormat.yearNumber
+        ]
+        (Maybe.withDefault Time.utc maybeZone)
 
 
 {-| Return text saying how long ago a date was. Or nothing if we do not have
 the current date.
 -}
-timeAgo : Maybe Date -> Date -> Html msg
+timeAgo : Maybe Posix -> Posix -> Html msg
 timeAgo maybeCurrentDate date =
     maybeCurrentDate
         |> maybeHtml
             (\currentDate ->
-                text <| " (" ++ Date.Distance.inWords currentDate date ++ " ago)"
+                text <| " (" ++ Time.Distance.inWords currentDate date ++ " ago)"
             )
 
 
@@ -708,7 +745,7 @@ timeAgo maybeCurrentDate date =
 listingsView :
     Pagination CommunityListing CommunitiesRequestData
     -> String
-    -> Maybe Date
+    -> Maybe ( Posix, Zone )
     -> ListingsRoute
     -> Html Msg
 listingsView communities searchString currentDate route =
@@ -844,11 +881,11 @@ links =
 {-| Render the Result Count if there are Results.
 -}
 resultCount : Pagination CommunityListing CommunitiesRequestData -> Html Msg
-resultCount pagination =
-    if not <| Pagination.hasNone pagination then
+resultCount communityPagination =
+    if not <| Pagination.hasNone communityPagination then
         Html.div [ class "float-left" ]
             [ text "Showing "
-            , Html.b [] [ text <| toString <| Pagination.getTotalItems pagination ]
+            , Html.b [] [ text <| String.fromInt <| Pagination.getTotalItems communityPagination ]
             , text " communities."
             ]
 
@@ -870,25 +907,25 @@ filterHtml route =
                 (Routing.getInherentFilters route)
 
         annotate filter =
-            (\( n, t ) -> ( filter, n, t, List.member filter currentFilters )) <|
+            (\maybeAnnotation -> ( filter, maybeAnnotation, List.member filter currentFilters )) <|
                 case filter of
                     VisitorsFilter ->
-                        ( "visitors", "Visitors Welcome" )
+                        Just ( "visitors", "Visitors Welcome" )
 
                     MembersFilter ->
-                        ( "members", "Accepting Members" )
+                        Just ( "members", "Accepting Members" )
 
                     EstablishedFilter ->
-                        ( "established", "Established" )
+                        Just ( "established", "Established" )
 
                     FormingFilter ->
-                        ( "forming", "Forming" )
+                        Just ( "forming", "Forming" )
 
                     FICMemberFilter ->
-                        ( "fic-member", "FIC Member" )
+                        Just ( "fic-member", "FIC Member" )
 
                     _ ->
-                        Debug.crash "Unhandled Inline Filter in `filterHtml`"
+                        Nothing
 
         checkMsg filter isOn =
             NavigateTo
@@ -901,16 +938,21 @@ filterHtml route =
                 else
                     filter :: currentFilters
 
-        render ( filter, filterName, filterText, isOn ) =
-            Html.label [ onClick <| checkMsg filter isOn ]
-                [ Html.input
-                    [ type_ "checkbox"
-                    , name filterName
-                    , checked isOn
-                    ]
-                    []
-                , Html.span [] [ text <| " " ++ filterText ]
-                ]
+        render ( filter, maybeNameAndText, isOn ) =
+            case maybeNameAndText of
+                Nothing ->
+                    text ""
+
+                Just ( filterName, filterText ) ->
+                    Html.label [ onClick <| checkMsg filter isOn ]
+                        [ Html.input
+                            [ type_ "checkbox"
+                            , name filterName
+                            , checked isOn
+                            ]
+                            []
+                        , Html.span [] [ text <| " " ++ filterText ]
+                        ]
     in
     Html.div [ class "float-right directory-filters" ] <|
         List.map (annotate >> render) Routing.inlineFilters
@@ -996,13 +1038,13 @@ pagination route communityPagination =
         pageLink page =
             if page == currentPage then
                 Html.li [ class "page-item active" ]
-                    [ Html.span [ class "page-link" ] [ text <| toString page ] ]
+                    [ Html.span [ class "page-link" ] [ text <| String.fromInt page ] ]
 
             else
                 Html.li [ class "page-item" ]
                     [ navigateLink (ListingsRoute <| Routing.mapPage (always page) route)
                         "page-link"
-                        (toString page)
+                        (String.fromInt page)
                     ]
     in
     List.concat
@@ -1028,7 +1070,7 @@ pagination route communityPagination =
 
 {-| Render a Single Community in the Listings.
 -}
-communityItem : Maybe Date -> CommunityListing -> Html Msg
+communityItem : Maybe ( Posix, Zone ) -> CommunityListing -> Html Msg
 communityItem maybeCurrentDate community =
     let
         address { city, state, country } =

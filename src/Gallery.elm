@@ -32,10 +32,10 @@ TODO:
 import Animation
 import Html exposing (Html, a, div, img)
 import Html.Attributes exposing (class, href, src, tabindex)
-import Html.Events exposing (defaultOptions, keyCode, onWithOptions)
+import Html.Events exposing (custom, keyCode, stopPropagationOn)
 import Html.Keyed as Keyed
 import Json.Decode as Decode
-import Time exposing (millisecond)
+import Time exposing (millisToPosix)
 
 
 {-| Configuration for pulling the thumbnail & image URLs out of an arbitrary
@@ -181,7 +181,7 @@ updateBackgroundImage cfg selector m =
                         [ Animation.set [ backgroundImageProperty selected ] ]
                         m.backgroundImageStyle
                     , Animation.queue
-                        [ Animation.wait (50 * millisecond)
+                        [ Animation.wait (millisToPosix 50)
                         , Animation.set
                             [ backgroundImageProperty new, Animation.opacity 0 ]
                         , Animation.to [ Animation.opacity 1 ]
@@ -243,7 +243,7 @@ calcNextPrev allItems selected =
         ( Nothing, False, Nothing )
         allItems
         |> (\( p, _, n ) ->
-                Maybe.map2 (,)
+                Maybe.map2 Tuple.pair
                     (orMaybe p
                         (List.drop (List.length allItems - 1) allItems
                             |> List.head
@@ -385,53 +385,52 @@ ignoreClick =
 
 ignoreOn : String -> Html.Attribute (Msg a)
 ignoreOn event =
-    onWithOptions event
-        { defaultOptions
-            | stopPropagation = True
+    custom event <|
+        Decode.succeed
+            { message = Noop
+            , stopPropagation = True
             , preventDefault = True
-        }
-    <|
-        Decode.succeed Noop
+            }
 
 
 nextOnClick : Html.Attribute (Msg a)
 nextOnClick =
-    onWithOptions "click" { defaultOptions | stopPropagation = True } <|
-        Decode.succeed Next
+    alwaysStopPropagationOn "click" Next
 
 
 previousOnClick : Html.Attribute (Msg a)
 previousOnClick =
-    onWithOptions "click" { defaultOptions | stopPropagation = True } <|
-        Decode.succeed Previous
+    alwaysStopPropagationOn "click" Previous
 
 
 closeModalOnEsc : Html.Attribute (Msg a)
 closeModalOnEsc =
-    onWithOptions "keyup" { defaultOptions | stopPropagation = True } <|
-        (keyCode
-            |> Decode.andThen
-                (\code ->
-                    if code == 27 then
-                        Decode.succeed Close
+    stopPropagationOn "keyup" <|
+        Decode.map (\msg -> ( msg, True )) <|
+            (keyCode
+                |> Decode.andThen
+                    (\code ->
+                        if code == 27 then
+                            Decode.succeed Close
 
-                    else
-                        Decode.fail "Not ESC"
-                )
-        )
+                        else
+                            Decode.fail "Not ESC"
+                    )
+            )
 
 
 closeModalOnClick : Html.Attribute (Msg a)
 closeModalOnClick =
-    onWithOptions "click"
-        { defaultOptions | stopPropagation = True }
-    <|
-        Decode.succeed Close
+    alwaysStopPropagationOn "click" Close
 
 
 openModalOnClick : a -> Html.Attribute (Msg a)
 openModalOnClick =
-    onWithOptions "click"
-        { defaultOptions | preventDefault = True }
-        << Decode.succeed
+    alwaysStopPropagationOn "click"
         << Select
+
+
+alwaysStopPropagationOn : String -> msg -> Html.Attribute msg
+alwaysStopPropagationOn event msg =
+    Decode.succeed ( msg, True )
+        |> stopPropagationOn event

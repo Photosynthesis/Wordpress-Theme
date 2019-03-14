@@ -32,14 +32,15 @@ module Directory.Pagination exposing
 
     )
 
-{-| For paginating responses
+{-| For paginating responses.
 
-TODO: Eventually:
+Eventually we should:
 
-  - examples
+  - use the prikhi/paginate package
   - fetchRequest per-args cache?
       - toString on args to get a (Dict String (Dict PageNumber Chunk))?
   - custom page sizes(+ reorganize items when changed)
+      - currently, higher values hit the server hard.
 
 -}
 

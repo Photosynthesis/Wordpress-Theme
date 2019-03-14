@@ -3,35 +3,42 @@ module Directory.Main exposing (main)
 {-| The Entry Point for the Application.
 -}
 
-import Date
+import Browser
 import Directory.Commands exposing (WPNonce(..))
-import Directory.Messages exposing (Msg(GalleryMsg, SetCurrentDate, UrlChange))
+import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model)
+import Directory.Ports as Ports
 import Directory.Routing exposing (FilterParam(..), Route(..), routeParser)
 import Directory.Update exposing (update)
 import Directory.View exposing (view)
 import Gallery
-import Navigation
 import Task
+import Time
 
 
 main : Program Flags Model Msg
 main =
-    Navigation.programWithFlags (routeParser >> UrlChange)
+    Browser.element
         { init = initialize
         , update = update
-        , subscriptions = \m -> Sub.map GalleryMsg <| Gallery.subscriptions m.communityGallery
+        , subscriptions =
+            \m ->
+                Sub.batch
+                    [ Sub.map GalleryMsg <| Gallery.subscriptions m.communityGallery
+                    , Ports.onUrlChange (routeParser >> UrlChange)
+                    ]
         , view = view
         }
 
 
 type alias Flags =
     { nonce : String
+    , location : String
     }
 
 
-initialize : Flags -> Navigation.Location -> ( Model, Cmd Msg )
-initialize { nonce } location =
+initialize : Flags -> ( Model, Cmd Msg )
+initialize { nonce, location } =
     let
         route =
             routeParser location
@@ -41,7 +48,9 @@ initialize { nonce } location =
     in
     ( model
     , Cmd.batch
-        [ Task.perform SetCurrentDate Date.now
+        [ Time.now
+            |> Task.andThen (\posix -> Task.map (\zone -> ( posix, zone )) Time.here)
+            |> Task.perform SetCurrentDate
         , cmd
         ]
     )

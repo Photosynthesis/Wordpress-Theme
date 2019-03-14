@@ -1,15 +1,15 @@
 module Directory.Messages exposing (Msg(..))
 
-import Date exposing (Date)
 import Directory.Communities exposing (CommunityDetails, CommunityListing, ImageData)
 import Directory.Pagination as Pagination
 import Directory.Routing exposing (Route)
 import Gallery
 import RemoteData exposing (WebData)
+import Time exposing (Posix, Zone)
 
 
 type Msg
-    = SetCurrentDate Date
+    = SetCurrentDate ( Posix, Zone )
     | UrlChange Route
     | NavigateTo Route
       -- Listings

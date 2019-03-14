@@ -42,7 +42,7 @@ render m =
         (List.filterMap identity
             [ Just <| attribute "api-key" "AIzaSyAGISn5aMHQ1cwSVUAUHytb40g27ul9qQE"
             , Maybe.map (attribute "center" << Encode.encode 0 << encodeCoords) m.center
-            , Just <| attribute "zoom" <| toString m.zoom
+            , Just <| attribute "zoom" <| String.fromInt m.zoom
             ]
         )
         (List.map renderMarker m.markers)

@@ -1,10 +1,38 @@
-module Directory.Routing exposing (FilterParam(..), ListingsRoute(..), Ordering(..), Route(..), addQueryParams, filterParamToQueryString, filterParams, filtersToQueryString, getAdditionalFilters, getFilters, getInherentFilters, getOrdering, getPageAndFilters, getPageTitle, getSearchFilter, inlineFilters, listingsParser, listingsReverse, mapBoth, mapFilters, mapPage, parseFilterParam, parser, reverse, routeParser, toPageOne)
+module Directory.Routing exposing
+    ( FilterParam(..)
+    , ListingsRoute(..)
+    , Ordering(..)
+    , Route(..)
+    , addQueryParams
+    , filterParamToQueryString
+    , filtersToQueryString
+    , getAdditionalFilters
+    , getFilters
+    , getInherentFilters
+    , getOrdering
+    , getPageAndFilters
+    , getPageTitle
+    , getSearchFilter
+    , inlineFilters
+    , listingsParser
+    , listingsReverse
+    , mapBoth
+    , mapFilters
+    , mapPage
+    , parseFilterParam
+    , parseFilterParams
+    , parser
+    , reverse
+    , routeParser
+    , toPageOne
+    )
 
 {-| Contains Types & Functions Related to the Application's Internal Routing.
 -}
 
-import Navigation
-import UrlParser exposing ((</>), (<?>), Parser, int, map, oneOf, parsePath, s, string)
+import Url
+import Url.Parser exposing ((</>), (<?>), Parser, int, map, oneOf, parse, s, string)
+import Url.Parser.Query
 
 
 
@@ -154,17 +182,14 @@ parseFilterParam str =
 
 {-| Parse a `FilterParam` List From the QueryString
 -}
-filterParams : UrlParser.QueryParser (List FilterParam -> b) b
-filterParams =
-    UrlParser.customParam "filters"
-        (\x ->
-            case x of
-                Just str ->
+parseFilterParams : Url.Parser.Query.Parser (List FilterParam)
+parseFilterParams =
+    Url.Parser.Query.custom "filters" <|
+        List.concat
+            << List.map
+                (\str ->
                     String.split "," str |> List.filterMap parseFilterParam
-
-                Nothing ->
-                    []
-        )
+                )
 
 
 {-| Parse a `SearchFilter` And/Or `FilterParam` List From the QueryString,
@@ -181,13 +206,13 @@ addQueryParams route pathParser =
                 Nothing ->
                     filters
 
-        withTopLevelFilter name filter parser =
+        withTopLevelFilter name filter parser_ =
             map addFilterIfExists
-                (parser <?> UrlParser.customParam name (Maybe.map filter))
+                (parser_ <?> Url.Parser.Query.custom name (List.head >> Maybe.map filter))
 
         queryParser =
-            UrlParser.top
-                <?> filterParams
+            Url.Parser.top
+                <?> parseFilterParams
                 |> withTopLevelFilter "search" SearchFilter
                 |> withTopLevelFilter "country" CountryFilter
                 |> withTopLevelFilter "state" StateFilter
@@ -271,7 +296,7 @@ filtersToQueryString filters =
 
         filterString =
             otherFilters
-                |> List.sortBy toString
+                |> List.sortBy filterParamToQueryString
                 |> List.map filterParamToQueryString
                 |> String.join ","
                 |> (\str ->
@@ -462,7 +487,7 @@ getFilters route =
 -}
 getPageAndFilters : ListingsRoute -> ( Int, List FilterParam )
 getPageAndFilters route =
-    flip (,) (getFilters route) <|
+    (\pageNumber -> ( pageNumber, getFilters route )) <|
         case route of
             Listings page _ ->
                 page
@@ -672,73 +697,73 @@ listingsReverse route =
                     "listings/" ++ filtersToQueryString filterParams
 
                 Listings page filterParams ->
-                    "listings/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "listings/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 Communes 1 filterParams ->
                     "communes/" ++ filtersToQueryString filterParams
 
                 Communes page filterParams ->
-                    "communes/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "communes/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 Ecovillages 1 filterParams ->
                     "ecovillages/" ++ filtersToQueryString filterParams
 
                 Ecovillages page filterParams ->
-                    "ecovillages/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "ecovillages/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 CohousingCommunities 1 filterParams ->
                     "cohousing-communities/" ++ filtersToQueryString filterParams
 
                 CohousingCommunities page filterParams ->
-                    "cohousing-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "cohousing-communities/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 Coops 1 filterParams ->
                     "co-ops/" ++ filtersToQueryString filterParams
 
                 Coops page filterParams ->
-                    "co-ops/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "co-ops/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 SharedHousing 1 filterParams ->
                     "shared-housing/" ++ filtersToQueryString filterParams
 
                 SharedHousing page filterParams ->
-                    "shared-housing/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "shared-housing/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 StudentHousing 1 filterParams ->
                     "student-housing/" ++ filtersToQueryString filterParams
 
                 StudentHousing page filterParams ->
-                    "student-housing/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "student-housing/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 ReligiousCommunities 1 filterParams ->
                     "spiritual-and-religious/" ++ filtersToQueryString filterParams
 
                 ReligiousCommunities page filterParams ->
-                    "spiritual-and-religious/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "spiritual-and-religious/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 JewishCommunities 1 filterParams ->
                     "jewish-communities/" ++ filtersToQueryString filterParams
 
                 JewishCommunities page filterParams ->
-                    "jewish-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "jewish-communities/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 ChristianCommunities 1 filterParams ->
                     "christian-communities/" ++ filtersToQueryString filterParams
 
                 ChristianCommunities page filterParams ->
-                    "christian-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "christian-communities/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 RecentlyUpdated 1 filterParams ->
                     "recently-updated/" ++ filtersToQueryString filterParams
 
                 RecentlyUpdated page filterParams ->
-                    "recently-updated/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "recently-updated/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
 
                 RecentlyAdded 1 filterParams ->
                     "newest-communities/" ++ filtersToQueryString filterParams
 
                 RecentlyAdded page filterParams ->
-                    "newest-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                    "newest-communities/" ++ String.fromInt page ++ "/" ++ filtersToQueryString filterParams
            )
 
 
@@ -752,11 +777,14 @@ reverse route =
             "/directory/" ++ slug ++ "/"
 
 
-{-| Parse a Path into a Route, Defaulting to the Listings Route.
+{-| Parse an `href.location` String into a Route, Defaulting to the Listings
+Route.
 
-TODO: Add 404 route & default to it.
+TODO: Add 404 route & default to that instead.
 
 -}
-routeParser : Navigation.Location -> Route
+routeParser : String -> Route
 routeParser =
-    parsePath parser >> Maybe.withDefault (ListingsRoute <| Listings 1 [])
+    Url.fromString
+        >> Maybe.andThen (parse parser)
+        >> Maybe.withDefault (ListingsRoute <| Listings 1 [])

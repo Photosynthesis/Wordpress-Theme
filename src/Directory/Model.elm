@@ -1,13 +1,13 @@
 module Directory.Model exposing (Model, initial, paginationConfig)
 
-import Date exposing (Date)
 import Directory.Commands exposing (CommunitiesRequestData, WPNonce, getCommunities, getCommunity)
 import Directory.Communities exposing (CommunityDetails, CommunityListing, ImageData)
-import Directory.Messages exposing (Msg(CommunityPagination))
+import Directory.Messages exposing (Msg(..))
 import Directory.Pagination as Pagination exposing (Pagination)
 import Directory.Routing as Routing exposing (FilterParam(..), Route(..))
 import Gallery
 import RemoteData exposing (WebData)
+import Time exposing (Posix, Zone)
 
 
 {-| Contains the State Used Throughout The Application
@@ -18,7 +18,7 @@ type alias Model =
     , communityGallery : Gallery.Model ImageData
     , communityValidation : WebData Bool
     , searchString : String
-    , currentDate : Maybe Date
+    , currentDate : Maybe ( Posix, Zone )
     , route : Route
     , wpNonce : WPNonce
     }

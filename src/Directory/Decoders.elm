@@ -1,15 +1,34 @@
 module Directory.Decoders exposing (communityDetails, communityListing)
 
-import Date exposing (Date)
-import Directory.Communities exposing (..)
+import Directory.Communities
+    exposing
+        ( CohousingData
+        , CohousingStatus(..)
+        , CommunityDetails
+        , CommunityID(..)
+        , CommunityListing
+        , CommunityStatus(..)
+        , CommunityType(..)
+        , ExtraStatusInfo
+        , ImageData
+        , IncomeSharing(..)
+        , LandStatus(..)
+        , LocationType(..)
+        , MembersWelcome(..)
+        , PublicAddress
+        , PublicAddressType(..)
+        , VisitorsWelcome(..)
+        )
+import Iso8601
 import Json.Decode as Decode exposing (Decoder, bool, int, string)
-import Json.Decode.Pipeline exposing (decode, optional, required)
+import Json.Decode.Pipeline exposing (optional, required)
 import Map exposing (Coords)
+import Time exposing (Posix)
 
 
 communityDetails : Decoder CommunityDetails
 communityDetails =
-    decode CommunityDetails
+    Decode.succeed CommunityDetails
         |> required "id" communityID
         |> required "name" string
         |> required "slug" string
@@ -121,7 +140,7 @@ maybe key decoder =
 
 communityListing : Decoder CommunityListing
 communityListing =
-    decode CommunityListing
+    Decode.succeed CommunityListing
         |> required "id" communityID
         |> required "name" string
         |> required "slug" string
@@ -167,7 +186,7 @@ communityStatus =
 
 extraStatusInfo : Decoder ExtraStatusInfo
 extraStatusInfo =
-    decode ExtraStatusInfo
+    Decode.succeed ExtraStatusInfo
         |> optional "year" string ""
         |> optional "info" string ""
 
@@ -241,7 +260,7 @@ communityType =
 
 publicAddress : Decoder PublicAddress
 publicAddress =
-    decode PublicAddress
+    Decode.succeed PublicAddress
         |> optional "lineOne" string ""
         |> optional "lineTwo" string ""
         |> optional "zipCode" string ""
@@ -294,7 +313,7 @@ incomeSharing =
 
 cohousingData : Decoder CohousingData
 cohousingData =
-    decode CohousingData
+    Decode.succeed CohousingData
         |> maybe "siteStatus" decodeCohousingStatus
         |> maybe "yearCompleted" Decode.int
         |> maybe "housingUnits" Decode.int
@@ -322,14 +341,14 @@ decodeCohousingStatus =
 
 imageData : Decoder ImageData
 imageData =
-    decode ImageData
+    Decode.succeed ImageData
         |> optional "thumbnailUrl" (Decode.map Just string) Nothing
         |> required "imageUrl" string
 
 
 coords : Decoder Coords
 coords =
-    decode Coords
+    Decode.succeed Coords
         |> required "latitude" Decode.float
         |> required "longitude" Decode.float
 
@@ -348,10 +367,9 @@ oneOrList decoder =
     Decode.oneOf [ singleton decoder, Decode.list decoder ]
 
 
-date : Decoder Date
+date : Decoder Posix
 date =
-    string
-        |> Decode.andThen (Date.fromString >> fromResult)
+    Iso8601.decoder
 
 
 stringToEnum : List ( a, String ) -> Decoder a

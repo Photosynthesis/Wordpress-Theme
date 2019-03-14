@@ -30,10 +30,10 @@ listingsUpdateUrl route model =
         updatedModel =
             { model | route = ListingsRoute route, searchString = updatedSearchString }
 
-        jumpToPage page =
+        jumpToPage page_ =
             let
                 ( updatedPagination, paginationCmd ) =
-                    Pagination.jumpTo paginationConfig model.communities page
+                    Pagination.jumpTo paginationConfig model.communities page_
             in
             ( { updatedModel | communities = updatedPagination }
             , Cmd.map CommunityPagination paginationCmd
@@ -41,11 +41,11 @@ listingsUpdateUrl route model =
 
         communityFilters =
             Pagination.getData model.communities
-                |> (\{ filters } -> filters)
+                |> (\d -> d.filters)
 
         communityOrdering =
             Pagination.getData model.communities
-                |> (\{ ordering } -> ordering)
+                |> (\d -> d.ordering)
 
         ( page, filters ) =
             Routing.getPageAndFilters route

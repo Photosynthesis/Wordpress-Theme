@@ -1,10 +1,36 @@
-module Directory.Communities exposing (CohousingData, CohousingStatus(..), CommunityDetails, CommunityID(..), CommunityListing, CommunityStatus(..), CommunityType(..), ExtraStatusInfo, ImageData, IncomeSharing(..), LandStatus(..), LocationType(..), MembersWelcome(..), PublicAddress, PublicAddressType(..), VisitorsWelcome(..), addressTypeToString, cohousingStatusToString, incomeSharingToString, landStatusToString, locationTypeToString, membersWelcomeToString, statusToString, typeToString, visitorsWelcomeToString)
+module Directory.Communities exposing
+    ( CohousingData
+    , CohousingStatus(..)
+    , CommunityDetails
+    , CommunityID(..)
+    , CommunityListing
+    , CommunityStatus(..)
+    , CommunityType(..)
+    , ExtraStatusInfo
+    , ImageData
+    , IncomeSharing(..)
+    , LandStatus(..)
+    , LocationType(..)
+    , MembersWelcome(..)
+    , PublicAddress
+    , PublicAddressType(..)
+    , VisitorsWelcome(..)
+    , addressTypeToString
+    , cohousingStatusToString
+    , incomeSharingToString
+    , landStatusToString
+    , locationTypeToString
+    , membersWelcomeToString
+    , statusToString
+    , typeToString
+    , visitorsWelcomeToString
+    )
 
 {-| Contains Community Data Types & Related Functions
 -}
 
-import Date exposing (Date)
 import Map exposing (Coords)
+import Time exposing (Posix)
 
 
 {-| A Communities Unique ID is an Integer
@@ -153,8 +179,8 @@ type alias CommunityListing =
     , openToVisitors : VisitorsWelcome
     , openToMembers : MembersWelcome
     , communityTypes : List CommunityType
-    , updatedAt : Date
-    , createdAt : Date
+    , updatedAt : Posix
+    , createdAt : Posix
     }
 
 
@@ -257,8 +283,8 @@ type alias CommunityDetails =
     , communityAffiliations : Maybe String
     , fairHousingComplaint : Bool
     , keywords : String
-    , updatedAt : Date
-    , createdAt : Date
+    , updatedAt : Posix
+    , createdAt : Posix
     , isAdmin : Bool
     , isOwner : Bool
     }
