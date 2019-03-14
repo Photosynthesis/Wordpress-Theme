@@ -352,20 +352,10 @@ update msg model =
                 ( { model | formError = "A minimum of 10 items is required." }, Cmd.none )
 
         StripeTokenReceived { token, checkoutArgs } ->
-            let
-                _ =
-                    Debug.log "token received" token
-
-                _ =
-                    Debug.log "checkout args" checkoutArgs
-            in
             ( { model | responseStatus = Loading }, placeOrder token checkoutArgs model )
 
         OrderProcessed (Ok response) ->
             let
-                _ =
-                    Debug.log "OrderProcessed Ok" response
-
                 updatedModel =
                     if response == "ok" then
                         { model | responseStatus = Success, formError = "" }
@@ -377,9 +367,6 @@ update msg model =
 
         OrderProcessed (Err httpError) ->
             let
-                _ =
-                    Debug.log "OrderProcessed Error" httpError
-
                 updatedModel =
                     case httpError of
                         Http.BadUrl _ ->

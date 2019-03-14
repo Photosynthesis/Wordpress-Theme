@@ -27,6 +27,7 @@ import Html.Attributes exposing (class, for)
 import Http
 import Json.Decode exposing (Decoder, Value)
 import RemoteData exposing (WebData)
+import String.Conversions exposing (fromHttpError)
 
 
 {-| Enumerate the potential status of a form submission.
@@ -107,7 +108,7 @@ submissionSpinner status =
         text ""
 
 
-{-| TODO: Remove these Debug calls so we can use the `optimize` flag.
+{-| Get a SubmissionStatus from a Result nested in some WebData.
 -}
 statusFromWebData : WebData (Result e a) -> SubmissionStatus
 statusFromWebData response =
@@ -119,10 +120,13 @@ statusFromWebData response =
             ReturnedValidationError
 
         RemoteData.Failure err ->
-            ReturnedOtherError <| Debug.toString err
+            ReturnedOtherError <| fromHttpError err
 
-        _ ->
-            ReturnedOtherError <| "Unexpected response status: " ++ Debug.toString response
+        RemoteData.Loading ->
+            ReturnedOtherError <| "Unexpected response status: Loading"
+
+        RemoteData.NotAsked ->
+            ReturnedOtherError <| "Unexpected response status: NotAsked"
 
 
 

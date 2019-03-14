@@ -37,6 +37,7 @@ import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode exposing (Value)
 import RemoteData exposing (WebData)
 import String exposing (toUpper)
+import String.Conversions exposing (fromHttpError)
 
 
 main : Program Flags Model Msg
@@ -550,9 +551,6 @@ saveOptions m =
 
 
 {-| Render the Admin Page.
-
-TODO: Remove Debug calls so we can use the `optimize` flag.
-
 -}
 view : Model -> Html Msg
 view m =
@@ -578,7 +576,7 @@ view m =
                 RemoteData.Failure err ->
                     p []
                         [ text "Got an error while fetching options:"
-                        , pre [] [ text <| Debug.toString err ]
+                        , pre [] [ text <| fromHttpError err ]
                         ]
     in
     div []
