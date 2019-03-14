@@ -32,7 +32,7 @@ TODO:
 import Animation
 import Html exposing (Html, a, div, img)
 import Html.Attributes exposing (class, href, src, tabindex)
-import Html.Events exposing (custom, keyCode, stopPropagationOn)
+import Html.Events exposing (custom, keyCode, preventDefaultOn, stopPropagationOn)
 import Html.Keyed as Keyed
 import Json.Decode as Decode
 import Time exposing (millisToPosix)
@@ -426,7 +426,8 @@ closeModalOnClick =
 
 openModalOnClick : a -> Html.Attribute (Msg a)
 openModalOnClick =
-    alwaysStopPropagationOn "click"
+    preventDefaultOn "click"
+        << (\m -> Decode.succeed ( m, True ))
         << Select
 
 

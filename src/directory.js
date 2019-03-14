@@ -38,8 +38,8 @@ $(document).ready(function() {
       app.ports.onUrlChange.send(location.href);
     });
 
-    /* Inform the Elm app of navigation chanes */
-    document.addEventListener('popstate', function() {
+    /* Inform the Elm app of navigation changes. */
+    window.addEventListener('popstate', function() {
       app.ports.onUrlChange.send(location.href);
     })
   }
