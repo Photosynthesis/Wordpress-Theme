@@ -17,7 +17,25 @@ import Admin.Utils
 import Array exposing (Array)
 import Browser
 import Dict as Dict exposing (Dict)
-import Html exposing (..)
+import Html
+    exposing
+        ( Html
+        , br
+        , button
+        , div
+        , form
+        , h1
+        , h3
+        , hr
+        , input
+        , li
+        , p
+        , pre
+        , span
+        , table
+        , text
+        , ul
+        )
 import Html.Attributes as A
     exposing
         ( checked
@@ -722,6 +740,7 @@ idInputs prefix array addMsg inputMsg deleteMsg =
                     , placeholder "ID"
                     , style "width" "9em"
                     , required True
+                    , id <| prefix ++ "_" ++ String.fromInt index
                     ]
                     []
                 , button

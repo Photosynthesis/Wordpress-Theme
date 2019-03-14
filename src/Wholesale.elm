@@ -1,10 +1,51 @@
-port module Wholesale exposing (Cents(..), Model, Msg(..), ProductSet, ProductSetItem, ResponseStatus(..), SingleProduct, SlugQuantities, VolumeDiscountProduct, aNewWe, additionalFields, allSingleProducts, bestOfCommunities, calculateTotals, centsAdd, collectStripeToken, communitiesDirectory, communitiesMagazine, getQuantity, groupFacilitation, init, main, parseIntOrZero, placeOrder, productSetItemTotal, productSetSubTotal, productSetTotal, renderProductSet, renderSingleProduct, renderVolumeDiscountProduct, singleProductTotal, stripeTokenReceived, toDollars, togetherResilient, unitedJudgement, update, view, volumeDiscountTotal, volumeDiscountUnitPrice, wisdomSet, wisdomVolumeFour, wisdomVolumeOne, wisdomVolumeThree, wisdomVolumeTwo, withinReach)
+port module Wholesale exposing (main)
 
 import Browser
 import Dict exposing (Dict)
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (onCheck, onClick, onInput, onSubmit)
+import Html
+    exposing
+        ( Html
+        , a
+        , b
+        , button
+        , div
+        , em
+        , h1
+        , h2
+        , h3
+        , i
+        , img
+        , input
+        , label
+        , li
+        , p
+        , table
+        , tbody
+        , td
+        , text
+        , tfoot
+        , th
+        , thead
+        , tr
+        , ul
+        )
+import Html.Attributes
+    exposing
+        ( checked
+        , class
+        , colspan
+        , for
+        , href
+        , id
+        , required
+        , src
+        , step
+        , style
+        , target
+        , type_
+        , value
+        )
+import Html.Events exposing (onCheck, onInput, onSubmit)
 import Http
 import Json.Decode as Decode exposing (Value)
 import Json.Encode as Encode
@@ -180,7 +221,11 @@ type alias VolumeDiscountProduct =
     , thumbnail : String
     , url : String
     , description : List String
-    , priceTiers : List { minQuantity : Int, price : Cents }
+    , priceTiers :
+        List
+            { minQuantity : Int
+            , price : Cents
+            }
     }
 
 
@@ -506,7 +551,7 @@ additionalFields model =
             , input
                 [ type_ "email"
                 , id "email"
-                , class "form-control col-8 col-md-6"
+                , class inputClasses
                 , value model.emailAddress
                 , onInput UpdateEmailAddress
                 , required True
@@ -518,7 +563,7 @@ additionalFields model =
             , input
                 [ type_ "text"
                 , id "business-name"
-                , class "form-control col-8 col-md-6"
+                , class inputClasses
                 , value model.businessName
                 , onInput UpdateBusinessName
                 , required True
@@ -530,7 +575,7 @@ additionalFields model =
             , input
                 [ type_ "text"
                 , id "contact-name"
-                , class "form-control col-8 col-md-6"
+                , class inputClasses
                 , value model.contactName
                 , onInput UpdateContactName
                 , required True
@@ -542,7 +587,7 @@ additionalFields model =
             , input
                 [ type_ "tel"
                 , id "phone-number"
-                , class "form-control col-8 col-md-6"
+                , class inputClasses
                 , value model.phoneNumber
                 , onInput UpdatePhoneNumber
                 , required True

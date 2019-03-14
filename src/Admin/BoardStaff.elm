@@ -32,8 +32,6 @@ import Html
         , table
         , text
         , textarea
-        , th
-        , tr
         )
 import Html.Attributes
     exposing
