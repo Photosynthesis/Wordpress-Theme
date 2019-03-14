@@ -7,7 +7,7 @@ import Directory.Commands as Commands
 import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model, paginationConfig)
 import Directory.Pagination as Pagination
-import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..))
+import Directory.Routing as Routing exposing (FilterParam(..), ListingsRoute(..), Route(..))
 import Gallery
 import RemoteData
 
@@ -35,9 +35,9 @@ listingsUpdateUrl route model =
                 ( updatedPagination, paginationCmd ) =
                     Pagination.jumpTo paginationConfig model.communities page
             in
-                ( { updatedModel | communities = updatedPagination }
-                , Cmd.map CommunityPagination paginationCmd
-                )
+            ( { updatedModel | communities = updatedPagination }
+            , Cmd.map CommunityPagination paginationCmd
+            )
 
         communityFilters =
             Pagination.getData model.communities
@@ -68,15 +68,17 @@ listingsUpdateUrl route model =
                 ListingsRoute _ ->
                     False
     in
-        if filters /= communityFilters || ordering /= communityOrdering || fromDetailsPage then
-            Pagination.updateData paginationConfig model.communities updatedRequestData
-                |> (\( m, c ) ->
-                        ( { updatedModel | communities = m }, Cmd.map CommunityPagination c )
-                   )
-        else if page /= Pagination.getPage model.communities then
-            jumpToPage page
-        else
-            ( model, Cmd.none )
+    if filters /= communityFilters || ordering /= communityOrdering || fromDetailsPage then
+        Pagination.updateData paginationConfig model.communities updatedRequestData
+            |> (\( m, c ) ->
+                    ( { updatedModel | communities = m }, Cmd.map CommunityPagination c )
+               )
+
+    else if page /= Pagination.getPage model.communities then
+        jumpToPage page
+
+    else
+        ( model, Cmd.none )
 
 
 {-| Make Model Changes & Queue Commands Related to DetailsRoute Page Changes.
@@ -135,7 +137,7 @@ update msg model =
                         [] ->
                             [ SearchFilter model.searchString ]
             in
-                ( model, Commands.newPage newRoute )
+            ( model, Commands.newPage newRoute )
 
         CommunityPagination subMsg ->
             let
@@ -159,18 +161,19 @@ update msg model =
                                     |> Routing.mapPage (always <| Pagination.getPage paginationModel)
                                     |> ListingsRoute
                                     |> Commands.newPage
+
                             else
                                 Cmd.none
 
                         DetailsRoute _ ->
                             Cmd.none
             in
-                ( { model | communities = paginationModel }
-                , Cmd.batch
-                    [ Cmd.map CommunityPagination paginationCmd
-                    , pageChangeCmd
-                    ]
-                )
+            ( { model | communities = paginationModel }
+            , Cmd.batch
+                [ Cmd.map CommunityPagination paginationCmd
+                , pageChangeCmd
+                ]
+            )
 
         FetchCommunityDetails details ->
             ( { model | community = details }, Cmd.none )
@@ -216,4 +219,4 @@ update msg model =
                         Just image ->
                             image :: community.galleryImages
             in
-                ( updatedModel, Cmd.none )
+            ( updatedModel, Cmd.none )

@@ -1,11 +1,11 @@
 module Directory.Model exposing (Model, initial, paginationConfig)
 
 import Date exposing (Date)
-import Directory.Commands exposing (WPNonce, getCommunity, getCommunities, CommunitiesRequestData)
-import Directory.Communities exposing (CommunityListing, CommunityDetails, ImageData)
-import Directory.Pagination as Pagination exposing (Pagination)
-import Directory.Routing as Routing exposing (Route(..), FilterParam(..))
+import Directory.Commands exposing (CommunitiesRequestData, WPNonce, getCommunities, getCommunity)
+import Directory.Communities exposing (CommunityDetails, CommunityListing, ImageData)
 import Directory.Messages exposing (Msg(CommunityPagination))
+import Directory.Pagination as Pagination exposing (Pagination)
+import Directory.Routing as Routing exposing (FilterParam(..), Route(..))
 import Gallery
 import RemoteData exposing (WebData)
 
@@ -33,17 +33,17 @@ initial route nonce =
         ( community, detailsCmd ) =
             detailsInitial nonce route
     in
-        ( { communities = communitiesPagination
-          , community = community
-          , communityGallery = Gallery.initial
-          , communityValidation = RemoteData.NotAsked
-          , searchString = searchString
-          , currentDate = Nothing
-          , route = route
-          , wpNonce = nonce
-          }
-        , Cmd.batch [ Cmd.map CommunityPagination paginationCmd, detailsCmd ]
-        )
+    ( { communities = communitiesPagination
+      , community = community
+      , communityGallery = Gallery.initial
+      , communityValidation = RemoteData.NotAsked
+      , searchString = searchString
+      , currentDate = Nothing
+      , route = route
+      , wpNonce = nonce
+      }
+    , Cmd.batch [ Cmd.map CommunityPagination paginationCmd, detailsCmd ]
+    )
 
 
 listingsInitial : Route -> ( Pagination CommunityListing CommunitiesRequestData, Cmd (Pagination.Msg CommunityListing), String )
@@ -53,7 +53,7 @@ listingsInitial route =
             case route of
                 ListingsRoute listings ->
                     Routing.getPageAndFilters listings
-                        |> \( p, fs ) -> ( p, fs, Routing.getOrdering listings )
+                        |> (\( p, fs ) -> ( p, fs, Routing.getOrdering listings ))
 
                 DetailsRoute _ ->
                     ( 1, [], Nothing )
@@ -67,12 +67,12 @@ listingsInitial route =
         searchString =
             Routing.getSearchFilter filters |> Maybe.withDefault ""
     in
-        case route of
-            ListingsRoute _ ->
-                ( communitiesPagination, paginationCmd, searchString )
+    case route of
+        ListingsRoute _ ->
+            ( communitiesPagination, paginationCmd, searchString )
 
-            DetailsRoute _ ->
-                ( communitiesPagination, Cmd.none, "" )
+        DetailsRoute _ ->
+            ( communitiesPagination, Cmd.none, "" )
 
 
 paginationConfig : Pagination.Config CommunityListing CommunitiesRequestData

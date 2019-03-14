@@ -1,7 +1,7 @@
 module Directory.Messages exposing (Msg(..))
 
 import Date exposing (Date)
-import Directory.Communities exposing (CommunityListing, CommunityDetails, ImageData)
+import Directory.Communities exposing (CommunityDetails, CommunityListing, ImageData)
 import Directory.Pagination as Pagination
 import Directory.Routing exposing (Route)
 import Gallery

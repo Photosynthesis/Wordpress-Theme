@@ -1,4 +1,4 @@
-module Map exposing (Map, Coords, Marker, render)
+module Map exposing (Coords, Map, Marker, render)
 
 {-| This module is responsible for specifying & rendering Google Maps.
 

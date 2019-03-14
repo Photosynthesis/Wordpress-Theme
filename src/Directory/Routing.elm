@@ -1,10 +1,11 @@
-module Directory.Routing exposing (..)
+module Directory.Routing exposing (FilterParam(..), ListingsRoute(..), Ordering(..), Route(..), addQueryParams, filterParamToQueryString, filterParams, filtersToQueryString, getAdditionalFilters, getFilters, getInherentFilters, getOrdering, getPageAndFilters, getPageTitle, getSearchFilter, inlineFilters, listingsParser, listingsReverse, mapBoth, mapFilters, mapPage, parseFilterParam, parser, reverse, routeParser, toPageOne)
 
 {-| Contains Types & Functions Related to the Application's Internal Routing.
 -}
 
 import Navigation
-import UrlParser exposing (Parser, (</>), (<?>), s, int, string, map, oneOf, parsePath)
+import UrlParser exposing ((</>), (<?>), Parser, int, map, oneOf, parsePath, s, string)
+
 
 
 -- QueryString Filters
@@ -192,7 +193,7 @@ addQueryParams route pathParser =
                 |> withTopLevelFilter "state" StateFilter
                 |> withTopLevelFilter "province" ProvinceFilter
     in
-        map route (pathParser </> queryParser)
+    map route (pathParser </> queryParser)
 
 
 {-| Try to Pull a `SearchFilter` Out of a `FilterParam` List.
@@ -276,18 +277,20 @@ filtersToQueryString filters =
                 |> (\str ->
                         if not (String.isEmpty str) then
                             "filters=" ++ str
+
                         else
                             ""
                    )
     in
-        List.filter (not << String.isEmpty) [ filterString, topLevelFilterString ]
-            |> String.join "&"
-            |> (\str ->
-                    if String.isEmpty str then
-                        ""
-                    else
-                        "?" ++ str
-               )
+    List.filter (not << String.isEmpty) [ filterString, topLevelFilterString ]
+        |> String.join "&"
+        |> (\str ->
+                if String.isEmpty str then
+                    ""
+
+                else
+                    "?" ++ str
+           )
 
 
 
@@ -664,78 +667,79 @@ parser =
 listingsReverse : ListingsRoute -> String
 listingsReverse route =
     "/directory/"
-        ++ case route of
-            Listings 1 filterParams ->
-                "listings/" ++ filtersToQueryString filterParams
+        ++ (case route of
+                Listings 1 filterParams ->
+                    "listings/" ++ filtersToQueryString filterParams
 
-            Listings page filterParams ->
-                "listings/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                Listings page filterParams ->
+                    "listings/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            Communes 1 filterParams ->
-                "communes/" ++ filtersToQueryString filterParams
+                Communes 1 filterParams ->
+                    "communes/" ++ filtersToQueryString filterParams
 
-            Communes page filterParams ->
-                "communes/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                Communes page filterParams ->
+                    "communes/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            Ecovillages 1 filterParams ->
-                "ecovillages/" ++ filtersToQueryString filterParams
+                Ecovillages 1 filterParams ->
+                    "ecovillages/" ++ filtersToQueryString filterParams
 
-            Ecovillages page filterParams ->
-                "ecovillages/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                Ecovillages page filterParams ->
+                    "ecovillages/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            CohousingCommunities 1 filterParams ->
-                "cohousing-communities/" ++ filtersToQueryString filterParams
+                CohousingCommunities 1 filterParams ->
+                    "cohousing-communities/" ++ filtersToQueryString filterParams
 
-            CohousingCommunities page filterParams ->
-                "cohousing-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                CohousingCommunities page filterParams ->
+                    "cohousing-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            Coops 1 filterParams ->
-                "co-ops/" ++ filtersToQueryString filterParams
+                Coops 1 filterParams ->
+                    "co-ops/" ++ filtersToQueryString filterParams
 
-            Coops page filterParams ->
-                "co-ops/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                Coops page filterParams ->
+                    "co-ops/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            SharedHousing 1 filterParams ->
-                "shared-housing/" ++ filtersToQueryString filterParams
+                SharedHousing 1 filterParams ->
+                    "shared-housing/" ++ filtersToQueryString filterParams
 
-            SharedHousing page filterParams ->
-                "shared-housing/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                SharedHousing page filterParams ->
+                    "shared-housing/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            StudentHousing 1 filterParams ->
-                "student-housing/" ++ filtersToQueryString filterParams
+                StudentHousing 1 filterParams ->
+                    "student-housing/" ++ filtersToQueryString filterParams
 
-            StudentHousing page filterParams ->
-                "student-housing/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                StudentHousing page filterParams ->
+                    "student-housing/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            ReligiousCommunities 1 filterParams ->
-                "spiritual-and-religious/" ++ filtersToQueryString filterParams
+                ReligiousCommunities 1 filterParams ->
+                    "spiritual-and-religious/" ++ filtersToQueryString filterParams
 
-            ReligiousCommunities page filterParams ->
-                "spiritual-and-religious/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                ReligiousCommunities page filterParams ->
+                    "spiritual-and-religious/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            JewishCommunities 1 filterParams ->
-                "jewish-communities/" ++ filtersToQueryString filterParams
+                JewishCommunities 1 filterParams ->
+                    "jewish-communities/" ++ filtersToQueryString filterParams
 
-            JewishCommunities page filterParams ->
-                "jewish-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                JewishCommunities page filterParams ->
+                    "jewish-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            ChristianCommunities 1 filterParams ->
-                "christian-communities/" ++ filtersToQueryString filterParams
+                ChristianCommunities 1 filterParams ->
+                    "christian-communities/" ++ filtersToQueryString filterParams
 
-            ChristianCommunities page filterParams ->
-                "christian-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                ChristianCommunities page filterParams ->
+                    "christian-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            RecentlyUpdated 1 filterParams ->
-                "recently-updated/" ++ filtersToQueryString filterParams
+                RecentlyUpdated 1 filterParams ->
+                    "recently-updated/" ++ filtersToQueryString filterParams
 
-            RecentlyUpdated page filterParams ->
-                "recently-updated/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                RecentlyUpdated page filterParams ->
+                    "recently-updated/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
 
-            RecentlyAdded 1 filterParams ->
-                "newest-communities/" ++ filtersToQueryString filterParams
+                RecentlyAdded 1 filterParams ->
+                    "newest-communities/" ++ filtersToQueryString filterParams
 
-            RecentlyAdded page filterParams ->
-                "newest-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+                RecentlyAdded page filterParams ->
+                    "newest-communities/" ++ toString page ++ "/" ++ filtersToQueryString filterParams
+           )
 
 
 reverse : Route -> String

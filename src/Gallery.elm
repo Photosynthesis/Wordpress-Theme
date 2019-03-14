@@ -1,15 +1,14 @@
-module Gallery
-    exposing
-        ( Config
-        , Model
-        , initial
-        , Msg
-        , update
-        , subscriptions
-        , open
-        , modal
-        , thumbnails
-        )
+module Gallery exposing
+    ( Config
+    , Model
+    , Msg
+    , initial
+    , modal
+    , open
+    , subscriptions
+    , thumbnails
+    , update
+    )
 
 {-| This module is used to render images as gallery thumbnails & lightboxes.
 
@@ -31,10 +30,10 @@ TODO:
 -}
 
 import Animation
-import Html exposing (Html, div, img, a)
+import Html exposing (Html, a, div, img)
+import Html.Attributes exposing (class, href, src, tabindex)
+import Html.Events exposing (defaultOptions, keyCode, onWithOptions)
 import Html.Keyed as Keyed
-import Html.Attributes exposing (class, tabindex, src, href)
-import Html.Events exposing (onWithOptions, defaultOptions, keyCode)
 import Json.Decode as Decode
 import Time exposing (millisecond)
 
@@ -110,7 +109,7 @@ update cfg msg m l =
                         ]
                         m.style
             in
-                { m | style = newStyle }
+            { m | style = newStyle }
 
         Select s ->
             let
@@ -123,8 +122,8 @@ update cfg msg m l =
                         ]
                         m.style
             in
-                updateSelectedItem cfg l (always <| Just s) m
-                    |> \model -> { model | style = newStyle }
+            updateSelectedItem cfg l (always <| Just s) m
+                |> (\model -> { model | style = newStyle })
 
         Next ->
             updateSelectedItem cfg l (Maybe.map .next) m
@@ -150,9 +149,9 @@ updateSelectedItem cfg l selector m =
             selector model.data
                 |> Maybe.andThen (calcNextPrev l)
     in
-        m
-            |> updateBackgroundImage cfg selector
-            |> \model -> { model | data = newData model }
+    m
+        |> updateBackgroundImage cfg selector
+        |> (\model -> { model | data = newData model })
 
 
 {-| Transition the background image styles using the given selector function.
@@ -199,7 +198,7 @@ updateBackgroundImage cfg selector m =
                 ( Nothing, Nothing ) ->
                     ( m.backgroundImageStyle, m.foregroundImageStyle )
     in
-        { m | foregroundImageStyle = fgStyle, backgroundImageStyle = bgStyle }
+    { m | foregroundImageStyle = fgStyle, backgroundImageStyle = bgStyle }
 
 
 {-| Subscribe to the animation updates.
@@ -225,24 +224,25 @@ calcNextPrev allItems selected =
                 ( Nothing, Nothing ) ->
                     Nothing
     in
-        List.foldl
-            (\i acc ->
-                case acc of
-                    ( prev, True, Nothing ) ->
-                        ( prev, True, Just i )
+    List.foldl
+        (\i acc ->
+            case acc of
+                ( prev, True, Nothing ) ->
+                    ( prev, True, Just i )
 
-                    ( _, True, Just _ ) ->
-                        acc
+                ( _, True, Just _ ) ->
+                    acc
 
-                    ( prev, False, next ) ->
-                        if i == selected then
-                            ( prev, True, next )
-                        else
-                            ( Just i, False, next )
-            )
-            ( Nothing, False, Nothing )
-            allItems
-            |> \( p, _, n ) ->
+                ( prev, False, next ) ->
+                    if i == selected then
+                        ( prev, True, next )
+
+                    else
+                        ( Just i, False, next )
+        )
+        ( Nothing, False, Nothing )
+        allItems
+        |> (\( p, _, n ) ->
                 Maybe.map2 (,)
                     (orMaybe p
                         (List.drop (List.length allItems - 1) allItems
@@ -259,6 +259,7 @@ calcNextPrev allItems selected =
                             , previous = previous
                             }
                         )
+           )
 
 
 {-| Render the Modal. This should always be done, even if the Modal has not
@@ -329,9 +330,9 @@ modal model =
                     , div [ class "modal-backdrop d-flex", closeModalOnClick ] []
                     )
     in
-        Keyed.node "div"
-            (class "gallery-modal" :: Animation.render model.style)
-            [ ( "gallery-modal", modal_ ), ( "gallery-backdrop", backdrop ) ]
+    Keyed.node "div"
+        (class "gallery-modal" :: Animation.render model.style)
+        [ ( "gallery-modal", modal_ ), ( "gallery-backdrop", backdrop ) ]
 
 
 {-| Render thumbnails using the given list.
@@ -353,7 +354,7 @@ thumbnails c =
                     ]
                 ]
     in
-        div [ class "row" ] << List.map renderItem
+    div [ class "row" ] << List.map renderItem
 
 
 {-| Open the modal, selecting the given item.
@@ -413,6 +414,7 @@ closeModalOnEsc =
                 (\code ->
                     if code == 27 then
                         Decode.succeed Close
+
                     else
                         Decode.fail "Not ESC"
                 )

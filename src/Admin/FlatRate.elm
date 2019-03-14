@@ -2,36 +2,36 @@ port module Admin.FlatRate exposing (main)
 
 import Admin.Utils
     exposing
-        ( simpleLabel
-        , formLabel
-        , formRow
+        ( SubmissionStatus(AwaitingResponse)
         , adminGet
         , adminPost
-        , SubmissionStatus(AwaitingResponse)
+        , formLabel
+        , formRow
         , initialSubmissionStatus
+        , simpleLabel
+        , statusFromWebData
         , submissionAwaitingResponse
         , submissionNotice
         , submissionSpinner
-        , statusFromWebData
         )
 import Array.Hamt as Array exposing (Array)
 import Dict as Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes as A
     exposing
-        ( type_
-        , step
-        , value
-        , checked
-        , id
+        ( checked
         , class
-        , required
-        , placeholder
-        , size
-        , style
         , disabled
+        , id
+        , placeholder
+        , required
+        , size
+        , step
+        , style
+        , type_
+        , value
         )
-import Html.Events exposing (onCheck, onInput, onClick, onSubmit)
+import Html.Events exposing (onCheck, onClick, onInput, onSubmit)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode exposing (Value)
 import RemoteData exposing (WebData)
@@ -96,10 +96,10 @@ encodeOptions { cmag, others } =
                 arrayToList (\_ ( name, rate ) -> ( name, encodeRate rate ))
                     others
     in
-        Encode.object
-            [ ( "cmag", encodeCMag cmag )
-            , ( "others", encodedRates )
-            ]
+    Encode.object
+        [ ( "cmag", encodeCMag cmag )
+        , ( "others", encodedRates )
+        ]
 
 
 {-| The CMag specific options
@@ -222,7 +222,7 @@ init { nonce } =
             , formStatus = initialSubmissionStatus
             }
     in
-        ( initialModel, getOptions initialModel )
+    ( initialModel, getOptions initialModel )
 
 
 
@@ -278,9 +278,9 @@ update msg model =
                         _ ->
                             model.errors
             in
-                ( { model | formStatus = formStatus, errors = errors }
-                , scrollToTop ()
-                )
+            ( { model | formStatus = formStatus, errors = errors }
+            , scrollToTop ()
+            )
 
         CMagCheckIgnore ignoreDomestic ->
             ( cmagUpdate model <|
@@ -537,8 +537,8 @@ saveOptions m =
                         , Decode.succeed <| Ok ()
                         ]
             in
-                adminPost "flat-rate/set/" m body decoder
-                    |> Cmd.map SaveOptions
+            adminPost "flat-rate/set/" m body decoder
+                |> Cmd.map SaveOptions
 
         _ ->
             Cmd.none
@@ -577,10 +577,10 @@ view m =
                         , pre [] [ text <| toString err ]
                         ]
     in
-        div []
-            [ h1 [] [ text "FIC Flat Rate Options" ]
-            , loadingOrContent
-            ]
+    div []
+        [ h1 [] [ text "FIC Flat Rate Options" ]
+        , loadingOrContent
+        ]
 
 
 {-| Render the Options Form
@@ -679,12 +679,12 @@ otherRatesForms rates errors =
                     [ text "Remove Rate" ]
                 ]
     in
-        div [] <|
-            List.intersperse (hr [] []) <|
-                arrayToList rateForm rates
-                    ++ [ button [ type_ "button", class "button", onClick AddNewRate ]
-                            [ text "Add New Rate" ]
-                       ]
+    div [] <|
+        List.intersperse (hr [] []) <|
+            arrayToList rateForm rates
+                ++ [ button [ type_ "button", class "button", onClick AddNewRate ]
+                        [ text "Add New Rate" ]
+                   ]
 
 
 {-| Render a list of errors.
@@ -693,6 +693,7 @@ errorList : List String -> Html msg
 errorList errors =
     if not (List.isEmpty errors) then
         ul [ style [ ( "color", "red" ), ( "font-weight", "bold" ) ] ] <| List.map (\e -> li [] [ text e ]) errors
+
     else
         text ""
 
@@ -729,12 +730,12 @@ idInputs prefix array addMsg inputMsg deleteMsg =
                     [ text "Remove" ]
                 ]
     in
-        div [] <|
-            List.intersperse (br [] []) <|
-                arrayToList idInput array
-                    ++ [ button [ type_ "button", class "button", onClick addMsg ]
-                            [ text "+" ]
-                       ]
+    div [] <|
+        List.intersperse (br [] []) <|
+            arrayToList idInput array
+                ++ [ button [ type_ "button", class "button", onClick addMsg ]
+                        [ text "+" ]
+                   ]
 
 
 {-| Render the list of country rate inputs & add/remove controls.
@@ -771,16 +772,16 @@ countryInputs prefix countries codeInputMsg rateInputMsg deleteMsg addMsg =
                     [ text "Remove" ]
                 ]
     in
-        div [] <|
-            List.intersperse (br [] []) <|
-                arrayToList countryInput countries
-                    ++ [ button
-                            [ type_ "button"
-                            , class "button"
-                            , onClick addMsg
-                            ]
-                            [ text "Add Country" ]
-                       ]
+    div [] <|
+        List.intersperse (br [] []) <|
+            arrayToList countryInput countries
+                ++ [ button
+                        [ type_ "button"
+                        , class "button"
+                        , onClick addMsg
+                        ]
+                        [ text "Add Country" ]
+                   ]
 
 
 {-| Render an amount/price input.
@@ -809,8 +810,8 @@ globalInputRow prefix rate inputMsg =
         inputId =
             prefix ++ "_global"
     in
-        formRow (formLabel inputId "Global Price ($)") <|
-            amountInput rate inputId inputMsg
+    formRow (formLabel inputId "Global Price ($)") <|
+        amountInput rate inputId inputMsg
 
 
 {-| Render the Ignore Domestic checkbox.
@@ -821,11 +822,11 @@ ignoreDomesticInputRow prefix ignoreDomestic checkMsg =
         inputId =
             prefix ++ "_ignore"
     in
-        formRow (formLabel inputId "Ignore Domestic Orders") <|
-            input
-                [ type_ "checkbox"
-                , checked ignoreDomestic
-                , id inputId
-                , onCheck checkMsg
-                ]
-                []
+    formRow (formLabel inputId "Ignore Domestic Orders") <|
+        input
+            [ type_ "checkbox"
+            , checked ignoreDomestic
+            , id inputId
+            , onCheck checkMsg
+            ]
+            []

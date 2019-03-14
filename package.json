@@ -27,6 +27,7 @@
     "coffeekraken-s-google-map-marker-component": "^1.0.2",
     "css-loader": "^0.26.4",
     "elm": "^0.18.0",
+    "elm-format": "^0.8.1",
     "elm-webpack-loader": "^4.5.0",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.10.1",

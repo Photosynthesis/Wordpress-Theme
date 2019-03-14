@@ -4,15 +4,15 @@ module Directory.Main exposing (main)
 -}
 
 import Date
-import Navigation
-import Task
 import Directory.Commands exposing (WPNonce(..))
-import Directory.Messages exposing (Msg(SetCurrentDate, UrlChange, GalleryMsg))
+import Directory.Messages exposing (Msg(GalleryMsg, SetCurrentDate, UrlChange))
 import Directory.Model exposing (Model)
-import Directory.Routing exposing (Route(..), FilterParam(..), routeParser)
+import Directory.Routing exposing (FilterParam(..), Route(..), routeParser)
 import Directory.Update exposing (update)
 import Directory.View exposing (view)
 import Gallery
+import Navigation
+import Task
 
 
 main : Program Flags Model Msg
@@ -39,9 +39,9 @@ initialize { nonce } location =
         ( model, cmd ) =
             Directory.Model.initial route (WPNonce nonce)
     in
-        ( model
-        , Cmd.batch
-            [ Task.perform SetCurrentDate Date.now
-            , cmd
-            ]
-        )
+    ( model
+    , Cmd.batch
+        [ Task.perform SetCurrentDate Date.now
+        , cmd
+        ]
+    )

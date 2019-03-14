@@ -1,51 +1,51 @@
-port module Admin.BoardStaff exposing (main, Profile, decodeProfile)
+port module Admin.BoardStaff exposing (Profile, decodeProfile, main)
 
-import Array.Hamt as Array exposing (Array)
 import Admin.Utils
     exposing
-        ( adminGet
+        ( SubmissionStatus(AwaitingResponse)
+        , adminGet
         , adminPost
         , formLabel
         , formRow
-        , SubmissionStatus(AwaitingResponse)
         , initialSubmissionStatus
         , statusFromWebData
+        , submissionAwaitingResponse
         , submissionNotice
         , submissionSpinner
-        , submissionAwaitingResponse
         )
+import Array.Hamt as Array exposing (Array)
 import Html
     exposing
         ( Html
+        , button
+        , code
+        , div
+        , form
         , h1
         , h2
         , h3
-        , div
-        , span
-        , form
-        , table
-        , tr
-        , th
-        , text
-        , p
-        , code
         , hr
         , input
+        , p
+        , span
+        , table
+        , text
         , textarea
-        , button
+        , th
+        , tr
         )
 import Html.Attributes
     exposing
-        ( type_
-        , class
-        , disabled
-        , style
-        , required
-        , value
-        , placeholder
-        , id
-        , rows
+        ( class
         , cols
+        , disabled
+        , id
+        , placeholder
+        , required
+        , rows
+        , style
+        , type_
+        , value
         )
 import Html.Events exposing (onClick, onInput, onSubmit)
 import Json.Decode as Decode exposing (Decoder)
@@ -127,7 +127,7 @@ init flags =
             , formError = ""
             }
     in
-        ( model, getData model )
+    ( model, getData model )
 
 
 
@@ -167,9 +167,9 @@ update msg model =
                         _ ->
                             model.formError
             in
-                ( { model | formStatus = formStatus, formError = error }
-                , scrollToTop ()
-                )
+            ( { model | formStatus = formStatus, formError = error }
+            , scrollToTop ()
+            )
 
         StaffProfile subMsg ->
             ( { model | staff = updateProfile subMsg model.staff }, Cmd.none )
@@ -233,8 +233,8 @@ getData m =
         decodeProfiles =
             Decode.map Array.fromList <| Decode.list decodeProfile
     in
-        adminGet "board-staff/get/" m decoder
-            |> Cmd.map FetchData
+    adminGet "board-staff/get/" m decoder
+        |> Cmd.map FetchData
 
 
 {-| Save the Profile data to Wordpress's DB.
@@ -254,8 +254,8 @@ saveData m =
                 , ( "staff", Encode.list <| List.map encodeProfile <| Array.toList m.staff )
                 ]
     in
-        adminPost "board-staff/set/" m body decoder
-            |> Cmd.map SaveData
+    adminPost "board-staff/set/" m body decoder
+        |> Cmd.map SaveData
 
 
 
@@ -270,6 +270,7 @@ view model =
             , p [ style [ ( "color", "red" ), ( "font-weight", "bold" ) ] ]
                 [ text "There was an error fetching the data. This is a bug, report it!" ]
             ]
+
     else
         form [ onSubmit SubmitForm ]
             [ h1 [] [ text "FIC Board & Staff Profiles" ]
@@ -310,89 +311,90 @@ profileForms msg prefix profiles =
                 makeId name =
                     prefix ++ toString i ++ name
             in
-                div [ style [ ( "clear", "both" ) ] ]
-                    [ h3 [] [ text profile.name ]
-                    , div []
-                        [ button
-                            [ type_ "button"
-                            , class "button"
-                            , onClick <| msg <| MoveProfileUp i
-                            ]
-                            [ span
-                                [ class "dashicons dashicons-arrow-up-alt"
-                                , style [ ( "margin-top", "0.15em" ) ]
-                                ]
-                                []
-                            ]
-                        , button
-                            [ type_ "button"
-                            , class "button"
-                            , onClick <| msg <| MoveProfileDown i
-                            ]
-                            [ span
-                                [ class "dashicons dashicons-arrow-down-alt"
-                                , style [ ( "margin-top", "0.15em" ) ]
-                                ]
-                                []
-                            ]
+            div [ style [ ( "clear", "both" ) ] ]
+                [ h3 [] [ text profile.name ]
+                , div []
+                    [ button
+                        [ type_ "button"
+                        , class "button"
+                        , onClick <| msg <| MoveProfileUp i
                         ]
-                    , table [ class "form-table" ]
-                        [ formRow (formLabel (makeId "name") "Name") <|
-                            input
-                                [ type_ "text"
-                                , required True
-                                , value profile.name
-                                , placeholder "Jane Doe"
-                                , onInput <| msg << ProfileName i
-                                , id <| makeId "name"
-                                ]
-                                []
-                        , formRow (formLabel (makeId "image") "Image") <|
-                            input
-                                [ type_ "text"
-                                , required True
-                                , value profile.image
-                                , placeholder "/wp-content/uploads/..."
-                                , onInput <| msg << ProfileImage i
-                                , id <| makeId "image"
-                                ]
-                                []
-                        , formRow (formLabel (makeId "bio") "Biography") <|
-                            textarea
-                                [ required True
-                                , placeholder "Enter a bio for the person."
-                                , onInput <| msg << ProfileBio i
-                                , id <| makeId "bio"
-                                , rows 20
-                                , cols 55
-                                ]
-                                [ text profile.bio ]
+                        [ span
+                            [ class "dashicons dashicons-arrow-up-alt"
+                            , style [ ( "margin-top", "0.15em" ) ]
+                            ]
+                            []
                         ]
                     , button
                         [ type_ "button"
-                        , class "button-primary"
-                        , onClick <| msg <| DeleteProfile i
-                        , style [ ( "margin-bottom", "2rem" ) ]
-                        ]
-                        [ text "Delete Profile" ]
-                    ]
-    in
-        div [] <|
-            (List.intersperse (hr [] []) <|
-                Array.toList <|
-                    Array.indexedMap profileForm profiles
-            )
-                ++ [ if Array.length profiles > 0 then
-                        hr [] []
-                     else
-                        text ""
-                   , button
-                        [ type_ "button"
                         , class "button"
-                        , onClick <| msg AddProfile
+                        , onClick <| msg <| MoveProfileDown i
                         ]
-                        [ text "Add Profile" ]
-                   ]
+                        [ span
+                            [ class "dashicons dashicons-arrow-down-alt"
+                            , style [ ( "margin-top", "0.15em" ) ]
+                            ]
+                            []
+                        ]
+                    ]
+                , table [ class "form-table" ]
+                    [ formRow (formLabel (makeId "name") "Name") <|
+                        input
+                            [ type_ "text"
+                            , required True
+                            , value profile.name
+                            , placeholder "Jane Doe"
+                            , onInput <| msg << ProfileName i
+                            , id <| makeId "name"
+                            ]
+                            []
+                    , formRow (formLabel (makeId "image") "Image") <|
+                        input
+                            [ type_ "text"
+                            , required True
+                            , value profile.image
+                            , placeholder "/wp-content/uploads/..."
+                            , onInput <| msg << ProfileImage i
+                            , id <| makeId "image"
+                            ]
+                            []
+                    , formRow (formLabel (makeId "bio") "Biography") <|
+                        textarea
+                            [ required True
+                            , placeholder "Enter a bio for the person."
+                            , onInput <| msg << ProfileBio i
+                            , id <| makeId "bio"
+                            , rows 20
+                            , cols 55
+                            ]
+                            [ text profile.bio ]
+                    ]
+                , button
+                    [ type_ "button"
+                    , class "button-primary"
+                    , onClick <| msg <| DeleteProfile i
+                    , style [ ( "margin-bottom", "2rem" ) ]
+                    ]
+                    [ text "Delete Profile" ]
+                ]
+    in
+    div [] <|
+        (List.intersperse (hr [] []) <|
+            Array.toList <|
+                Array.indexedMap profileForm profiles
+        )
+            ++ [ if Array.length profiles > 0 then
+                    hr [] []
+
+                 else
+                    text ""
+               , button
+                    [ type_ "button"
+                    , class "button"
+                    , onClick <| msg AddProfile
+                    ]
+                    [ text "Add Profile" ]
+               ]
 
 
 
@@ -418,7 +420,7 @@ deleteArray index arr =
         right =
             Array.slice (index + 1) (Array.length arr) arr
     in
-        Array.append left right
+    Array.append left right
 
 
 {-| Move an index up in the array.
@@ -427,6 +429,7 @@ moveUp : Int -> Array a -> Array a
 moveUp index array =
     if index <= 0 then
         array
+
     else
         swapIndexes index (index - 1) array
 
@@ -437,6 +440,7 @@ moveDown : Int -> Array a -> Array a
 moveDown index array =
     if index >= (Array.length array - 1) then
         array
+
     else
         swapIndexes index (index + 1) array
 

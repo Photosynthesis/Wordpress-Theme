@@ -8,11 +8,11 @@ import Directory.Communities exposing (..)
 import Directory.Messages exposing (Msg(..))
 import Directory.Model exposing (Model)
 import Directory.Pagination as Pagination exposing (Pagination)
-import Directory.Routing as Routing exposing (Route(..), ListingsRoute(..), FilterParam(..), reverse)
+import Directory.Routing as Routing exposing (FilterParam(..), ListingsRoute(..), Route(..), reverse)
 import Gallery
 import Html exposing (Html, text)
-import Html.Attributes exposing (class, src, alt, href, name, type_, checked, height, width, value, target, id, title)
-import Html.Events exposing (onClick, onInput, onSubmit, onWithOptions, defaultOptions)
+import Html.Attributes exposing (alt, checked, class, height, href, id, name, src, target, title, type_, value, width)
+import Html.Events exposing (defaultOptions, onClick, onInput, onSubmit, onWithOptions)
 import Html.Keyed as Keyed
 import Json.Decode as Decode
 import Map
@@ -117,6 +117,7 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
                     , Html.h2 [] [ Html.small [] [ area ] ]
                     , if community.status == Disbanded then
                         Html.strong [ class "text-danger" ] [ text "Disbanded Community" ]
+
                       else
                         text ""
                     ]
@@ -189,16 +190,16 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
                         ]
                         [ inner ]
             in
-                Html.div [ class "mb-2" ]
-                    [ linkWrapper <|
-                        Html.img
-                            [ src imageSrc
-                            , alt community.name
-                            , title community.name
-                            , class "img-thumbnail img-fluid d-block mx-auto"
-                            ]
-                            []
-                    ]
+            Html.div [ class "mb-2" ]
+                [ linkWrapper <|
+                    Html.img
+                        [ src imageSrc
+                        , alt community.name
+                        , title community.name
+                        , class "img-thumbnail img-fluid d-block mx-auto"
+                        ]
+                        []
+                ]
 
         section header content =
             sectionHtml header <| Html.p [] [ text content ]
@@ -247,6 +248,7 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
                         , text "."
                         ]
                     ]
+
             else
                 text ""
 
@@ -258,31 +260,31 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
                 community.networkAffiliations
                     ++ [ community.otherAffiliations ]
     in
-        Html.div [ class "directory-listing" ]
-            [ header
-            , Html.div [ class "row mb-2" ]
-                [ leftColumn
-                , detailRightColumn community
-                ]
-            , detailInfoBlocks community
-            , renderMaybeString community.additionalComments <|
-                section "Additional Comments"
-            , renderIf (not <| List.isEmpty community.galleryImages) <|
-                sectionHtml "Photo Gallery" <|
-                    Html.map GalleryMsg <|
-                        Gallery.thumbnails galleryConfig community.galleryImages
-            , embedYoutube
-            , renderIf (not <| List.isEmpty affiliations) <|
-                section "Community Network or Organization Affiliations" <|
-                    String.join ", " affiliations
-            , renderMaybeString community.communityAffiliations <|
-                section "Community Affiliations"
-            , fairHousingSection
-            , renderNonEmpty community.keywords <|
-                section "Keywords"
-            , Html.map GalleryMsg <|
-                Gallery.modal communityGallery
+    Html.div [ class "directory-listing" ]
+        [ header
+        , Html.div [ class "row mb-2" ]
+            [ leftColumn
+            , detailRightColumn community
             ]
+        , detailInfoBlocks community
+        , renderMaybeString community.additionalComments <|
+            section "Additional Comments"
+        , renderIf (not <| List.isEmpty community.galleryImages) <|
+            sectionHtml "Photo Gallery" <|
+                Html.map GalleryMsg <|
+                    Gallery.thumbnails galleryConfig community.galleryImages
+        , embedYoutube
+        , renderIf (not <| List.isEmpty affiliations) <|
+            section "Community Network or Organization Affiliations" <|
+                String.join ", " affiliations
+        , renderMaybeString community.communityAffiliations <|
+            section "Community Affiliations"
+        , fairHousingSection
+        , renderNonEmpty community.keywords <|
+            section "Keywords"
+        , Html.map GalleryMsg <|
+            Gallery.modal communityGallery
+        ]
 
 
 {-| Render non-empty strings only.
@@ -291,6 +293,7 @@ renderNonEmpty : String -> (String -> Html msg) -> Html msg
 renderNonEmpty value_ renderer =
     if value_ == "" then
         text ""
+
     else
         renderer value_
 
@@ -313,6 +316,7 @@ renderIf : Bool -> Html msg -> Html msg
 renderIf condition html =
     if condition then
         html
+
     else
         text ""
 
@@ -425,11 +429,11 @@ detailRightColumn community =
         boldLabelText label value_ =
             boldLabel label <| text value_
     in
-        Html.div [ class "col-24 col-sm-10" ]
-            [ Html.div [ class "card" ]
-                [ Html.ul [ class "card-block list-unstyled listing-status mb-0" ] rightColumn
-                ]
+    Html.div [ class "col-24 col-sm-10" ]
+        [ Html.div [ class "card" ]
+            [ Html.ul [ class "card-block list-unstyled listing-status mb-0" ] rightColumn
             ]
+        ]
 
 
 detailInfoBlocks : CommunityDetails -> Html msg
@@ -470,6 +474,7 @@ detailInfoBlocks community =
         stringInfoItem header value_ =
             if String.isEmpty value_ then
                 []
+
             else
                 [ ( header, text value_ ) ]
 
@@ -482,134 +487,141 @@ detailInfoBlocks community =
         boolToString val =
             if val then
                 "Yes"
+
             else
                 "No"
     in
-        Html.div [ class "card-columns listing-info-blocks" ]
-            [ infoBlock "About"
-                [ infoBlockSublist "Type(s)" <| List.map typeToString community.communityTypes
-                , infoBlockSublist "Programs & Activities" community.programsAndActivites
-                , [ ( "Location", text <| locationTypeToString community.location ) ]
-                ]
-            , infoBlock "Housing"
-                [ maybeInfoItem "Status"
-                    community.landStatus
-                    (text << landStatusToString)
-                , maybeInfoItem "Area" community.landSizeAmount landAmountAndUnits
-                , infoBlockSublist "Current Residence Types" community.currentResidenceTypes
-                , maybeInfoItem "Current Number of Residences"
-                    community.currentResidences
-                    (text << toString)
-                , maybeInfoItem "Planned Number of Residences"
-                    community.plannedResidences
-                    (text << toString)
-                , infoBlockSublist "Planned Residence Types" community.plannedResidenceTypes
-                , infoBlockSublist "Housing Provided" community.housingAccess
-                , maybeInfoItem "Land Owned By" community.landOwner text
-                , maybeInfoItem "Additional Comments" community.housingComments text
-                ]
-            , infoBlock "Membership"
-                [ [ ( "Adult Members", text <| toString community.adultCount ) ]
-                , maybeInfoItem "Child Members" community.childCount (text << toString)
-                , maybeInfoItem "Non-Member Residents" community.nonmemberCount (text << toString)
-                , maybeInfoItem "Percent Women" community.percentFemale text
-                , maybeInfoItem "Percent Men" community.percentMale text
-                , maybeInfoItem "Percent Transgender" community.percentTrans text
-                , [ ( "Visitors Accepted", visitorsWelcome community.openToVisitors ) ]
-                , maybeInfoItem "Visitor Process" community.visitorProcess text
-                , [ ( "Open to New Members", membersWelcome community.openToMembers ) ]
-                , maybeInfoItem "Membership Process" community.membershipProcess text
-                , maybeInfoItem "Additional Comments" community.membershipComments text
-                ]
-            , infoBlock "Government"
-                [ [ ( "Decision Making", text community.decisionMaking )
-                  , ( "Identified Leader", text community.leader )
-                  ]
-                , maybeInfoItem "Leadership Core Group" community.leadershipGroup text
-                , maybeInfoItem "Additional Comments" community.governmentComments text
-                ]
-            , infoBlock "Economics"
-                [ if community.hasJoinFee then
-                    maybeInfoItem "Join Fee($)" community.joinFee (text << toString)
-                  else
-                    []
-                , [ ( "Dues, Fees, or Shared Expenses"
-                    , text <|
-                        if community.hasRegularFees then
-                            "Yes"
-                        else
-                            "No"
-                    )
-                  ]
-                , if community.hasRegularFees then
-                    maybeInfoItem "Monthly Fees($)" community.regularFees (text << toString)
-                  else
-                    []
-                , [ ( "Shared Income", text <| incomeSharingToString community.sharedIncome ) ]
-                , if community.contributeLabor == "Yes" then
-                    maybeInfoItem "Required Weekly Labor Contribution"
-                        community.laborHours
-                        (text << toString)
-                  else if community.contributeLabor == "No" then
-                    []
-                  else
-                    maybeInfoItem "Suggested Weekly Labor Contribution"
-                        community.laborHours
-                        (text << toString)
-                , maybeInfoItem "Open to Members with Existing Debt" community.memberDebt text
-                , maybeInfoItem "Additional Comments" community.economicsComments text
-                ]
-            , infoBlock "Sustainability Practices"
-                [ maybeInfoItem "Energy Infrastructure" community.energyInfrastructure text
-                , maybeInfoItem "Current Renewable Energy Generation" community.currentRenewablePercentage text
-                , infoBlockSublist "Energy Sources" <| Maybe.withDefault [] community.renewableSources
-                , maybeInfoItem "Planned Renewable Energy Generation" community.plannedRenewablePercentage text
-                , maybeInfoItem "Current Food Produced" community.currentFoodPercentage text
-                , maybeInfoItem "Planned Food Produced" community.plannedFoodPercentage text
-                , maybeInfoItem "Food Produced Locally" community.localFoodPercentage text
-                ]
-            , infoBlock "Lifestyle"
-                [ infoBlockSublist "Common Facilities" community.facilities
-                , maybeInfoItem "Internet Available" community.internetAccess text
-                , maybeInfoItem "Internet Fast?" community.internetSpeed text
-                , maybeInfoItem "Cellphone Service" community.cellService text
-                , maybeInfoItem "Shared Meals" community.sharedMeals text
-                , infoBlockSublist "Dietary Practices" community.dietaryPractices
-                , maybeInfoItem "Dietary Choice or Restrictions" community.commonDiet text
-                , maybeInfoItem "Special Diets OK" community.specialDiets text
-                , maybeInfoItem "Alcohol Use" community.alcohol text
-                , maybeInfoItem "Tobacco Use" community.tobacco text
-                , maybeInfoItem "Additional Diet Comments" community.dietComments text
-                , if not (List.isEmpty community.spiritualPractices) then
-                    infoBlockSublist "Common Spiritual Practice(s)" community.spiritualPractices
-                        ++ maybeInfoItem "Spiritual Practice Expected?" community.religionExpected text
-                  else
-                    []
-                , infoBlockSublist "Education Style(s)" community.education
-                , maybeInfoItem "Expected Healthcare Practices" community.healthcareComments text
-                , infoBlockSublist "Healthcare Options" community.healthcareOptions
-                , maybeInfoItem "Additional Comments" community.lifestyleComments text
-                ]
-            , (\a b -> maybeHtml b a) community.cohousing <|
-                \cohousing ->
-                    infoBlock "Cohousing"
-                        [ maybeInfoItem "Building Site Status"
-                            cohousing.siteStatus
-                            (cohousingStatusToString >> text)
-                        , maybeInfoItem "Year Construction Completed"
-                            cohousing.yearCompleted
-                            (toString >> text)
-                        , maybeInfoItem "Number of Housing Units"
-                            cohousing.housingUnits
-                            (toString >> text)
-                        , maybeInfoItem "Has a Shared Common Building"
-                            cohousing.hasSharedBuilding
-                            (boolToString >> text)
-                        , stringInfoItem "Architect" cohousing.architect
-                        , stringInfoItem "Developer" cohousing.developer
-                        , stringInfoItem "Commercial Lender" cohousing.lender
-                        ]
+    Html.div [ class "card-columns listing-info-blocks" ]
+        [ infoBlock "About"
+            [ infoBlockSublist "Type(s)" <| List.map typeToString community.communityTypes
+            , infoBlockSublist "Programs & Activities" community.programsAndActivites
+            , [ ( "Location", text <| locationTypeToString community.location ) ]
             ]
+        , infoBlock "Housing"
+            [ maybeInfoItem "Status"
+                community.landStatus
+                (text << landStatusToString)
+            , maybeInfoItem "Area" community.landSizeAmount landAmountAndUnits
+            , infoBlockSublist "Current Residence Types" community.currentResidenceTypes
+            , maybeInfoItem "Current Number of Residences"
+                community.currentResidences
+                (text << toString)
+            , maybeInfoItem "Planned Number of Residences"
+                community.plannedResidences
+                (text << toString)
+            , infoBlockSublist "Planned Residence Types" community.plannedResidenceTypes
+            , infoBlockSublist "Housing Provided" community.housingAccess
+            , maybeInfoItem "Land Owned By" community.landOwner text
+            , maybeInfoItem "Additional Comments" community.housingComments text
+            ]
+        , infoBlock "Membership"
+            [ [ ( "Adult Members", text <| toString community.adultCount ) ]
+            , maybeInfoItem "Child Members" community.childCount (text << toString)
+            , maybeInfoItem "Non-Member Residents" community.nonmemberCount (text << toString)
+            , maybeInfoItem "Percent Women" community.percentFemale text
+            , maybeInfoItem "Percent Men" community.percentMale text
+            , maybeInfoItem "Percent Transgender" community.percentTrans text
+            , [ ( "Visitors Accepted", visitorsWelcome community.openToVisitors ) ]
+            , maybeInfoItem "Visitor Process" community.visitorProcess text
+            , [ ( "Open to New Members", membersWelcome community.openToMembers ) ]
+            , maybeInfoItem "Membership Process" community.membershipProcess text
+            , maybeInfoItem "Additional Comments" community.membershipComments text
+            ]
+        , infoBlock "Government"
+            [ [ ( "Decision Making", text community.decisionMaking )
+              , ( "Identified Leader", text community.leader )
+              ]
+            , maybeInfoItem "Leadership Core Group" community.leadershipGroup text
+            , maybeInfoItem "Additional Comments" community.governmentComments text
+            ]
+        , infoBlock "Economics"
+            [ if community.hasJoinFee then
+                maybeInfoItem "Join Fee($)" community.joinFee (text << toString)
+
+              else
+                []
+            , [ ( "Dues, Fees, or Shared Expenses"
+                , text <|
+                    if community.hasRegularFees then
+                        "Yes"
+
+                    else
+                        "No"
+                )
+              ]
+            , if community.hasRegularFees then
+                maybeInfoItem "Monthly Fees($)" community.regularFees (text << toString)
+
+              else
+                []
+            , [ ( "Shared Income", text <| incomeSharingToString community.sharedIncome ) ]
+            , if community.contributeLabor == "Yes" then
+                maybeInfoItem "Required Weekly Labor Contribution"
+                    community.laborHours
+                    (text << toString)
+
+              else if community.contributeLabor == "No" then
+                []
+
+              else
+                maybeInfoItem "Suggested Weekly Labor Contribution"
+                    community.laborHours
+                    (text << toString)
+            , maybeInfoItem "Open to Members with Existing Debt" community.memberDebt text
+            , maybeInfoItem "Additional Comments" community.economicsComments text
+            ]
+        , infoBlock "Sustainability Practices"
+            [ maybeInfoItem "Energy Infrastructure" community.energyInfrastructure text
+            , maybeInfoItem "Current Renewable Energy Generation" community.currentRenewablePercentage text
+            , infoBlockSublist "Energy Sources" <| Maybe.withDefault [] community.renewableSources
+            , maybeInfoItem "Planned Renewable Energy Generation" community.plannedRenewablePercentage text
+            , maybeInfoItem "Current Food Produced" community.currentFoodPercentage text
+            , maybeInfoItem "Planned Food Produced" community.plannedFoodPercentage text
+            , maybeInfoItem "Food Produced Locally" community.localFoodPercentage text
+            ]
+        , infoBlock "Lifestyle"
+            [ infoBlockSublist "Common Facilities" community.facilities
+            , maybeInfoItem "Internet Available" community.internetAccess text
+            , maybeInfoItem "Internet Fast?" community.internetSpeed text
+            , maybeInfoItem "Cellphone Service" community.cellService text
+            , maybeInfoItem "Shared Meals" community.sharedMeals text
+            , infoBlockSublist "Dietary Practices" community.dietaryPractices
+            , maybeInfoItem "Dietary Choice or Restrictions" community.commonDiet text
+            , maybeInfoItem "Special Diets OK" community.specialDiets text
+            , maybeInfoItem "Alcohol Use" community.alcohol text
+            , maybeInfoItem "Tobacco Use" community.tobacco text
+            , maybeInfoItem "Additional Diet Comments" community.dietComments text
+            , if not (List.isEmpty community.spiritualPractices) then
+                infoBlockSublist "Common Spiritual Practice(s)" community.spiritualPractices
+                    ++ maybeInfoItem "Spiritual Practice Expected?" community.religionExpected text
+
+              else
+                []
+            , infoBlockSublist "Education Style(s)" community.education
+            , maybeInfoItem "Expected Healthcare Practices" community.healthcareComments text
+            , infoBlockSublist "Healthcare Options" community.healthcareOptions
+            , maybeInfoItem "Additional Comments" community.lifestyleComments text
+            ]
+        , (\a b -> maybeHtml b a) community.cohousing <|
+            \cohousing ->
+                infoBlock "Cohousing"
+                    [ maybeInfoItem "Building Site Status"
+                        cohousing.siteStatus
+                        (cohousingStatusToString >> text)
+                    , maybeInfoItem "Year Construction Completed"
+                        cohousing.yearCompleted
+                        (toString >> text)
+                    , maybeInfoItem "Number of Housing Units"
+                        cohousing.housingUnits
+                        (toString >> text)
+                    , maybeInfoItem "Has a Shared Common Building"
+                        cohousing.hasSharedBuilding
+                        (boolToString >> text)
+                    , stringInfoItem "Architect" cohousing.architect
+                    , stringInfoItem "Developer" cohousing.developer
+                    , stringInfoItem "Commercial Lender" cohousing.lender
+                    ]
+        ]
 
 
 renderStatus : CommunityStatus -> Html msg
@@ -618,10 +630,11 @@ renderStatus status =
         statusClass =
             if status == Disbanded then
                 "text-danger"
+
             else
                 ""
     in
-        Html.span [ class statusClass ] [ text <| statusToString status ]
+    Html.span [ class statusClass ] [ text <| statusToString status ]
 
 
 visitorsWelcome : VisitorsWelcome -> Html msg
@@ -638,8 +651,8 @@ visitorsWelcome welcomeStatus =
                 NoVisitors ->
                     "text-danger"
     in
-        Html.span [ class <| visitorsWelcomeClass welcomeStatus ]
-            [ text <| visitorsWelcomeToString welcomeStatus ]
+    Html.span [ class <| visitorsWelcomeClass welcomeStatus ]
+        [ text <| visitorsWelcomeToString welcomeStatus ]
 
 
 membersWelcome : MembersWelcome -> Html msg
@@ -656,8 +669,8 @@ membersWelcome welcomeStatus =
                 NoMembers ->
                     "text-danger"
     in
-        Html.span [ class <| membersWelcomeClass welcomeStatus ]
-            [ text <| membersWelcomeToString welcomeStatus ]
+    Html.span [ class <| membersWelcomeClass welcomeStatus ]
+        [ text <| membersWelcomeToString welcomeStatus ]
 
 
 {-| Return the text to display for a Listing's Updated Date.
@@ -739,6 +752,7 @@ listingsView communities searchString currentDate route =
                 , Html.div [ class "clearfix" ]
                     [ if not <| List.isEmpty (Pagination.getCurrent communities) then
                         resultCount communities
+
                       else
                         text ""
                     , filterHtml route
@@ -750,6 +764,7 @@ listingsView communities searchString currentDate route =
                         , Html.ul [ class "pagination justify-content-center" ] <|
                             pagination route communities
                         ]
+
                   else
                     text ""
                 ]
@@ -774,24 +789,27 @@ listingsView communities searchString currentDate route =
         communitiesList =
             if Pagination.isLoading communities then
                 loadingBar
+
             else if Pagination.getError communities /= Nothing then
                 Html.div [ class "text-danger text-center my-4" ]
                     [ text "Sorry, we encountered a problem when trying to load Communities, please try again or contact "
                     , Html.a [ href "mailto:directory@ic.org" ] [ text "directory@ic.org" ]
                     , text "."
                     ]
+
             else if Pagination.hasNone communities then
                 Html.div [ class "tall text-danger text-center" ]
                     [ text "Sorry, we couldn't find any matching Communities." ]
+
             else
                 Html.div [ class "list-group directory-listings mt-2" ] <|
                     List.map (communityItem currentDate) <|
                         Pagination.getCurrent communities
     in
-        Html.div []
-            [ pageHeading
-            , listings
-            ]
+    Html.div []
+        [ pageHeading
+        , listings
+        ]
 
 
 {-| Render the Links Appearing Above & Below the Listings.
@@ -819,8 +837,8 @@ links =
                 , ( "Recently Updated", RecentlyUpdated )
                 ]
     in
-        Html.div [ class "directory-header-links" ] <|
-            List.intersperse (text " | ") (pageLinks ++ staticLinks)
+    Html.div [ class "directory-header-links" ] <|
+        List.intersperse (text " | ") (pageLinks ++ staticLinks)
 
 
 {-| Render the Result Count if there are Results.
@@ -833,6 +851,7 @@ resultCount pagination =
             , Html.b [] [ text <| toString <| Pagination.getTotalItems pagination ]
             , text " communities."
             ]
+
     else
         text ""
 
@@ -878,6 +897,7 @@ filterHtml route =
             <|
                 if isOn then
                     List.filter (\f -> f /= filter) currentFilters
+
                 else
                     filter :: currentFilters
 
@@ -892,8 +912,8 @@ filterHtml route =
                 , Html.span [] [ text <| " " ++ filterText ]
                 ]
     in
-        Html.div [ class "float-right directory-filters" ] <|
-            List.map (annotate >> render) Routing.inlineFilters
+    Html.div [ class "float-right directory-filters" ] <|
+        List.map (annotate >> render) Routing.inlineFilters
 
 
 {-| Render the Pagination for the Listings.
@@ -911,6 +931,7 @@ pagination route communityPagination =
                         "page-link"
                         "«"
                     ]
+
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "«" ] ]
@@ -922,6 +943,7 @@ pagination route communityPagination =
                         "page-link"
                         "»"
                     ]
+
             else
                 Html.li [ class "page-item disabled" ]
                     [ Html.a [ class "page-link" ] [ text "»" ] ]
@@ -942,9 +964,11 @@ pagination route communityPagination =
             if splitSections && not showMiddle then
                 List.range 1 4
                     |> List.map pageLink
+
             else if splitSections then
                 List.range 1 2
                     |> List.map pageLink
+
             else
                 List.range 1 lastPage
                     |> List.map pageLink
@@ -953,6 +977,7 @@ pagination route communityPagination =
             if showMiddle then
                 List.range (currentPage - 2) (currentPage + 2)
                     |> List.map pageLink
+
             else
                 []
 
@@ -960,9 +985,11 @@ pagination route communityPagination =
             if splitSections && not showMiddle then
                 List.range (lastPage - 3) lastPage
                     |> List.map pageLink
+
             else if splitSections then
                 List.range (lastPage - 1) lastPage
                     |> List.map pageLink
+
             else
                 []
 
@@ -970,6 +997,7 @@ pagination route communityPagination =
             if page == currentPage then
                 Html.li [ class "page-item active" ]
                     [ Html.span [ class "page-link" ] [ text <| toString page ] ]
+
             else
                 Html.li [ class "page-item" ]
                     [ navigateLink (ListingsRoute <| Routing.mapPage (always page) route)
@@ -977,23 +1005,25 @@ pagination route communityPagination =
                         (toString page)
                     ]
     in
-        List.concat
-            [ [ backArrow ]
-            , firstNumbers
-            , [ if showMiddle then
-                    dots
-                else
-                    text ""
-              ]
-            , middleNumbers
-            , [ if splitSections then
-                    dots
-                else
-                    text ""
-              ]
-            , endNumbers
-            , [ forwardArrow ]
-            ]
+    List.concat
+        [ [ backArrow ]
+        , firstNumbers
+        , [ if showMiddle then
+                dots
+
+            else
+                text ""
+          ]
+        , middleNumbers
+        , [ if splitSections then
+                dots
+
+            else
+                text ""
+          ]
+        , endNumbers
+        , [ forwardArrow ]
+        ]
 
 
 {-| Render a Single Community in the Listings.
@@ -1022,43 +1052,43 @@ communityItem maybeCurrentDate community =
         maybeImage image =
             maybeHtml (imageElement image.name) image.thumbnailUrl
     in
-        Html.a
-            (class "list-group-item list-group-item-action"
-                :: navigateAttributes (DetailsRoute community.slug)
-            )
-            [ Html.div [ class "mb-2 w-100" ]
-                [ Html.div [ class "clearfix" ]
-                    [ maybeImage community
-                    , Html.h2 []
-                        [ text community.name
-                        , Html.br [] []
-                        , Html.small []
-                            [ text <| address community ++ " - "
-                            , Html.em []
-                                [ renderStatus community.status ]
-                            ]
-                        ]
-                    , Html.div []
-                        [ Html.div []
-                            [ Html.b [] [ text "Visitors Accepted: " ]
-                            , visitorsWelcome community.openToVisitors
-                            ]
-                        , Html.div []
-                            [ Html.b []
-                                [ text "Open to New Members: " ]
-                            , membersWelcome community.openToMembers
-                            ]
-                        ]
-                    , Html.div []
-                        [ Html.b [] [ text "Community Types: " ]
-                        , text <|
-                            String.join ", " <|
-                                List.map typeToString community.communityTypes
+    Html.a
+        (class "list-group-item list-group-item-action"
+            :: navigateAttributes (DetailsRoute community.slug)
+        )
+        [ Html.div [ class "mb-2 w-100" ]
+            [ Html.div [ class "clearfix" ]
+                [ maybeImage community
+                , Html.h2 []
+                    [ text community.name
+                    , Html.br [] []
+                    , Html.small []
+                        [ text <| address community ++ " - "
+                        , Html.em []
+                            [ renderStatus community.status ]
                         ]
                     ]
+                , Html.div []
+                    [ Html.div []
+                        [ Html.b [] [ text "Visitors Accepted: " ]
+                        , visitorsWelcome community.openToVisitors
+                        ]
+                    , Html.div []
+                        [ Html.b []
+                            [ text "Open to New Members: " ]
+                        , membersWelcome community.openToMembers
+                        ]
+                    ]
+                , Html.div []
+                    [ Html.b [] [ text "Community Types: " ]
+                    , text <|
+                        String.join ", " <|
+                            List.map typeToString community.communityTypes
+                    ]
                 ]
-            , Html.div [ class "small text-muted" ] <|
-                updatedOn maybeCurrentDate community
-                    ++ text " | "
-                    :: createdOn maybeCurrentDate community
             ]
+        , Html.div [ class "small text-muted" ] <|
+            updatedOn maybeCurrentDate community
+                ++ text " | "
+                :: createdOn maybeCurrentDate community
+        ]

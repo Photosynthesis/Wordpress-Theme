@@ -1,32 +1,36 @@
-module Directory.Pagination
-    exposing
-        ( Pagination
-        , initial
-          -- Config
-        , Config
-        , FetchResponse
-        , makeConfig
-          -- Retrieving Data
-        , getCurrent
-        , getPage
-        , getTotalPages
-        , getTotalItems
-        , getError
-        , getData
-          -- Querying
-        , isLoading
-        , hasNone
-        , hasPrevious
-        , hasNext
-          -- Modification
-        , moveNext
-        , movePrevious
-        , jumpTo
-        , updateData
-          -- Update / Messages
-        , Msg
-        , update
-        )
+module Directory.Pagination exposing
+    ( Config
+    , FetchResponse
+    , Msg
+    , Pagination
+    , getCurrent
+    ,  getData
+       -- Querying
+
+    , getError
+    , getPage
+    , getTotalItems
+    , getTotalPages
+    ,  hasNext
+       -- Modification
+
+    , hasNone
+    , hasPrevious
+    ,  initial
+       -- Config
+
+    , isLoading
+    , jumpTo
+    ,  makeConfig
+       -- Retrieving Data
+
+    , moveNext
+    , movePrevious
+    , update
+    ,  updateData
+       -- Update / Messages
+
+    )
 
 {-| For paginating responses
 
@@ -42,6 +46,7 @@ TODO: Eventually:
 import Dict exposing (Dict)
 import Http
 import RemoteData exposing (WebData)
+
 
 
 -- Model
@@ -104,9 +109,9 @@ initial config requestData page =
                 , requestData = requestData
                 }
     in
-        ( initialModel
-        , getFetches config initialModel
-        )
+    ( initialModel
+    , getFetches config initialModel
+    )
 
 
 {-| Get the current list of items.
@@ -216,7 +221,7 @@ moveNext (Config config) ((Pagination pagination) as model) =
                     (\_ -> Pagination { pagination | currentPage = currentPage + 1 })
                 |> Maybe.withDefault model
     in
-        ( updatedModel, getFetches (Config config) updatedModel )
+    ( updatedModel, getFetches (Config config) updatedModel )
 
 
 {-| Move to the previous page.
@@ -234,7 +239,7 @@ movePrevious (Config config) ((Pagination pagination) as model) =
                     (\_ -> Pagination { pagination | currentPage = currentPage - 1 })
                 |> Maybe.withDefault model
     in
-        ( updatedModel, getFetches (Config config) updatedModel )
+    ( updatedModel, getFetches (Config config) updatedModel )
 
 
 {-| Move to a specific page.
@@ -248,10 +253,11 @@ jumpTo (Config config) ((Pagination pagination) as model) page =
         updatedModel =
             if canJump then
                 Pagination { pagination | currentPage = page }
+
             else
                 model
     in
-        ( updatedModel, getFetches (Config config) updatedModel )
+    ( updatedModel, getFetches (Config config) updatedModel )
 
 
 {-| Replace the current Extra Request Data, jumping to page 1 & performing new
@@ -261,6 +267,7 @@ updateData : Config a b -> Pagination a b -> b -> ( Pagination a b, Cmd (Msg a) 
 updateData config ((Pagination pagination) as model) newData =
     if newData == pagination.requestData then
         ( model, Cmd.none )
+
     else
         initial config newData 1
 
@@ -310,10 +317,11 @@ update config msg (Pagination model) =
                 pageIsEmptyButPagesExist =
                     List.isEmpty items && getTotalPages updatedModel > 0
             in
-                if pageIsEmptyButPagesExist && page == model.currentPage then
-                    jumpTo config updatedModel (getTotalPages updatedModel)
-                else
-                    ( updatedModel, Cmd.none )
+            if pageIsEmptyButPagesExist && page == model.currentPage then
+                jumpTo config updatedModel (getTotalPages updatedModel)
+
+            else
+                ( updatedModel, Cmd.none )
 
         FetchPage page data ->
             let
@@ -321,9 +329,9 @@ update config msg (Pagination model) =
                     RemoteData.map (\{ items } -> Chunk { items = items, page = page })
                         data
             in
-                ( Pagination { model | items = Dict.insert page newData model.items }
-                , Cmd.none
-                )
+            ( Pagination { model | items = Dict.insert page newData model.items }
+            , Cmd.none
+            )
 
 
 
@@ -360,6 +368,7 @@ getFetches (Config config) (Pagination pagination) =
                 config.fetchRequest pagination.requestData currentPage
                     |> RemoteData.sendRequest
                     |> Cmd.map (FetchPage currentPage)
+
             else
                 Cmd.none
 
@@ -368,6 +377,7 @@ getFetches (Config config) (Pagination pagination) =
                 config.fetchRequest pagination.requestData (currentPage - 1)
                     |> RemoteData.sendRequest
                     |> Cmd.map (FetchPage <| currentPage - 1)
+
             else
                 Cmd.none
 
@@ -376,14 +386,18 @@ getFetches (Config config) (Pagination pagination) =
                 config.fetchRequest pagination.requestData (currentPage + 1)
                     |> RemoteData.sendRequest
                     |> Cmd.map (FetchPage <| currentPage + 1)
+
             else
                 Cmd.none
     in
-        if currentPage > 1 && (currentPage < totalPages || totalPages == 0) then
-            Cmd.batch [ currentFetch, previousFetch, nextFetch ]
-        else if currentPage > 1 then
-            Cmd.batch [ currentFetch, previousFetch ]
-        else if currentPage < totalPages || totalPages == 0 then
-            Cmd.batch [ currentFetch, nextFetch ]
-        else
-            currentFetch
+    if currentPage > 1 && (currentPage < totalPages || totalPages == 0) then
+        Cmd.batch [ currentFetch, previousFetch, nextFetch ]
+
+    else if currentPage > 1 then
+        Cmd.batch [ currentFetch, previousFetch ]
+
+    else if currentPage < totalPages || totalPages == 0 then
+        Cmd.batch [ currentFetch, nextFetch ]
+
+    else
+        currentFetch

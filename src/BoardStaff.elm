@@ -1,7 +1,7 @@
 module BoardStaff exposing (main)
 
 import Admin.BoardStaff exposing (Profile, decodeProfile)
-import Html exposing (Html, h1, h2, div, img, text, hr)
+import Html exposing (Html, div, h1, h2, hr, img, text)
 import Html.Attributes exposing (class, src, style)
 import Json.Decode as Decode exposing (Value, decodeValue)
 import Markdown
@@ -43,7 +43,7 @@ init json =
                 Ok m ->
                     m
     in
-        ( model, Cmd.none )
+    ( model, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

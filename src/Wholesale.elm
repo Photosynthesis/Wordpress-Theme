@@ -1,9 +1,9 @@
-port module Wholesale exposing (..)
+port module Wholesale exposing (Cents(..), Model, Msg(..), ProductSet, ProductSetItem, ResponseStatus(..), SingleProduct, SlugQuantities, VolumeDiscountProduct, aNewWe, additionalFields, allSingleProducts, bestOfCommunities, calculateTotals, centsAdd, collectStripeToken, communitiesDirectory, communitiesMagazine, getQuantity, groupFacilitation, init, main, parseIntOrZero, placeOrder, productSetItemTotal, productSetSubTotal, productSetTotal, renderProductSet, renderSingleProduct, renderVolumeDiscountProduct, singleProductTotal, stripeTokenReceived, toDollars, togetherResilient, unitedJudgement, update, view, volumeDiscountTotal, volumeDiscountUnitPrice, wisdomSet, wisdomVolumeFour, wisdomVolumeOne, wisdomVolumeThree, wisdomVolumeTwo, withinReach)
 
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput, onClick, onSubmit, onCheck)
+import Html.Events exposing (onCheck, onClick, onInput, onSubmit)
 import Http
 import Json.Decode as Decode exposing (Value)
 import Json.Encode as Encode
@@ -106,7 +106,7 @@ toDollars (Cents i) =
                 _ ->
                     String.left 2 <| toString fractional
     in
-        toString wholePart ++ "." ++ fractionalString
+    toString wholePart ++ "." ++ fractionalString
 
 
 type ResponseStatus
@@ -204,13 +204,14 @@ volumeDiscountUnitPrice { priceTiers } quantity =
                 { price } :: nextTier :: ts ->
                     if quantity < nextTier.minQuantity then
                         price
+
                     else
                         getPriceTier (nextTier :: ts)
 
                 [] ->
                     Cents 0
     in
-        getPriceTier priceTiers
+    getPriceTier priceTiers
 
 
 calculateTotals : Model -> { total : Cents, subTotal : Cents, shippingTotal : Cents, shippingQuantity : Int }
@@ -284,11 +285,11 @@ calculateTotals model =
         magazineQuantity =
             parseIntOrZero model.communitiesMagazineQuantity
     in
-        { total = total
-        , subTotal = subTotal
-        , shippingTotal = shippingTotal
-        , shippingQuantity = shippingQuantity
-        }
+    { total = total
+    , subTotal = subTotal
+    , shippingTotal = shippingTotal
+    , shippingQuantity = shippingQuantity
+    }
 
 
 
@@ -341,12 +342,13 @@ update msg model =
         PayButtonClicked ->
             let
                 ( Cents cartTotal, shippingQuantity ) =
-                    calculateTotals model |> \ts -> ( ts.total, ts.shippingQuantity )
+                    calculateTotals model |> (\ts -> ( ts.total, ts.shippingQuantity ))
             in
-                if shippingQuantity >= 10 then
-                    ( { model | formError = "" }, collectStripeToken ( model.emailAddress, cartTotal ) )
-                else
-                    ( { model | formError = "A minimum of 10 items is required." }, Cmd.none )
+            if shippingQuantity >= 10 then
+                ( { model | formError = "" }, collectStripeToken ( model.emailAddress, cartTotal ) )
+
+            else
+                ( { model | formError = "A minimum of 10 items is required." }, Cmd.none )
 
         StripeTokenReceived { token, checkoutArgs } ->
             let
@@ -356,7 +358,7 @@ update msg model =
                 _ =
                     Debug.log "checkout args" checkoutArgs
             in
-                ( { model | responseStatus = Loading }, placeOrder token checkoutArgs model )
+            ( { model | responseStatus = Loading }, placeOrder token checkoutArgs model )
 
         OrderProcessed (Ok response) ->
             let
@@ -366,10 +368,11 @@ update msg model =
                 updatedModel =
                     if response == "ok" then
                         { model | responseStatus = Success, formError = "" }
+
                     else
                         { model | responseStatus = Error, formError = response }
             in
-                ( updatedModel, Cmd.none )
+            ( updatedModel, Cmd.none )
 
         OrderProcessed (Err httpError) ->
             let
@@ -393,7 +396,7 @@ update msg model =
                         Http.BadPayload errorMessage _ ->
                             { model | formError = "Received unexpected response from server(" ++ errorMessage ++ ") - please contact bookstore@ic.org." }
             in
-                ( updatedModel, Cmd.none )
+            ( updatedModel, Cmd.none )
 
 
 placeOrder : String -> Value -> Model -> Cmd Msg
@@ -424,8 +427,8 @@ placeOrder stripeToken checkoutArgs model =
         responseDecoder =
             Decode.field "status" Decode.string
     in
-        Http.post "/wp-json/v1/wholesale/checkout/" requestBody responseDecoder
-            |> Http.send OrderProcessed
+    Http.post "/wp-json/v1/wholesale/checkout/" requestBody responseDecoder
+        |> Http.send OrderProcessed
 
 
 
@@ -438,63 +441,65 @@ view model =
         { total, subTotal, shippingTotal } =
             calculateTotals model
     in
-        if model.responseStatus == Success then
-            div [ class "alert alert-success mx-4" ]
-                [ p []
-                    [ b [] [ i [ class "fa fa-check-circle fa-2x" ] [] ]
-                    , text " Thanks for your order! We've sent you a confirmation email with a summary of your order and will contact you when your order has shipped."
-                    ]
+    if model.responseStatus == Success then
+        div [ class "alert alert-success mx-4" ]
+            [ p []
+                [ b [] [ i [ class "fa fa-check-circle fa-2x" ] [] ]
+                , text " Thanks for your order! We've sent you a confirmation email with a summary of your order and will contact you when your order has shipped."
                 ]
-        else
-            Html.form [ onSubmit PayButtonClicked ] <|
-                [ h1 [] [ text "Wholesale Order Form" ]
-                , table [ class "table" ]
-                    [ thead []
-                        [ tr []
-                            [ th [] [ text "" ]
-                            , th [ class "text-right" ] [ text "Quantity" ]
-                            , th [ class "text-right" ] [ text "Price per Unit" ]
-                            , th [ class "text-right" ] [ text "Product Total" ]
-                            ]
-                        ]
-                    , tbody [] <|
-                        List.concatMap (renderSingleProduct model.quantityBySlug) allSingleProducts
-                            ++ List.concat
-                                [ renderVolumeDiscountProduct communitiesMagazine
-                                    model.communitiesMagazineQuantity
-                                , renderProductSet bestOfCommunities
-                                    model.bestOfCommunitiesSetQuantity
-                                    model.quantityBySlug
-                                ]
-                    , tfoot [ class "font-weight-bold text-right" ]
-                        [ tr []
-                            [ td [ colspan 3, class "text-right" ] [ text "Sub-Total:" ]
-                            , td [] [ text <| "$" ++ toDollars subTotal ]
-                            ]
-                        , tr []
-                            [ td [ colspan 3, class "text-right" ] [ text "Shipping:" ]
-                            , td [] [ text <| "$" ++ toDollars shippingTotal ]
-                            ]
-                        , tr []
-                            [ td [ colspan 3, class "text-right" ] [ text "Total:" ]
-                            , td [] [ text <| "$" ++ toDollars total ]
-                            ]
+            ]
+
+    else
+        Html.form [ onSubmit PayButtonClicked ] <|
+            [ h1 [] [ text "Wholesale Order Form" ]
+            , table [ class "table" ]
+                [ thead []
+                    [ tr []
+                        [ th [] [ text "" ]
+                        , th [ class "text-right" ] [ text "Quantity" ]
+                        , th [ class "text-right" ] [ text "Price per Unit" ]
+                        , th [ class "text-right" ] [ text "Product Total" ]
                         ]
                     ]
-                , additionalFields model
-                , p [ class "text-right" ]
-                    [ div [ class "d-inline-block mr-4 text-danger" ] [ b [] [ text model.formError ] ]
-                    , button
-                        [ class "btn btn-primary btn-lg", type_ "submit" ]
-                      <|
-                        if model.responseStatus == Loading then
-                            [ i [ class "fa fa-spinner fa-spin fa-2x pull-left" ] []
-                            , text " Processing Order..."
+                , tbody [] <|
+                    List.concatMap (renderSingleProduct model.quantityBySlug) allSingleProducts
+                        ++ List.concat
+                            [ renderVolumeDiscountProduct communitiesMagazine
+                                model.communitiesMagazineQuantity
+                            , renderProductSet bestOfCommunities
+                                model.bestOfCommunitiesSetQuantity
+                                model.quantityBySlug
                             ]
-                        else
-                            [ text "Pay with Credit Card" ]
+                , tfoot [ class "font-weight-bold text-right" ]
+                    [ tr []
+                        [ td [ colspan 3, class "text-right" ] [ text "Sub-Total:" ]
+                        , td [] [ text <| "$" ++ toDollars subTotal ]
+                        ]
+                    , tr []
+                        [ td [ colspan 3, class "text-right" ] [ text "Shipping:" ]
+                        , td [] [ text <| "$" ++ toDollars shippingTotal ]
+                        ]
+                    , tr []
+                        [ td [ colspan 3, class "text-right" ] [ text "Total:" ]
+                        , td [] [ text <| "$" ++ toDollars total ]
+                        ]
                     ]
                 ]
+            , additionalFields model
+            , p [ class "text-right" ]
+                [ div [ class "d-inline-block mr-4 text-danger" ] [ b [] [ text model.formError ] ]
+                , button
+                    [ class "btn btn-primary btn-lg", type_ "submit" ]
+                  <|
+                    if model.responseStatus == Loading then
+                        [ i [ class "fa fa-spinner fa-spin fa-2x pull-left" ] []
+                        , text " Processing Order..."
+                        ]
+
+                    else
+                        [ text "Pay with Credit Card" ]
+                ]
+            ]
 
 
 additionalFields : Model -> Html Msg
@@ -507,67 +512,67 @@ additionalFields model =
             label [ class "col-16 col-md-18 col-form-label text-right font-weight-bold", for inputId ]
                 [ text <| labelText ++ ": " ]
     in
-        div []
-            [ div [ class "form-group row" ]
-                [ fieldLabel "email" "Email Address"
-                , input
-                    [ type_ "email"
-                    , id "email"
-                    , class "form-control col-8 col-md-6"
-                    , value model.emailAddress
-                    , onInput UpdateEmailAddress
-                    , required True
-                    ]
-                    []
+    div []
+        [ div [ class "form-group row" ]
+            [ fieldLabel "email" "Email Address"
+            , input
+                [ type_ "email"
+                , id "email"
+                , class "form-control col-8 col-md-6"
+                , value model.emailAddress
+                , onInput UpdateEmailAddress
+                , required True
                 ]
-            , div [ class "form-group row" ]
-                [ fieldLabel "business-name" "Business Name"
-                , input
-                    [ type_ "text"
-                    , id "business-name"
-                    , class "form-control col-8 col-md-6"
-                    , value model.businessName
-                    , onInput UpdateBusinessName
-                    , required True
-                    ]
-                    []
-                ]
-            , div [ class "form-group row" ]
-                [ fieldLabel "contact-name" "Contact Name"
-                , input
-                    [ type_ "text"
-                    , id "contact-name"
-                    , class "form-control col-8 col-md-6"
-                    , value model.contactName
-                    , onInput UpdateContactName
-                    , required True
-                    ]
-                    []
-                ]
-            , div [ class "form-group row" ]
-                [ fieldLabel "phone-number" "Phone Number"
-                , input
-                    [ type_ "tel"
-                    , id "phone-number"
-                    , class "form-control col-8 col-md-6"
-                    , value model.phoneNumber
-                    , onInput UpdatePhoneNumber
-                    , required True
-                    ]
-                    []
-                ]
-            , div [ class "form-group row" ]
-                [ fieldLabel "send-email" "Should we contact you with new wholesale products or sales?"
-                , input
-                    [ type_ "checkbox"
-                    , id "send-email"
-                    , class "col-8 col-md-6"
-                    , checked model.sendProductEmails
-                    , onCheck UpdateSendingEmails
-                    ]
-                    []
-                ]
+                []
             ]
+        , div [ class "form-group row" ]
+            [ fieldLabel "business-name" "Business Name"
+            , input
+                [ type_ "text"
+                , id "business-name"
+                , class "form-control col-8 col-md-6"
+                , value model.businessName
+                , onInput UpdateBusinessName
+                , required True
+                ]
+                []
+            ]
+        , div [ class "form-group row" ]
+            [ fieldLabel "contact-name" "Contact Name"
+            , input
+                [ type_ "text"
+                , id "contact-name"
+                , class "form-control col-8 col-md-6"
+                , value model.contactName
+                , onInput UpdateContactName
+                , required True
+                ]
+                []
+            ]
+        , div [ class "form-group row" ]
+            [ fieldLabel "phone-number" "Phone Number"
+            , input
+                [ type_ "tel"
+                , id "phone-number"
+                , class "form-control col-8 col-md-6"
+                , value model.phoneNumber
+                , onInput UpdatePhoneNumber
+                , required True
+                ]
+                []
+            ]
+        , div [ class "form-group row" ]
+            [ fieldLabel "send-email" "Should we contact you with new wholesale products or sales?"
+            , input
+                [ type_ "checkbox"
+                , id "send-email"
+                , class "col-8 col-md-6"
+                , checked model.sendProductEmails
+                , onCheck UpdateSendingEmails
+                ]
+                []
+            ]
+        ]
 
 
 renderSingleProduct : SlugQuantities -> SingleProduct -> List (Html Msg)
@@ -586,42 +591,42 @@ renderSingleProduct quantities ({ name, slug, msrp, description, pricePerUnit } 
                 |> Maybe.map (\q -> [ value <| toString q ])
                 |> Maybe.withDefault []
     in
-        [ tr []
-            [ td [ colspan 4, class "pt-4" ]
-                [ h2 []
-                    [ b []
-                        [ a
-                            [ href <| "/community-bookstore/product/" ++ slug ++ "/"
-                            , target "_blank"
-                            ]
-                            [ text name ]
+    [ tr []
+        [ td [ colspan 4, class "pt-4" ]
+            [ h2 []
+                [ b []
+                    [ a
+                        [ href <| "/community-bookstore/product/" ++ slug ++ "/"
+                        , target "_blank"
                         ]
-                    ]
-                , div [ class "clearfix px-4 mr-4" ]
-                    [ img [ src product.thumbnail, class "pull-left mb-1 mr-3", style [ ( "max-width", "25%" ) ] ] []
-                    , em [] [ text <| "Suggested Retail Price: $" ++ msrp ]
-                    , description
+                        [ text name ]
                     ]
                 ]
-            ]
-        , tr []
-            [ td [ class "border-top-0" ] []
-            , td [ class "text-right border-top-0 pb-4" ]
-                [ input
-                    ([ class "form-control"
-                     , type_ "number"
-                     , Html.Attributes.min "0"
-                     , step "1"
-                     , onInput <| UpdateQuantityWithSlug slug
-                     ]
-                        ++ inputValue
-                    )
-                    []
+            , div [ class "clearfix px-4 mr-4" ]
+                [ img [ src product.thumbnail, class "pull-left mb-1 mr-3", style [ ( "max-width", "25%" ) ] ] []
+                , em [] [ text <| "Suggested Retail Price: $" ++ msrp ]
+                , description
                 ]
-            , td [ class "text-right border-top-0" ] [ b [] [ text <| "x $" ++ toDollars pricePerUnit ] ]
-            , td [ class "text-right border-top-0" ] [ b [] [ text <| productTotal ] ]
             ]
         ]
+    , tr []
+        [ td [ class "border-top-0" ] []
+        , td [ class "text-right border-top-0 pb-4" ]
+            [ input
+                ([ class "form-control"
+                 , type_ "number"
+                 , Html.Attributes.min "0"
+                 , step "1"
+                 , onInput <| UpdateQuantityWithSlug slug
+                 ]
+                    ++ inputValue
+                )
+                []
+            ]
+        , td [ class "text-right border-top-0" ] [ b [] [ text <| "x $" ++ toDollars pricePerUnit ] ]
+        , td [ class "text-right border-top-0" ] [ b [] [ text <| productTotal ] ]
+        ]
+    ]
 
 
 renderProductSet : ProductSet -> String -> SlugQuantities -> List (Html Msg)
@@ -656,62 +661,63 @@ renderProductSet ({ name, msrp, pricePerItem, setPrice, items } as pSet) setQuan
                         |> (\((Cents c) as cents) ->
                                 if c > 0 then
                                     "$" ++ toDollars cents
+
                                 else
                                     ""
                            )
             in
-                tr []
-                    [ td []
-                        [ b []
-                            [ a [ href <| "/community-bookstore/product/" ++ slug ++ "/", target "_blank" ]
-                                [ text name ]
-                            ]
+            tr []
+                [ td []
+                    [ b []
+                        [ a [ href <| "/community-bookstore/product/" ++ slug ++ "/", target "_blank" ]
+                            [ text name ]
                         ]
-                    , td []
-                        [ input
-                            ([ class "form-control"
-                             , type_ "number"
-                             , Html.Attributes.min "0"
-                             , step "1"
-                             , onInput <| UpdateQuantityWithSlug slug
-                             ]
-                                ++ inputValue
-                            )
-                            []
-                        ]
-                    , td [ class "text-right" ] [ b [] [ text <| " x $" ++ toDollars pricePerItem ] ]
-                    , td [ class "text-right" ] [ b [] [ text <| total ] ]
                     ]
-    in
-        tr []
-            [ td [ colspan 4, class "pt-4" ]
-                [ h2 [] [ b [] [ text name ] ]
-                , div [ class "clearfix px-4 mr-4" ]
-                    [ img [ src pSet.thumbnail, class "pull-left mr-3 mb-1", style [ ( "max-width", "25%" ) ] ] []
-                    , em [] [ text <| "Suggested Retail Price: $" ++ msrp ++ " Each" ]
-                    , p [ class "mr-4" ] [ text pSet.description ]
-                    ]
-                ]
-            ]
-            :: tr []
-                [ td [] [ b [] [ text "Order as an Entire Set:" ] ]
-                , td [ class "text-right pb-4" ]
+                , td []
                     [ input
                         ([ class "form-control"
                          , type_ "number"
                          , Html.Attributes.min "0"
                          , step "1"
-                         , onInput UpdateSetQuantity
+                         , onInput <| UpdateQuantityWithSlug slug
                          ]
-                            ++ setInputValue
+                            ++ inputValue
                         )
                         []
                     ]
-                , td [ class "text-right" ]
-                    [ b [] [ text <| "x $" ++ toDollars setPrice ] ]
-                , td [ class "text-right" ] [ b [] [ setTotal ] ]
+                , td [ class "text-right" ] [ b [] [ text <| " x $" ++ toDollars pricePerItem ] ]
+                , td [ class "text-right" ] [ b [] [ text <| total ] ]
                 ]
-            :: renderedItems
+    in
+    tr []
+        [ td [ colspan 4, class "pt-4" ]
+            [ h2 [] [ b [] [ text name ] ]
+            , div [ class "clearfix px-4 mr-4" ]
+                [ img [ src pSet.thumbnail, class "pull-left mr-3 mb-1", style [ ( "max-width", "25%" ) ] ] []
+                , em [] [ text <| "Suggested Retail Price: $" ++ msrp ++ " Each" ]
+                , p [ class "mr-4" ] [ text pSet.description ]
+                ]
+            ]
+        ]
+        :: tr []
+            [ td [] [ b [] [ text "Order as an Entire Set:" ] ]
+            , td [ class "text-right pb-4" ]
+                [ input
+                    ([ class "form-control"
+                     , type_ "number"
+                     , Html.Attributes.min "0"
+                     , step "1"
+                     , onInput UpdateSetQuantity
+                     ]
+                        ++ setInputValue
+                    )
+                    []
+                ]
+            , td [ class "text-right" ]
+                [ b [] [ text <| "x $" ++ toDollars setPrice ] ]
+            , td [ class "text-right" ] [ b [] [ setTotal ] ]
+            ]
+        :: renderedItems
 
 
 renderVolumeDiscountProduct : VolumeDiscountProduct -> String -> List (Html Msg)
@@ -743,41 +749,41 @@ renderVolumeDiscountProduct ({ name, thumbnail, url, description, priceTiers } a
         productTotal =
             String.toInt quantity
                 |> Result.toMaybe
-                |> Maybe.map (volumeDiscountTotal product >> \s -> "$" ++ toDollars s)
+                |> Maybe.map (volumeDiscountTotal product >> (\s -> "$" ++ toDollars s))
                 |> Maybe.withDefault ""
                 |> text
     in
-        [ tr []
-            [ td [ colspan 4, class "pt-4" ]
-                [ h3 []
-                    [ b []
-                        [ a [ href url, target "_blank" ] [ text name ]
-                        ]
-                    ]
-                , div [ class "clearfix px-4 mr-4" ]
-                    [ img [ src thumbnail, class "pull-left mr-3 mb-1", style [ ( "max-width", "25%" ) ] ] []
-                    , div [] <| List.map (text >> List.singleton >> p []) description
-                    , describeVolumeDiscount
+    [ tr []
+        [ td [ colspan 4, class "pt-4" ]
+            [ h3 []
+                [ b []
+                    [ a [ href url, target "_blank" ] [ text name ]
                     ]
                 ]
-            ]
-        , tr []
-            [ td [ class "border-top-0" ] []
-            , td [ class "text-right border-top-0 pb-4" ]
-                [ input
-                    [ class "form-control"
-                    , type_ "number"
-                    , Html.Attributes.min "0"
-                    , step "1"
-                    , value quantity
-                    , onInput UpdateMagazineQuantity
-                    ]
-                    []
+            , div [ class "clearfix px-4 mr-4" ]
+                [ img [ src thumbnail, class "pull-left mr-3 mb-1", style [ ( "max-width", "25%" ) ] ] []
+                , div [] <| List.map (text >> List.singleton >> p []) description
+                , describeVolumeDiscount
                 ]
-            , td [ class "text-right border-top-0" ] [ b [] [ text <| "x $" ++ toDollars currentTier ] ]
-            , td [ class "text-right border-top-0" ] [ b [] [ productTotal ] ]
             ]
         ]
+    , tr []
+        [ td [ class "border-top-0" ] []
+        , td [ class "text-right border-top-0 pb-4" ]
+            [ input
+                [ class "form-control"
+                , type_ "number"
+                , Html.Attributes.min "0"
+                , step "1"
+                , value quantity
+                , onInput UpdateMagazineQuantity
+                ]
+                []
+            ]
+        , td [ class "text-right border-top-0" ] [ b [] [ text <| "x $" ++ toDollars currentTier ] ]
+        , td [ class "text-right border-top-0" ] [ b [] [ productTotal ] ]
+        ]
+    ]
 
 
 {-| Parse an Integer from a String, falling back to `0` on failure.

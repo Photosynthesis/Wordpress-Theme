@@ -1,4 +1,4 @@
-module Directory.Communities exposing (..)
+module Directory.Communities exposing (CohousingData, CohousingStatus(..), CommunityDetails, CommunityID(..), CommunityListing, CommunityStatus(..), CommunityType(..), ExtraStatusInfo, ImageData, IncomeSharing(..), LandStatus(..), LocationType(..), MembersWelcome(..), PublicAddress, PublicAddressType(..), VisitorsWelcome(..), addressTypeToString, cohousingStatusToString, incomeSharingToString, landStatusToString, locationTypeToString, membersWelcomeToString, statusToString, typeToString, visitorsWelcomeToString)
 
 {-| Contains Community Data Types & Related Functions
 -}

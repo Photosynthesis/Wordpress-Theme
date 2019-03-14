@@ -1,27 +1,29 @@
-module Admin.Utils
-    exposing
-        ( -- Form Submission Notices
-          SubmissionStatus(..)
-        , initialSubmissionStatus
-        , submissionAwaitingResponse
-        , hasSubmissionError
-        , submissionNotice
-        , submissionSpinner
-        , statusFromWebData
-          -- Html Utils
-        , simpleLabel
-        , formLabel
-        , formRow
-          -- Http Utils
-        , adminGet
-        , adminPost
-        )
+module Admin.Utils exposing
+    (  -- Form Submission Notices
+       SubmissionStatus(..)
+
+    , adminGet
+    , adminPost
+    , formLabel
+    ,  formRow
+       -- Http Utils
+
+    , hasSubmissionError
+    , initialSubmissionStatus
+    , simpleLabel
+    ,  statusFromWebData
+       -- Html Utils
+
+    , submissionAwaitingResponse
+    , submissionNotice
+    , submissionSpinner
+    )
 
 {-| Utility Functions for Interacting with the WP Admin Site
 -}
 
-import Html exposing (Html, label, text, tr, td, th, div)
-import Html.Attributes exposing (for, class)
+import Html exposing (Html, div, label, td, text, th, tr)
+import Html.Attributes exposing (class, for)
 import Http
 import Json.Decode exposing (Decoder, Value)
 import RemoteData exposing (WebData)
@@ -83,13 +85,15 @@ submissionNotice status successText =
                 _ ->
                     ""
     in
-        if hasSubmissionError status then
-            div [ class "notice notice-error" ] [ text errorText ]
-        else if status == ReturnedSuccess then
-            div [ class "notice notice-success" ]
-                [ text successText ]
-        else
-            text ""
+    if hasSubmissionError status then
+        div [ class "notice notice-error" ] [ text errorText ]
+
+    else if status == ReturnedSuccess then
+        div [ class "notice notice-success" ]
+            [ text successText ]
+
+    else
+        text ""
 
 
 {-| Show a spinner while awaiting a response from a form submission.
@@ -98,6 +102,7 @@ submissionSpinner : SubmissionStatus -> Html msg
 submissionSpinner status =
     if status == AwaitingResponse then
         div [ class "spinner is-active" ] []
+
     else
         text ""
 

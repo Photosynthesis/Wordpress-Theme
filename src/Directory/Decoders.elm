@@ -1,9 +1,9 @@
 module Directory.Decoders exposing (communityDetails, communityListing)
 
 import Date exposing (Date)
-import Json.Decode as Decode exposing (Decoder, string, int, bool)
-import Json.Decode.Pipeline exposing (decode, required, optional)
 import Directory.Communities exposing (..)
+import Json.Decode as Decode exposing (Decoder, bool, int, string)
+import Json.Decode.Pipeline exposing (decode, optional, required)
 import Map exposing (Coords)
 
 
@@ -148,17 +148,21 @@ communityStatus =
         decoder str =
             if String.contains "established" str then
                 Ok Established
+
             else if String.contains "re-forming" str then
                 Ok Reforming
+
             else if String.contains "forming" str then
                 Ok Forming
+
             else if String.contains "disbanded" str then
                 Ok Disbanded
+
             else
                 Err <| "Could not Decode " ++ str
     in
-        Decode.string
-            |> Decode.andThen (String.toLower >> decoder >> fromResult)
+    Decode.string
+        |> Decode.andThen (String.toLower >> decoder >> fromResult)
 
 
 extraStatusInfo : Decoder ExtraStatusInfo
@@ -174,15 +178,18 @@ visitorsWelcome =
         decoder str =
             if str == "yes" then
                 Ok Welcome
+
             else if String.contains "rarely" str then
                 Ok Rarely
+
             else if str == "no" then
                 Ok NoVisitors
+
             else
                 Err <| "Could not Decode " ++ str
     in
-        Decode.string
-            |> Decode.andThen (String.toLower >> decoder >> fromResult)
+    Decode.string
+        |> Decode.andThen (String.toLower >> decoder >> fromResult)
 
 
 membersWelcome : Decoder MembersWelcome
@@ -191,15 +198,18 @@ membersWelcome =
         decoder str =
             if str == "yes" then
                 Ok Yes
+
             else if str == "no" then
                 Ok NoMembers
+
             else if String.contains "not currently" str then
                 Ok Waitlist
+
             else
                 Err <| "Could not Decode " ++ str
     in
-        Decode.string
-            |> Decode.andThen (String.toLower >> decoder >> fromResult)
+    Decode.string
+        |> Decode.andThen (String.toLower >> decoder >> fromResult)
 
 
 communityType : Decoder CommunityType
@@ -352,14 +362,15 @@ stringToEnum conversions =
                 ( enumType, enumString ) :: cs ->
                     if str == enumString then
                         Ok enumType
+
                     else
                         convert cs str
 
                 [] ->
                     Err <| "Could not Decode " ++ str
     in
-        Decode.string
-            |> Decode.andThen (String.toLower >> convert conversions >> fromResult)
+    Decode.string
+        |> Decode.andThen (String.toLower >> convert conversions >> fromResult)
 
 
 fromResult : Result String a -> Decoder a

@@ -1,22 +1,21 @@
-module Directory.Commands
-    exposing
-        ( WPNonce(..)
-        , getCommunity
-        , validateCommunity
-        , CommunitiesRequestData
-        , getCommunities
-        , newPage
-        )
+module Directory.Commands exposing
+    ( CommunitiesRequestData
+    , WPNonce(..)
+    , getCommunities
+    , getCommunity
+    , newPage
+    , validateCommunity
+    )
 
 {-| Contains Commands & Relevant Types Used in the Application.
 -}
 
 import Directory.Communities exposing (CommunityID(..), CommunityListing)
 import Directory.Decoders as Decoders
+import Directory.Messages exposing (Msg(FetchCommunityDetails, ValidateCommunity))
 import Directory.Pagination as Pagination
 import Directory.Ports as Ports
-import Directory.Routing exposing (Route(..), FilterParam(..), Ordering(..), reverse, getPageTitle)
-import Directory.Messages exposing (Msg(FetchCommunityDetails, ValidateCommunity))
+import Directory.Routing exposing (FilterParam(..), Ordering(..), Route(..), getPageTitle, reverse)
 import Http
 import Json.Decode as Decode
 import Json.Encode as Encode
@@ -75,27 +74,29 @@ getCommunities { filters, ordering } page =
         filterQueryString =
             if not (List.isEmpty filters) then
                 "&" ++ String.join "&" (List.map filterToApiQuery filters)
+
             else
                 ""
 
         orderQueryString =
             if not (String.isEmpty <| orderingToApiQuery ordering) then
                 "&" ++ orderingToApiQuery ordering
+
             else
                 ""
     in
-        Decode.map2 Pagination.FetchResponse
-            (Decode.field "listings" (Decode.list Decoders.communityListing))
-            (Decode.field "totalCount" Decode.int)
-            |> Http.get
-                (String.join ""
-                    [ "/wp-json/v1/directory/entries/"
-                    , "?page="
-                    , toString page
-                    , filterQueryString
-                    , orderQueryString
-                    ]
-                )
+    Decode.map2 Pagination.FetchResponse
+        (Decode.field "listings" (Decode.list Decoders.communityListing))
+        (Decode.field "totalCount" Decode.int)
+        |> Http.get
+            (String.join ""
+                [ "/wp-json/v1/directory/entries/"
+                , "?page="
+                , toString page
+                , filterQueryString
+                , orderQueryString
+                ]
+            )
 
 
 {-| Return the Commands Relevant For Switching to a New `Route`:
@@ -116,11 +117,11 @@ newPage newRoute =
                 DetailsRoute _ ->
                     "Listing Details"
     in
-        Cmd.batch
-            [ Navigation.newUrl <| reverse newRoute
-            , Ports.scrollTo "main"
-            , Ports.setPageTitle <| pageTitle
-            ]
+    Cmd.batch
+        [ Navigation.newUrl <| reverse newRoute
+        , Ports.scrollTo "main"
+        , Ports.setPageTitle <| pageTitle
+        ]
 
 
 {-| Return the Backend API QueryString for a `FilterParam`.
@@ -196,4 +197,4 @@ orderingToApiQuery =
                 CreatedDate ->
                     "order=created"
     in
-        Maybe.map orderingToQuery >> Maybe.withDefault ""
+    Maybe.map orderingToQuery >> Maybe.withDefault ""
