@@ -66,6 +66,7 @@ class DirectoryDB
   public static $percent_male_field_id = 708;
   public static $percent_female_field_id = 709;
   public static $percent_trans_field_id = 710;
+  public static $percent_nonbinary_field_id = 991;
   public static $visitor_process_field_id = 258;
   public static $membership_process_field_id = 421;
   public static $membership_comments_field_id = 304;

@@ -233,6 +233,7 @@ type alias CommunityDetails =
     , percentMale : Maybe String
     , percentFemale : Maybe String
     , percentTrans : Maybe String
+    , percentNonBinary : Maybe String
     , visitorProcess : Maybe String
     , membershipProcess : Maybe String
     , membershipComments : Maybe String

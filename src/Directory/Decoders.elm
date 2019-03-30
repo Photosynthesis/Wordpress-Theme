@@ -75,6 +75,7 @@ communityDetails =
         |> maybe "percentMale" Decode.string
         |> maybe "percentFemale" Decode.string
         |> maybe "percentTrans" Decode.string
+        |> maybe "percentNonBinary" Decode.string
         |> maybe "visitorProcess" Decode.string
         |> maybe "membershipProcess" Decode.string
         |> maybe "membershipComments" Decode.string

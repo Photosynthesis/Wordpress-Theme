@@ -546,6 +546,7 @@ detailInfoBlocks community =
             , maybeInfoItem "Percent Women" community.percentFemale text
             , maybeInfoItem "Percent Men" community.percentMale text
             , maybeInfoItem "Percent Transgender" community.percentTrans text
+            , maybeInfoItem "Percent Non-Binary" community.percentNonBinary text
             , [ ( "Visitors Accepted", visitorsWelcome community.openToVisitors ) ]
             , maybeInfoItem "Visitor Process" community.visitorProcess text
             , [ ( "Open to New Members", membersWelcome community.openToMembers ) ]

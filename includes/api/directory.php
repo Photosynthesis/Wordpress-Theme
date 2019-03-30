@@ -100,6 +100,7 @@ class APIDirectory
    *    - percentMale
    *    - percentFemale
    *    - percentTrans
+   *    - percentNonBinary
    *    - visitorProcess
    *    - membershipProcess
    *    - membershipComments
@@ -226,6 +227,7 @@ class APIDirectory
       DirectoryDB::$percent_male_field_id => 'percentMale',
       DirectoryDB::$percent_female_field_id => 'percentFemale',
       DirectoryDB::$percent_trans_field_id => 'percentTrans',
+      DirectoryDB::$percent_nonbinary_field_id => 'percentNonBinary',
       DirectoryDB::$visitor_process_field_id => 'visitorProcess',
       DirectoryDB::$membership_process_field_id => 'membershipProcess',
       DirectoryDB::$membership_comments_field_id => 'membershipComments',
