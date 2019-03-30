@@ -966,6 +966,11 @@ body.error404.incsub_wiki
 
 
 /** WPAdverts **/
+/* Bump up the text size on the details pages */
+body.single-advert
+  div#main
+    font-size: 1rem
+
 /* Hide the Default Send Message & Phone Buttons */
 .adverts-show-contact-form, .adverts-single-actions span.adverts-button
   display: none !important
@@ -981,7 +986,7 @@ body.error404.incsub_wiki
   height: 350px
 
 /* Fix Spacing Between Message Button, Contact Form, & Ad Body */
-#adverts-send-message-button, .adverts-contact-box
+#adverts-send-message-button, #adverts-phone-number-button, .adverts-contact-box
   margin-bottom: 1em
 
 /* Hide Contact Box on Initial Load */
