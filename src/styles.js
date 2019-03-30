@@ -118,5 +118,6 @@ $(document).ready(function() {
   /* Toggle Contact Form on Button Click */
   $('body.advert-template-default button#adverts-send-message-button').click(function() {
     $('body.advert-template-default .adverts-contact-box').slideToggle('fast');
+    $('button#adverts-send-message-button').hide('fast');
   });
 });

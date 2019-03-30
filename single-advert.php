@@ -86,11 +86,11 @@ if (!empty($children)) {
 
 
 <!-- Message / Phone -->
-<button id='adverts-send-message-button' class='btn btn-warning'>Send Message</button>
+<button id='adverts-send-message-button' class='btn btn-warning mr-2'>Send Message</button>
 <?php
 $phone_number = get_post_meta($post_id, 'adverts_phone', true);
 if ($phone_number) {
-  echo "<button id='adverts-phone-number-button' class='ml-2 btn btn-secondary'>Phone <a href='tel:{$phone_number}'>{$phone_number}</a></button>";
+  echo "<button id='adverts-phone-number-button' class='btn btn-secondary'>Phone <a href='tel:{$phone_number}'>{$phone_number}</a></button>";
 }
 
 do_action("adverts_tpl_single_bottom", $post_id); ?>
