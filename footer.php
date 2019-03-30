@@ -4,7 +4,8 @@
     'new-listing', 'contact-fic', 'place-ad', 'contact-communities-magazine',
     'contact-a-community', 'support',
   );
-  if (!(is_woocommerce() || in_array(get_post()->post_name, $excluded_membership_footer_posts))) { ?>
+  $is_shop_but_not_homepage = is_woocommerce() && !is_shop();
+  if (!($is_shop_but_not_homepage || in_array(get_post()->post_name, $excluded_membership_footer_posts))) { ?>
   <div id='membership-footer' class='row'>
     <div class="bg-info p-3">
       <div class="row">

@@ -5,6 +5,7 @@ class ThemeGeneral
   /** Special Page IDs **/
   public static $home_page_slug = 'home';
   public static $development_page_slug = 'support';
+  public static $bookstore_page_slug = 'communities-bookstore';
 
   /** General Theme Functions **/
 
@@ -247,7 +248,9 @@ CSS;
       (get_post_type() == 'directory')
       || ($post->post_name === 'directory')
       || ($post->post_name === ThemeGeneral::$home_page_slug)
-      || ($post->post_name === ThemeGeneral::$development_page_slug);
+      || ($post->post_name === ThemeGeneral::$development_page_slug)
+      || is_shop()
+      || ($post->post_name === ThemeGeneral::$bookstore_page_slug);
     if ($excluded) {
       return $post_content;
     }
@@ -260,6 +263,8 @@ CSS;
 
     if ($post->post_name === ThemeGeneral::$home_page_slug ||
         $post->post_name === ThemeGeneral::$development_page_slug ||
+        is_shop() ||
+        $post->post_name === ThemeGeneral::$bookstore_page_slug ||
         $post->post_name === 'directory') {
       return false;
     }
@@ -424,7 +429,9 @@ add_action('login_headertitle', array('ThemeGeneral', 'customize_login_logo_titl
 add_filter('excerpt_more', array('ThemeGeneral', 'post_excerpt_link'));
 add_filter('comments_array', array('ThemeGeneral', 'reverse_comments'));
 remove_filter('the_content', 'wpautop');
+remove_filter('woocommerce_short_description', 'wpautop');
 add_filter('the_content', array('ThemeGeneral', 'auto_paragraphs'));
+add_filter('woocommerce_short_description', array('ThemeGeneral', 'auto_paragraphs'));
 add_filter('user_can_richedit', array('ThemeGeneral', 'remove_richtext_editor'));
 add_shortcode('homepage_recent_posts_widget', array('ThemeGeneral', 'recent_posts'));
 add_filter('category_description', 'do_shortcode');

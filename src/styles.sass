@@ -449,6 +449,83 @@ body.page-id-255787
     font-size: 1.2rem
 
 
+/** Store Home **/
+body.woocommerce-page article#post-21
+  /* Increase the Regular Text Size */
+  font-size: 1.2rem
+  /* Make sub-headings match body text color */
+  h2, h3, h4, h5, h6
+    color: $body-color
+
+  /* Decrease Size of Product Title Text */
+  li.product h4
+    font-size: 1.2rem
+
+  /* Center the Alert Headings */
+  #store-home-new, #store-home-sale, #store-home-support, #store-home-categories
+    h2
+      text-align: center
+  /* Scroll the Products Instead of Wrapping Them */
+  #store-home-sale, #store-home-new
+    .products.row
+      display: flex
+      flex-wrap: nowrap
+      overflow-x: auto
+      justify-content: flex-start !important
+  #store-home-types
+    margin-top: 3.25rem
+    margin-bottom: 3rem
+    & > div
+      margin-bottom: 1em
+    /* Darken the Cards on Hover by Adding a Gradient to the ::after Element */
+    .card:after
+      content: ""
+      opacity: 0
+      transition: opacity 0.45s
+      background: linear-gradient(rgba(0, 0, 0, 0.075), rgba(0, 0, 0, 0.075))
+      position: absolute
+      top: 0
+      left: 0
+      height: 100%
+      width: 100%
+    .card:hover:after
+        opacity: 1
+  #store-home-categories
+    padding-bottom: 0
+    a
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+      height: 100%
+    div
+      margin-bottom: 0.75em
+    .row
+      margin-bottom: 0
+    img
+      margin-bottom: 0.25em
+    h5
+      text-align: center
+      margin: auto 0
+  #store-home-cmag
+    color: $body-color
+    .right-section .col-12
+      text-align: center
+  #store-home-sale
+    /* Revert the Alert's Background Color */
+    background-color: inherit
+    .products.row
+      /* Add some space for the "Sale!" Badges */
+      padding-top: 0.75em
+  #store-home-support
+    & > div.row > div
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+      align-content: center
+      h5
+        margin: 0.5em 0
+        text-align: center
+
 
 /*** Plugin Customizations ***/
 

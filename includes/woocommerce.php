@@ -637,7 +637,20 @@ gtag(
 );
 </script>
 HTML;
+  }
 
+  /* Hide the Products on the Shop's Homepage */
+  public static function hide_products_on_homepage($query) {
+    if (is_shop()) {
+      $tax_query = (array) $query->get('tax_query');
+      $tax_query[] = array(
+        'taxonomy' => 'product_cat',
+        'field' => 'slug',
+        'terms' => array(),
+        'operator' => 'IN',
+      );
+      $query->set('tax_query', $tax_query);
+    }
   }
 }
 
@@ -679,5 +692,6 @@ add_filter('woocommerce_available_variation', array('ThemeWooCommerce', 'customi
 add_filter('theme_store_resubscribe_button_text', array('ThemeWooCommerce', 'customize_resubscribe_cart_button_text'));
 add_filter('woocommerce_order_button_text', array('ThemeWooCommerce', 'customize_place_order_button_text'), 11);
 add_action('woocommerce_thankyou', array('ThemeWooCommerce', 'google_adwords_tracking'));
+add_action('woocommerce_product_query', array('ThemeWooCommerce', 'hide_products_on_homepage'));
 
 ?>
