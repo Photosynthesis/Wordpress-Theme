@@ -18,12 +18,12 @@ class APIWholesale
     $slug_prices = array(
       "starting-a-community" => 1800,
       "wisdom-of-communities-volumes-1-2-3-4-complete-set" => 7200,
-      "communities-directory-book-new-7th-edition" => 2100,
+      "communities-directory-book-new-7th-edition" => 1800,
       "together-resilient-building-community" => 1080,
       "a-manual-for-group-facilitators" => 600,
       "building-united-judgment" => 600,
       "ecological-communities-in-europe" => 900,
-      "within-reach" => 1200,
+      "within-reach" => 720,
       // Best of Communities
       "intentional-community-overview-and-starting-a-community" => 900,
       "seeking-and-visiting-community" => 900,

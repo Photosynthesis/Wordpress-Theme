@@ -935,8 +935,8 @@ communitiesDirectory =
     { name = "Communities Directory, 7th Edition"
     , slug = "communities-directory-book-new-7th-edition"
     , thumbnail = "/wp-content/uploads/2016/01/Screen-Shot-2016-02-18-at-11.25.55-PM-300x387.png"
-    , msrp = "35"
-    , pricePerUnit = Cents 2100
+    , msrp = "30"
+    , pricePerUnit = Cents 1800
     , description =
         div []
             [ p [] [ text "For over 20 years we have offered the leading directory for connecting seekers, dreamers and builders with forming and established intentional communities. In our 7th edition, you'll find over 1,200 communities, full-page maps showing where communities are located, charts that compare communities by more than 30 different qualities, and an easy index to find communities interested in specific pursuits." ]
@@ -956,7 +956,7 @@ togetherResilient =
     { name = "Together Resilient: Building Community in the Age of Climate Disruption"
     , slug = "together-resilient-building-community"
     , thumbnail = "/wp-content/uploads/2017/03/Together-Resilient-300x454.png"
-    , msrp = "18"
+    , msrp = "15"
     , pricePerUnit = Cents 900
     , description =
         div []
@@ -1034,8 +1034,8 @@ withinReach =
     { name = "Within Reach - Journey to Find Sustainable Community"
     , slug = "within-reach"
     , thumbnail = "/wp-content/uploads/2014/08/WR_official_poster-300x450.jpg"
-    , msrp = "20"
-    , pricePerUnit = Cents 1200
+    , msrp = "12"
+    , pricePerUnit = Cents 720
     , description = p [] [ text "One of the most important questions facing the world today is “Can humans live sustainably?” This film answers this in a resounding way – Yes! Within Reach documents one resilient couple’s 6,500 mile bicycling journey across the United States in search of sustainable communities. Mandy and Ryan gave up their corporate jobs and houses to travel thousands of miles in search of a new home, while also looking within. As you journey along, you’ll meet people from around the country showing that there is a better way to live together on this planet. It is not only possible, it is already underway!" ]
     }
 
