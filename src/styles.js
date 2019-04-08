@@ -3,8 +3,7 @@
 /* Include Custom Styles & Bootstrap */
 require('./styles.sass');
 window.jQuery = require('../node_modules/jquery/dist/jquery.js');
-window.Tether = require('../node_modules/tether/dist/js/tether.js');
-require('../node_modules/bootstrap/dist/js/bootstrap.js');
+require('../node_modules/bootstrap/dist/js/bootstrap.bundle.js');
 
 var $ = window.jQuery;
 $(document).ready(function() {

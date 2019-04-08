@@ -5,8 +5,8 @@ $light-blue: #F0F8FF
 $header-blue: #586A96
 $background-blue: #666698
 
-$brand-primary: $blue
-$brand-info: $light-blue
+$primary: $blue
+$info: $light-blue
 $link-hover-color: $orange
 
 $container-max-widths: (sm: 540px, md: 720px, lg: 960px, xl: 1350px)
@@ -212,8 +212,8 @@ hr#header-content-divider
     font-size: 1.1em
     font-weight: bold
     text-transform: uppercase
-    border-top: 1px solid $gray-lighter
-    border-bottom: 1px solid $gray-lighter
+    border-top: 1px solid $gray-300
+    border-bottom: 1px solid $gray-300
     padding: 3px 0
     margin-bottom: 12px
   /* Space Widgets Vertically */
@@ -257,17 +257,17 @@ hr#header-content-divider
       .classified-location
         margin-left: auto
         padding-top: 0.25rem
-        color: $brand-primary
+        color: $primary
 
 .center-column
   /* Style the Vertical Borders */
   &.center-column-store
     +media-breakpoint-up(md)
-      border-left: solid 1px darken($gray-lightest, 5%)
+      border-left: solid 1px darken($gray-100, 5%)
     +media-breakpoint-up(xl)
-      border-right: solid 1px darken($gray-lightest, 5%)
+      border-right: solid 1px darken($gray-100, 5%)
   +media-breakpoint-up(sm)
-    border-right: solid 1px darken($gray-lightest, 5%)
+    border-right: solid 1px darken($gray-100, 5%)
   /* Push Vertical Borders Out */
   padding: 0 15px
   +media-breakpoint-up(sm)
@@ -419,12 +419,12 @@ body.page-id-17
           order: 3
           border-left-style: none
         input:focus ~ span
-          border-top-color: $input-border-focus
-          border-bottom-color: $input-border-focus
+          border-top-color: $input-focus-border-color
+          border-bottom-color: $input-focus-border-color
         input:focus ~ .ig-left
-          border-left-color: $input-border-focus
+          border-left-color: $input-focus-border-color
         input:focus ~ .ig-right
-          border-right-color: $input-border-focus
+          border-right-color: $input-focus-border-color
 
     /* Color all Card links like list-group items when hovered & clicked. */
     .card > a
@@ -539,7 +539,7 @@ body.single-directory
       margin: 6em 0
   /* Add Separation Between the Directory Filters */
   .directory-filters label
-    border-left: 1px solid $gray-lighter
+    border-left: 1px solid $gray-300
     padding: 0.25rem 0.5rem
     margin: 0
     &:first-of-type
@@ -597,7 +597,7 @@ body.single-directory
   margin-bottom: 1.5rem
   /* Style the Indicator for Required Fields */
   .frm_required
-    color: $brand-danger
+    color: $danger
     font-weight: bold
   /* De-Emphasize Help Text */
   .frm_description
@@ -626,7 +626,7 @@ body.single-directory
   .frm_form_field
     @extend .form-group
     label
-      @extend .form-control-label
+      @extend .form-control
   /* Fix Height of Scrollable Containers */
   .frm_scroll_box > .frm_opt_container
     height: 17em
@@ -663,7 +663,7 @@ body.single-directory
       padding: 0.25em
       margin-bottom: 1.5em
       text-align: center
-      border: 1px solid $gray-light
+      border: 1px solid $gray-500
       .frm_upload_icon
         display: inline-block
         font: normal normal normal 14px/1 FontAwesome
@@ -714,11 +714,11 @@ body.single-directory
     @extend .alert-danger
   /* Style Input Errors */
   .frm_blank_field
-    @extend .has-danger
+    @extend :invalid
     input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]), select, textarea
-      @extend .form-control-danger
+      @extend :invalid
   .frm_error
-    @extend .form-control-feedback
+    @extend .form-control-plaintext
 
 /* Style the Results Table */
 .form_results
@@ -821,7 +821,7 @@ body.error404.incsub_wiki
   .price
     color: $body-color
     .amount
-      color: $brand-success
+      color: $success
 
   /* Remove Extra Spacing Around Variation Text */
   dl.variation
@@ -830,7 +830,7 @@ body.error404.incsub_wiki
 
   /* Color Markers for Required Fields Red */
   .required
-    color: $brand-danger
+    color: $danger
 
   /* Order Details Product Metas */
   .order_details ul.wc-item-meta
@@ -944,7 +944,7 @@ body.error404.incsub_wiki
   .checkout
     /* Style Fields with Errors */
     .woocommerce-invalid
-      @extend .has-danger
+      @extend :invalid
     /* Cleanup Payment Method Cards */
     li.wc_payment_method
       &.payment_method_paypal
@@ -977,9 +977,9 @@ body.single-advert
 
 /* Darken the Background of Featured Classifieds */
 .list-group-item.list-group-item-action.featured-classified
-  background-color: darken($brand-info, 10%)
+  background-color: darken($info, 10%)
   &:hover, &:active, &:focus
-    background-color: darken($brand-info, 3%)
+    background-color: darken($info, 3%)
 
 /* Fix the Height of the Image Carousel */
 #advert-carousel .carousel-item > img
@@ -1009,7 +1009,7 @@ body.single-advert
     @extend .card
     @extend .card-block
     .adverts-listing-type-cost
-      color: $brand-success
+      color: $success
       font-weight: bold
 
 
