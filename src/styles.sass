@@ -1,18 +1,6 @@
-$container-max-widths: (sm: 576px, md: 768px, lg: 960px, xl: 1350px)
+/** Variables **/
 
-$grid-columns: 24
-$grid-gutter-width-base: 15px
-
-$navbar-padding-x: 0
-$navbar-padding-y: 0
-
-$dropdown-min-width: 14rem
-$dropdown-padding-y: 0.3rem
-
-$sizes: (10: 10%, 25: 25%, 33: 33%, 40: 40%, 50: 50%, 66: 66%, 75: 75%, 100: 100%)
-
-
-// NEW VARIABLES
+// Colors
 $black: black
 $teal: #579C87
 $blue: #233D4D
@@ -24,10 +12,12 @@ $primary: $teal
 
 $body-color: $black
 
-// Use Source Sans Pro as the default font
+
+// Font
+/* Use Source Sans Pro as the default font */
 $font-family-sans-serif: "Source Sans Pro", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
 
-// Set the heading font sizes, weight, & color
+/* Set the heading font sizes, weight, & color */
 $h1-font-size: 3rem
 $h2-font-size: 2.25rem
 $h3-font-size: 1.875rem
@@ -35,32 +25,51 @@ $h4-font-size: 1.5rem
 $headings-font-weight: 600
 $headings-color: black
 
+
+// Grid
+$grid-columns: 24
+$grid-gutter-width-base: 15px
+
+$container-max-widths: (sm: 768px, md: 960px, lg: 1200px, xl: 1350px)
+
+
+// Navbar
+$navbar-padding-x: 0
+$navbar-padding-y: 0
+
+
+// Links
 $link-hover-color: $blue
 
+
+// Borders
 $border-radius: 0.7rem
 $border-radius-sm: 0.7rem
 $border-radius-lg: 1rem
 
+
+// Buttons
 $btn-padding-y-sm: 0.2rem
 $btn-padding-x-sm: 1rem
+
+
+// Dropdowns
+$dropdown-min-width: 14rem
+$dropdown-padding-y: 0.3rem
+
+
+// Size Utilities
+$sizes: (10: 10%, 25: 25%, 33: 33%, 40: 40%, 50: 50%, 66: 66%, 75: 75%, 100: 100%)
+
 
 
 @import "~bootstrap/scss/bootstrap"
 
 
+
 // NEW STYLES
 
 // General
-// Set the button/label/meta font styles
-button, label, .meta, .btn
-  font-weight: bold
-  font-size: 0.8125rem
-.btn-light
-  background-color: $body-bg
-  border-color: $black
-  &:hover
-    border-color: $black
-    background-color: darken($body-bg, 10%)
 
 /** Utility Classes */
 /* Auto Height for Images with Height Attributes */
@@ -81,30 +90,36 @@ body
   background-color: $blue
   padding-bottom: 15px
 
+/* Set the button/label/meta font styles */
+button, label, .meta, .btn
+  font-weight: bold
+  font-size: 0.8125rem
+.btn-light
+  background-color: $body-bg
+  border-color: $black
+  &:hover
+    border-color: $black
+    background-color: darken($body-bg, 10%)
+
 
 /* Add Spacing & White Backdrop */
 #body-wrapper
   padding: 5px 15px 15px
   background-color: white
   box-shadow: rgba(black, 0.75) 0px 20px 32px
-  +media-breakpoint-only(lg)
-    width: 98%
-  +media-breakpoint-down(md)
-    width: 100%
 
 
 .nav-container
   background-color: $white
-  .container
-    +media-breakpoint-down(md)
-      width: 100%
+  +media-breakpoint-down(md)
+    width: 100%
 
 #nav-menu
   nav.navbar
     cursor: pointer
     .navbar-toggler-label
       font-weight: bold
-      color: black
+      color: $black
     /* Remove Carets From Dropdown Menus */
     .dropdown-toggle.nav-link:after
       content: none
@@ -120,9 +135,9 @@ body
       > a
         font-weight: bold
         padding: 0.75em 1.25em
-        color: black
+        color: $black
       &.active > a
-        color: white
+        color: $white
       ul
         /* Remove Spacing for Continuous Hover Event */
         margin-top: 0
@@ -132,13 +147,13 @@ body
         /* Set Sub-Menu Colors */
         background-color: $blue
         a
-          color: black
+          color: $white
         /* Push Each Nested Level of Sub-Menus Slightly More to the Right */
         li
           padding-left: 1rem
         /* Emphasize Links to Current Page */
         li.active > a
-          color: white
+          color: $white
           font-weight: bold
         /* Position Nested Sub-Menus to the Right of the Open Sub-Menu */
         li.dropdown
@@ -152,10 +167,10 @@ body
         +media-breakpoint-up(sm)
           border-left-color: white
         > a
-          color: white
+          color: $white
           font-weight: bold
         & a:hover
-          color: white
+          color: $white
           font-weight: bold
   +media-breakpoint-only(md)
     /* Hide NavBar Search on Medium Screens */
