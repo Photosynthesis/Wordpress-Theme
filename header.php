@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="profile" href="http://gmpg.org/xfn/11" />
     <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
-    <link href='//fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
     <?php if (is_singular() && get_option('thread_comments')) { wp_enqueue_script('comment-reply'); } ?>
     <?php wp_head(); ?>
     <script type='text/javascript'><?php echo get_option('theme_extra_javascript'); ?></script>
@@ -30,14 +30,13 @@
     <body <?php body_class(); ?>>
 
 <!-- Nav Menu & Search -->
-<div class='container-fluid nav-outer-container'>
-<div class='container'>
+<div class='container nav-container'>
   <div id="nav-menu" class="row">
-    <div class="d-none d-lg-block col-lg-4 push-lg-20">
+    <div class="d-none d-lg-block col-lg-4 order-lg-2 bg-white">
       <div class="google-search-div"><gcse:search></gcse:search></div>
     </div>
-    <div class="col-24 col-sm-12 col-md-24 col-lg-20 pull-lg-4">
-      <nav class="navbar navbar-inverse navbar-toggleable-sm">
+    <div class="col-24 col-sm-12 col-md-24 col-lg-20 order-lg-1 bg-white">
+      <nav class="navbar navbar-expand-md">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
                 aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-label">MENU</span> <span class="navbar-toggler-icon"></span>
@@ -61,7 +60,6 @@
       </nav>
     </div>
   </div>
-</div>
 </div>
 
 <div id="body-wrapper" class="container"><!-- Closed in footer.php -->
@@ -92,8 +90,8 @@
         </a>
       </div>
       <div id="header-buttons">
-        <a class="btn btn-sm btn-secondary mr-2" href='<?php echo get_permalink(14602); ?>'>Membership</a>
-        <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>Donate</a>
+        <a class="btn btn-sm btn-light mr-2" href='<?php echo get_permalink(14602); ?>'>SHOP</a>
+        <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>DONATE</a>
       </div>
       <div class="google-search-div d-none d-sm-block d-lg-none">
         <script>

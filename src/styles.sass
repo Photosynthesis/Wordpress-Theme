@@ -1,34 +1,66 @@
-$blue: #596A96
-$orange: #F47950
-$light-blue: #F0F8FF
-
-$header-blue: #586A96
-$background-blue: #666698
-
-$primary: $blue
-$info: $light-blue
-$link-hover-color: $orange
-
-$container-max-widths: (sm: 540px, md: 720px, lg: 960px, xl: 1350px)
+$container-max-widths: (sm: 576px, md: 768px, lg: 960px, xl: 1350px)
 
 $grid-columns: 24
 $grid-gutter-width-base: 15px
 
-$headings-font-family: Lora
-$font-size-base: 0.8rem
-
-$navbar-inverse-color: black
-$navbar-inverse-active-color: white
-$navbar-inverse-toggler-border: rgba(black, .3)
 $navbar-padding-x: 0
-$navbar-padding-y: 0.2rem
+$navbar-padding-y: 0
 
 $dropdown-min-width: 14rem
 $dropdown-padding-y: 0.3rem
 
 $sizes: (10: 10%, 25: 25%, 33: 33%, 40: 40%, 50: 50%, 66: 66%, 75: 75%, 100: 100%)
 
+
+// NEW VARIABLES
+$black: black
+$teal: #579C87
+$blue: #233D4D
+$green: #A1C181
+$yellow: #FCCA46
+$white: white
+
+$primary: $teal
+
+$body-color: $black
+
+// Use Source Sans Pro as the default font
+$font-family-sans-serif: "Source Sans Pro", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+
+// Set the heading font sizes, weight, & color
+$h1-font-size: 3rem
+$h2-font-size: 2.25rem
+$h3-font-size: 1.875rem
+$h4-font-size: 1.5rem
+$headings-font-weight: 600
+$headings-color: black
+
+$link-hover-color: $blue
+
+$border-radius: 0.7rem
+$border-radius-sm: 0.7rem
+$border-radius-lg: 1rem
+
+$btn-padding-y-sm: 0.2rem
+$btn-padding-x-sm: 1rem
+
+
 @import "~bootstrap/scss/bootstrap"
+
+
+// NEW STYLES
+
+// General
+// Set the button/label/meta font styles
+button, label, .meta, .btn
+  font-weight: bold
+  font-size: 0.8125rem
+.btn-light
+  background-color: $body-bg
+  border-color: $black
+  &:hover
+    border-color: $black
+    background-color: darken($body-bg, 10%)
 
 /** Utility Classes */
 /* Auto Height for Images with Height Attributes */
@@ -46,30 +78,23 @@ html, body
 
 /* Add Purple Background */
 body
-  background-color: $background-blue
+  background-color: $blue
   padding-bottom: 15px
-
-/* Change Font Color & Text Emphasis of Headings */
-h1, h2, h3, h4, h5, h6
-  color: $header-blue
-  font-weight: bold
 
 
 /* Add Spacing & White Backdrop */
 #body-wrapper
-  margin-bottom: 30px
   padding: 5px 15px 15px
   background-color: white
-  box-shadow: black 0px 20px 32px
+  box-shadow: rgba(black, 0.75) 0px 20px 32px
   +media-breakpoint-only(lg)
     width: 98%
   +media-breakpoint-down(md)
     width: 100%
 
 
-.nav-outer-container
-  background-color: $orange
-  box-shadow: black 0px 6px 16px
+.nav-container
+  background-color: $white
   .container
     +media-breakpoint-down(md)
       width: 100%
@@ -105,7 +130,7 @@ h1, h2, h3, h4, h5, h6
         border: none
         border-radius: 0
         /* Set Sub-Menu Colors */
-        background-color: $orange
+        background-color: $blue
         a
           color: black
         /* Push Each Nested Level of Sub-Menus Slightly More to the Right */
@@ -123,7 +148,7 @@ h1, h2, h3, h4, h5, h6
     /* Recolor on Active & Hover */
     .navbar-nav li
       &:hover, &.show
-        background-color: $orange
+        background-color: $blue
         +media-breakpoint-up(sm)
           border-left-color: white
         > a
@@ -157,7 +182,7 @@ div.google-search-div
   div#google-search-div .gsib_b
     display: none
   td.gsc-search-button input.gsc-search-button
-    background-color: $orange
+    background-color: $teal
     /* Reduce width of search button */
     padding: 6px 15px
     /* Darken button border */
@@ -185,8 +210,6 @@ div.google-search-div
   #header-buttons
     margin-top: 10px
     font-weight: bold
-    a.btn-sm
-      font-size: 1rem
   .google-search-div
     width: 60%
     margin-left: auto
@@ -850,7 +873,7 @@ body.error404.incsub_wiki
     .current-cat, .current-cat-parent
       > a
         &, &:hover, &:active
-          color: $orange
+          color: $teal
           font-weight: bold
           text-decoration: none
 
