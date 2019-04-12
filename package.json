@@ -21,6 +21,7 @@
   "author": "Pavan Rikhi",
   "license": "GPL-3.0",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.8.1",
     "@webcomponents/webcomponentsjs": "2.2.1",
     "bootstrap": "^4.3.0",
     "coffeekraken-s-google-map-component": "^1.0.2",
@@ -31,7 +32,6 @@
     "elm-webpack-loader": "^5.0.0",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.10.1",
-    "font-awesome": "^4.7.0",
     "jquery": "1.12.4",
     "node-sass": "^4.11.0",
     "sass-loader": "^4.1.1",
