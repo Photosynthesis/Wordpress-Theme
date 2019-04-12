@@ -409,6 +409,124 @@ HTML;
         'var boardStaffData = ' .  json_encode($data) .  ';' .
       '</script>';
   }
+
+  public static function render_partners_block() {
+    $sisters = array(
+      array(
+        'name' => 'Cohousing',
+        'tracking' => 'coho',
+        'image' => 'cohousing.png',
+        'link' => 'http://www.cohousing.org',
+        'height' => 40,
+      ),
+      array(
+        'name' => 'The Federation of Egalitarian Communities',
+        'tracking' => 'fec',
+        'image' => 'fec.png',
+        'link' => 'http://thefec.org',
+        'height' => 40,
+      ),
+      array(
+        'name' => 'North American Students of Cooperation',
+        'tracking' => 'NASCO',
+        'image' => 'nasco.jpg',
+        'link' => 'http://www.nasco.coop/',
+        'height' => 40,
+      ),
+      array(
+        'name' => 'Global Ecovillage Network',
+        'tracking' => 'GEN',
+        'image' => 'gen.png',
+        'link' => 'http://gen.ecovillage.org',
+        'height' => 40,
+      ),
+      array(
+        'name' => 'New Economy Coalition',
+        'tracking' => 'NEC',
+        'image' => 'nec.png',
+        'link' => 'https://neweconomy.net/',
+        'height' => 40,
+      ),
+    );
+    $sponsors = array(
+      array(
+        'name' => 'NuMundo',
+        'tracking' => 'NM',
+        'image' => 'numundo.png',
+        'link' => 'http://www.numundo.org/',
+        'height' => 40,
+      ),
+      array(
+        'name' => 'California Cohousing',
+        'tracking' => 'calcoho',
+        'image' => 'calcoho.jpg',
+        'link' => 'http://www.calcoho.org/',
+        'height' => 40,
+      ),
+      array(
+        'name' => 'International Communes Desk',
+        'tracking' => 'ICD',
+        'image' => 'icd.jpg',
+        'link' => 'http://www.communa.org.il',
+        'height' => 40,
+      ),
+      array(
+        'name' => 'ICSA',
+        'tracking' => 'ICSA',
+        'image' => 'icsa.jpg',
+        'link' => 'http://www.communa.org.il/icsa',
+        'height' => 40,
+      ),
+      array(
+        'name' => 'Communal Studies Association',
+        'tracking' => 'CSA',
+        'image' => 'csa.gif',
+        'link' => 'http://www.communalstudies.org/',
+        'height' => 50,
+      ),
+      array(
+        'name' => 'Transition US',
+        'tracking' => 'TransitionUS',
+        'image' => 'transition-us.png',
+        'link' => 'http://www.transitionus.org/',
+        'height' => 40,
+      ),
+      array(
+        'name' => 'NW Intentional Communities Association',
+        'tracking' => 'NICA',
+        'image' => 'nica.jpg',
+        'link' => 'https://nwcommunities.org/',
+        'height' => 40,
+      ),
+    );
+
+    $output = "<div class='partners row'><div class='col'>\n";
+    $output .= "<h3>PARTNERS</h3>";
+
+    $output .= "<div>";
+    foreach ($sisters as $partner) {
+      $output .= self::partner_logo($partner, 'sister_org');
+    }
+    $output .= "</div><div>";
+    foreach ($sponsors as $partner) {
+      $output .= self::partner_logo($partner, 'sponsor');
+    }
+    $output .= "</div>";
+
+    $output .= "</div></div>\n";
+    return $output;
+  }
+  private static function partner_logo($partner, $tracking_type) {
+    $footer_logo_path = get_stylesheet_directory_uri() . "/img/footer-logos/";
+    $tracking = self::fic_footer_track_click($tracking_type . "_" . $partner['tracking']);
+    $output = "<a href='{$partner['link']}' target='_blank' title='{$partner['name']}' onclick='{$tracking}'>\n";
+    $output .= "<img src='{$footer_logo_path}{$partner['image']}' alt='{$partner['name']}' title='{$partner['name']}' height='{$partner['height']}' hspace='4' border='0' />\n";
+    $output .= "</a>\n";
+    return $output;
+  }
+  private static function fic_footer_track_click($event_label) {
+    return "ga('send', 'event', 'Theme.Footer', 'click', '{$event_label}');";
+  }
 }
 
 add_filter('wp_mail_from_name', function($n) { return 'Fellowship for Intentional Community'; }, 11);
@@ -437,5 +555,6 @@ add_shortcode('homepage_recent_posts_widget', array('ThemeGeneral', 'recent_post
 add_filter('category_description', 'do_shortcode');
 add_filter('upload_mimes', array('ThemeGeneral', 'allow_ebook_mimes'));
 add_shortcode('elm_board_staff', array('ThemeGeneral', 'render_board_and_staff'));
+add_shortcode('fic_partners', array('ThemeGeneral', 'render_partners_block'));
 
 ?>
