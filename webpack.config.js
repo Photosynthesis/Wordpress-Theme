@@ -11,7 +11,7 @@ module.exports = {
       './src/styles.js',
     ],
     fa: [
-      'style-loader!css-loader!./node_modules/font-awesome/css/font-awesome.css',
+      'style-loader!css-loader!./node_modules/@fortawesome/fontawesome-free/css/all.css',
     ],
     board_staff: [
       './src/board-staff.js',
