@@ -53,6 +53,8 @@ $btn-padding-y: 0.5rem
 $btn-padding-x: 2rem
 $btn-padding-y-sm: 0.2rem
 $btn-padding-x-sm: 1rem
+$btn-padding-y-lg: 1rem
+$btn-padding-x-lg: 2rem
 
 
 // Dropdowns
@@ -92,6 +94,8 @@ body
 button, label, .meta, .btn
   font-weight: bold
   font-size: 0.8125rem
+.btn-lg
+  font-size: 1rem
 .btn-light
   background-color: $body-bg
   border-color: $black
@@ -523,6 +527,19 @@ body.home
       margin-bottom: 1rem
       a:hover
         text-decoration: none
+  /* Explore Communities section */
+  #home-explore
+    text-align: center
+    padding: 10rem 0
+    margin: 3rem calc(-1 * #{$grid-gutter-width / 2})
+    margin-bottom: 3rem
+    background: linear-gradient(rgba(white, 0.65), rgba(white, 0.65)), url('/wp-content/themes/fic-theme/img/directory-map.png')
+    background-size: cover
+    background-position: center center
+    box-shadow: 0 3px 8px 4px rgba(black, 0.1)
+    h2
+      font-size: 3rem
+      margin-bottom: 0.1rem
 
 
 /** Directory Home **/
