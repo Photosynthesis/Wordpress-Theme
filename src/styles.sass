@@ -527,12 +527,39 @@ body.home
       margin-bottom: 1rem
       a:hover
         text-decoration: none
+  /* New Arrivals section */
+  #home-new-arrivals, #home-upcoming-events, #home-community-offers
+    margin-top: 4rem
+    margin-bottom: 4rem
+    h5
+      color: $teal
+      font-weight: bold
+      display: flex
+      margin-bottom: 1.5rem
+      a
+        margin-left: auto
+      i
+        font-size: 0.7rem
+        margin-right: 0.2em
+    .item-block
+      a
+        text-decoration: none
+        color: black
+        display: flex
+        flex-direction: column
+        justify-content: center
+        height: 100%
+      img
+        margin: 0 auto 1rem
+      div
+        text-align: center
+        margin-top: auto
+        margin-bottom: auto
   /* Explore Communities section */
   #home-explore
     text-align: center
     padding: 10rem 0
-    margin: 3rem calc(-1 * #{$grid-gutter-width / 2})
-    margin-bottom: 3rem
+    margin: 8rem calc(-1 * #{$grid-gutter-width / 2}) 3rem
     background: linear-gradient(rgba(white, 0.65), rgba(white, 0.65)), url('/wp-content/themes/fic-theme/img/directory-map.png')
     background-size: cover
     background-position: center center

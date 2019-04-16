@@ -528,6 +528,91 @@ HTML;
   private static function fic_footer_track_click($event_label) {
     return "ga('send', 'event', 'Theme.Footer', 'click', '{$event_label}');";
   }
+
+  public static function render_new_arrivals() {
+    $sale_product_ids = wc_get_product_ids_on_sale();
+    $products = wc_get_products(array(
+      'limit' => 4,
+      'orderby' => 'rand',
+      'include' => $sale_product_ids,
+      'category' => array('books'),
+    ));
+    $output =
+      "<div id='home-new-arrivals' class='row'>" .
+        "<div class='col-24'>" .
+          "<h5 class='clearfix'>" .
+            "NEW ARRIVALS" .
+            "<a href='/community-bookstore/category/books/' class='btn btn-sm btn-primary'>" .
+              "BROWSE BOOKS" .
+            "</a>" .
+          "</h5>" .
+        "</div>";
+    foreach ($products as $product) {
+      $name = $product->get_title();
+      $image = $product->get_image(
+        'wide-thumbnail', array('class' => 'img-fluid rounded-lg')
+      );
+      $link = $product->get_permalink();
+      $output .= "<div class='col-6 item-block'><a href='{$link}'>";
+      $output .= $image . "<div>{$name}</div>";
+      $output .= "</a></div>";
+    }
+    $output .= "</div>";
+    return $output;
+  }
+
+  public static function render_upcoming_events() {
+    $events = tribe_get_events(array('posts_per_page' => 5));
+    $output =
+      "<div id='home-upcoming-events' class='row'>" .
+        "<div class='col-24'>" .
+          "<h5 class='clearfix'>UPCOMING EVENTS</h5>" .
+        "</div>";
+    foreach ($events as $post) {
+      $name = $post->post_title;
+      $image = get_the_post_thumbnail(
+        $post->ID, 'wide-thumbnail', array('class' => 'img-fluid rounded-lg')
+      );
+      $link = get_permalink($post->ID);
+      $output .= "<div class='col-6 item-block'><a href='{$link}'>";
+      $output .= $image . "<div>{$name}</div>";
+      $output .= "</a></div>";
+    }
+    $output .= "</div>";
+    return $output;
+  }
+
+  public static function render_offers() {
+    $ads = get_posts(array(
+      'post_type' => 'advert',
+      'post_status' => 'publish',
+      'posts_per_page' => 4,
+      'menu_order' => 1,    // featured ads
+      'orderby' => array('date' => 'desc'),
+    ));
+    $output =
+      "<div id='home-community-offers' class='row'>" .
+        "<div class='col-24'>" .
+          "<h5 class='clearfix'>COMMUNITY OFFERS" .
+            "<a href='/community-classifieds/place-ad/' class='btn btn-sm btn-primary'>" .
+              "<i class='fas fa-plus'></i> POST OFFER" .
+            "</a>" .
+          "</h5>" .
+        "</div>";
+    foreach ($ads as $post) {
+      $name = $post->post_title;
+      $image_post = array_pop(adverts_sort_images(get_children(array('post_parent' => $post->ID)), $post->ID));
+      $image = wp_get_attachment_image(
+        $image_post->ID, 'wide-thumbnail', false, array('class' => 'img-fluid rounded-lg')
+      );
+      $link = get_permalink($post->ID);
+      $output .= "<div class='col-6 item-block' data-item='{$post->ID}'><a href='{$link}'>";
+      $output .= $image . "<div>{$name}</div>";
+      $output .= "</a></div>";
+    }
+    $output .= "</div>";
+    return $output;
+  }
 }
 
 add_filter('wp_mail_from_name', function($n) { return 'Fellowship for Intentional Community'; }, 11);
@@ -557,5 +642,8 @@ add_filter('category_description', 'do_shortcode');
 add_filter('upload_mimes', array('ThemeGeneral', 'allow_ebook_mimes'));
 add_shortcode('elm_board_staff', array('ThemeGeneral', 'render_board_and_staff'));
 add_shortcode('fic_partners', array('ThemeGeneral', 'render_partners_block'));
+add_shortcode('fic_new_arrivals', array('ThemeGeneral', 'render_new_arrivals'));
+add_shortcode('fic_upcoming_events', array('ThemeGeneral', 'render_upcoming_events'));
+add_shortcode('fic_community_offers', array('ThemeGeneral', 'render_offers'));
 
 ?>
