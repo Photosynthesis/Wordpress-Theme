@@ -351,8 +351,10 @@ hr#header-content-divider
       list-style: none
       padding-left: 0
     li
-      line-height: 1.15
+      line-height: 1.4
   .right-column
+    display: flex
+    flex-direction: column
     /* Style the MailPoet Form */
     input[type="text"], input[type="email"]
       color: $white
@@ -375,9 +377,7 @@ hr#header-content-divider
       color: $danger
     /* Style the social icons */
     div.icons
-      position: relative
-      bottom: 0
-      right: 0
+      margin-top: auto
       a
         color: $yellow
         margin-left: 1rem
