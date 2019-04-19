@@ -613,6 +613,28 @@ HTML;
     $output .= "</div>";
     return $output;
   }
+
+  public static function render_homepage_banner_image($atts) {
+    $a = shortcode_atts(
+      array(
+        'header' => 'Find community. Experience a new world.',
+        'image' => '//placekitten.com/1350/675',
+      ), $atts
+    );
+    $output = "<div id='home-banner' class='row'><img src='{$a['image']}' />";
+    $output .= "<h1>{$a['header']}</h1>";
+    $output .=
+      "<div class='search-container'>" .
+        "<form action='/directory/listings/' class='directory-search-input'>" .
+          "<i class='fas fa-search'></i>" .
+          "<input type='text' class='form-control' name='search' placeholder=\"Try searching for 'California' or 'Cohousing'\" />" .
+          "<input type='submit' class='btn btn-primary btn-sm' value='SEARCH' />" .
+        "</form>" .
+        "<a href='/directory/advanced-search/' class='btn btn-sm btn-transparent'>ADVANCED SEARCH</a>" .
+      "</div>";
+    $output .= "</div>";
+    return $output;
+  }
 }
 
 add_filter('wp_mail_from_name', function($n) { return 'Fellowship for Intentional Community'; }, 11);
@@ -645,5 +667,6 @@ add_shortcode('fic_partners', array('ThemeGeneral', 'render_partners_block'));
 add_shortcode('fic_new_arrivals', array('ThemeGeneral', 'render_new_arrivals'));
 add_shortcode('fic_upcoming_events', array('ThemeGeneral', 'render_upcoming_events'));
 add_shortcode('fic_community_offers', array('ThemeGeneral', 'render_offers'));
+add_shortcode('fic_jumbo_image', array('ThemeGeneral', 'render_homepage_banner_image'));
 
 ?>
