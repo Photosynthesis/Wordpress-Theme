@@ -32,6 +32,10 @@ module.exports = {
     admin_flate_rate: [
       './src/admin-flat-rate.js',
     ],
+    // Entries for block editor assets should all start with `editor_.
+    editor_styles: [
+      './src/styles-editor.sass',
+    ],
   },
 
   output: {
@@ -77,7 +81,7 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('[contenthash].css'),
+    new ExtractTextPlugin('[name].[contenthash].css'),
     new webpack.DefinePlugin({ isProduction: isProduction }),
     new WebpackCleanupPlugin(),
   ],

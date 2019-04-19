@@ -47,10 +47,15 @@ class ThemeGeneral
           $wholesale_js_filename = $dist_file;
           continue;
         } else if (strpos($dist_file, "admin_") === 0) {
+          // skip admin scripts
           continue;
         }
         wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
       } else if ($extension === 'css') {
+        if (strpos($dist_file, "editor_") === 0) {
+          // skip editor styles
+          continue;
+        }
         wp_enqueue_style($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
       }
     }
@@ -92,6 +97,15 @@ class ThemeGeneral
     foreach (scandir(__DIR__ . "/../dist") as $dist_file) {
       if (strpos($dist_file, "admin_") === 0) {
         wp_enqueue_script($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
+      }
+    }
+  }
+
+  public static function enqueue_editor_assets() {
+    foreach (scandir(__DIR__ . "/../dist") as $dist_file) {
+      if (strpos($dist_file, "editor_") === 0) {
+        error_log("Enqueued " . $dist_file);
+        wp_enqueue_style($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
       }
     }
   }
@@ -689,6 +703,7 @@ ThemeGeneral::set_thumbnail_sizes();
 ThemeGeneral::register_menu();
 add_action('wp_enqueue_scripts', array('ThemeGeneral', 'enqueue_assets'));
 add_action('admin_enqueue_scripts', array('ThemeGeneral', 'enqueue_admin_assets'));
+add_action('enqueue_block_editor_assets', array('ThemeGeneral', 'enqueue_editor_assets'));
 add_action('widgets_init', array('ThemeGeneral', 'register_sidebars'));
 add_action('login_head', array('ThemeGeneral', 'add_favicon'));
 add_action('admin_head', array('ThemeGeneral', 'add_favicon'));
