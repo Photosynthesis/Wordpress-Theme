@@ -487,31 +487,6 @@ body.single
 
 /** Site Home **/
 body.home
-  /* Increase the Regular Text Size to ~14pt */
-  .img-banner
-    /* Fix Background Image Size in Chrome */
-    .carousel-item.active, .carousel-item-next, .carousel-item-prev
-      display: block !important
-    /* Reduce Size of Text on Top of Banner for Smallest Screens */
-    h1
-      +media-breakpoint-only(xs)
-        font-size: 1.65rem
-        margin-bottom: 0
-  /* Narrow the Text Below Initial Info Cards Headings */
-  .info-cards p
-    +media-breakpoint-only(xl)
-      margin-right: 1.5rem
-      margin-left: 1.5rem
-    +media-breakpoint-down(sm)
-      padding-left: 0.5rem
-      padding-right: 0.5rem
-    +media-breakpoint-up(md)
-      padding-left: 1rem
-      padding-right: 1rem
-  /* Decrease Space Below WP Hustle Opt-In Widget */
-  .inc_opt_shortcode_wrap
-    margin-bottom: 15px
-
   /* Homepage Banner Image & Directory Search */
   #home-banner
     height: 100%
