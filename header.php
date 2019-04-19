@@ -110,4 +110,3 @@
       </div>
     </div>
   </div>
-  <hr id='header-content-divider' class='mt-2 mb-4'>
