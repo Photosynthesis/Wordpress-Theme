@@ -103,6 +103,11 @@ button, label, .meta, .btn
     border-color: $black
     background-color: darken($body-bg, 10%)
 
+/* Hide the empty <p> tags Wordpress sticks everywhere */
+p:empty
+  display: none
+  margin: 0
+
 /* See-through mailpoet inputs */
 %transparent-mailpoet-form
   /* Style the MailPoet Form */
