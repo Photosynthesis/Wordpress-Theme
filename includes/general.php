@@ -660,6 +660,25 @@ HTML;
     $output .= "</div>";
     return $output;
   }
+
+  public static function render_column_section($atts, $content = "") {
+    $a = shortcode_atts(
+      array(
+        'image' => '',
+        'header' => '',
+        'link' => '',
+      ), $atts
+    );
+    $output = <<<HTML
+<div class='homepage-column-section'>
+  <img src="{$a['image']}" class='img-fluid' />
+  <h3>{$a['header']}</h3>
+  <p>{$content}</p>
+  <a href="{$a['link']}">Learn more</a>
+</div>
+HTML;
+    return $output;
+  }
 }
 
 add_filter('wp_mail_from_name', function($n) { return 'Fellowship for Intentional Community'; }, 11);
@@ -694,5 +713,6 @@ add_shortcode('fic_upcoming_events', array('ThemeGeneral', 'render_upcoming_even
 add_shortcode('fic_community_offers', array('ThemeGeneral', 'render_offers'));
 add_shortcode('fic_jumbo_image', array('ThemeGeneral', 'render_homepage_banner_image'));
 add_shortcode('fic_get_involved', array('ThemeGeneral', 'render_get_involved_block'));
+add_shortcode('fic_column_section', array('ThemeGeneral', 'render_column_section'));
 
 ?>
