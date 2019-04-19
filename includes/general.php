@@ -635,6 +635,31 @@ HTML;
     $output .= "</div>";
     return $output;
   }
+
+  public static function render_get_involved_block($atts, $content = "") {
+    $a = shortcode_atts(
+      array(
+        'header' => 'Intentional communities model solutions',
+        'news_header' => 'JOIN OUR NEWSLETTER',
+        'news_text' => 'Free resources and inspiring news in your inbox!',
+      ), $atts
+    );
+    $mailpoet_form = do_shortcode('[mailpoet_form id="2"]');
+    $output = "<div id='get-involved-block' class='row'>";
+    $output .= <<<HTML
+<div class='col-15 left-column'>
+  <h2 class='h1'>{$a['header']}</h2>
+  <p>{$content}</p>
+</div>
+<div class='col-7 right-column'>
+  <h5>{$a['news_header']}</h5>
+  <p>{$a['news_text']}</p>
+  {$mailpoet_form}
+</div>
+HTML;
+    $output .= "</div>";
+    return $output;
+  }
 }
 
 add_filter('wp_mail_from_name', function($n) { return 'Fellowship for Intentional Community'; }, 11);
@@ -668,5 +693,6 @@ add_shortcode('fic_new_arrivals', array('ThemeGeneral', 'render_new_arrivals'));
 add_shortcode('fic_upcoming_events', array('ThemeGeneral', 'render_upcoming_events'));
 add_shortcode('fic_community_offers', array('ThemeGeneral', 'render_offers'));
 add_shortcode('fic_jumbo_image', array('ThemeGeneral', 'render_homepage_banner_image'));
+add_shortcode('fic_get_involved', array('ThemeGeneral', 'render_get_involved_block'));
 
 ?>

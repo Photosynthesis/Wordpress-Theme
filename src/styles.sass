@@ -103,6 +103,31 @@ button, label, .meta, .btn
     border-color: $black
     background-color: darken($body-bg, 10%)
 
+/* See-through mailpoet inputs */
+%transparent-mailpoet-form
+  /* Style the MailPoet Form */
+  input[type="text"], input[type="email"]
+    color: $white
+    background-color: inherit
+    border: solid 1px $white
+    border-radius: $border-radius
+    padding: 0.25rem
+    padding-left: 1.25rem
+    outline: none
+    width: 100%
+    transition: box-shadow 0.2s ease-in-out
+    &:focus
+      box-shadow: 0 0 4px 2px $teal
+    &::placeholder
+      color: $white
+  input[type="submit"]
+    @extend .btn
+    @extend .btn-primary
+    text-transform: uppercase
+  li.parsely-custom-error-message
+    color: $danger
+
+
 
 /* Add Spacing & White Backdrop */
 #body-wrapper
@@ -353,29 +378,9 @@ hr#header-content-divider
     li
       line-height: 1.4
   .right-column
+    @extend %transparent-mailpoet-form
     display: flex
     flex-direction: column
-    /* Style the MailPoet Form */
-    input[type="text"], input[type="email"]
-      color: $white
-      background-color: inherit
-      border: solid 1px $white
-      border-radius: $border-radius
-      padding: 0.25rem
-      padding-left: 1.25rem
-      outline: none
-      width: 100%
-      transition: box-shadow 0.2s ease-in-out
-      &:focus
-        box-shadow: 0 0 4px 2px $teal
-      &::placeholder
-        color: $white
-    input[type="submit"]
-      @extend .btn
-      @extend .btn-primary
-      text-transform: uppercase
-    li.parsely-custom-error-message
-      color: $danger
     /* Style the social icons */
     div.icons
       margin-top: auto
@@ -569,6 +574,30 @@ body.home
         margin-top: 0.75em
         &:hover
           background-color: rgba($black, 0.3)
+
+  /* Get Involved + Newsletter Signup Section */
+  #get-involved-block
+    color: $white
+    background-color: $sage
+    margin-top: 7rem
+    margin-bottom: 7rem
+    padding: 6rem 5rem
+    justify-content: space-between
+    box-shadow: 0 0 8px 3px rgba($black, 0.2)
+    h2, h5
+      color: $white
+    h2
+      margin-bottom: 2.5rem
+    h5
+      font-weight: bold
+    .left-column
+      p
+        font-size: 1.3rem
+        font-weight: 600
+      a
+        font-weight: bold
+    .right-column
+      @extend %transparent-mailpoet-form
 
   /* Fix sizing of partner blocks */
   .row.partners
