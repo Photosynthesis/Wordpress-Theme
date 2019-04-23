@@ -407,6 +407,101 @@ HTML;
     return $output;
   }
 
+  /* Display 3 Featured FIC-Member Communities for the Main Page */
+  public static function homepage_featured_communities() {
+    global $wpdb;
+
+    $query = "
+      SELECT
+          posts.post_title, posts.post_name,
+          countries.meta_value AS country, states.meta_value AS state,
+          provinces.meta_value AS province, cities.meta_value AS city,
+          descriptions.meta_value AS description, statements.meta_value AS statement,
+          images.meta_value AS image
+      FROM {$wpdb->prefix}frm_items as entries
+      INNER JOIN {$wpdb->prefix}posts AS posts ON entries.post_id=posts.ID
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=291)
+        AS status ON status.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=424)
+        AS countries ON countries.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=815)
+        AS states ON states.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=816)
+        AS provinces ON provinces.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=427)
+        AS cities ON cities.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=228)
+        AS images ON images.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=277)
+        AS descriptions ON descriptions.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=286)
+        AS statements ON statements.item_id=entries.id
+      INNER JOIN
+        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=933 AND meta_value='Yes')
+        AS fic_member ON fic_member.item_id=entries.id
+      WHERE entries.form_id=2 AND posts.post_status='publish'
+      ORDER BY RAND()
+      LIMIT 3
+      ;";
+    $results = $wpdb->get_results($query);
+
+    $output = <<<HTML
+<div id='home-featured-communities' class='row'>
+  <div class='col-24 section-heading'>
+    <h3>FEATURED COMMUNITIES</h3>
+    <a class='btn btn-primary' href='/directory/listings/?filters=ficMember'>
+      VIEW MORE <i class='fas fa-angle-right'></i>
+    </a>
+  </div>
+HTML;
+    foreach ($results as $listing) {
+      $image = wp_get_attachment_image($listing->image,
+        'wide-thumbnail', false, array('class' => 'img-fluid rounded-lg')
+      );
+      $region = $listing->state == "" ? $listing->province : $listing->state;
+      $location = implode(', ', array_filter(array($listing->city, $region, $listing->country)));
+      if (strlen($listing->statement) < 100) {
+        $description = self::truncate($listing->description);
+      } else {
+        $description = self::truncate($listing->statement);
+      }
+      $output .= <<<HTML
+<div class='col-md-8'>
+    <div class='h-100'>
+      {$image}
+      <h5 class="card-title">{$listing->post_title} <i>{$location}</i></h5>
+      <p>
+        {$description}&hellip;
+        <a href="/directory/{$listing->post_name}/" class="h-100">
+          Learn more
+        </a>
+      </p>
+    </div>
+</div>
+HTML;
+    }
+
+    $output .= "</div>";
+
+    return $output;
+  }
+  private static function truncate($string) {
+    $string = str_replace("\r", ' ', str_replace("\n", ' ', strip_tags($string)));
+    if (strlen($string) > 150) {
+      $string = wordwrap($string, 150);
+      $string = substr($string, 0, strpos($string, "\n"));
+    }
+    return $string;
+  }
+
 }
 
 add_shortcode('directory_elm', array('DirectoryShortcodes', 'render_elm'));
@@ -417,5 +512,6 @@ add_shortcode('show_directory_geo_list', array('DirectoryShortcodes', 'geo_list'
 add_shortcode('directory_search_terms', array('DirectoryShortcodes', 'search_terms'));
 add_shortcode('directory_twelve_tribes_statement', array('DirectoryShortcodes', 'twelve_tribes_statement'));
 add_shortcode('directory_featured_communities', array('DirectoryShortcodes', 'featured_communities'));
+add_shortcode('fic_home_featured_communities', array('DirectoryShortcodes', 'homepage_featured_communities'));
 
 ?>
