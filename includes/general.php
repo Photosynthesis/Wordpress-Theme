@@ -104,7 +104,6 @@ class ThemeGeneral
   public static function enqueue_editor_assets() {
     foreach (scandir(__DIR__ . "/../dist") as $dist_file) {
       if (strpos($dist_file, "editor_") === 0) {
-        error_log("Enqueued " . $dist_file);
         wp_enqueue_style($dist_file, get_stylesheet_directory_uri() . "/dist/{$dist_file}", array(), null);
       }
     }
@@ -544,11 +543,10 @@ HTML;
   }
 
   public static function render_new_arrivals() {
-    $sale_product_ids = wc_get_product_ids_on_sale();
     $products = wc_get_products(array(
       'limit' => 4,
-      'orderby' => 'rand',
-      'include' => $sale_product_ids,
+      'orderby' => 'date',
+      'order' => 'DESC',
       'category' => array('books'),
     ));
     $output =
