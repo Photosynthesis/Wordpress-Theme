@@ -514,6 +514,10 @@ body.home
       display: flex
       flex-direction: column
       width: 55%
+      @media (min-width: 1400px)
+        width: 45%
+      @media (min-width: 1750px)
+        width: 30%
       form.directory-search-input
         color: $white
         background-color: rgba($black, 0.7)
@@ -540,8 +544,9 @@ body.home
         border-color: $white
         margin-left: auto
         margin-top: 0.75em
+        background-color: rgba($black, 0.2)
         &:hover
-          background-color: rgba($black, 0.3)
+          background-color: rgba($black, 0.4)
 
   /* Get Involved + Newsletter Signup Section */
   #get-involved-block
