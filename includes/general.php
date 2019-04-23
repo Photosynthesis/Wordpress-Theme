@@ -695,6 +695,90 @@ HTML;
 HTML;
     return $output;
   }
+
+  public static function render_primary_story($atts) {
+    $a = shortcode_atts(
+      array(
+        'title' => null,
+        'tagline' => null,
+        'post' => null,
+      ), $atts
+    );
+    if (is_null($a['post'])) {
+      return '';
+    } else {
+      $post = (int) $a['post'];
+    }
+    $post = get_post($post);
+    if (is_null($post)) {
+      return '';
+    }
+
+    $image = get_the_post_thumbnail($post->ID, 'large-wide-thumbnail', array('class' => 'img-fluid'));
+    $link = get_the_permalink($post->ID);
+    $time = human_time_diff(get_the_time('U', $post->ID), current_time('timestamp'));
+    $author = get_the_author_meta('display_name', $post->post_author);
+
+    $title = $a['title'] ??  $title = get_the_title($post->ID);
+
+    $tagline = $a['tagline'] ?? strip_tags(explode('.', $post->post_content, 2)[0]);
+
+    $output = <<<HTML
+<div class='primary-story'>
+  <div class='image-title'>
+    {$image}
+    <h3>{$title}</h3>
+  </div>
+  <div class='tagline-author d-block d-xl-flex'>
+    <div class='tagline'>{$tagline}</div>
+    <div class='author'>{$author} &ndash; {$time} ago</div>
+  </div>
+</div>
+HTML;
+    return $output;
+  }
+
+  public static function render_secondary_story($atts) {
+    $a = shortcode_atts(
+      array(
+        'title' => null,
+        'tagline' => null,
+        'post' => null,
+      ), $atts
+    );
+    if (is_null($a['post'])) {
+      return '';
+    } else {
+      $post = (int) $a['post'];
+    }
+    $post = get_post($post);
+    if (is_null($post)) {
+      return '';
+    }
+
+    $image = get_the_post_thumbnail($post->ID, 'wide-thumbnail', array('class' => 'img-fluid'));
+    $link = get_the_permalink($post->ID);
+    $time = human_time_diff(get_the_time('U', $post->ID), current_time('timestamp'));
+    $author = get_the_author_meta('display_name', $post->post_author);
+
+    $title = $a['title'] ??  $title = get_the_title($post->ID);
+
+    $tagline = $a['tagline'] ?? strip_tags(explode('.', $post->post_content, 2)[0]);
+
+    $output = <<<HTML
+<div class='secondary-story row'>
+  <div class='col-sm-14 col-md-13 col-lg-12'>
+    {$image}
+  </div>
+  <div class='col-sm-10 col-md-11 col-lg-12'>
+    <h5>{$title}</h5>
+    <div class='tagline'>{$tagline}</div>
+    <div class='author'>{$author} &ndash; {$time} ago</div>
+  </div>
+</div>
+HTML;
+    return $output;
+  }
 }
 
 add_filter('wp_mail_from_name', function($n) { return 'Fellowship for Intentional Community'; }, 11);
@@ -731,5 +815,7 @@ add_shortcode('fic_community_offers', array('ThemeGeneral', 'render_offers'));
 add_shortcode('fic_jumbo_image', array('ThemeGeneral', 'render_homepage_banner_image'));
 add_shortcode('fic_get_involved', array('ThemeGeneral', 'render_get_involved_block'));
 add_shortcode('fic_column_section', array('ThemeGeneral', 'render_column_section'));
+add_shortcode('fic_primary_story', array('ThemeGeneral', 'render_primary_story'));
+add_shortcode('fic_secondary_story', array('ThemeGeneral', 'render_secondary_story'));
 
 ?>

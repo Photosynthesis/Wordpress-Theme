@@ -617,6 +617,52 @@ body.home
         font-weight: bold
         font-size: 0.9rem
 
+  /* Communities Stories */
+  .stories-section
+    background-color: $gray-bg
+    padding-top: 5rem !important
+    padding-bottom: 5rem !important
+    h2
+      display: flex
+      justify-content: space-between
+      align-items: center
+      margin-bottom: 0
+      padding-bottom: 2rem
+    .container > .row
+      margin-bottom: 3rem
+    .row
+      justify-content: space-between
+    .right-column
+      display: flex
+      flex-direction: column
+    .primary-story
+      .image-title
+        position: relative
+        h3
+          position: absolute
+          bottom: 0
+          left: 0
+          color: $white
+          background-color: rgba($black, 0.4)
+          width: 100%
+          margin: 0
+          padding: 1rem
+      .tagline-author
+        display: flex
+        justify-content: space-between
+        margin-top: 0.75rem
+    .secondary-story
+      margin-bottom: 4.5rem
+      > div:last-of-type
+        padding-left: 0
+      .tagline
+        margin-bottom: 1rem
+    .tagline, .author
+      font-size: 0.95rem
+    .author
+      opacity: 0.7
+      font-style: italic
+
   /* Fix sizing of partner blocks */
   .row.partners
     justify-content: center
