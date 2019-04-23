@@ -7,6 +7,7 @@ $blue: #233D4D
 $sage: #A1C181
 $yellow: #FCCA46
 $white: white
+$gray-bg: #F6F5F3
 
 $primary: $teal
 
@@ -84,11 +85,7 @@ html, body
   height: 100%
   margin: 0
   padding: 0
-
-/* Add Purple Background */
-body
-  background-color: $blue
-  padding-bottom: 15px
+  overflow-x: hidden
 
 /* Set the button/label/meta font styles */
 button, label, .meta, .btn
@@ -107,6 +104,14 @@ button, label, .meta, .btn
 p:empty
   display: none
   margin: 0
+
+/* Support full-width fluid containers inside constrained containers */
+.container .container-fluid.full-width
+  width: 100vw
+  position: relative
+  margin-left: -50vw
+  left: 50%
+  padding: 0
 
 /* See-through mailpoet inputs */
 %transparent-mailpoet-form
@@ -138,7 +143,6 @@ p:empty
 #body-wrapper
   padding: 5px 15px 0
   background-color: white
-  box-shadow: rgba(black, 0.75) 0px 20px 32px
 
 
 .nav-container
@@ -349,16 +353,19 @@ hr#header-content-divider
 
 /* Footer Sections */
 #footer-support
-  padding: 4rem 6rem
-  align-items: center
-  justify-content: space-between
-  background-color: #F6F5F3
+  background-color: $gray-bg
+  .row
+    padding: 4rem 6rem
+    align-items: center
+    justify-content: space-between
+
 #footer-columns
   color: $white
   background-color: #3C3D41
   font-weight: bold
-  padding: 4rem 1.5rem
-  justify-content: space-between
+  .row
+    padding: 4rem 1.5rem
+    justify-content: space-between
   h5
     color: $white
   .left-column
@@ -396,18 +403,13 @@ hr#header-content-divider
           color: $teal
           text-decoration: none
 
-
 #footer-copyright
   color: $white
   background: $sage
-  font-weight: bold
   text-align: center
-  margin-left: -15px
-  margin-right: -15px
   p
     padding-top: 1rem
-
-  div
+  .col > div
     padding-bottom: 0.5rem
     font-weight: normal
 
@@ -547,23 +549,24 @@ body.home
     background-color: $sage
     margin-top: 7rem
     margin-bottom: 7rem
-    padding: 6rem 5rem
-    justify-content: space-between
     box-shadow: 0 0 8px 3px rgba($black, 0.2)
-    h2, h5
-      color: $white
-    h2
-      margin-bottom: 2.5rem
-    h5
-      font-weight: bold
-    .left-column
-      p
-        font-size: 1.3rem
-        font-weight: 600
-      a
+    .row
+      padding: 6rem 5rem
+      justify-content: space-between
+      h2, h5
+        color: $white
+      h2
+        margin-bottom: 2.5rem
+      h5
         font-weight: bold
-    .right-column
-      @extend %transparent-mailpoet-form
+      .left-column
+        p
+          font-size: 1.3rem
+          font-weight: 600
+        a
+          font-weight: bold
+      .right-column
+        @extend %transparent-mailpoet-form
 
   /* Sub-Sections for the 3-Column Section */
   .has-3-columns
@@ -634,7 +637,8 @@ body.home
   #home-explore
     text-align: center
     padding: 10rem 0
-    margin: 8rem calc(-1 * #{$grid-gutter-width / 2}) 3rem
+    margin-top: 8rem
+    margin-bottom: 3rem
     background: linear-gradient(rgba(white, 0.65), rgba(white, 0.65)), url('/wp-content/themes/fic-theme/img/directory-map.png')
     background-size: cover
     background-position: center center

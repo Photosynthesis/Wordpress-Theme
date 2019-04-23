@@ -633,7 +633,7 @@ HTML;
         'image' => '//placekitten.com/1350/675',
       ), $atts
     );
-    $output = "<div id='home-banner' class='row'><img src='{$a['image']}' />";
+    $output = "<div id='home-banner' class='container-fluid full-width row'><img src='{$a['image']}' />";
     $output .= "<h1>{$a['header']}</h1>";
     $output .=
       "<div class='search-container'>" .
@@ -657,19 +657,23 @@ HTML;
       ), $atts
     );
     $mailpoet_form = do_shortcode('[mailpoet_form id="2"]');
-    $output = "<div id='get-involved-block' class='row'>";
-    $output .= <<<HTML
-<div class='col-15 left-column'>
-  <h2 class='h1'>{$a['header']}</h2>
-  <p>{$content}</p>
-</div>
-<div class='col-7 right-column'>
-  <h5>{$a['news_header']}</h5>
-  <p>{$a['news_text']}</p>
-  {$mailpoet_form}
+    $output = <<<HTML
+<div id='get-involved-block' class='container-fluid full-width'>
+  <div class='container'>
+    <div class='row'>
+      <div class='col-15 left-column'>
+        <h2 class='h1'>{$a['header']}</h2>
+        <p>{$content}</p>
+      </div>
+      <div class='col-7 right-column'>
+        <h5>{$a['news_header']}</h5>
+        <p>{$a['news_text']}</p>
+        {$mailpoet_form}
+      </div>
+    </div>
+  </div>
 </div>
 HTML;
-    $output .= "</div>";
     return $output;
   }
 

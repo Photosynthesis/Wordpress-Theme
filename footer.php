@@ -1,7 +1,8 @@
 <!-- div#body-wrapper is opened -->
+  <div class='container-fluid full-width'>
 
   <!-- Footer Support -->
-  <div id='footer-support' class='row'>
+  <div id='footer-support'><div class='container'><div class='row'>
     <div class='col-md-14'>
       <h3>Our work is made possible thanks to community lovers like you!</h3>
       <p>
@@ -13,11 +14,11 @@
     <div class='col-md-8'>
       <img src='/wp-content/themes/fic-theme/img/membership-badge.png' class='img-fluid' />
     </div>
-  </div>
+  </div></div></div>
 
 
   <!-- Footer Columns -->
-  <div id='footer-columns' class='row'>
+  <div id='footer-columns'><div class='container'><div class='row'>
     <div class='col-md-10 col-lg-8 left-column'>
       <img src='/wp-content/themes/fic-theme/img/logo-full-white.png' class='img-fluid' />
       <h5>OUR MISSION</h5>
@@ -68,22 +69,25 @@
         </a>
       </div>
     </div>
-  </div>
+  </div></div></div>
 
 
   <!-- Copyright -->
-  <div id='footer-copyright' class='meta'>
-    <p>
-      Foundation for Intentional Community (FIC) is a registered 501(c)(3)
-      non-profit organization. Our main office is located at Dancing Rabbit
-      Ecovillage, MO, USA.
-      <br />
-      Stewarding the communities movement for over 30 years!
-    </p>
+  <div id='footer-copyright' class='meta'><div class='container'><div class='row'>
+    <div class='col'>
+      <p>
+        Foundation for Intentional Community (FIC) is a registered 501(c)(3)
+        non-profit organization. Our main office is located at Dancing Rabbit
+        Ecovillage, MO, USA.
+        <br />
+        Stewarding the communities movement for over 30 years!
+      </p>
 
-    <div>© 2019 Foundation for Intentional Community. All rights reserved.</div>
+      <div>© 2019 Foundation for Intentional Community. All rights reserved.</div>
+    </div>
+  </div></div></div>
+
   </div>
-
 
 </div><!-- div#body-wrapper -->
 <?php wp_footer(); ?>
