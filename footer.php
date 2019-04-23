@@ -11,7 +11,7 @@
       <a class='btn btn-primary' href='/support/' target='_blank'>SUPPORT</a>
     </div>
     <div class='col-md-8'>
-      <img src='//placekitten.com/600/600' class='img-fluid' />
+      <img src='/wp-content/themes/fic-theme/img/membership-badge.png' class='img-fluid' />
     </div>
   </div>
 
@@ -19,7 +19,7 @@
   <!-- Footer Columns -->
   <div id='footer-columns' class='row'>
     <div class='col-md-10 col-lg-8 left-column'>
-      <img src='//placekitten.com/700/300' class='img-fluid' />
+      <img src='/wp-content/themes/fic-theme/img/logo-full-white.png' class='img-fluid' />
       <h5>OUR MISSION</h5>
       <p>
         To support and promote the development of intentional communities, as a
