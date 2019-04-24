@@ -8,7 +8,6 @@
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
     <?php if (is_singular() && get_option('thread_comments')) { wp_enqueue_script('comment-reply'); } ?>
     <?php wp_head(); ?>
-    <script type='text/javascript'><?php echo get_option('theme_extra_javascript'); ?></script>
     <!-- From RealFaviconGenerator.net -->
     <link rel="apple-touch-icon" sizes="180x180" href="/wp-content/themes/fic-theme/img/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/favicon-32x32.png">
@@ -28,6 +27,16 @@
     </script>
   </head>
     <body <?php body_class(); ?>>
+
+<!-- Notification Banner --><?php
+$banner_content = get_option('theme_banner_content');
+if ($banner_content !== "") { ?>
+  <div id='top-banner' class='container-fluid'>
+    <div class='container'>
+      <?php echo $banner_content; ?>
+    </div>
+  </div><?php
+} ?>
 
 <!-- Nav Menu & Search -->
 <div class='container nav-container'>
