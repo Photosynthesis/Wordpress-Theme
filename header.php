@@ -68,7 +68,7 @@
   <div id="site-header" class="row">
     <div class="col text-center text-sm-left d-flex align-items-center">
       <a href="/" class="banner-image">
-        <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-fic.png'; ?>" alt="FIC" />
+        <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-full-color.png'; ?>" alt="FIC" />
       </a>
     </div>
     <div class="col text-right d-none d-sm-block">
