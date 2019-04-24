@@ -32,10 +32,9 @@
       <h5>SITE PAGES</h5><?php
       $footer_links = array(
         array('title' => 'About FIC', 'link' => '/about/'),
-        array('title' => 'Directory', 'link' => '/directory/'),
+        array('title' => 'Communities Directory', 'link' => '/directory/'),
         array('title' => 'Membership', 'link' => '/membership/'),
         array('title' => 'Donate', 'link' => '/donate/'),
-        array('title' => 'Communities Directory', 'link' => '/directory/'),
         array('title' => 'Bookstore', 'link' => '/communities-bookstore/'),
         array('title' => 'Magazine', 'link' => '/communities-magazine/'),
         array('title' => 'Planet Community', 'link' => '/planet-community/'),
@@ -44,11 +43,11 @@
         array('title' => 'Knowledgebase', 'link' => '/knowledgebase/'),
         array('title' => 'Blog', 'link' => '/blog/'),
         array('title' => 'Contact', 'link' => '/contact-fic/'),
-        array('title' => 'Privacy', 'link' => '/privacy/'),
+        array('title' => 'Policies', 'link' => '/policies/'),
       );
       echo '<ul>';
       foreach ($footer_links as $link) {
-        echo "<li><a href='{$link['link']}' target='_blank'>{$link['title']}</a></li>";
+        echo "<li><a href='{$link['link']}'>{$link['title']}</a></li>";
       }
       echo '</ul>';
       ?>
@@ -64,7 +63,10 @@
         <a href='https://www.youtube.com/channel/UC_bjpd6qhVcA1SuuF8pLRIg' target='_blank'>
           <i class='fab fa-2x fa-youtube'></i>
         </a>
-        <a href='/contact-fic/' target='_blank'>
+        <a href="tel:800-462-8240">
+          <i class='fa fa-2x fa-phone-square'></i>
+        </a>
+        <a href='mailto:support@ic.org' target='_blank'>
           <i class='fa fa-2x fa-paper-plane'></i>
         </a>
       </div>
