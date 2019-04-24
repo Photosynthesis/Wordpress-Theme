@@ -81,8 +81,11 @@ if ($banner_content !== "") { ?>
       </a>
     </div>
     <div class="col text-right d-none d-sm-block">
-      <div id="greeting-logout">
-        <div class='d-inline-block'><?php
+      <div>
+        <span class='muted-meta'>New to ic.org?</span> <a class='meta' href='/'>Start here.</a>
+      </div>
+      <div id="header-buttons">
+        <div class='d-inline-block meta'><?php
           if (is_user_logged_in()) {
             $current_user = wp_get_current_user();
             echo 'Hello,&nbsp;<strong>' . ucfirst($current_user->user_login) .
@@ -91,15 +94,7 @@ if ($banner_content !== "") { ?>
               echo '<a href="' . wp_login_url(get_permalink()) . '">Log In</a>';
           } ?>
         </div>
-        <a class="mx-4" href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" title="My Account">
-          <i class='fa fa-2x fa-user'></i>
-        </a>
-        <a href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e('Shopping Cart'); ?>">
-          <i class='fa fa-2x fa-shopping-cart'></i>
-        </a>
-      </div>
-      <div id="header-buttons">
-        <a class="btn btn-sm btn-light mr-2" href='<?php echo get_permalink(14602); ?>'>SHOP</a>
+        <a class="btn btn-sm btn-light mx-2" href='<?php echo get_permalink(14602); ?>'>SHOP</a>
         <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>DONATE</a>
       </div>
       <div class="google-search-div d-none d-sm-block d-lg-none">

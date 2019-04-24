@@ -77,6 +77,10 @@ $sizes: (10: 10%, 25: 25%, 33: 33%, 40: 40%, 50: 50%, 66: 66%, 75: 75%, 100: 100
 .h-auto
   height: auto !important
 
+.muted-meta
+  @extend .meta
+  opacity: 0.6
+
 
 /** General Site Design **/
 
@@ -258,22 +262,11 @@ div.google-search-div
 
 
 #site-header
+  margin-bottom: 3rem
   .banner-image img
     height: 80px
     +media-breakpoint-only(md)
       height: 100%
-  #greeting-logout
-    font-size: 1rem
-    margin-right: 5px
-    display: flex
-    justify-content: flex-end
-    align-items: center
-    #header-cart-icon
-      text-decoration: none
-      i.fa
-        font-size: 20px
-        font-weight: 400
-        vertical-align: bottom
   #header-buttons
     margin-top: 10px
     font-weight: bold
