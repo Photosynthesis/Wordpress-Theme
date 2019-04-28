@@ -1,7 +1,5 @@
 <?php ThemeGeneral::top(); ?>
 
-<?php ThemeGeneral::image_banner(); ?>
-
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
   <div class='clearfix'><?php
     $thumbnail = get_the_post_thumbnail(get_the_ID(), 'post-thumbnail', array('class' => 'p-1 img-fluid'));

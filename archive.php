@@ -1,7 +1,5 @@
 <?php ThemeGeneral::top(); ?>
 
-<?php ThemeGeneral::image_banner(); ?>
-
 
 <?php if (is_category()) { ?>
   <h1><?php echo single_cat_title(); ?></h1>

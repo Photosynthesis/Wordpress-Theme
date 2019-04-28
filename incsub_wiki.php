@@ -4,8 +4,6 @@ get_header(); ?>
 <div class="row">
   <!-- Content -->
   <div class="<?php echo ThemeGeneral::main_column_css_classes(); ?>" id="main">
-    <?php ThemeGeneral::image_banner(); ?>
-
     <h1 class="entry-title"><?php the_title(); ?></h1>
 
     <?php if (!post_password_required()) { ?>

@@ -1,7 +1,5 @@
 <?php ThemeGeneral::top(); ?>
 
-<?php ThemeGeneral::image_banner(); ?>
-
 
 <h1><?php echo str_replace('Category: ', '', get_the_title()); ?></h1>
 <hr class="mt-2" />

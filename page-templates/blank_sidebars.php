@@ -10,8 +10,6 @@ get_header(); ?>
 
 
   <div class='col-18 mt-2'>
-    <?php ThemeGeneral::image_banner(); ?>
-
     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
         <div class='clearfix'><?php
           if (has_post_thumbnail()) {

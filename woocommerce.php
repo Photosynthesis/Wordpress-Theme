@@ -5,7 +5,6 @@ if (is_shop()) {
   echo "<div class='row'><div class='col mt-2'>";
 } else {
   ThemeGeneral::top('wc');
-  ThemeGeneral::image_banner();
 }
 ?>
 

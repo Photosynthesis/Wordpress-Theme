@@ -328,52 +328,6 @@ CSS;
     return $output;
   }
 
-  /* Echo the Image Banner HTML */
-  public static function image_banner() {
-    global $post;
-
-    if (is_front_page() || $post->post_name === ThemeGeneral::$development_page_slug || $post->post_name === 'planet-community') {
-      return;
-    } else {
-      $img_url = "/wp-content/uploads/2019/01/fic-membership.png";
-      $link_url = "/community-bookstore/product/fic-membership/";
-      $ga_label = "membership";
-      /* Randomize cmag banners
-      $rand_int = mt_rand(0,2);
-      switch ($rand_int) {
-      case 0:
-        $img_url = "https://www.ic.org/wp-content/uploads/2018/11/communities_magazine_banner_no181_ver1.jpg";
-        $link_url = "https://www.ic.org/community-bookstore/product/communities-magazine-the-culture-of-intentional-community/";
-        $ga_label = "communities magazine";
-        break;
-      case 1:
-        $img_url = "https://www.ic.org/wp-content/uploads/2018/11/communities_magazine_banner_no181_ver2.jpg";
-        $link_url = "https://www.ic.org/community-bookstore/product/communities-magazine-the-culture-of-intentional-community/";
-        $ga_label = "communities magazine";
-        break;
-      case 2: default:
-        $img_url = "https://www.ic.org/wp-content/uploads/2018/11/planet-community-episode-2-banner.jpg";
-        $link_url = "https://www.ic.org/planet-community/";
-        $ga_label = "planet community";
-        break;
-      }
-      */
-    }
-
-
-    echo <<<HTML
-  <div class="row mb-3"><div class="col-24 text-center">
-    <a target="_blank" href="{$link_url}" onclick="ga('send', 'event', 'Theme.Banner', 'click', '{$ga_label}');">
-      <img
-        class="img-fluid mx-auto"
-        src="{$img_url}"
-        title="Support FIC, Donate Today"
-      />
-    </a>
-  </div></div>
-HTML;
-  }
-
   /* Allow eBook Uploads */
   public static function allow_ebook_mimes($mimes) {
     return array_merge($mimes, array(
