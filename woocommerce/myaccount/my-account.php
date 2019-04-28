@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 wc_print_notices(); ?>
 
 <div class='card woocommerce-account'>
-  <div class="row card-block">
+  <div class="row card-body">
 
     <div class='col-24 col-sm-6'><?php
       /**

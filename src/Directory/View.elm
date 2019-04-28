@@ -456,7 +456,7 @@ detailRightColumn community =
     in
     Html.div [ class "col-24 col-sm-10" ]
         [ Html.div [ class "card" ]
-            [ Html.ul [ class "card-block list-unstyled listing-status mb-0" ] rightColumn
+            [ Html.ul [ class "card-body list-unstyled listing-status mb-0" ] rightColumn
             ]
         ]
 
@@ -467,7 +467,7 @@ detailInfoBlocks community =
         infoBlock header content =
             Html.div [ class "card" ]
                 [ Html.h3 [ class "card-header" ] [ text header ]
-                , Html.div [ class "card-block" ]
+                , Html.div [ class "card-body" ]
                     [ Html.ul [ class "list-unstyled pl-0 mb-0" ] <|
                         List.map infoItem <|
                             List.concat content

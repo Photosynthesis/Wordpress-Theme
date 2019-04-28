@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
 ?>
-<li class="wc_payment_method payment_method_<?php echo $gateway->id; ?> card-block">
+<li class="wc_payment_method payment_method_<?php echo $gateway->id; ?> card-body">
   <input id="payment_method_<?php echo $gateway->id; ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" <?php checked( $gateway->chosen, true ); ?> data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>" />
 
   <label for="payment_method_<?php echo $gateway->id; ?>">
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
   </label>
   <?php if ( $gateway->has_fields() || $gateway->get_description() ) : ?>
     <div class="payment_box payment_method_<?php echo $gateway->id; ?> card" <?php if ( ! $gateway->chosen ) : ?>style="display:none;"<?php endif; ?>>
-      <div class='card-block bg-faded'>
+      <div class='card-body bg-faded'>
         <?php $gateway->payment_fields(); ?>
       </div>
     </div>
