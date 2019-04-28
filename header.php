@@ -114,8 +114,5 @@ if ($banner_content !== "") { ?>
         <a class="btn btn-sm btn-light mx-2" href='<?php echo get_permalink(14602); ?>'>SHOP</a>
         <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>DONATE</a>
       </div>
-      <div class="google-search-div d-none d-sm-block d-lg-none">
-        <gcse:search></gcse:search>
-      </div>
     </div>
   </div>
