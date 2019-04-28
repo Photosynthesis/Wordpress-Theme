@@ -12,6 +12,7 @@ $gray-bg: #F6F5F3
 $primary: $teal
 
 $body-color: $black
+$nav-dropdown-bg: #F7F4F4
 
 
 // Font
@@ -37,6 +38,21 @@ $container-max-widths: (sm: 768px, md: 960px, lg: 1200px, xl: 1350px)
 // Navbar
 $navbar-padding-x: 0
 $navbar-padding-y: 0
+$navbar-light-color: $blue
+$navbar-light-hover-color: $teal
+$navbar-light-active-color: $teal
+
+
+// Dropdowns
+$dropdown-color: $blue
+$dropdown-bg: $nav-dropdown-bg
+$dropdown-border-radius: 0
+$dropdown-border-width: 0
+$dropdown-divider-bg: $nav-dropdown-bg
+
+$dropdown-link-hover-color: $teal
+$dropdown-link-hover-bg: $nav-dropdown-bg
+
 
 
 // Links
@@ -165,79 +181,13 @@ p:empty
       color: $white
 
 
-.nav-container
-  background-color: $white
-  +media-breakpoint-down(md)
-    width: 100%
-
-#nav-menu
-  nav.navbar
-    cursor: pointer
-    .navbar-toggler-label
-      font-weight: bold
-      color: $black
-    /* Remove Carets From Dropdown Menus */
-    .dropdown-toggle.nav-link:after
-      content: none
-    .navbar-nav
-      flex-wrap: wrap
-    .navbar-nav > li
-      /* Add Separators */
-      border-left: 1px solid white
-      +media-breakpoint-up(md)
-        &:first-child
-          border-left: none
-      /* Emphasize Text & Reduce Size */
-      > a
-        font-weight: bold
-        padding: 0.75em 1.25em
-        color: $black
-      &.active > a
-        color: $white
-      ul
-        /* Remove Spacing for Continuous Hover Event */
-        margin-top: 0
-        /* Remove Border & Rounding */
-        border: none
-        border-radius: 0
-        /* Set Sub-Menu Colors */
-        background-color: $blue
-        a
-          color: $white
-        /* Push Each Nested Level of Sub-Menus Slightly More to the Right */
-        li
-          padding-left: 1rem
-        /* Emphasize Links to Current Page */
-        li.active > a
-          color: $white
-          font-weight: bold
-        /* Position Nested Sub-Menus to the Right of the Open Sub-Menu */
-        li.dropdown
-          > ul
-            top: 0
-            left: 99.9%
-    /* Recolor on Active & Hover */
-    .navbar-nav li
-      &:hover, &.show
-        background-color: $blue
-        +media-breakpoint-up(sm)
-          border-left-color: white
-        > a
-          color: $white
-          font-weight: bold
-        & a:hover
-          color: $white
-          font-weight: bold
-  +media-breakpoint-only(md)
-    /* Hide NavBar Search on Medium Screens */
-    .google-search-div
-      display: none
-
 
 /* Google Search Boxes */
-div.google-search-div
+#___gcse_0
   z-index: 20000
   padding-top: 10px
+  form, table
+    margin-bottom: 0
   /* Fix Input Alignment */
   input.gsc-input, .gsc-input-box, .gsc-input-box-hover, .gsc-input-box-focus, .gsc-search-button
     box-sizing: content-box
@@ -252,16 +202,27 @@ div.google-search-div
   /* Hide the X icon in the search box */
   div#google-search-div .gsib_b
     display: none
-  td.gsc-search-button input.gsc-search-button
+  td.gsc-search-button button.gsc-search-button
+    border-radius: 0.25rem
+    width: 1rem
     background-color: $teal
     /* Reduce width of search button */
-    padding: 6px 15px
+    padding: 7px 17px
     /* Darken button border */
-    border-color: black
+    border-color: $teal
+  .gsc-input-box
+    border-color: $teal
+    border-radius: $input-border-radius
+    transition: all 0.3s ease-in
+    &:focus-within
+      outline: 0
+      box-shadow: 0 0 4px 2px rgba($teal, 0.25)
+
 
 
 
 #site-header
+  margin-top: 1.5rem
   margin-bottom: 3rem
   .banner-image img
     height: 80px
@@ -273,12 +234,45 @@ div.google-search-div
   .google-search-div
     width: 60%
     margin-left: auto
+  nav.navbar
+    /* Remove Carets From Dropdown Menus */
+    .dropdown-toggle.nav-link:after
+      content: none
+    /* Center align top-level nav links */
+    .navbar-nav
+      text-align: center
+      align-items: center
+    /* Emphasize Top-Level Text & Reduce Size */
+    #navbar-header > ul > li > a
+      font-weight: bold
+      padding: 0.75rem 1rem
+    /* Search Button */
+    #nav-search-icon
+      padding: 0 0.25rem
+      color: $blue
+      i
+        font-size: 1.15rem
+      &:hover
+        color: $teal
+      &:focus
+        box-shadow: none
+    li.dropdown
+      &::before
+        content: ''
+        height: 0
+        width: 1rem
+        bottom: calc(-0.5rem - #{$dropdown-spacer})
+        left: 0
+        right: 0
+        margin: 0 auto
+        transform: rotate(45deg)
+        background: linear-gradient(135deg, $dropdown-bg 0 50%, transparent 50% 100%)
+        position: absolute
+      &.show::before
+        height: 1rem
+      .dropdown-item
+        font-weight: 600
 
-
-hr#header-content-divider
-  /* Pull the dividing line to the edges of the middle section */
-  margin-left: -15px
-  margin-right: -15px
 
 
 .sidebar

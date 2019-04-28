@@ -73,8 +73,12 @@ $(document).ready(function() {
     }
     /* Open Submenus on Hover In */
     menuHoverTimer = setTimeout(function() {
-      $this.children('.dropdown-menu').stop(true, true).slideDown('fast');
-      $this.addClass('show');
+      $this.children('.dropdown-menu').stop(true, true).slideDown({
+        duration: 'fast',
+        start: function() {
+          $this.addClass('show');
+        }
+      });
     }, menuHoverTimeout);
   }, function() {
     if (menuHoverTimer) {
@@ -84,13 +88,31 @@ $(document).ready(function() {
     /* Close Submenus on Hover Out */
     var $this = $(this);
     menuCloseTimers[$this.attr('id')] = setTimeout(function() {
-      $this.children('.dropdown-menu').stop(true, true).slideUp('fast');
-      $this.removeClass('show');
+      $this.children('.dropdown-menu').stop(true, true).slideUp({
+        duration: 'fast',
+        complete: function() {
+          $this.removeClass('show');
+        }
+      });
     }, menuCloseTimeout);
   });
 
 
   /** Google Custom Search **/
+  /* Open the search when the icon is clicked */
+  $('#nav-search-icon').click(function() {
+    $('#nav-search-icon').animate({
+      opacity: 0,
+      display: 'none',
+    }, {
+      done: function () {
+        $('#nav-search-icon').css('display', 'none');
+        $('#menu-search').css('display', 'block').css('opacity', '0').animate({
+          opacity: 1,
+        });
+      }
+    });
+  })
   /* Wait Until Google's JS has Finished Initializing the Input */
   setTimeout(function() {
     /* Cleanup Look of Search Input */

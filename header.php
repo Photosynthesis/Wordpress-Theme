@@ -25,6 +25,19 @@
       gtag('js', new Date());
       gtag('config', 'AW-824163499');
     </script>
+    <!-- Google Custom Search -->
+    <script>
+      (function() {
+        var cx = 'partner-pub-4810885975061329:dhwcft-rc6r';
+        var gcse = document.createElement('script');
+        gcse.type = 'text/javascript';
+        gcse.async = true;
+        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(gcse, s);
+      })();
+    </script>
   </head>
     <body <?php body_class(); ?>>
 
@@ -38,14 +51,19 @@ if ($banner_content !== "") { ?>
   </div><?php
 } ?>
 
-<!-- Nav Menu & Search -->
-<div class='container nav-container'>
-  <div id="nav-menu" class="row">
-    <div class="d-none d-lg-block col-lg-4 order-lg-2 bg-white">
-      <div class="google-search-div"><gcse:search></gcse:search></div>
+<div id="body-wrapper" class="container"><!-- Closed in footer.php -->
+
+  <!-- Header -->
+  <div id="site-header" class="row">
+    <!-- Logo -->
+    <div class="col col-md-6 col-xl-5 text-center text-sm-left d-flex justify-content-center align-items-center">
+      <a href="/" class="banner-image">
+        <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-full-color.png'; ?>" alt="FIC" />
+      </a>
     </div>
-    <div class="col-24 col-sm-12 col-md-24 col-lg-20 order-lg-1 bg-white">
-      <nav class="navbar navbar-expand-md">
+    <!-- Nav Menu -->
+    <div id="nav-menu" class="col d-flex">
+      <nav class="navbar navbar-expand-md navbar-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
                 aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-label">MENU</span> <span class="navbar-toggler-icon"></span>
@@ -56,31 +74,30 @@ if ($banner_content !== "") { ?>
             wp_nav_menu( array(
               'menu'              => 'Primary Menu',
               'theme_location'    => 'primary',
-              'depth'             => 3,
+              'depth'             => 2,
               'container'         => '',
               'container_class'   => '',
               'container_id'      => '',
               'menu_class'        => 'navbar-nav',
-              'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
-              'walker'            => new wp_bootstrap_navwalker())
+              'fallback_cb'       => 'WP_Bootstrap_Navwalker::fallback',
+              'walker'            => new WP_Bootstrap_Navwalker())
             );
           ?>
+          <ul class='navbar-nav'>
+            <li class='nav-item'>
+              <button class='btn' id='nav-search-icon'>
+                <i class='fas fa-search'></i>
+              </button>
+              <div id='menu-search' style='display:none;'>
+                <gcse:search></gcse:search>
+              </div>
+            </li>
+          </ul>
         </div>
       </nav>
     </div>
-  </div>
-</div>
-
-<div id="body-wrapper" class="container"><!-- Closed in footer.php -->
-
-  <!-- Header -->
-  <div id="site-header" class="row">
-    <div class="col text-center text-sm-left d-flex align-items-center">
-      <a href="/" class="banner-image">
-        <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-full-color.png'; ?>" alt="FIC" />
-      </a>
-    </div>
-    <div class="col text-right d-none d-sm-block">
+    <!-- Buttons/Links -->
+    <div class="col col-lg-6 text-right d-none d-sm-block">
       <div>
         <span class='muted-meta'>New to ic.org?</span> <a class='meta' href='/'>Start here.</a>
       </div>
@@ -98,18 +115,6 @@ if ($banner_content !== "") { ?>
         <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>DONATE</a>
       </div>
       <div class="google-search-div d-none d-sm-block d-lg-none">
-        <script>
-          (function() {
-            var cx = 'partner-pub-4810885975061329:dhwcft-rc6r';
-            var gcse = document.createElement('script');
-            gcse.type = 'text/javascript';
-            gcse.async = true;
-            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-                '//www.google.com/cse/cse.js?cx=' + cx;
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(gcse, s);
-          })();
-        </script>
         <gcse:search></gcse:search>
       </div>
     </div>
