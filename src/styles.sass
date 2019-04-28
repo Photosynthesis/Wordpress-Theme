@@ -132,9 +132,10 @@ button, label, .meta, .btn
 .btn-light
   background-color: $body-bg
   border-color: $black
-  &:hover
+  &:hover, &:active
     border-color: $black
-    background-color: darken($body-bg, 10%)
+    color: $body-bg
+    background-color: $black
 
 /* Hide the empty <p> tags Wordpress sticks everywhere */
 p:empty
@@ -173,6 +174,10 @@ p:empty
   li.parsely-custom-error-message
     color: $danger
 
+/* Customize Hover styles for buttons */
+.btn-primary:hover, .btn-primary:active
+  color: $teal
+  background-color: $white
 
 
 /* Add Spacing & White Backdrop */
