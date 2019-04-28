@@ -57,8 +57,8 @@ if ($banner_content !== "") { ?>
   <div id="site-header" class="row">
     <!-- Logo -->
     <div class="col col-md-6 col-xl-5 text-center text-sm-left d-flex justify-content-center align-items-center">
-      <a href="/" class="banner-image">
-        <img src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-full-color.png'; ?>" alt="FIC" />
+      <a href="/">
+        <img class='img-fluid' src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-full-color.png'; ?>" alt="FIC" />
       </a>
     </div>
     <!-- Nav Menu -->
