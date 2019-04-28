@@ -525,7 +525,7 @@ view model =
                     [ class "btn btn-primary btn-lg", type_ "submit" ]
                   <|
                     if model.responseStatus == Loading then
-                        [ i [ class "fa fa-spinner fa-spin fa-2x pull-left" ] []
+                        [ i [ class "fa fa-spinner fa-spin fa-2x float-left" ] []
                         , text " Processing Order..."
                         ]
 
@@ -636,7 +636,7 @@ renderSingleProduct quantities ({ name, slug, msrp, description, pricePerUnit } 
                     ]
                 ]
             , div [ class "clearfix px-4 mr-4" ]
-                [ img [ src product.thumbnail, class "pull-left mb-1 mr-3", style "max-width" "25%" ] []
+                [ img [ src product.thumbnail, class "float-left mb-1 mr-3", style "max-width" "25%" ] []
                 , em [] [ text <| "Suggested Retail Price: $" ++ msrp ]
                 , description
                 ]
@@ -726,7 +726,7 @@ renderProductSet ({ name, msrp, pricePerItem, setPrice, items } as pSet) setQuan
         [ td [ colspan 4, class "pt-4" ]
             [ h2 [] [ b [] [ text name ] ]
             , div [ class "clearfix px-4 mr-4" ]
-                [ img [ src pSet.thumbnail, class "pull-left mr-3 mb-1", style "max-width" "25%" ] []
+                [ img [ src pSet.thumbnail, class "float-left mr-3 mb-1", style "max-width" "25%" ] []
                 , em [] [ text <| "Suggested Retail Price: $" ++ msrp ++ " Each" ]
                 , p [ class "mr-4" ] [ text pSet.description ]
                 ]
@@ -793,7 +793,7 @@ renderVolumeDiscountProduct ({ name, thumbnail, url, description, priceTiers } a
                     ]
                 ]
             , div [ class "clearfix px-4 mr-4" ]
-                [ img [ src thumbnail, class "pull-left mr-3 mb-1", style "max-width" "25%" ] []
+                [ img [ src thumbnail, class "float-left mr-3 mb-1", style "max-width" "25%" ] []
                 , div [] <| List.map (text >> List.singleton >> p []) description
                 , describeVolumeDiscount
                 ]
