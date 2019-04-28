@@ -262,7 +262,6 @@ CSS;
     $excluded =
       (get_post_type() == 'directory')
       || ($post->post_name === 'directory')
-      || ($post->post_name === ThemeGeneral::$home_page_slug)
       || ($post->post_name === ThemeGeneral::$development_page_slug)
       || is_shop()
       || ($post->post_name === ThemeGeneral::$bookstore_page_slug);
@@ -276,8 +275,7 @@ CSS;
   public static function remove_richtext_editor($can_use) {
     global $post;
 
-    if ($post->post_name === ThemeGeneral::$home_page_slug ||
-        $post->post_name === ThemeGeneral::$development_page_slug ||
+    if ($post->post_name === ThemeGeneral::$development_page_slug ||
         is_shop() ||
         $post->post_name === ThemeGeneral::$bookstore_page_slug ||
         $post->post_name === 'directory') {
