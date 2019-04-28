@@ -751,17 +751,17 @@ body.page-id-17
      */
     form#directory-search
       div.input-group
-        input ~ .ig-left
-          order: 1
-          border-left: $border-width solid $input-border-color
+        .input-group-prepend
+          display: flex
+          align-items: center
+          padding: 0 0.5rem
+          border: $border-width solid $input-border-color
           border-top-left-radius: $input-border-radius
           border-bottom-left-radius: $input-border-radius
         input
-          order: 2
           border-top-left-radius: 0
           border-bottom-left-radius: 0
         input ~ .ig-right
-          order: 3
           border-left-style: none
         input:focus ~ span
           border-top-color: $input-focus-border-color
