@@ -26,7 +26,7 @@
         To support and promote the development of intentional communities, as a
         pathway towards a more sustainable and just world.
       </p>
-      <a class='btn btn-primary' href='/about/'>LEARN MORE</a>
+      <a class='btn btn-primary' href='/the-fellowship-for-intentional-community/'>LEARN MORE</a>
     </div>
     <div class='col-md-5 col-lg-4 middle-column'>
       <h5>SITE PAGES</h5><?php
