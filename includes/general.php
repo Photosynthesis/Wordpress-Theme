@@ -23,7 +23,8 @@ class ThemeGeneral
     add_image_size('product-image', 300, 0);
     add_image_size('cart-thumbnail', 75, 0);
     add_image_size('card-image', 0, 300);
-    add_image_size('wide-thumbnail', 350, 235, TRUE);
+    add_image_size('wide-thumbnail', 420, 285, TRUE);
+    add_image_size('large-wide-thumbnail', 800, 550, TRUE);
   }
 
   /* Register & Enqueue Compiled Scripts & Styles.
