@@ -204,13 +204,13 @@ CSS;
 
   /* Return CSS Classes for Left Sidebars */
   public static function left_sidebar_css_classes() {
-    return "col-24 col-sm-12 col-md-7 pull-md-17 col-lg-5 pull-lg-19 col-xl-4 pull-xl-16 sidebar";
+    return "order-3 order-md-1 col-24 col-sm-12 col-md-7 col-lg-5 col-xl-4 sidebar";
   }
 
   /* Return CSS Classes for Right Sidebars */
   public static function right_sidebar_css_classes($sidebar='main') {
     if ($sidebar == 'wc') {
-      return "col-24 col-sm-12 col-md-24 col-xl-4 sidebar";
+      return "order-2 col-24 col-sm-12 col-md-24 col-xl-4 sidebar";
     } else {
       return 'col-24 col-sm-7 col-lg-6 col-xl-5 sidebar';
     }
@@ -219,7 +219,7 @@ CSS;
   /* Return CSS Classes for Center Column */
   public static function main_column_css_classes($sidebar='main') {
     if ($sidebar == 'wc') {
-      return "col-24 col-md-17 push-md-7 col-lg-19 push-lg-5 col-xl-16 push-xl-4 center-column center-column-store";
+      return "order-1 order-md-2 col-24 col-md-17 col-lg-19 col-xl-16 center-column center-column-store";
     } else {
       return "col center-column";
     }
