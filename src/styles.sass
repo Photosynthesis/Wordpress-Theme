@@ -1285,6 +1285,10 @@ body.error404.incsub_wiki
   .cart_totals #calc_shipping_state
     @extend .form-control
 
+  /* Fix width of input wrappers */
+  span.woocommerce-input-wrapper
+    @extend .col
+
   /* Checkout */
   .checkout
     /* Style Fields with Errors */
@@ -1297,11 +1301,22 @@ body.error404.incsub_wiki
           float: right
         img
           max-width: 50%
+          margin-left: 1rem
         .payment_box
           p
             margin-bottom: 0
-      &.payment_method_stripe div.payment_box p.woocommerce-SavedPaymentMethods-saveNew
-        margin-bottom: 0
+      &.payment_method_stripe
+        > label
+          display: inline-flex
+          align-items: center
+          width: 80%
+          img:first-of-type
+            margin-left: 0.5rem !important
+        div.payment_box p.woocommerce-SavedPaymentMethods-saveNew
+          margin-bottom: 0
+    /* Fix width of Stripe Inputs */
+    .wc-stripe-elements-field, .stripe-card-group
+      width: 100%
 
   /* My Account */
   > .woocommerce-account
