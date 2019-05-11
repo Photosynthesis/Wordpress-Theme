@@ -12,6 +12,14 @@ class ThemeWooCommerce
   /* Disable WooCommerce CSS */
   public static function disable_css() {}
 
+  /* Disable WooCommmerce Custom Selects */
+  public static function disable_selects() {
+    wp_dequeue_style('selectWoo');
+    wp_deregister_style('selectWoo');
+    wp_dequeue_script('selectWoo');
+    wp_deregister_script('selectWoo');
+  }
+
   /* Add Bootstrap Classes to Add-to-Cart Buttons */
   public static function add_to_cart_classes($args, $product) {
     $args['class'] .= ' btn btn-primary btn-block';
@@ -669,6 +677,7 @@ remove_action('woocommerce_after_add_to_cart_quantity',
 
 add_action('after_setup_theme', array('ThemeWooCommerce', 'enable_support'));
 add_filter('woocommerce_enqueue_styles', array('ThemeWooCommerce', 'disable_css'));
+add_action('wp_enqueue_scripts', array('ThemeWooCommerce', 'disable_selects'), 100);
 add_filter('woocommerce_loop_add_to_cart_args', array('ThemeWooCommerce', 'add_to_cart_classes'), 10, 2);
 add_filter('woocommerce_get_price_input', array('ThemeWooCommerce', 'nyp_input_classes'), 10, 3);
 add_filter('woocommerce_get_price_html', array('ThemeWooCommerce', 'change_free_text'), 10, 2);

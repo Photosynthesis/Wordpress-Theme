@@ -20,7 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<table class="table table-sm table-responsive shop_table woocommerce-checkout-review-order-table">
+<div class='table-responsive'>
+<table class="table table-sm shop_table woocommerce-checkout-review-order-table">
 	<thead>
 		<tr>
 			<th class="product-name"><?php _e( 'Product', 'woocommerce' ); ?></th>
@@ -111,3 +112,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	</tfoot>
 </table>
+</div>

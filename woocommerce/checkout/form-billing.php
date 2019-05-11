@@ -41,8 +41,12 @@ if ( ! defined( 'ABSPATH' ) ) {
     $fields = $checkout->get_checkout_fields( 'billing' );
 
     foreach ( $fields as $key => $field ) {
-      $field['class'][] = 'form-group';
+      $field['class'][] = 'form-group row';
+      $field['label_class'][] = 'col-form-label col-sm-6';
       $field['input_class'][] = 'form-control';
+      if (strpos($key, 'address_2') !== FALSE) {
+        $field['input_class'][] = 'col-sm-18 ml-auto';
+      }
       if ( isset( $field['country_field'], $fields[ $field['country_field'] ] ) ) {
         $field['country'] = $checkout->get_value( $field['country_field'] );
       }
@@ -72,7 +76,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
       <div class="create-account">
         <?php foreach ( $checkout->get_checkout_fields( 'account' ) as $key => $field ) :
-          $field['class'][] = 'form-group';
+          $field['class'][] = 'form-group row';
+          $field['label_class'][] = 'col-form-label col-sm-6';
           $field['input_class'][] = 'form-control';
           woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
         <?php endforeach; ?>
