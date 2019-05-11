@@ -150,27 +150,49 @@ class ThemeGeneral
 
   /* Customize the Login Page CSS - Replace Logo, Change Background Color */
   public static function customize_login_css() {
-    $logo_path = get_stylesheet_directory_uri() . "/img/logo-login-fic.png";
+    $logo_path = get_stylesheet_directory_uri() . "/img/logo-header-full-color.png?v=1";
+    echo " <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>";
     echo <<<CSS
       <style type="text/css">
         body {
-          background: #666698 !important;
+          background: white !important;
+          font-family: "Source Sans Pro", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+          display: flex;
+        }
+        * {
+          transition: all 0.3s ease-in-out;
         }
         #login {
-          background: white;
-          margin: 0 auto !important;
-          padding: 1em 1.5em !important;
-          border-bottom-left-radius: 3px !important;
-          border-bottom-right-radius: 3px !important;
+          background: #F6F5F3;
+          margin: auto !important;
+          padding: 1em 5em !important;
+          border-radius: 0.5rem !important;
         }
         #login > form {
+          background: #F6F5F3;
           margin-top: 0 !important;
           padding: 1em 0 0 !important;
           box-shadow: none;
         }
+        #login > form > p.submit > input[type="submit"] {
+          background: #579C87;
+          border-color: #579C87;
+          border-radius: 0.5rem;
+          color: white;
+          font-weight: bold;
+          box-shadow: none;
+          text-shadow: none;
+        }
+        #login > form > p.submit > input[type="submit"]:hover {
+          color: #579C87;
+          background: white;
+        }
+        #login h1 {
+          margin-top: 16px;
+        }
         #login h1 a, .login h1 a {
           background-image: url("{$logo_path}");
-          background-size: auto;
+          background-size: contain;
           width: 300px;
           padding-bottom: 30px;
         }
