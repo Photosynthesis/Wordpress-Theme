@@ -12,7 +12,9 @@
       <a class='btn btn-primary' href='/support/' target='_blank'>SUPPORT</a>
     </div>
     <div class='col-md-8'>
-      <img src='/wp-content/themes/fic-theme/img/membership-badge.png' class='img-fluid' />
+      <a href='/community-bookstore/product/fic-membership/'>
+        <img src='/wp-content/themes/fic-theme/img/membership-badge.png?v=1' class='img-fluid' />
+      </a>
     </div>
   </div></div></div>
 
