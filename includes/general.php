@@ -518,7 +518,7 @@ CSS;
         'wide-thumbnail', array('class' => 'img-fluid rounded-lg')
       );
       $link = $product->get_permalink();
-      $output .= "<div class='col-6 item-block'><a href='{$link}'>";
+      $output .= "<div class='col-6 item-block pop-image'><a href='{$link}'>";
       $output .= $image . "<div>{$name}</div>";
       $output .= "</a></div>";
     }
@@ -544,7 +544,7 @@ CSS;
         $post->ID, 'wide-thumbnail', array('class' => 'img-fluid rounded-lg')
       );
       $link = get_permalink($post->ID);
-      $output .= "<div class='col-6 item-block'><a href='{$link}'>";
+      $output .= "<div class='col-6 item-block pop-image'><a href='{$link}'>";
       $output .= $image . "<div>{$name}</div>";
       $output .= "</a></div>";
     }
@@ -576,7 +576,7 @@ CSS;
         $image_post->ID, 'wide-thumbnail', false, array('class' => 'img-fluid rounded-lg')
       );
       $link = get_permalink($post->ID);
-      $output .= "<div class='col-6 item-block' data-item='{$post->ID}'><a href='{$link}'>";
+      $output .= "<div class='col-6 item-block pop-image' data-item='{$post->ID}'><a href='{$link}'>";
       $output .= $image . "<div>{$name}</div>";
       $output .= "</a></div>";
     }
@@ -644,7 +644,7 @@ HTML;
       ), $atts
     );
     $output = <<<HTML
-<div class='homepage-column-section'>
+<div class='homepage-column-section pop-image'>
   <a href="{$a['link']}" class='image-link'>
     <img src="{$a['image']}" class='img-fluid' />
   </a>
@@ -684,7 +684,7 @@ HTML;
     $tagline = $a['tagline'] ?? strip_tags(explode('.', $post->post_content, 2)[0]);
 
     $output = <<<HTML
-<div class='primary-story'>
+<div class='primary-story pop-image'>
   <a href='{$link}'>
     <div class='image-title'>
       {$image}
@@ -729,7 +729,7 @@ HTML;
 
     $output = <<<HTML
 <div class='secondary-story row'>
-  <div class='col-sm-14 col-md-13 col-lg-12'>
+  <div class='col-sm-14 col-md-13 col-lg-12 pop-image'>
     <a href='{$link}'>
       {$image}
     </a>

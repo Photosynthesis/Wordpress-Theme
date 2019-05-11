@@ -474,7 +474,7 @@ HTML;
         $description = self::truncate($listing->statement);
       }
       $output .= <<<HTML
-<div class='col-md-8'>
+<div class='col-md-8 pop-image'>
     <div class='h-100'>
       <a href="/directory/{$listing->post_name}/">{$image}</a>
       <h5 class="card-title">{$listing->post_title} <i>{$location}</i></h5>
