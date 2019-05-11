@@ -25,27 +25,26 @@
       <img src='/wp-content/themes/fic-theme/img/logo-full-white.png' class='img-fluid' />
       <h5>OUR MISSION</h5>
       <p>
-        To support and promote the development of intentional communities, as a
-        pathway towards a more sustainable and just world.
+        To support and promote the development of intentional communities as
+        pathways towards a more sustainable and just world.
       </p>
       <a class='btn btn-primary' href='/the-fellowship-for-intentional-community/'>LEARN MORE</a>
     </div>
     <div class='col-md-5 col-lg-4 middle-column'>
       <h5>SITE PAGES</h5><?php
       $footer_links = array(
-        array('title' => 'About FIC', 'link' => '/about/'),
-        array('title' => 'Communities Directory', 'link' => '/directory/'),
-        array('title' => 'Membership', 'link' => '/membership/'),
+        array('title' => 'About', 'link' => '/about/'),
         array('title' => 'Donate', 'link' => '/donate/'),
+        array('title' => 'Membership', 'link' => '/membership/'),
+        array('title' => 'Communities Directory', 'link' => '/directory/'),
+        array('title' => 'Planet Community', 'link' => '/planet-community/'),
         array('title' => 'Bookstore', 'link' => '/communities-bookstore/'),
         array('title' => 'Magazine', 'link' => '/communities-magazine/'),
-        array('title' => 'Planet Community', 'link' => '/planet-community/'),
         array('title' => 'Events', 'link' => '/events/'),
-        array('title' => 'Classifieds', 'link' => '/community-classifieds/'),
-        array('title' => 'Knowledgebase', 'link' => '/knowledgebase/'),
+        array('title' => 'Offers', 'link' => '/community-classifieds/'),
         array('title' => 'Blog', 'link' => '/blog/'),
-        array('title' => 'Contact', 'link' => '/contact-fic/'),
         array('title' => 'Policies', 'link' => '/policies/'),
+        array('title' => 'Contact', 'link' => '/contact-fic/'),
       );
       echo '<ul>';
       foreach ($footer_links as $link) {
