@@ -464,7 +464,7 @@ HTML;
 HTML;
     foreach ($results as $listing) {
       $image = wp_get_attachment_image($listing->image,
-        'wide-thumbnail', false, array('class' => 'img-fluid rounded-lg')
+        'wide-thumbnail', false, array('class' => 'img-fluid rounded-lg d-block text-center')
       );
       $region = $listing->state == "" ? $listing->province : $listing->state;
       $location = implode(', ', array_filter(array($listing->city, $region, $listing->country)));
@@ -476,7 +476,7 @@ HTML;
       $output .= <<<HTML
 <div class='col-md-8'>
     <div class='h-100'>
-      {$image}
+      <a href="/directory/{$listing->post_name}/">{$image}</a>
       <h5 class="card-title">{$listing->post_title} <i>{$location}</i></h5>
       <p>
         {$description}&hellip;
