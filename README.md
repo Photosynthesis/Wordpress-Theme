@@ -1,4 +1,4 @@
-# Fellowship of Intentional Communities Wordpress Theme
+# Foundation for Intentional Communities Wordpress Theme
 
 [![Build Status](https://travis-ci.org/Fellowship-For-Intentional-Community/Wordpress-Theme.svg?branch=master)](https://travis-ci.org/Fellowship-For-Intentional-Community/Wordpress-Theme)
 

@@ -207,7 +207,7 @@ CSS;
 
   /* Set the Login Logo's Title Attribute to the Name of the Site */
   public static function customize_login_logo_title() {
-    return 'Fellowship of Intentional Community';
+    return 'Foundation for Intentional Community';
   }
 
   /* Replace Posts "Read More" Excerpt Text with a Link to the Post */
@@ -767,7 +767,7 @@ HTML;
   }
 }
 
-add_filter('wp_mail_from_name', function($n) { return 'Fellowship for Intentional Community'; }, 11);
+add_filter('wp_mail_from_name', function($n) { return 'Foundation for Intentional Community'; }, 11);
 add_filter('wp_mail_from', function($e) { return 'support@ic.org'; }, 11);
 
 ThemeGeneral::enable_support();

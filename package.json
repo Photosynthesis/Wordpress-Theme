@@ -1,7 +1,7 @@
 {
   "name": "fic-theme",
   "version": "1.1.0",
-  "description": "A Wordpress Theme for the Fellowship of Intentional Community",
+  "description": "A Wordpress Theme for the Foundation for Intentional Community",
   "main": "src/index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack --optimize-minimize",

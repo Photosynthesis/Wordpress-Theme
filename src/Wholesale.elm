@@ -855,7 +855,7 @@ wisdomVolumeOne =
     , description =
         div []
             [ p [] [ text "Resources and Stories about Creating and Exploring Intentional Community: It is estimated that currently just 10 percent of new communities move past the initial stages. This book aims to increase the survival rate to successful starts. Volume I includes both general articles and on-the-ground stories from intentional community founders and other catalysts of cooperative efforts " ]
-            , p [] [ text "Published by Fellowship for Intentional Community" ]
+            , p [] [ text "Published by Foundation for Intentional Community" ]
             ]
     }
 
@@ -870,7 +870,7 @@ wisdomVolumeTwo =
     , description =
         div []
             [ p [] [ text "Resources and Stories about Seeking and Joining Intentional Community: Many searches for intentional community fizzle out due to lack of adequate information, guidance, or exposure to fellow travelers’ stories. Authors share experiences, tools, advice, and perspectives that should help anyone searching for an intentional community—whether to visit or to live in—increase the likelihood of finding what they’re seeking." ]
-            , p [] [ text "Published by Fellowship for Intentional Community" ]
+            , p [] [ text "Published by Foundation for Intentional Community" ]
             ]
     }
 
@@ -885,7 +885,7 @@ wisdomVolumeThree =
     , description =
         div []
             [ p [] [ text "Resources and Stories about the Human Dimension of Cooperative Culture: Volume 3 includes articles about decision-making, governance, power, gender, class, race, relationships, intimacy, politics, and neighbor relations in cooperative group culture. These areas are key for communities to address if they are to retain members and develop strong and healthy group connection." ]
-            , p [] [ text "Published by Fellowship for Intentional Community" ]
+            , p [] [ text "Published by Foundation for Intentional Community" ]
             ]
     }
 
@@ -900,7 +900,7 @@ wisdomVolumeFour =
     , description =
         div []
             [ p [] [ text "Resources and Stories about Creating Eco-Resilience in Intentional Community: We focus on food, water, shelter, energy, land, permaculture, ecovillage design, eco-education, and resilience in cooperative culture. These areas will prove more and more essential in allowing communities to navigate changing circumstances on our planet, while growing into new, regenerative ways of living and thriving together." ]
-            , p [] [ text "Published by Fellowship for Intentional Community" ]
+            , p [] [ text "Published by Foundation for Intentional Community" ]
             ]
     }
 
@@ -917,7 +917,7 @@ wisdomSet =
             [ p []
                 [ text "Since 1972, "
                 , i [] [ text "Communities" ]
-                , text " magazine, published by the Fellowship for Intentional Community, has been collecting and disseminating the lessons learned, and now we’re distilling them into a new 4 volume book series. Each book is over 300 pages and features over 100 of our best articles. This series is intended to aid community founders, seekers, current communitarians, students, and researchers alike in their explorations."
+                , text " magazine, published by the Foundation for Intentional Community, has been collecting and disseminating the lessons learned, and now we’re distilling them into a new 4 volume book series. Each book is over 300 pages and features over 100 of our best articles. This series is intended to aid community founders, seekers, current communitarians, students, and researchers alike in their explorations."
                 ]
             , ul [ class "list-unstyled" ]
                 [ li [] [ text "Volume 1: Starting a Community" ]
@@ -925,7 +925,7 @@ wisdomSet =
                 , li [] [ text "Volume 3: Communication in Community" ]
                 , li [] [ text "Volume 4: Sustainability in Community" ]
                 ]
-            , p [] [ text "Published by Fellowship for Intentional Community" ]
+            , p [] [ text "Published by Foundation for Intentional Community" ]
             ]
     }
 
@@ -940,7 +940,7 @@ communitiesDirectory =
     , description =
         div []
             [ p [] [ text "For over 20 years we have offered the leading directory for connecting seekers, dreamers and builders with forming and established intentional communities. In our 7th edition, you'll find over 1,200 communities, full-page maps showing where communities are located, charts that compare communities by more than 30 different qualities, and an easy index to find communities interested in specific pursuits." ]
-            , p [] [ text "Published by Fellowship for Intentional Community" ]
+            , p [] [ text "Published by Foundation for Intentional Community" ]
             , ul [ class "list-unstyled" ]
                 [ li [] [ text "ISBN: 978-0971826496" ]
                 , li [] [ text "paperbound" ]
@@ -1045,7 +1045,7 @@ bestOfCommunities =
     { name = "Best of Communities"
     , thumbnail = "/wp-content/uploads/2014/01/best-of-communities-bundle-300x224.png"
     , msrp = "15"
-    , description = "In 15 scintillating collections, we have distilled what we consider the most insightful and helpful articles from Communities Magazine and Communities Directory on the topics that you care about most. Compiled for your convenience, discover the very best articles that have appeared over the last 20 years. Each collection is comprised of 15–20 articles, containing a total of 55–65 pages. Published by Fellowship for Intentional Community"
+    , description = "In 15 scintillating collections, we have distilled what we consider the most insightful and helpful articles from Communities Magazine and Communities Directory on the topics that you care about most. Compiled for your convenience, discover the very best articles that have appeared over the last 20 years. Each collection is comprised of 15–20 articles, containing a total of 55–65 pages. Published by Foundation for Intentional Community"
     , pricePerItem = Cents 900
     , setPrice = Cents 13500
     , items =
@@ -1104,7 +1104,7 @@ communitiesMagazine =
     , thumbnail = "/wp-content/uploads/2013/06/Mag.covers-12up-600x323.jpg"
     , url = "/communities-magazine-home/"
     , description =
-        [ "Communities magazine is the primary resource for information, stories, and ideas about intentional communities—including urban co-ops, cohousing groups, ecovillages, and rural communes. Communities also focuses on creating and enhancing community in the workplace, in nonprofit or activist organizations, and in neighborhoods. We explore the joys and challenges of cooperation in its many dimensions, and pass the wisdom on to you and your community. Published by Fellowship for Intentional Community, since 1971"
+        [ "Communities magazine is the primary resource for information, stories, and ideas about intentional communities—including urban co-ops, cohousing groups, ecovillages, and rural communes. Communities also focuses on creating and enhancing community in the workplace, in nonprofit or activist organizations, and in neighborhoods. We explore the joys and challenges of cooperation in its many dimensions, and pass the wisdom on to you and your community. Published by Foundation for Intentional Community, since 1971"
         , "Selecting quantity “1” offers a full year (4 issues) subscription. We are a quarterly publication, shipping the first week of March, June, September, and December. Different rates apply than above. No shipping will be applied."
         ]
     , priceTiers =

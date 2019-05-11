@@ -264,7 +264,7 @@ HTML;
     $charge_url = 'https://dashboard.stripe.com/' .
       (STRIPE_MODE === 'TEST' ? 'test/' : '') . "payments/" . $charge->id;
     $confirmation_email = <<<HTML
-<h1>Fellowship for Intentional Community Wholesale Order Confirmation</h1>
+<h1>Foundation for Intentional Community Wholesale Order Confirmation</h1>
 
 <p>We have received the following wholesale order from you:</p>
 

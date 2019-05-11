@@ -18,7 +18,7 @@ $(document).ready(function() {
     var stripeHandler = StripeCheckout.configure({
       key: stripeApiKey,
       locale: 'auto',
-      name: 'Fellowship for Intentional Community',
+      name: 'Foundation for Intentional Community',
       image: '/wp-content/themes/fic-theme/img/logo-large-fic.png',
       zipCode: true,
       token: function(token, args) {
