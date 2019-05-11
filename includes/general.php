@@ -138,7 +138,7 @@ class ThemeGeneral
 
   /* Add Favicon to Login & Admin Pages */
   public static function add_favicon() {
-    $favicon_url = get_stylesheet_directory_uri() . '/img/favicon/favicon.ico';
+    $favicon_url = get_stylesheet_directory_uri() . '/img/favicon/favicon.ico?v=M4mloMGjlj';
     echo "<link rel='shortcut icon' href='{$favicon_url}' />";
   }
 
