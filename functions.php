@@ -32,6 +32,8 @@ load_include('wholesale.php');
 /** Plugins **/
 /* Directory */
 load_include('directory.php');
+/* Events Calendar */
+load_include('events.php');
 /* Newsletter - MailPoet & Hustle Pro */
 load_include('newsletter.php');
 /* WooCommerce */
