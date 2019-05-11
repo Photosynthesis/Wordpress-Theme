@@ -108,14 +108,13 @@ if ($banner_content !== "") { ?>
         <div class='d-inline-block meta'><?php
           if (is_user_logged_in()) {
             $current_user = wp_get_current_user();
-            echo 'Hello,&nbsp;<strong>' . ucfirst($current_user->user_login) .
-              '</strong>&nbsp;(<a href="' . wp_logout_url('/') . '">Log Out</a>)';
+            echo '<a href="' . wp_logout_url('/') . '">Log Out</a>';
           } else {
-              echo '<a href="' . wp_login_url(get_permalink()) . '">Log In</a>';
+            echo '<a href="' . wp_login_url(get_permalink()) . '">Log In</a>';
           } ?>
         </div>
-        <a class="btn btn-sm btn-light mx-2" href='<?php echo get_permalink(14602); ?>'>SHOP</a>
-        <a class="btn btn-sm btn-primary donate-button" href='<?php echo get_permalink(14601); ?>'>DONATE</a>
+        <a class="btn btn-sm btn-light mx-2" href='/communities-bookstore/'>SHOP</a>
+        <a class="btn btn-sm btn-primary donate-button" href='/support/'>DONATE</a>
       </div>
     </div>
   </div>
