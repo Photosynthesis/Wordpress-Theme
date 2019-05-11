@@ -506,7 +506,7 @@ CSS;
       "<div id='home-new-arrivals' class='row'>" .
         "<div class='col-24'>" .
           "<h5 class='clearfix'>" .
-            "NEW ARRIVALS" .
+            "<a href='/community-bookstore/category/recently-added/'>NEW BOOKS</a>" .
             "<a href='/community-bookstore/category/books/' class='btn btn-sm btn-primary'>" .
               "BROWSE BOOKS" .
             "</a>" .
@@ -531,7 +531,12 @@ CSS;
     $output =
       "<div id='home-upcoming-events' class='row'>" .
         "<div class='col-24'>" .
-          "<h5 class='clearfix'>UPCOMING EVENTS</h5>" .
+          "<h5 class='clearfix'>" .
+            "<a href='/events/'>UPCOMING EVENTS</a>" .
+            "<a href='/events/' class='btn btn-sm btn-primary'>" .
+              "MORE EVENTS" .
+            "</a>" .
+          "</h5>" .
         "</div>";
     foreach ($events as $post) {
       $name = $post->post_title;
@@ -558,7 +563,7 @@ CSS;
     $output =
       "<div id='home-community-offers' class='row'>" .
         "<div class='col-24'>" .
-          "<h5 class='clearfix'>COMMUNITY OFFERS" .
+          "<h5 class='clearfix'><a href='/community-classifieds/'>COMMUNITY OFFERS</a>" .
             "<a href='/community-classifieds/place-ad/' class='btn btn-sm btn-primary'>" .
               "<i class='fas fa-plus'></i> POST OFFER" .
             "</a>" .
@@ -606,7 +611,7 @@ CSS;
       array(
         'header' => 'Intentional communities model solutions',
         'news_header' => 'JOIN OUR NEWSLETTER',
-        'news_text' => 'Free resources and inspiring news in your inbox!',
+        'news_text' => 'Free resources, inspiring stories, and special offers!',
       ), $atts
     );
     $mailpoet_form = do_shortcode('[mailpoet_form id="2"]');
@@ -618,7 +623,7 @@ CSS;
         <h2 class='h1'>{$a['header']}</h2>
         <p>{$content}</p>
       </div>
-      <div class='col-7 right-column'>
+      <div class='col-8 right-column'>
         <h5>{$a['news_header']}</h5>
         <p>{$a['news_text']}</p>
         {$mailpoet_form}
@@ -640,8 +645,10 @@ HTML;
     );
     $output = <<<HTML
 <div class='homepage-column-section'>
-  <img src="{$a['image']}" class='img-fluid' />
-  <h3>{$a['header']}</h3>
+  <a href="{$a['link']}" class='image-link'>
+    <img src="{$a['image']}" class='img-fluid' />
+  </a>
+  <h3><a href="{$a['link']}">{$a['header']}</a></h3>
   <p>{$content}</p>
   <a href="{$a['link']}">Learn more</a>
 </div>
@@ -678,10 +685,12 @@ HTML;
 
     $output = <<<HTML
 <div class='primary-story'>
-  <div class='image-title'>
-    {$image}
-    <h3>{$title}</h3>
-  </div>
+  <a href='{$link}'>
+    <div class='image-title'>
+      {$image}
+      <h3>{$title}</h3>
+    </div>
+  </a>
   <div class='tagline-author d-block d-xl-flex'>
     <div class='tagline'>{$tagline}</div>
     <div class='author'>{$author} &ndash; {$time} ago</div>
@@ -721,10 +730,12 @@ HTML;
     $output = <<<HTML
 <div class='secondary-story row'>
   <div class='col-sm-14 col-md-13 col-lg-12'>
-    {$image}
+    <a href='{$link}'>
+      {$image}
+    </a>
   </div>
   <div class='col-sm-10 col-md-11 col-lg-12'>
-    <h5>{$title}</h5>
+    <h5><a href='{$link}'>{$title}</a></h5>
     <div class='tagline'>{$tagline}</div>
     <div class='author'>{$author} &ndash; {$time} ago</div>
   </div>
