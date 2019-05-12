@@ -96,10 +96,8 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 
   <span class='woocommerce-mini-cart__buttons buttons'><?php do_action( 'woocommerce_widget_shopping_cart_before_buttons' ); ?></span>
 
-  <p class="clearfix">
-    <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class='btn btn-secondary float-left'>View Cart</a>
-    <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class='btn btn-primary float-right'>Checkout</a>
-  </p>
+  <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class='btn btn-secondary btn-block mb-1'>View Cart</a>
+  <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class='btn btn-primary btn-block'>Checkout</a>
 
 <?php endif; ?>
 
