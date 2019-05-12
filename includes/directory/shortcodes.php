@@ -408,8 +408,10 @@ HTML;
   }
 
   /* Display 3 Featured FIC-Member Communities for the Main Page */
-  public static function homepage_featured_communities() {
+  public static function homepage_featured_communities($atts) {
     global $wpdb;
+
+    $a = shortcode_atts(array('listings' => ''), $atts);
 
     $query = "
       SELECT
@@ -444,12 +446,7 @@ HTML;
       INNER JOIN
         (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=286)
         AS statements ON statements.item_id=entries.id
-      INNER JOIN
-        (SELECT meta_value, item_id FROM {$wpdb->prefix}frm_item_metas WHERE field_id=933 AND meta_value='Yes')
-        AS fic_member ON fic_member.item_id=entries.id
-      WHERE entries.form_id=2 AND posts.post_status='publish'
-      ORDER BY RAND()
-      LIMIT 3
+      WHERE entries.form_id=2 AND posts.post_status='publish' AND entries.id IN ({$a['listings']})
       ;";
     $results = $wpdb->get_results($query);
 
