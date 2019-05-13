@@ -832,6 +832,22 @@ body.page-id-17
       background-repeat: no-repeat
       background-size: cover
 
+    /* Customize the Community Offers section */
+    #home-community-offers
+      @extend %homepage-shortcode-section
+      background-color: $gray-bg
+      .container
+        padding-top: 2rem
+        padding-bottom: 2rem
+      h5
+        @extend .h2
+        a:first-of-type
+          color: $black
+          font-weight: 600
+    /* Make the Directory Sponsors Banner Images Responsive */
+    .directory-sponsors img
+      @extend .img-fluid
+
 
 /** Development Home **/
 body.page-id-255787
@@ -997,6 +1013,10 @@ body.single-directory
     opacity: 0.9
   a
     font-weight: bold
+/* Reduce the Featured Communities Margins on the Directory Homepage */
+body.page-id-17
+  .home-featured-communities
+    @extend .my-2
 
 
 /** Formidable Forms **/
