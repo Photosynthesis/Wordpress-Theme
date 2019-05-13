@@ -581,26 +581,6 @@ body.home
         &:hover
           background-color: rgba($black, 0.4)
 
-  /* Featured Communities Section */
-  #home-featured-communities
-    margin-top: 5rem
-    margin-bottom: 5rem
-    .section-heading
-      display: flex
-      justify-content: space-between
-      margin-bottom: 1rem
-      h3
-        margin-bottom: 0
-    img
-      margin-bottom: 1rem
-    h5 i
-      display: block
-      font-size: 80%
-      font-weight: normal
-      opacity: 0.9
-    a
-      font-weight: bold
-
   /* Get Involved + Newsletter Signup Section */
   #get-involved-block
     color: $white
@@ -710,35 +690,8 @@ body.home
       margin-bottom: 1rem
       a:hover
         text-decoration: none
-  /* New Arrivals section */
   #home-new-arrivals, #home-upcoming-events, #home-community-offers
-    margin-top: 4rem
-    margin-bottom: 4rem
-    padding: 0 2rem
-    h5
-      color: $teal
-      font-weight: bold
-      display: flex
-      margin-bottom: 1.5rem
-      a.btn
-        margin-left: auto
-      i
-        font-size: 0.7rem
-        margin-right: 0.2em
-    .item-block
-      a
-        color: black
-        display: flex
-        flex-direction: column
-        justify-content: center
-        height: 100%
-      img
-        margin: 0 auto 1rem
-      div
-        font-weight: bold
-        text-align: left
-        margin-top: auto
-        margin-bottom: auto
+    @extend %homepage-shortcode-section
   /* Explore Communities section */
   #home-explore
     text-align: center
@@ -752,6 +705,36 @@ body.home
     h2
       font-size: 3rem
       margin-bottom: 0.1rem
+
+/* Style the Community Offers, Events, & Products Shortcode Sections */
+%homepage-shortcode-section
+  margin-top: 4rem
+  margin-bottom: 4rem
+  padding: 0 2rem
+  h5
+    color: $teal
+    font-weight: bold
+    display: flex
+    margin-bottom: 1.5rem
+    a.btn
+      margin-left: auto
+    i
+      font-size: 0.7rem
+      margin-right: 0.2em
+  .item-block
+    a
+      color: black
+      display: flex
+      flex-direction: column
+      justify-content: center
+      height: 100%
+    img
+      margin: 0 auto 1rem
+    div
+      font-weight: bold
+      text-align: left
+      margin-top: auto
+      margin-bottom: auto
 
 
 /** Directory Home **/
@@ -945,6 +928,25 @@ body.single-directory
       @extend .btn
       @extend .btn-primary
 
+/** Featured Communities Shortcode */
+.home-featured-communities
+  margin-top: 5rem
+  margin-bottom: 5rem
+  .section-heading
+    display: flex
+    justify-content: space-between
+    margin-bottom: 1rem
+    h3
+      margin-bottom: 0
+  img
+    margin-bottom: 1rem
+  h5 i
+    display: block
+    font-size: 80%
+    font-weight: normal
+    opacity: 0.9
+  a
+    font-weight: bold
 
 
 /** Formidable Forms **/
