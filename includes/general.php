@@ -299,8 +299,7 @@ CSS;
 
     if ($post->post_name === ThemeGeneral::$development_page_slug ||
         is_shop() ||
-        $post->post_name === ThemeGeneral::$bookstore_page_slug ||
-        $post->post_name === 'directory') {
+        $post->post_name === ThemeGeneral::$bookstore_page_slug) {
       return false;
     }
     return $can_use;
