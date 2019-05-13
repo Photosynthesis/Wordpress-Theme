@@ -422,8 +422,9 @@ detailRightColumn community =
                         [ Html.img
                             [ id "fic-membership-badge"
                             , title "FIC Membership Badge"
-                            , src "/wp-content/images/fic-membership-badge.png"
+                            , src "/wp-content/themes/fic-theme/img/membership-badge.png?v=1"
                             , alt "This Community is an FIC Member"
+                            , class "img-fluid"
                             ]
                             []
                         ]
