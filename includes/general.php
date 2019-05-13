@@ -574,7 +574,12 @@ CSS;
     return $output;
   }
 
-  public static function render_offers() {
+  public static function render_offers($atts) {
+    $a = shortcode_atts(
+      array('full_width' => false),
+      $atts
+    );
+    $a['full_width'] = (bool) $a['full_width'];
     $ads = get_posts(array(
       'post_type' => 'advert',
       'post_status' => 'publish',
@@ -582,8 +587,10 @@ CSS;
       'menu_order' => 1,    // featured ads
       'orderby' => array('date' => 'desc'),
     ));
+    $container_classes = $a['full_width'] ? 'container-fluid full-width' : 'row';
     $output =
-      "<div id='home-community-offers' class='row'>" .
+      "<div id='home-community-offers' class='{$container_classes}'>" .
+        ($a['full_width'] ? "<div class='container'><div class='row'>" : '') .
         "<div class='col-24'>" .
           "<h5 class='clearfix'><a href='/community-classifieds/'>COMMUNITY OFFERS</a>" .
             "<a href='/community-classifieds/place-ad/' class='btn btn-sm btn-primary'>" .
@@ -602,7 +609,7 @@ CSS;
       $output .= $image . "<div>{$name}</div>";
       $output .= "</a></div>";
     }
-    $output .= "</div>";
+    $output .= ($a['full_width'] ? "</div></div>" : '') . "</div>";
     return $output;
   }
 
