@@ -411,7 +411,8 @@ HTML;
   public static function homepage_featured_communities($atts) {
     global $wpdb;
 
-    $a = shortcode_atts(array('listings' => ''), $atts);
+    $a = shortcode_atts(array('listings' => '', 'include_title' => true), $atts);
+    $a['include_title'] = (bool) $a['include_title'];
 
     $query = "
       SELECT
@@ -450,15 +451,17 @@ HTML;
       ;";
     $results = $wpdb->get_results($query);
 
-    $output = <<<HTML
-<div id='home-featured-communities' class='row'>
-  <div class='col-24 section-heading'>
-    <h3>FEATURED COMMUNITIES</h3>
-    <a class='btn btn-primary' href='/directory/listings/?filters=ficMember'>
-      VIEW MORE <i class='fas fa-angle-right'></i>
-    </a>
-  </div>
+    $output = "<div class='home-featured-communities row'>";
+    if ($a['include_title']) {
+      $output .= <<<HTML
+<div class='col-24 section-heading'>
+  <h3>FEATURED COMMUNITIES</h3>
+  <a class='btn btn-primary' href='/directory/listings/?filters=ficMember'>
+    VIEW MORE <i class='fas fa-angle-right'></i>
+  </a>
+</div>
 HTML;
+    }
     foreach ($results as $listing) {
       $image = wp_get_attachment_image($listing->image,
         'wide-thumbnail', false, array('class' => 'img-fluid rounded-lg d-block text-center')
