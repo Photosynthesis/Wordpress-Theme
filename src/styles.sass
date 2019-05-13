@@ -332,8 +332,59 @@ p:empty
       margin-top: 0
 
 #main-sidebar
+  /* Social Sharing Widget */
+  .widget_inc_opt_widget
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin: 0 -15px 1rem
+    padding: 0.75rem 0 0.5rem
+    border-top: solid 1px $border-color
+    border-bottom: solid 1px $border-color
+    h4
+      border: none
+      margin: 0 0 0 1rem
+    > div
+      margin-right: 1rem
+      .wph-sshare--container
+        padding: 0
+        > a
+          margin: 0 0 0 0.2rem
+          svg.wph-social
+            background-color: $black
+            transition: all 0.3s ease-in-out
+          &:hover svg.wph-social
+            background-color: $primary
+  /* Newsletter Widget */
+  .widget_mailpoet_form
+    color: $white
+    background-color: $sage
+    padding: 1rem 0.5rem
+    margin: 1rem 0
+    box-shadow: 0 0 8px 0 rgba(black, 0.2)
+    @extend .rounded-lg
+    h5
+      color: $white
+      font-weight: bold
+    input::placeholder
+      font-weight: bold
+    input.mailpoet_text
+      @extend .form-control
+      @extend .form-control-sm
+    input[type="email"]
+      margin-top: 0.5rem
+    p.mailpoet_paragraph:nth-of-type(4), p.mailpoet_paragraph:nth-of-type(5)
+      display: inline
+      input
+        width: 49%
+        display: inline-block
+    p.mailpoet_paragraph:last-of-type
+      margin-bottom: 0.5rem
+    .mailpoet_submit
+      @extend .btn
+      @extend .btn-primary
   /* Advanced Ads Widget */
-  .widget:nth-of-type(2), .widget:nth-of-type(3)
+  .widget:nth-of-type(3), .widget:nth-of-type(4), .widget:nth-of-type(5)
     /* Collapse adjacent ad widget spacing */
     margin-top: 0
     margin-bottom: 0
