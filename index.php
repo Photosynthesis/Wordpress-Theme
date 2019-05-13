@@ -9,7 +9,7 @@ if (have_posts()) {
       <div id="main" class="entry">
         <?php the_content(); ?>
       </div>
-        </div><?php
+    </div><?php
   }
 }
 
