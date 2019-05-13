@@ -117,7 +117,7 @@ class DirectoryMaps
           array(
             'width' => '99%', 'height' => 480, 'zoom' => '4',
             'center' => array('lat' => 37.961523, 'lng' => -95.939942),
-            'poiList' => true, 'poiZoom' => '10',
+            'poiList' => false, 'poiZoom' => '10',
           )
         );
         $map->prepare();
