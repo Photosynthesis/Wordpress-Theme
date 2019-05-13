@@ -157,6 +157,10 @@ p:empty
   left: 50%
   padding: 0
 
+/* Fix margin of last WP Block Column */
+.wp-block-column:last-of-type
+  margin-right: 0
+
 /* See-through mailpoet inputs */
 %transparent-mailpoet-form
   /* Style the MailPoet Form */
@@ -623,8 +627,6 @@ body.home
     padding: 0 2rem
     margin-top: 7rem
     margin-bottom: 7rem
-    .wp-block-column:last-of-type
-      margin-right: 0
     .homepage-column-section
       height: 100%
       display: flex
