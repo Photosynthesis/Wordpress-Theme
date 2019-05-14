@@ -803,11 +803,14 @@ body.page-id-17
      * the border of the entire input group when the input element is focused.
      */
     form#directory-search
+      width: 83%
+      margin: 0 auto 2.5rem
       div.input-group
+        margin-bottom: 0.6875rem
         .input-group-prepend
           display: flex
           align-items: center
-          padding: 0 0.5rem
+          padding: 0 0.5rem 0 0.75rem
           border: $border-width solid $input-border-color
           border-top-left-radius: $input-border-radius
           border-bottom-left-radius: $input-border-radius
@@ -824,6 +827,28 @@ body.page-id-17
         input:focus ~ .ig-right
           border-right-color: $input-focus-border-color
 
+    /* Decrease the width of the Map & center it */
+    .mapp-layout
+      margin: 0 auto 1.625rem
+      width: 90% !important
+
+    /* Space out the various sections & their headings */
+    .directory-header-links
+      margin-bottom: 3.875rem
+    .home-featured-communities
+      margin-top: 0
+      margin-bottom: 3.125rem
+      p
+        margin-bottom: 0
+    .community-types
+      margin-bottom: 7.75rem
+    h3
+      margin-bottom: 2.25rem
+      &.sponsors-heading
+        margin-bottom: 3.125rem
+    h5
+      margin-bottom: 2rem
+
     /* Color all Card links like list-group items when hovered & clicked. */
     .card > a
       &, &:hover, &:active
@@ -832,28 +857,30 @@ body.page-id-17
         background-color: $list-group-hover-bg
         text-decoration: none
 
-    /* Position & Scale the Featured Community images */
-    .featured-communities .community-img
-      height: 300px
-      background-position: center
-      background-repeat: no-repeat
-      background-size: cover
-
     /* Customize the Community Offers section */
     #home-community-offers
       @extend %homepage-shortcode-section
+      margin-top: 7.25rem
+      margin-bottom: 6.25rem
       background-color: $gray-bg
       .container
-        padding-top: 2rem
-        padding-bottom: 2rem
+        padding-top: 1.75rem
+        padding-bottom: 1.75rem
       h5
         @extend .h2
         a:first-of-type
           color: $black
           font-weight: 600
-    /* Make the Directory Sponsors Banner Images Responsive */
-    .directory-sponsors img
-      @extend .img-fluid
+      .item-block div
+        margin-top: 0
+
+    .directory-sponsors
+      margin-bottom: 5.375rem
+      .wp-block-column
+        margin-bottom: 0
+      /* Make the Directory Sponsors Banner Images Responsive */
+      img
+        @extend .img-fluid
 
 
 /** Development Home **/
@@ -1013,17 +1040,13 @@ body.single-directory
       margin-bottom: 0
   img
     margin-bottom: 1rem
-  h5 i
+  h6 i
     display: block
     font-size: 80%
     font-weight: normal
     opacity: 0.9
   a
     font-weight: bold
-/* Reduce the Featured Communities Margins on the Directory Homepage */
-body.page-id-17
-  .home-featured-communities
-    @extend .my-2
 
 
 /** Formidable Forms **/
