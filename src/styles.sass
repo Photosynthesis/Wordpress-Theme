@@ -171,6 +171,14 @@ p:empty
 .wp-block-column:last-of-type
   margin-right: 0
 
+/* Fix Youtube Embed Blocks */
+figure.wp-block-embed-youtube
+  > div 
+    @extend .embed-responsive
+    @extend .embed-responsive-16by9
+    > iframe
+      @extend .embed-responsive-item
+
 /* See-through mailpoet inputs */
 %mailpoet-form
   /* Style the MailPoet Form */
