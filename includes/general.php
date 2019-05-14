@@ -780,6 +780,7 @@ HTML;
   <img src="{$content}" />
 </div>
 HTML;
+    return $output;
   }
 }
 
