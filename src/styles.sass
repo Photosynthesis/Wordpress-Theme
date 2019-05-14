@@ -133,8 +133,11 @@ body.page-template-no_sidebars, article#post-21
 body.page-template-no_sidebars
   #body-wrapper > .row
     padding: 0 2rem
-article#post-21
-  padding: 0 calc(2rem - 10px)
+/* Push in the content for all other pages a little less */
+body:not(.page-template-no_sidebars)
+  #body-wrapper > .row
+    padding: 0 calc(#{$grid-gutter-width-base} * 2)
+
 
 
 /* Set the button/label/meta font styles */
