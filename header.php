@@ -65,7 +65,7 @@ if ($banner_content !== "") { ?>
       </a>
     </div>
     <!-- Nav Menu -->
-    <div id="nav-menu" class="col d-flex">
+    <div id="nav-menu" class="col pl-0 d-flex">
       <nav class="navbar navbar-expand-md navbar-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
                 aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
