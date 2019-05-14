@@ -131,11 +131,11 @@ body.page-template-no_sidebars, article#post-21
     font-size: 1.125rem
 /* Push in the main content on pages with no sidebars */
 body.page-template-no_sidebars
-  #body-wrapper > .row
+  #body-wrapper > .row:not(#site-header)
     padding: 0 2rem
 /* Push in the content for all other pages a little less */
 body:not(.page-template-no_sidebars)
-  #body-wrapper > .row
+  #body-wrapper > .row:not(#site-header)
     padding: 0 calc(#{$grid-gutter-width-base} * 2)
 
 
