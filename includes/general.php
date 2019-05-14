@@ -771,6 +771,16 @@ HTML;
 HTML;
     return $output;
   }
+
+  public static function render_full_width_image($atts, $content = '') {
+    if ($content === '') { return ''; }
+    $a = shortcode_atts(array('class' => ''), $atts);
+    $output = <<<HTML
+<div class="container-fluid full-width full-width-image {$a['class']}">
+  <img src="{$content}" />
+</div>
+HTML;
+  }
 }
 
 add_filter('wp_mail_from_name', function($n) { return 'Foundation for Intentional Community'; }, 11);
@@ -809,5 +819,6 @@ add_shortcode('fic_get_involved', array('ThemeGeneral', 'render_get_involved_blo
 add_shortcode('fic_column_section', array('ThemeGeneral', 'render_column_section'));
 add_shortcode('fic_primary_story', array('ThemeGeneral', 'render_primary_story'));
 add_shortcode('fic_secondary_story', array('ThemeGeneral', 'render_secondary_story'));
+add_shortcode('fic_full_width_image', array('ThemeGeneral', 'render_full_width_image'));
 
 ?>
