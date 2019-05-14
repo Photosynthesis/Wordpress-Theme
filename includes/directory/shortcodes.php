@@ -475,10 +475,10 @@ HTML;
       }
       $output .= <<<HTML
 <div class='col-md-8 pop-image'>
-    <div class='h-100'>
+    <div class='h-100 d-flex flex-column'>
       <a href="/directory/{$listing->post_name}/">{$image}</a>
-      <h5 class="card-title">{$listing->post_title} <i>{$location}</i></h5>
-      <p>
+      <h6 class="card-title">{$listing->post_title} <i>{$location}</i></h6>
+      <p class='mt-auto'>
         {$description}&hellip;
         <a href="/directory/{$listing->post_name}/" class="h-100">
           Learn more
