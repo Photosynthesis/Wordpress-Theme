@@ -652,161 +652,6 @@ body.home
         &:hover
           background-color: rgba($black, 0.4)
 
-  /* Get Involved + Newsletter Signup Section */
-  #get-involved-block
-    color: $white
-    background-color: $sage
-    margin-top: 7rem
-    margin-bottom: 7rem
-    box-shadow: 0 0 8px 3px rgba($black, 0.2)
-    .row
-      padding: 6rem 5rem
-      justify-content: space-between
-      h2, h5
-        color: $white
-      h2
-        margin-bottom: 2.5rem
-      h5
-        font-weight: bold
-      .left-column
-        p
-          font-size: 1.3rem
-          font-weight: 600
-        a
-          font-weight: bold
-      .right-column
-        @extend %mailpoet-form
-
-  /* Sub-Sections for the 3-Column Section */
-  .has-3-columns
-    padding: 0 2rem
-    margin-top: 7rem
-    margin-bottom: 7rem
-    .homepage-column-section
-      height: 100%
-      display: flex
-      flex-direction: column
-      align-items: center
-      a.image-link
-        margin-top: auto
-        margin-bottom: auto
-      h3
-        margin-top: 2rem
-        a
-          color: $body-color
-      p
-        text-align: center
-      > a
-        font-weight: bold
-        font-size: 0.9rem
-
-  /* Communities Stories */
-  .stories-section
-    background-color: $gray-bg
-    padding-top: 5rem !important
-    padding-bottom: 5rem !important
-    h2
-      display: flex
-      justify-content: space-between
-      align-items: center
-      margin-bottom: 0
-      padding-bottom: 2rem
-    .container > .row
-      margin-bottom: 3rem
-    .row
-      justify-content: space-between
-    .right-column
-      display: flex
-      flex-direction: column
-    .primary-story
-      .image-title
-        position: relative
-        h3
-          position: absolute
-          bottom: 0
-          left: 0
-          color: $white
-          background-color: rgba($black, 0.4)
-          width: 100%
-          margin: 0
-          padding: 1rem
-      .tagline-author
-        display: flex
-        justify-content: space-between
-        margin-top: 0.75rem
-    .secondary-story
-      margin-bottom: 4.5rem
-      h5 a
-        color: $body-color
-      > div:last-of-type
-        padding-left: 0
-      .tagline
-        margin-bottom: 1rem
-    .tagline, .author
-      font-size: 0.95rem
-    .author
-      opacity: 0.7
-      font-style: italic
-
-  /* Fix sizing of partner blocks */
-  .row.partners
-    justify-content: center
-    margin-top: 6rem
-    margin-bottom: 6rem
-    h3
-      text-align: center
-      margin-bottom: 4rem
-    > .col > div
-      text-align: center
-      margin-bottom: 1rem
-      a:hover
-        text-decoration: none
-  #home-new-arrivals, #home-upcoming-events, #home-community-offers
-    @extend %homepage-shortcode-section
-  /* Explore Communities section */
-  #home-explore
-    text-align: center
-    padding: 10rem 0
-    margin-top: 8rem
-    margin-bottom: 3rem
-    background: linear-gradient(rgba(white, 0.65), rgba(white, 0.65)), url('/wp-content/themes/fic-theme/img/directory-map.png')
-    background-size: cover
-    background-position: center center
-    box-shadow: 0 3px 8px 4px rgba(black, 0.1)
-    h2
-      font-size: 3rem
-      margin-bottom: 0.1rem
-
-/* Style the Community Offers, Events, & Products Shortcode Sections */
-%homepage-shortcode-section
-  margin-top: 4rem
-  margin-bottom: 4rem
-  padding: 0 2rem
-  h5
-    color: $teal
-    font-weight: bold
-    display: flex
-    margin-bottom: 1.5rem
-    a.btn
-      margin-left: auto
-    i
-      font-size: 0.7rem
-      margin-right: 0.2em
-  .item-block
-    a
-      color: black
-      display: flex
-      flex-direction: column
-      justify-content: center
-      height: 100%
-    img
-      margin: 0 auto 1rem
-    div
-      font-weight: bold
-      text-align: left
-      margin-top: auto
-      margin-bottom: auto
-
 
 /** Directory Home **/
 body.page-id-17
@@ -873,7 +718,6 @@ body.page-id-17
 
     /* Customize the Community Offers section */
     #home-community-offers
-      @extend %homepage-shortcode-section
       margin-top: 7.25rem
       margin-bottom: 6.25rem
       background-color: $gray-bg
@@ -986,6 +830,186 @@ body.woocommerce-page article#post-21
 .full-width-image img
   object-fit: cover
   width: 100%
+
+/** Interest Block **/
+.interest-block
+  height: 100%
+  padding: 2rem 1.125rem 0.65rem
+  background-color: $gray-bg
+  border-radius: $border-radius
+  transition: box-shadow 0.2s ease-in-out
+  &:hover
+    box-shadow: 0 0 5px 3px rgba($black, 0.1)
+  div.icon-block
+    margin-bottom: 1.5rem
+    text-align: center
+    i
+      color: $yellow
+  h6
+    margin-bottom: 1.375rem
+  p
+    margin-bottom: 0
+    > br
+      display: none
+
+/** Re-useable Homepage Blocks **/
+/* Get Involved + Newsletter Signup Section */
+#get-involved-block
+  color: $white
+  background-color: $sage
+  margin-top: 7rem
+  margin-bottom: 7.5rem
+  box-shadow: 0 0 8px 3px rgba($black, 0.2)
+  .row
+    padding: 6rem 5rem 6.5rem
+    justify-content: space-between
+    h2, h5
+      color: $white
+    h2
+      margin-bottom: 3.125rem
+    h5
+      font-weight: bold
+    .left-column
+      p
+        font-size: 1.3rem
+        font-weight: 600
+      a
+        font-weight: bold
+    .right-column
+      @extend %mailpoet-form
+
+/* Scrollable Sections */
+#home-new-arrivals, #home-upcoming-events, #home-community-offers
+  margin-top: 4rem
+  margin-bottom: 5.375rem
+  padding: 0 2rem
+  h5
+    color: $teal
+    font-weight: bold
+    display: flex
+    margin-bottom: 1.5rem
+    a.btn
+      margin-left: auto
+    i
+      font-size: 0.7rem
+      margin-right: 0.2em
+  .item-block
+    a
+      color: black
+      display: flex
+      flex-direction: column
+      justify-content: center
+      height: 100%
+    img
+      margin: 0 auto 1.25rem
+    div
+      font-weight: bold
+      text-align: left
+      margin-top: auto
+      margin-bottom: auto
+
+/* Explore Communities section */
+#home-explore
+  text-align: center
+  padding: 10rem 0
+  margin-top: 9.5rem
+  margin-bottom: 3rem
+  background: linear-gradient(rgba(white, 0.65), rgba(white, 0.65)), url('/wp-content/themes/fic-theme/img/directory-map.png')
+  background-size: cover
+  background-position: center center
+  box-shadow: 0 3px 8px 4px rgba(black, 0.1)
+  h2
+    font-size: 3rem
+    margin-bottom: 0.1rem
+
+/* 3-Column Video/Books/Magazine Section */
+.video-books-magazine
+  padding: 0 2rem
+  margin-top: 7rem
+  margin-bottom: 7.375rem
+  .homepage-column-section
+    height: 100%
+    display: flex
+    flex-direction: column
+    align-items: center
+    a.image-link
+      margin-top: auto
+      margin-bottom: auto
+    h3
+      margin-top: 2.75rem
+      margin-bottom: 1.5rem
+      a
+        color: $body-color
+    p
+      text-align: center
+      margin-bottom: 1.5rem
+    > a
+      font-weight: bold
+      font-size: 0.9rem
+
+/* Communities Stories */
+.stories-section
+  background-color: $gray-bg
+  padding-top: 7.75rem !important
+  padding-bottom: 6rem !important
+  margin-bottom: 8.5rem
+  h2
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 0
+    padding-bottom: 2rem
+  .container > .row
+    margin-bottom: 3rem
+  .row
+    justify-content: space-between
+  .right-column
+    display: flex
+    flex-direction: column
+  .primary-story
+    .image-title
+      position: relative
+      h3
+        position: absolute
+        bottom: 0
+        left: 0
+        color: $white
+        background-color: rgba($black, 0.4)
+        width: 100%
+        margin: 0
+        padding: 1rem
+    .tagline-author
+      display: flex
+      justify-content: space-between
+      margin-top: 1.25rem
+  .secondary-story
+    margin-bottom: 3.75rem
+    h5 a
+      color: $body-color
+    > div:last-of-type
+      padding-left: 0
+    .tagline
+      margin-bottom: 1.75rem
+  .tagline, .author
+    font-size: 0.95rem
+  .author
+    opacity: 0.7
+    font-style: italic
+
+/* Partner Logos Block  */
+.row.partners
+  justify-content: center
+  margin-top: 5rem
+  margin-bottom: 9.375rem
+  h3
+    text-align: center
+    margin-bottom: 4rem
+  > .col > div
+    text-align: center
+    margin-bottom: 1rem
+    a:hover
+      text-decoration: none
+
 
 
 /*** Plugin Customizations ***/
