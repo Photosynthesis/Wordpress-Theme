@@ -782,6 +782,19 @@ HTML;
 HTML;
     return $output;
   }
+
+  public static function render_interest_block($atts, $content = '') {
+    if ($content === '') { return; }
+    $a = shortcode_atts(array('heading' => '', 'icon' => ''), $atts);
+    $output = <<<HTML
+<div class='interest-block'>
+  <div class='icon-block text-center'><i class="fa fa-{$a['icon']} fa-3x"></i></div>
+  <h6>{$a['heading']}</h6>
+  <p>{$content}</p>
+</div>
+HTML;
+    return $output;
+  }
 }
 
 add_filter('wp_mail_from_name', function($n) { return 'Foundation for Intentional Community'; }, 11);
@@ -821,5 +834,6 @@ add_shortcode('fic_column_section', array('ThemeGeneral', 'render_column_section
 add_shortcode('fic_primary_story', array('ThemeGeneral', 'render_primary_story'));
 add_shortcode('fic_secondary_story', array('ThemeGeneral', 'render_secondary_story'));
 add_shortcode('fic_full_width_image', array('ThemeGeneral', 'render_full_width_image'));
+add_shortcode('fic_interest_block', array('ThemeGeneral', 'render_interest_block'));
 
 ?>
