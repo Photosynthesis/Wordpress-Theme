@@ -36,7 +36,7 @@
         array('title' => 'About', 'link' => '/about/'),
         array('title' => 'Donate', 'link' => '/donate/'),
         array('title' => 'Membership', 'link' => '/membership/'),
-        array('title' => 'Communities Directory', 'link' => '/directory/'),
+        array('title' => 'Communities Map', 'link' => '/directory/'),
         array('title' => 'Planet Community', 'link' => '/planet-community/'),
         array('title' => 'Bookstore', 'link' => '/communities-bookstore/'),
         array('title' => 'Magazine', 'link' => '/communities-magazine/'),
