@@ -732,6 +732,37 @@ body.page-id-17
       .item-block div
         margin-top: 0
 
+    .directory-book-block
+      width: 85%
+      margin: 5rem auto 8.3125rem
+      padding: 1.875rem 1.8125rem 1rem
+      background-color: $yellow
+      box-shadow: 0 0 4px 3px rgba($black, 0.15)
+      @extend .rounded
+      .wp-block-column:first-of-type
+        display: flex
+        margin-right: 1rem
+        flex-basis: 40%
+        figure
+          margin: auto
+        img
+          @extend .img-fluid
+      .wp-block-column:last-of-type
+        display: flex
+        flex-direction: column
+        margin-left: 1rem
+        flex-basis: 60%
+        h2
+          margin-top: auto
+          margin-bottom: 1.1875rem
+        ul
+          margin-bottom: 1.5rem
+        p + p
+          margin-bottom: 0
+        ul + p
+          margin-bottom: auto
+
+
     .directory-sponsors
       margin-bottom: 5.375rem
       .wp-block-column
