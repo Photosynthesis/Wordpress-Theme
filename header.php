@@ -102,7 +102,7 @@ if ($banner_content !== "") { ?>
     <!-- Buttons/Links -->
     <div class="col col-lg-6 text-right d-none d-sm-block">
       <div>
-        <span class='muted-meta'>New to ic.org?</span> <a class='meta' href='/'>Start here.</a>
+        <span class='muted-meta'>New to ic.org?</span> <a class='meta' href='/start/'>Start here.</a>
       </div>
       <div id="header-buttons">
         <div class='d-inline-block meta'><?php
