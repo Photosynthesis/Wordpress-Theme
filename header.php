@@ -114,7 +114,7 @@ if ($banner_content !== "") { ?>
           } ?>
         </div>
         <a class="btn btn-sm btn-light mx-2" href='/communities-bookstore/'>SHOP</a>
-        <a class="btn btn-sm btn-primary donate-button" href='/support/'>DONATE</a>
+        <a class="btn btn-sm btn-primary donate-button" href='/donate/'>DONATE</a>
       </div>
     </div>
   </div>

@@ -9,7 +9,7 @@
         Donate to support a thriving communities movement and become a FIC
         Member for a host of special membership benefits.
       </p>
-      <a class='btn btn-primary' href='/support/' target='_blank'>SUPPORT</a>
+      <a class='btn btn-primary' href='/donate/' target='_blank'>SUPPORT</a>
     </div>
     <div class='col-md-8'>
       <a href='/community-bookstore/product/fic-membership/'>
