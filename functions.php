@@ -12,6 +12,7 @@ load_include('utilities.php');
 
 /** General Site & Layout Functions **/
 load_include('general.php');
+load_include('widget_submenu.php');
 
 /** Bootstrap Nav & Comment Builders **/
 load_include('bootstrap_menu_walker.php');

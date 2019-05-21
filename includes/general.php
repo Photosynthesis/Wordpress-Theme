@@ -133,6 +133,11 @@ class ThemeGeneral
   public static function register_menu() {
     register_nav_menus(array(
       'primary' => __( 'Primary Menu', 'FIC Theme'  ),
+      'directory' => __( 'Directory Sub-Menu', 'FIC Theme'),
+      'about' => __( 'About Sub-Menu', 'FIC Theme' ),
+      'cmag' => __( 'CMag Sub-Menu', 'FIC Theme' ),
+      'offers' => __( 'Offers Sub-Menu', 'FIC Theme' ),
+      'bookstore' => __( 'Bookstore Sub-Menu', 'FIC Theme' ),
     ));
   }
 

@@ -402,7 +402,7 @@ figure.wp-block-embed-youtube
       @extend .btn
       @extend .btn-primary
   /* Advanced Ads Widget */
-  .widget:nth-of-type(3), .widget:nth-of-type(4), .widget:nth-of-type(5)
+  .widget:nth-of-type(4), .widget:nth-of-type(5), .widget:nth-of-type(6)
     /* Collapse adjacent ad widget spacing */
     margin-top: 0
     margin-bottom: 0
@@ -433,6 +433,30 @@ figure.wp-block-embed-youtube
         margin-left: auto
         padding-top: 0.25rem
         color: $primary
+
+
+/* Style the SubMenu Sidebar Widget */
+.submenu-wrapper
+  margin: 3.25rem 0 5rem 1rem
+  h5
+    margin-bottom: 1rem
+  .submenu-widget
+    ul
+      list-style: none
+      padding-left: 0.5rem
+      li
+        margin-bottom: 0.75rem
+        &:last-child()
+          margin-bottom: 0
+        &.current-menu-item a
+          color: $black
+          font-weight: 600
+          cursor: default
+          &:hover
+            color: $black
+            text-decoration: none
+
+
 
 .center-column
   /* Style the Vertical Borders */
