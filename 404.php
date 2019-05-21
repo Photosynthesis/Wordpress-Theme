@@ -21,8 +21,8 @@
     </div>
   </div>
 
-  <!-- Right Sidebar -->
-  <div id="right-sidebar" class="<?php echo ThemeGeneral::right_sidebar_css_classes(); ?>">
+  <!-- Sidebar -->
+  <div id="main-sidebar" class="<?php echo ThemeGeneral::right_sidebar_css_classes(); ?>">
     <?php dynamic_sidebar('main-sidebar'); ?>
   </div>
 </div>

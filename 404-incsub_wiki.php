@@ -10,15 +10,9 @@ get_header(); ?>
   </div>
 
 
-  <!-- Left Sidebar -->
-  <div id="left-sidebar" class="<?php echo ThemeGeneral::left_sidebar_css_classes(); ?>">
-    <?php dynamic_sidebar('main-left'); ?>
-  </div>
-
-
-  <!-- Right Sidebar -->
-  <div id="right-sidebar" class="<?php echo ThemeGeneral::right_sidebar_css_classes(); ?>">
-    <?php dynamic_sidebar('main-right'); ?>
+  <!-- Sidebar -->
+  <div id="main-sidebar" class="<?php echo ThemeGeneral::right_sidebar_css_classes(); ?>">
+    <?php dynamic_sidebar('main-sidebar'); ?>
   </div>
 </div>
 
