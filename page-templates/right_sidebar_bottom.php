@@ -25,7 +25,7 @@ get_header(); ?>
 
     </article>
   </div>
-  <div id='right-sidebar' class='sidebar col-24 mt-2'>
+  <div id='main-sidebar' class='sidebar col-24 mt-2'>
     <?php dynamic_sidebar("main-sidebar"); ?>
   </div>
 </div>
