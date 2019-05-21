@@ -141,4 +141,51 @@ $(document).ready(function() {
     $('body.advert-template-default .adverts-contact-box').slideToggle('fast');
     $('button#adverts-send-message-button').hide('fast');
   });
+
+
+  /** Donate Page **/
+  (function() {
+    var nodes = document.getElementsByClassName('donate-form');
+    if (nodes.length === 0) {
+      return;
+    }
+    // Set the hidden amount input when selecting/entering an amount.
+    var $amountInput = $('.donate-form #amount-input');
+    $('.donate-form button.static-amount').each(function(i, el) {
+      var amount = $(this).attr('data-amount') + '.00';
+      $(this).click(function(ev) {
+        removeSuccessClass();
+        $(ev.target).removeClass("btn-secondary").addClass('btn-success');
+        $amountInput.val(amount);
+      });
+    });
+    $('#other-amount-input').change(function() {
+      $amountInput.val($(event.target).val());
+    });
+    $('#other-amount-input').focus(function(ev) {
+      removeSuccessClass();
+      $(ev.target).closest('button').addClass('btn-success').removeClass('btn-secondary');
+    });
+
+    // Set attribute & variation ID when selecting recurring donations.
+    var $recurringAttributeInput = $('#recurring-input');
+    var $variationInput = $('#variation-input');
+    $('#recurring-checkbox').change(function() {
+      if (event.target.checked) {
+        $recurringAttributeInput.val("recurring");
+        $variationInput.val("224363");
+      } else {
+        $recurringAttributeInput.val("once");
+        $variationInput.val("224364");
+      }
+    });
+
+    function removeSuccessClass() {
+      $('.donate-form button[type="button"]').each(function() {
+        $(this).removeClass("btn-success").addClass("btn-secondary");
+      })
+    }
+  })();
+  jQuery(document).ready(function($) {
+  });
 });
