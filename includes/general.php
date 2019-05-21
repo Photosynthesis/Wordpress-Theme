@@ -508,6 +508,7 @@ CSS;
       'orderby' => 'date',
       'order' => 'DESC',
       'category' => array('books'),
+      'status' => 'publish',
     ));
     $output =
       "<div id='home-new-arrivals' class='row'>" .
