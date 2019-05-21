@@ -534,7 +534,7 @@ CSS;
   }
 
   public static function render_upcoming_events() {
-    $events = tribe_get_events(array('posts_per_page' => 5));
+    $events = tribe_get_events(array('posts_per_page' => 4));
     $output =
       "<div id='home-upcoming-events' class='row'>" .
         "<div class='col-24'>" .
