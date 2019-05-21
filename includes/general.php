@@ -114,7 +114,6 @@ class ThemeGeneral
   public static function register_sidebars() {
     $sidebars = array(
       array('name' => 'Main', 'id' => 'main-sidebar'),
-      array('name' => 'WooCommerce Left', 'id' => 'wc-left'),
       array('name' => 'WooCommerce Right', 'id' => 'wc-right'),
     );
     foreach ($sidebars as $sidebar) {
@@ -229,32 +228,18 @@ CSS;
 
   /** Layout Functions **/
 
-  /* Return CSS Classes for Left Sidebars */
-  public static function left_sidebar_css_classes() {
-    return "order-3 order-md-1 col-24 col-sm-12 col-md-7 col-lg-5 col-xl-4 sidebar";
-  }
-
   /* Return CSS Classes for Right Sidebars */
   public static function right_sidebar_css_classes($sidebar='main') {
-    if ($sidebar == 'wc') {
-      return "order-2 col-24 col-sm-12 col-md-24 col-xl-4 sidebar";
-    } else {
-      return 'col-24 col-sm-7 col-lg-6 col-xl-5 sidebar';
-    }
+    return 'col-24 col-sm-7 col-lg-6 col-xl-5 sidebar';
   }
 
   /* Return CSS Classes for Center Column */
   public static function main_column_css_classes($sidebar='main') {
-    if ($sidebar == 'wc') {
-      return "order-1 order-md-2 col-24 col-md-17 col-lg-19 col-xl-16 center-column center-column-store";
-    } else {
-      return "col center-column";
-    }
+    return "col-24 col-sm-17 col-lg-18 col-xl-19 center-column";
   }
 
   /* Echo the Header & Opening Center Column Tag */
   public static function top($sidebar='main') {
-    $sidebar_class = ThemeGeneral::left_sidebar_css_classes();
     $center_class = ThemeGeneral::main_column_css_classes($sidebar);
     get_header();
     echo "\n<div class='row'>";
@@ -268,10 +253,6 @@ CSS;
     echo "</div>";
     $right_sidebar_class = ThemeGeneral::right_sidebar_css_classes($sidebar);
     if ($sidebar == 'wc') {
-      $left_sidebar_class = ThemeGeneral::left_sidebar_css_classes();
-      echo "\n<div id='left-sidebar' class='{$left_sidebar_class}'>\n";
-      dynamic_sidebar("{$sidebar}-left");
-      echo "\n</div>\n";
       echo "<div id='right-sidebar' class='{$right_sidebar_class}'>\n";
       dynamic_sidebar("{$sidebar}-right");
       echo "\n</div></div>\n";
