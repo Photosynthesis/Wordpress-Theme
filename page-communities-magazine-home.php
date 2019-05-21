@@ -14,6 +14,7 @@
     } ?>
     <div class='mt-3 entry-content'><?php the_content(); ?></div>
     <div class='mt-4'><?php
+      $backup = $post;
       $posts_query = new WP_Query(array(
         'category_name' => 'communities-articles',
         'post_type' => 'post',
@@ -24,7 +25,8 @@
           $posts_query->the_post();
           get_template_part('content', 'archive');
         }
-      } ?>
+      }
+      $post = $backup; ?>
     </div>
   </div>
 
