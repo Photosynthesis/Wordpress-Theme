@@ -20,6 +20,9 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-config" content="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon/browserconfig.xml?v=M4mloMGjlj">
     <meta name="theme-color" content="#ffffff">
+    <!-- Google Search Console -->
+    <meta name="google-site-verification" content="kAW6DYo8sJMSvIFYAS0T-_IlmYTeCDtk4QCjc6J0quM" />
+
     <!-- Global site tag (gtag.js) - Google Ads: 824163499 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-824163499"></script>
     <script>
