@@ -22,7 +22,6 @@ class SubMenu_Widget extends WP_Widget
     $post_name = $post->post_name;
     $post_type = $post->post_type;
     $menu_title = 'LEARN MORE';
-    error_log($post_name . ' ' . $post_type . "\n");
     if ($post_type === 'directory' || $post_name === 'directory') {
       // All Directory Posts
       $menu_slug = 'directory';
