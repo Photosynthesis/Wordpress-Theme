@@ -253,7 +253,7 @@ CSS;
     echo "</div>";
     $right_sidebar_class = ThemeGeneral::right_sidebar_css_classes($sidebar);
     if ($sidebar == 'wc') {
-      echo "<div id='right-sidebar' class='{$right_sidebar_class}'>\n";
+      echo "<div id='main-sidebar' class='{$right_sidebar_class}'>\n";
       dynamic_sidebar("{$sidebar}-right");
       echo "\n</div></div>\n";
     } else {
