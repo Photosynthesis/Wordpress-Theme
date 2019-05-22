@@ -38,9 +38,18 @@ defined( 'ABSPATH' ) || exit;
     foreach ( $fields as $key => $field ) {
       // FIC CUSTOM: Set Field Classes & Properly Space Address Line 2
       $field['class'][] = 'form-group row';
-      $field['label_class'][] = 'col-form-label col-sm-6';
       $field['input_class'][] = 'form-control';
+      if (isset($field['label_class'])) {
+        if (is_string($field['label_class'])) {
+          $field['label_class'] = array($field['label_class'], 'col-form-label col-sm-6');
+        } else {
+          $field['label_class'][] = 'col-form-label col-sm-6';
+        }
+      } else {
+        $field['label_class'] = array('col-form-label col-sm-6');
+      }
       if (strpos($key, 'address_2') !== FALSE) {
+        array_pop($field['label_class']);
         $field['input_class'][] = 'col-sm-18 ml-auto';
       }
       woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
@@ -70,7 +79,7 @@ defined( 'ABSPATH' ) || exit;
       <div class="create-account">
         <?php foreach ( $checkout->get_checkout_fields( 'account' ) as $key => $field ) :
           $field['class'][] = 'form-group row';
-          $field['label_class'][] = 'col-form-label col-sm-6';
+          $field['label_class'] = 'col-form-label col-sm-6';
           $field['input_class'][] = 'form-control'; ?>
           <?php woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
         <?php endforeach; ?>
