@@ -11,16 +11,11 @@
  * the readme will list any important changes.
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
- * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.6.0
+ * @version 3.5.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-  exit;
-}
-
-wc_print_notices(); ?>
+defined( 'ABSPATH' ) || exit; ?>
 
 <div class='card woocommerce-account'>
   <div class="row card-body">
@@ -33,7 +28,7 @@ wc_print_notices(); ?>
       do_action( 'woocommerce_account_navigation' ); ?>
     </div>
 
-    <div class='col-24 col-sm-18'>
+    <div class='col-24 col-sm-18 woocommerce-MyAccount-content'>
       <?php
         /**
         * My Account content.

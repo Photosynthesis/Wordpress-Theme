@@ -13,12 +13,11 @@
  * the readme will list any important changes.
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
- * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.3.0
+ * @version 3.5.0
  */
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+  exit;
 }
 
 do_action( 'woocommerce_before_mini_cart' ); ?>
@@ -43,10 +42,10 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
           <tr class="woocommerce-mini-cart-item <?php echo esc_attr( apply_filters( 'woocommerce_mini_cart_item_class', 'mini_cart_item', $cart_item, $cart_item_key ) ); ?>">
             <td class="align-middle text-center mini-cart-image-cell">
               <?php if ( ! $_product->is_visible() ) : ?>
-                <?php echo str_replace( array( 'http:', 'https:' ), '', $thumbnail ); ?>
+                <?php echo  $thumbnail; ?>
               <?php else : ?>
                 <a href="<?php echo esc_url( $product_permalink ); ?>">
-                  <?php echo str_replace( array( 'http:', 'https:' ), '', $thumbnail ); ?>
+                  <?php echo $thumbnail; ?>
                 </a>
               <?php endif; ?>
             </td>
@@ -65,7 +64,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
             <td><strong>
               <?php
               echo apply_filters( 'woocommerce_cart_item_remove_link', sprintf(
-                '<a href="%s" class="text-danger remove remove_from_cart_button aria-label="%s" data-product_id="%s" data-cart_item_key="%s" data-product_sku="%s">&times;</a>',
+                '<a href="%s" class="remove remove_from_cart_button" aria-label="%s" data-product_id="%s" data-cart_item_key="%s" data-product_sku="%s">&times;</a>',
                 esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
                 __( 'Remove this item', 'woocommerce' ),
                 esc_attr( $product_id ),

@@ -11,9 +11,8 @@
  * the readme will list any important changes.
  *
  * @see       https://docs.woocommerce.com/document/template-structure/
- * @author    WooThemes
  * @package   WooCommerce/Templates
- * @version   3.3.0
+ * @version     3.6.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,38 +24,38 @@ if ( is_user_logged_in() ) {
 }
 
 ?>
-<form class="woocomerce-form woocommerce-form-login login" method="post" <?php if ( $hidden ) echo 'style="display:none;"'; ?>>
+<form class="woocommerce-form woocommerce-form-login login" method="post" <?php echo ( $hidden ) ? 'style="display:none;"' : ''; ?>>
   <div class='card mb-3'><div class='card-body'>
 
   <?php do_action( 'woocommerce_login_form_start' ); ?>
 
-  <?php if ( $message ) echo wpautop( wptexturize( $message ) ); ?>
+  <?php echo ( $message ) ? wpautop( wptexturize( $message ) ) : ''; // @codingStandardsIgnoreLine ?>
 
   <div class='row'>
     <div class="form-group col-12">
       <label for="username"><?php esc_html_e( 'Username or email', 'woocommerce' ); ?> <span class="text-danger required">*</span></label>
-      <input type="text" class="form-control input-text" name="username" id="username" />
+      <input type="text" class="form-control input-text" name="username" id="username" autocomplete="username" />
     </div>
     <div class="form-group col-12">
       <label for="password"><?php esc_html_e( 'Password', 'woocommerce' ); ?> <span class="text-danger required">*</span></label>
-      <input class="form-control input-text" type="password" name="password" id="password" />
+      <input class="form-control input-text" type="password" name="password" id="password" autocomplete="current-password" />
     </div>
   </div>
 
   <?php do_action( 'woocommerce_login_form' ); ?>
 
-  <?php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ); ?>
-  <div class='form-group'>
-    <button type="submit" class="mr-2 btn btn-primary button" name="login" value="<?php esc_attr_e( 'Login', 'woocommerce' ); ?>"><?php esc_html_e('Login', 'woocommerce'); ?></button>
-    <input type="hidden" name="redirect" value="<?php echo esc_url( $redirect ) ?>" />
     <div class='form-check d-inline'>
-      <label class="form-check-label woocommerce-form__label woocommerce-form__label-for-checkbox inline">
+      <label class="form-check-label woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
         <input class="form-check-input woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever" /> <span><?php esc_html_e( 'Remember me', 'woocommerce' ); ?></span>
       </label>
     </div>
+    <?php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ); ?>
+  <div class='form-group'>
+    <input type="hidden" name="redirect" value="<?php echo esc_url( $redirect ) ?>" />
+    <button type="submit" class="mr-2 btn btn-primary woocommerce-button button woocommerce-form-login__submit" name="login" value="<?php esc_attr_e( 'Login', 'woocommerce' ); ?>"><?php esc_html_e( 'Login', 'woocommerce' ); ?></button>
   </div>
   <div class="lost_password">
-    <a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( 'Forgot your password?', 'woocommerce' ); ?></a>
+    <a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( 'Lost your password?', 'woocommerce' ); ?></a>
   </div>
 
   <?php do_action( 'woocommerce_login_form_end' ); ?>

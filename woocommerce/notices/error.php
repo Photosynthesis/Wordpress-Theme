@@ -10,10 +10,9 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see       https://docs.woocommerce.com/document/template-structure/
- * @author    WooThemes
- * @package   WooCommerce/Templates
- * @version   3.3.0
+ * @see         https://docs.woocommerce.com/document/template-structure/
+ * @package     WooCommerce/Templates
+ * @version     3.5.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,13 +24,15 @@ if ( ! $messages ) {
 }
 
 ?>
-<div class="alert alert-danger woocommerce-error clearfix" role='alert'>
+<div class="alert alert-danger clearfix woocommerce-error" role='alert'>
 <?php
-  if (sizeof($messages) > 1) { echo '<ul>'; }
+  if (sizeof($messages) > 1) {
+    echo '<ul>';
     foreach ( $messages as $message ) {
-      if (sizeof($messages) > 1) { echo '<li>'; }
-        echo str_replace('class="button', 'class="btn btn-secondary float-right ml-2', wp_kses_post( $message ));
-      if (sizeof($messages) > 1) { echo '</li>'; }
+      echo '<li>';
+      echo str_replace('class="button', 'class="btn btn-secondary float-right ml-2',wc_kses_notice( $message ));
+      echo '</li>';
     }
-  if (sizeof($messages) > 1) { echo '</ul>'; } ?>
+    echo '</ul>';
+  } ?>
 </div>

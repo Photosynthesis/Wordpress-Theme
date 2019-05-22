@@ -11,26 +11,21 @@
  * the readme will list any important changes.
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
- * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.0.9
+ * @version 3.6.0
+ * @global WC_Checkout $checkout
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-  exit; // Exit if accessed directly
-}
-
-/** @global WC_Checkout $checkout */
-
+defined( 'ABSPATH' ) || exit;
 ?>
 <div class="woocommerce-billing-fields">
   <?php if ( wc_ship_to_billing_address_only() && WC()->cart->needs_shipping() ) : ?>
 
-    <h3><?php _e( 'Billing &amp; Shipping', 'woocommerce' ); ?></h3>
+    <h3><?php esc_html_e( 'Billing &amp; Shipping', 'woocommerce' ); ?></h3>
 
   <?php else : ?>
 
-    <h3><?php _e( 'Billing details', 'woocommerce' ); ?></h3>
+    <h3><?php esc_html_e( 'Billing details', 'woocommerce' ); ?></h3>
 
   <?php endif; ?>
 
@@ -41,14 +36,12 @@ if ( ! defined( 'ABSPATH' ) ) {
     $fields = $checkout->get_checkout_fields( 'billing' );
 
     foreach ( $fields as $key => $field ) {
+      // FIC CUSTOM: Set Field Classes & Properly Space Address Line 2
       $field['class'][] = 'form-group row';
       $field['label_class'][] = 'col-form-label col-sm-6';
       $field['input_class'][] = 'form-control';
       if (strpos($key, 'address_2') !== FALSE) {
         $field['input_class'][] = 'col-sm-18 ml-auto';
-      }
-      if ( isset( $field['country_field'], $fields[ $field['country_field'] ] ) ) {
-        $field['country'] = $checkout->get_value( $field['country_field'] );
       }
       woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
     }
@@ -64,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
       <div class="form-group create-account">
         <label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox">
-          <input class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" id="createaccount" <?php checked( ( true === $checkout->get_value( 'createaccount' ) || ( true === apply_filters( 'woocommerce_create_account_default_checked', false ) ) ), true ) ?> type="checkbox" name="createaccount" value="1" /> <span><?php _e( 'Create an account?', 'woocommerce' ); ?></span>
+          <input class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" id="createaccount" <?php checked( ( true === $checkout->get_value( 'createaccount' ) || ( true === apply_filters( 'woocommerce_create_account_default_checked', false ) ) ), true ); ?> type="checkbox" name="createaccount" value="1" /> <span><?php esc_html_e( 'Create an account?', 'woocommerce' ); ?></span>
         </label>
       </div>
 
@@ -78,9 +71,10 @@ if ( ! defined( 'ABSPATH' ) ) {
         <?php foreach ( $checkout->get_checkout_fields( 'account' ) as $key => $field ) :
           $field['class'][] = 'form-group row';
           $field['label_class'][] = 'col-form-label col-sm-6';
-          $field['input_class'][] = 'form-control';
-          woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
+          $field['input_class'][] = 'form-control'; ?>
+          <?php woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
         <?php endforeach; ?>
+        <div class="clear"></div>
       </div>
 
     <?php endif; ?>

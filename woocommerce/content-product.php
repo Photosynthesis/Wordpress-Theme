@@ -12,7 +12,7 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce/Templates
- * @version 3.4.0
+ * @version 3.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -29,7 +29,7 @@ if ($product->is_on_sale()) {
   $card_classes .= ' card-outline-primary';
 }
 ?>
-<li <?php wc_product_class('text-center col-12 col-sm-8 col-md-6 col-xl-6 mb-4'); ?>>
+<li <?php wc_product_class('text-center col-12 col-sm-8 col-md-6 col-xl-6 mb-4', $product); ?>>
   <a href='<?php the_permalink(); ?>'>
     <div class='<?php echo $card_classes; ?>'>
       <?php woocommerce_show_product_loop_sale_flash();

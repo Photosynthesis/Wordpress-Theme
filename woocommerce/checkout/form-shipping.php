@@ -11,22 +11,19 @@
  * the readme will list any important changes.
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
- * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.0.9
+ * @version 3.6.0
+ * @global WC_Checkout $checkout
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-  exit; // Exit if accessed directly
-}
-
+defined( 'ABSPATH' ) || exit;
 ?>
 <div class="woocommerce-shipping-fields">
   <?php if ( true === WC()->cart->needs_shipping_address() ) : ?>
 
     <h3 id="ship-to-different-address">
       <label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox mb-0">
-        <input id="ship-to-different-address-checkbox" class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" <?php checked( apply_filters( 'woocommerce_ship_to_different_address_checked', 'shipping' === get_option( 'woocommerce_ship_to_destination' ) ? 1 : 0 ), 1 ); ?> type="checkbox" name="ship_to_different_address" value="1" /> <span><?php _e( 'Ship to a different address?', 'woocommerce' ); ?></span>
+        <input id="ship-to-different-address-checkbox" class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" <?php checked( apply_filters( 'woocommerce_ship_to_different_address_checked', 'shipping' === get_option( 'woocommerce_ship_to_destination' ) ? 1 : 0 ), 1 ); ?> type="checkbox" name="ship_to_different_address" value="1" /> <span><?php esc_html_e( 'Ship to a different address?', 'woocommerce' ); ?></span>
       </label>
     </h3>
 
@@ -35,20 +32,20 @@ if ( ! defined( 'ABSPATH' ) ) {
       <?php do_action( 'woocommerce_before_checkout_shipping_form', $checkout ); ?>
 
       <div class="woocommerce-shipping-fields__field-wrapper">
-          <?php
-          $fields = $checkout->get_checkout_fields( 'shipping' );
-          foreach ( $fields as $key => $field ) {
-            $field['class'][] = 'form-group row';
-            $field['label_class'][] = 'col-form-label col-sm-6';
-            $field['input_class'][] = 'form-control';
-            if (strpos($key, 'address_2') !== FALSE) {
-              $field['input_class'][] = 'col-sm-18 ml-auto';
-            }
-            if ( isset( $field['country_field'], $fields[ $field['country_field'] ] ) ) {
-              $field['country'] = $checkout->get_value( $field['country_field'] );
-            }
-            woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
-          } ?>
+        <?php
+        $fields = $checkout->get_checkout_fields( 'shipping' );
+
+        foreach ( $fields as $key => $field ) {
+          // FIC CUSTOM: Set form classes & properly size the Address Line 2
+          $field['class'][] = 'form-group row';
+          $field['label_class'][] = 'col-form-label col-sm-6';
+          $field['input_class'][] = 'form-control';
+          if (strpos($key, 'address_2') !== FALSE) {
+            $field['input_class'][] = 'col-sm-18 ml-auto';
+          }
+          woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
+        }
+        ?>
       </div>
 
       <?php do_action( 'woocommerce_after_checkout_shipping_form', $checkout ); ?>
@@ -64,16 +61,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <?php if ( ! WC()->cart->needs_shipping() || wc_ship_to_billing_address_only() ) : ?>
 
-      <h3><?php _e( 'Additional information', 'woocommerce' ); ?></h3>
+      <h3><?php esc_html_e( 'Additional information', 'woocommerce' ); ?></h3>
 
     <?php endif; ?>
 
     <div class="woocommerce-additional-fields__field-wrapper">
-      <?php foreach ( $checkout->get_checkout_fields( 'order' ) as $key => $field ) :
+      <?php foreach ( $checkout->get_checkout_fields( 'order' ) as $key => $field ) : ?>
+        <?
+        // FIC CUSTOM: Set Form Classes
         $field['class'][] = 'form-group row';
         $field['label_class'][] = 'col-form-label col-sm-6';
-        $field['input_class'][] = 'form-control';
-        woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
+        $field['input_class'][] = 'form-control'; ?>
+        <?php woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
       <?php endforeach; ?>
     </div>
 
