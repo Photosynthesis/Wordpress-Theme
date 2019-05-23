@@ -24,15 +24,12 @@ if ( ! $messages ) {
 }
 
 ?>
-<div class="alert alert-danger clearfix woocommerce-error" role='alert'>
-<?php
-  if (sizeof($messages) > 1) {
-    echo '<ul>';
-    foreach ( $messages as $message ) {
-      echo '<li>';
-      echo str_replace('class="button', 'class="btn btn-secondary float-right ml-2',wc_kses_notice( $message ));
-      echo '</li>';
-    }
-    echo '</ul>';
-  } ?>
-</div>
+<div class="alert alert-danger clearfix woocommerce-error" role='alert'><ul>
+  <?php foreach ( $messages as $message ) : ?>
+    <li>
+      <?php
+      echo str_replace('class="button', 'class="btn btn-secondary float-right ml-2', wc_kses_notice( $message ));
+      ?>
+    </li>
+  <?php endforeach; ?>
+</ul></div>
