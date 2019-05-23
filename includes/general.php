@@ -615,7 +615,7 @@ CSS;
           "<input type='text' class='form-control' name='search' placeholder=\"Try searching for 'California' or 'Cohousing'\" />" .
           "<input type='submit' class='btn btn-primary btn-sm' value='SEARCH' />" .
         "</form>" .
-        "<a href='/directory/advanced-search/' class='btn btn-sm btn-transparent'>ADVANCED SEARCH</a>" .
+        "<a href='/directory/search/' class='btn btn-sm btn-transparent'>ADVANCED SEARCH</a>" .
       "</div>";
     $output .= "</div>";
     return $output;
