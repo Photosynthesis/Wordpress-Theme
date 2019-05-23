@@ -80,7 +80,7 @@ class SubMenu_Widget extends WP_Widget
         case "donate": case "contact-fic":
           $menu_slug = false;
           break;
-        case "wholesale":
+        case "wholesale": case "cart": case "checkout":
           $menu_slug = 'bookstore';
           $menu_title = 'BOOKSTORE';
           break;
