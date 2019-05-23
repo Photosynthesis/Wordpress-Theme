@@ -103,7 +103,7 @@ if ($banner_content !== "") { ?>
       </nav>
     </div>
     <!-- Buttons/Links -->
-    <div class="col col-lg-6 text-right d-none d-sm-block">
+    <div class="col col-lg-7 text-right d-none d-sm-block">
       <div>
         <span class='muted-meta'>New to ic.org?</span> <a class='meta' href='/start/'>Start here.</a>
       </div>
@@ -116,6 +116,7 @@ if ($banner_content !== "") { ?>
             echo '<a href="' . wp_login_url(get_permalink()) . '">Log In</a>';
           } ?>
         </div>
+        <a class="btn btn-sm btn-light ml-2" href='/communities-classifieds/place-ad'>ADS</a>
         <a class="btn btn-sm btn-light mx-2" href='/communities-bookstore/'>SHOP</a>
         <a class="btn btn-sm btn-primary donate-button" href='/donate/'>DONATE</a>
       </div>
