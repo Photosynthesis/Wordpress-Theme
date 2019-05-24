@@ -3,7 +3,7 @@
 
   <!-- Footer Support -->
   <div id='footer-support'><div class='container'><div class='row'>
-    <div class='col-md-14'>
+    <div class='col-sm-14'>
       <h3>Our work is made possible thanks to community lovers like you!</h3>
       <p>
         Donate to support a thriving communities movement and become a FIC
@@ -11,7 +11,7 @@
       </p>
       <a class='btn btn-primary' href='/donate/' target='_blank'>SUPPORT</a>
     </div>
-    <div class='col-md-8'>
+    <div class='col-sm-8'>
       <a href='/community-bookstore/product/fic-membership/'>
         <img src='/wp-content/themes/fic-theme/img/membership-badge.png?v=1' class='img-fluid' />
       </a>
@@ -21,7 +21,7 @@
 
   <!-- Footer Columns -->
   <div id='footer-columns'><div class='container'><div class='row'>
-    <div class='col-md-10 col-lg-8 left-column'>
+    <div class='col-sm-10 col-lg-8 left-column'>
       <img src='/wp-content/themes/fic-theme/img/logo-full-white.png' class='img-fluid' />
       <h5>OUR MISSION</h5>
       <p>
@@ -30,7 +30,7 @@
       </p>
       <a class='btn btn-primary' href='/the-fellowship-for-intentional-community/'>LEARN MORE</a>
     </div>
-    <div class='col-md-5 col-lg-4 middle-column'>
+    <div class='col-sm-5 col-lg-4 middle-column'>
       <h5>SITE PAGES</h5><?php
       $footer_links = array(
         array('title' => 'About', 'link' => '/about/'),
@@ -53,7 +53,7 @@
       echo '</ul>';
       ?>
     </div>
-    <div class='col-md-8 col-xl-6 right-column'>
+    <div class='col-sm-8 col-xl-6 right-column'>
       <h5>NEWSLETTER</h5>
       <p class='font-weight-normal'>Community movement news in your inbox!</p>
       <?php echo do_shortcode('[mailpoet_form id="2"]'); ?>

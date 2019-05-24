@@ -281,6 +281,11 @@ figure.wp-block-embed-youtube
   #header-buttons
     margin-top: 10px
     font-weight: bold
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    a.btn
+      padding: 0.2rem 0.5rem
   .google-search-div
     width: 60%
     margin-left: auto
@@ -292,7 +297,7 @@ figure.wp-block-embed-youtube
     /* Emphasize Top-Level Text & Reduce Size */
     #navbar-header > ul > li > a
       font-weight: bold
-      padding: 0.75rem 1rem
+      padding: 0.75rem
     /* Search Button */
     #nav-search-icon
       padding: 0 0.25rem
@@ -477,6 +482,10 @@ figure.wp-block-embed-youtube
     justify-content: space-between
     h3
       margin-top: 1rem
+    +media-breakpoint-only(xs)
+      padding: 5.125rem 3rem 5.375rem
+      div:first-child()
+        margin-bottom: 4rem
 
 #footer-columns
   color: $white
@@ -485,6 +494,10 @@ figure.wp-block-embed-youtube
   .row
     padding: 4rem 1.5rem
     justify-content: space-between
+    +media-breakpoint-only(xs)
+      > div
+        padding: 0 2rem
+        margin-bottom: 5rem
   h5
     color: $white
   .left-column
@@ -630,11 +643,14 @@ body.home
       text-shadow: 0 0 12px $black
       margin-top: 12rem
       margin-bottom: 3.75rem
+      text-align: center
     > div.search-container
       margin-bottom: 17rem
       display: flex
       flex-direction: column
-      width: 55%
+      width: 80%
+      @media (min-width: 1000px)
+        width: 55%
       @media (min-width: 1400px)
         width: 45%
       @media (min-width: 1750px)
@@ -988,6 +1004,8 @@ article#post-281687
   .row
     padding: 6rem 5rem 6.5rem
     justify-content: space-between
+    +media-breakpoint-only(xs)
+      padding: 6rem 1.5rem 6.5rem
     h2, h5
       color: $white
     h2
@@ -1000,6 +1018,8 @@ article#post-281687
         font-weight: 600
       a
         font-weight: bold
+      +media-breakpoint-down(sm)
+        margin-bottom: 2rem
     .right-column
       @extend %mailpoet-form
 
@@ -1018,6 +1038,10 @@ article#post-281687
     i
       font-size: 0.7rem
       margin-right: 0.2em
+    +media-breakpoint-only(xs)
+      flex-direction: column
+      a.btn
+        margin-left: 0
   .item-block
     a
       color: black
@@ -1032,6 +1056,10 @@ article#post-281687
       text-align: left
       margin-top: auto
       margin-bottom: auto
+    +media-breakpoint-down(sm)
+      margin-bottom: 1.5rem
+  +media-breakpoint-down(sm)
+    padding: 0
 
 /* Explore Communities section */
 #home-explore
@@ -1046,12 +1074,22 @@ article#post-281687
   h2
     font-size: 3rem
     margin-bottom: 0.1rem
+  +media-breakpoint-down(md)
+    padding: 10rem 1rem
+    background-position: left center
 
 /* 3-Column Video/Books/Magazine Section */
 .video-books-magazine
   padding: 0 2rem
   margin-top: 7rem
   margin-bottom: 7.375rem
+  > .wp-block-column
+    +media-breakpoint-down(md)
+      margin: 0 auto 3rem
+      &:last-child()
+        margin-bottom: 1rem
+    +media-breakpoint-only(md)
+      min-width: 80%
   .homepage-column-section
     height: 100%
     display: flex
@@ -1107,14 +1145,21 @@ article#post-281687
       display: flex
       justify-content: space-between
       margin-top: 1.25rem
+    +media-breakpoint-down(md)
+      margin-bottom: 3.75rem
   .secondary-story
     margin-bottom: 3.75rem
     h5 a
       color: $body-color
-    > div:last-of-type
-      padding-left: 0
     .tagline
       margin-bottom: 1.75rem
+    +media-breakpoint-only(xs)
+      padding: 0
+      img
+        margin-bottom: 1rem
+    +media-breakpoint-up(sm)
+      > div:last-of-type
+        padding-left: 0
   .tagline, .author
     font-size: 0.95rem
   .author
@@ -1134,6 +1179,9 @@ article#post-281687
     margin-bottom: 1rem
     a:hover
       text-decoration: none
+  +media-breakpoint-down(lg)
+    img
+      margin-bottom: 1rem
 
 
 
@@ -1205,6 +1253,8 @@ body.single-directory
     display: flex
     justify-content: space-between
     margin-bottom: 1rem
+    +media-breakpoint-only(xs)
+      flex-direction: column
     h3
       margin-bottom: 0
   img

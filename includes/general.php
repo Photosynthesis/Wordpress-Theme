@@ -511,7 +511,7 @@ CSS;
       'status' => 'publish',
     ));
     $output =
-      "<div id='home-new-arrivals' class='row'>" .
+      "<div id='home-new-arrivals' class='row justify-content-md-center'>" .
         "<div class='col-24'>" .
           "<h5 class='clearfix'>" .
             "<a href='/community-bookstore/category/recently-added/'>NEW BOOKS</a>" .
@@ -526,7 +526,7 @@ CSS;
         'wide-thumbnail', array('class' => 'img-fluid rounded-lg')
       );
       $link = $product->get_permalink();
-      $output .= "<div class='col-6 item-block pop-image'><a href='{$link}'>";
+      $output .= "<div class='col-sm-12 col-md-8 col-lg-6 item-block pop-image'><a href='{$link}'>";
       $output .= $image . "<div>{$name}</div>";
       $output .= "</a></div>";
     }
@@ -537,7 +537,7 @@ CSS;
   public static function render_upcoming_events() {
     $events = tribe_get_events(array('posts_per_page' => 4));
     $output =
-      "<div id='home-upcoming-events' class='row'>" .
+      "<div id='home-upcoming-events' class='row justify-content-md-center'>" .
         "<div class='col-24'>" .
           "<h5 class='clearfix'>" .
             "<a href='/events/'>UPCOMING EVENTS</a>" .
@@ -552,7 +552,7 @@ CSS;
         $post->ID, 'wide-thumbnail', array('class' => 'img-fluid rounded-lg')
       );
       $link = get_permalink($post->ID);
-      $output .= "<div class='col-6 item-block pop-image'><a href='{$link}'>";
+      $output .= "<div class='col-sm-12 col-md-8 col-lg-6 item-block pop-image'><a href='{$link}'>";
       $output .= $image . "<div>{$name}</div>";
       $output .= "</a></div>";
     }
@@ -573,10 +573,10 @@ CSS;
       'menu_order' => 1,    // featured ads
       'orderby' => array('date' => 'desc'),
     ));
-    $container_classes = $a['full_width'] ? 'container-fluid full-width' : 'row';
+    $container_classes = $a['full_width'] ? 'container-fluid full-width' : 'row justify-content-md-center';
     $output =
       "<div id='home-community-offers' class='{$container_classes}'>" .
-        ($a['full_width'] ? "<div class='container'><div class='row'>" : '') .
+        ($a['full_width'] ? "<div class='container'><div class='row justify-content-md-center'>" : '') .
         "<div class='col-24'>" .
           "<h5 class='clearfix'><a href='/community-classifieds/'>COMMUNITY OFFERS</a>" .
             "<a href='/community-classifieds/place-ad/' class='btn btn-sm btn-primary'>" .
@@ -591,7 +591,7 @@ CSS;
         $image_post->ID, 'wide-thumbnail', false, array('class' => 'img-fluid rounded-lg')
       );
       $link = get_permalink($post->ID);
-      $output .= "<div class='col-6 item-block pop-image' data-item='{$post->ID}'><a href='{$link}'>";
+      $output .= "<div class='col-sm-12 col-md-8 col-lg-6 item-block pop-image' data-item='{$post->ID}'><a href='{$link}'>";
       $output .= $image . "<div>{$name}</div>";
       $output .= "</a></div>";
     }
@@ -634,11 +634,11 @@ CSS;
 <div id='get-involved-block' class='container-fluid full-width'>
   <div class='container'>
     <div class='row'>
-      <div class='col-15 left-column'>
+      <div class='col-md-15 left-column'>
         <h2 class='h1'>{$a['header']}</h2>
         <p>{$content}</p>
       </div>
-      <div class='col-8 right-column'>
+      <div class='col-md-8 right-column'>
         <h5>{$a['news_header']}</h5>
         <p>{$a['news_text']}</p>
         {$mailpoet_form}
