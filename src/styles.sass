@@ -955,6 +955,9 @@ article#post-281687
       margin-left: 1.25rem
       p:last-of-type
         margin-bottom: 0
+    +media-breakpoint-only(sm)
+      .wp-block-column
+        flex-basis: 100% !important
 
   /* Why Interested Section */
   h4.why-interested
@@ -969,6 +972,9 @@ article#post-281687
           margin-left: 0
         &:last-child
           margin-right: 0
+      +media-breakpoint-down(sm)
+        margin: 0 auto 2rem
+        flex-basis: 75%
 
   /* Bump Top Margin of Get Involved / Newsletter Section */
   #get-involved-block
