@@ -62,13 +62,13 @@ if ($banner_content !== "") { ?>
   <!-- Header -->
   <div id="site-header" class="row">
     <!-- Logo -->
-    <div class="col col-md-6 col-xl-5 text-center text-sm-left d-flex justify-content-center align-items-center">
+    <div class="col col-md-6 col-lg-4 col-xl-5 text-center text-sm-left d-flex justify-content-center align-items-center">
       <a href="/">
         <img class='img-fluid' src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-full-color.png?v=1'; ?>" alt="FIC" />
       </a>
     </div>
     <!-- Nav Menu -->
-    <div id="nav-menu" class="col pl-0 d-flex">
+    <div id="nav-menu" class="col col-lg-11 col-xl-12 pl-0 d-flex">
       <nav class="navbar navbar-expand-md navbar-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
                 aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,7 +103,7 @@ if ($banner_content !== "") { ?>
       </nav>
     </div>
     <!-- Buttons/Links -->
-    <div class="col col-lg-7 text-right d-none d-sm-block">
+    <div class="col col-lg-8 col-xl-7 text-right d-none d-sm-block">
       <div>
         <span class='muted-meta'>New to ic.org?</span> <a class='meta' href='/start/'>Start here.</a>
       </div>
@@ -112,6 +112,7 @@ if ($banner_content !== "") { ?>
           if (is_user_logged_in()) {
             $current_user = wp_get_current_user();
             echo '<a href="' . wp_logout_url('/') . '">Log Out</a>';
+            echo '<a class="ml-2" href="/my-fic-account/"><i class="fa fa-2x fa-user"></i></a>';
           } else {
             echo '<a href="' . wp_login_url(get_permalink()) . '">Log In</a>';
           } ?>
