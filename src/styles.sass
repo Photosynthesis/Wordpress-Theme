@@ -1145,9 +1145,11 @@ article#post-281687
 /* Communities Stories */
 .stories-section
   background-color: $gray-bg
-  padding-top: 7.75rem !important
-  padding-bottom: 6rem !important
+  padding: 7.75rem 4rem 6rem !important
   margin-bottom: 8.5rem
+  +media-breakpoint-down(sm)
+    padding-left: 2.5rem
+    padding-right: 2.5rem
   h2
     display: flex
     justify-content: space-between
