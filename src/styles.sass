@@ -695,7 +695,6 @@ body.page-id-17
      * the border of the entire input group when the input element is focused.
      */
     form#directory-search
-      width: 83%
       margin: 0 auto 2.5rem
       div.input-group
         margin-bottom: 0.6875rem
@@ -718,6 +717,14 @@ body.page-id-17
           border-left-color: $input-focus-border-color
         input:focus ~ .ig-right
           border-right-color: $input-focus-border-color
+      > div.small
+        +media-breakpoint-only(xs)
+          div
+            display: block !important
+          span
+            display: none
+      +media-breakpoint-up(md)
+        width: 83%
 
     /* Decrease the width of the Map & center it */
     .mapp-layout
@@ -727,6 +734,13 @@ body.page-id-17
     /* Space out the various sections & their headings */
     .directory-header-links
       margin-bottom: 3.875rem
+      span
+        margin: 0 0.25rem
+      +media-breakpoint-only(xs)
+        a
+          display: block
+        span
+          display: none
     .home-featured-communities
       margin-top: 0
       margin-bottom: 3.125rem
@@ -780,6 +794,9 @@ body.page-id-17
           margin: auto
         img
           @extend .img-fluid
+        +media-breakpoint-down(sm)
+          flex-basis: 80%
+          margin: 0 auto 3rem
       .wp-block-column:last-of-type
         display: flex
         flex-direction: column
@@ -794,6 +811,13 @@ body.page-id-17
           margin-bottom: 0
         ul + p
           margin-bottom: auto
+        +media-breakpoint-down(sm)
+          flex-basis: 100%
+          margin-left: auto
+          margin-right: auto
+      +media-breakpoint-only(xs)
+        width: 110%
+        margin-left: -5%
 
 
     .directory-sponsors
@@ -802,6 +826,8 @@ body.page-id-17
         margin-bottom: 0
         > div
           text-align: center
+        +media-breakpoint-down(sm)
+          margin: 0 auto
       /* Make the Directory Sponsors Banner Images Responsive */
       img
         @extend .img-fluid
@@ -1266,6 +1292,9 @@ body.single-directory
     opacity: 0.9
   a
     font-weight: bold
+  +media-breakpoint-only(xs)
+    > div
+      margin-bottom: 2rem
 
 
 /** Formidable Forms **/
