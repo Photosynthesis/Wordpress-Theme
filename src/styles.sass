@@ -998,6 +998,20 @@ article#post-281687
   .donate-form .card
     border: none
     background-color: transparent
+  .donate-form .btn-group
+    +media-breakpoint-down(md)
+      button
+        padding: 0.75rem 0.5rem
+      input[type="number"]
+        max-width: 8rem !important
+    +media-breakpoint-only(xs)
+      flex-direction: column
+      button:first-of-type
+        border-bottom-left-radius: 0
+        border-top-right-radius: $border-radius-lg
+      button:last-of-type
+        border-top-right-radius: 0
+        border-bottom-left-radius: $border-radius-lg
 
 
 
