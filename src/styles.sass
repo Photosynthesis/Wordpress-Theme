@@ -465,12 +465,16 @@ figure.wp-block-embed-youtube
   +media-breakpoint-up(sm)
     border-right: solid 1px darken($gray-100, 5%)
   /* Push Vertical Borders Out */
-  padding: 0 15px
+  padding: 0 2.25rem 0 15px
   +media-breakpoint-up(sm)
     /* Add Spacing between Nav & Content */
     margin-top: 0.25em
     /* Add Spacing between Vertical Borders & Footer */
     margin-bottom: 2em
+/* Push in the main content from the right on blog posts */
+body.single-post
+  article.post
+    padding-right: 1.5rem
 
 
 /* Footer Sections */
