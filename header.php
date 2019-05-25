@@ -62,19 +62,14 @@ if ($banner_content !== "") { ?>
   <!-- Header -->
   <div id="site-header" class="row">
     <!-- Logo -->
-    <div class="col col-md-6 col-lg-4 col-xl-5 text-center text-sm-left d-flex justify-content-center align-items-center">
+    <div class="col col-md-10 col-lg-4 col-xl-5 text-center text-sm-left d-flex justify-content-center align-items-center">
       <a href="/">
         <img class='img-fluid' src="<?php echo get_stylesheet_directory_uri() . '/img/logo-header-full-color.png?v=1'; ?>" alt="FIC" />
       </a>
     </div>
     <!-- Nav Menu -->
-    <div id="nav-menu" class="col col-lg-11 col-xl-12 pl-0 d-flex">
-      <nav class="navbar navbar-expand-md navbar-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header"
-                aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-label">MENU</span> <span class="navbar-toggler-icon"></span>
-        </button>
-
+    <div id="nav-menu" class="d-none d-lg-flex col-lg-11 col-xl-12 pl-0">
+      <nav class="navbar navbar-expand-lg navbar-light">
         <div class="collapse navbar-collapse" id="navbar-header">
           <?php
             wp_nav_menu( array(
@@ -103,14 +98,13 @@ if ($banner_content !== "") { ?>
       </nav>
     </div>
     <!-- Buttons/Links -->
-    <div class="col col-lg-8 col-xl-7 text-right d-none d-sm-block">
-      <div>
+    <div class="col-auto col-sm col-lg-8 col-xl-7 text-right">
+      <div class="d-none d-sm-block">
         <span class='muted-meta'>New to ic.org?</span> <a class='meta' href='/start/'>Start here.</a>
       </div>
-      <div id="header-buttons">
+      <div id="header-buttons" class="d-none d-sm-block">
         <div class='d-inline-block meta'><?php
           if (is_user_logged_in()) {
-            $current_user = wp_get_current_user();
             echo '<a href="' . wp_logout_url('/') . '">Log Out</a>';
             echo '<a class="ml-2" href="/my-fic-account/"><i class="fa fa-2x fa-user"></i></a>';
           } else {
@@ -121,5 +115,57 @@ if ($banner_content !== "") { ?>
         <a class="btn btn-sm btn-light mx-2" href='/communities-bookstore/'>SHOP</a>
         <a class="btn btn-sm btn-primary donate-button" href='/donate/'>DONATE</a>
       </div>
+      <!-- Mobile Menu Button -->
+      <div class='navbar navbar-light d-lg-none mt-2'>
+        <button class="ml-auto navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-navbar-header"
+                aria-controls="navbar-header" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-label">MENU</span> <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile Nav Menu -->
+    <div id="nav-menu" class="col-24 d-lg-none">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="collapse navbar-collapse" id="mobile-navbar-header">
+          <?php
+            wp_nav_menu( array(
+              'menu'              => 'Primary Menu',
+              'theme_location'    => 'primary',
+              'depth'             => 2,
+              'container'         => '',
+              'container_class'   => '',
+              'container_id'      => '',
+              'menu_class'        => 'navbar-nav',
+              'fallback_cb'       => 'WP_Bootstrap_Navwalker::fallback',
+              'walker'            => new WP_Bootstrap_Navwalker())
+            );
+          ?>
+          <ul class='navbar-nav d-sm-none'>
+            <?php
+              $links = array(
+                array('title' => 'CLASSIFIEDS', 'link' => '/communities-classifieds/place-ad/'),
+                array('title' => 'SHOP', 'link' => '/communities-bookstore/'),
+                array('title' => 'DONATE', 'link' => '/donate/'),
+              );
+              if (is_user_logged_in()) {
+                $links[] = array('title' => 'MY ACCOUNT', 'link' => '/my-fic-account/');
+                $links[] = array('title' => 'LOG OUT', 'link' => wp_logout_url());
+              } else {
+                $links[] = array('title' => 'LOG IN', 'link' => wp_login_url('/my-fic-account/'));
+              }
+              foreach ($links as $link) {
+                echo '<li class="nav-item d-md-none">';
+                echo "<a href='{$link['link']}' class='nav-link'>{$link['title']}</a>";
+                echo '</li>';
+              }
+            ?>
+          </ul>
+          <ul class='navbar-nav'>
+            <li class='nav-item'>
+              <gcse:search></gcse:search>
+            </li>
+          </ul>
+        </div>
+      </nav>
     </div>
   </div>
