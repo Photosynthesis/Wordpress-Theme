@@ -114,7 +114,7 @@ if ($banner_content !== "") { ?>
             echo '<a href="' . wp_logout_url('/') . '">Log Out</a>';
             echo '<a class="ml-2" href="/my-fic-account/"><i class="fa fa-2x fa-user"></i></a>';
           } else {
-            echo '<a href="' . wp_login_url(get_permalink()) . '">Log In</a>';
+            echo '<a href="' . wp_login_url('/my-fic-account/') . '">Log In</a>';
           } ?>
         </div>
         <a class="btn btn-sm btn-light ml-2" href='/communities-classifieds/place-ad'>ADS</a>
