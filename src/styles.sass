@@ -1152,14 +1152,18 @@ article#post-281687
   padding: 7.75rem 4rem 6rem !important
   margin-bottom: 8.5rem
   +media-breakpoint-down(sm)
-    padding-left: 2.5rem
-    padding-right: 2.5rem
+    padding-left: 2.5rem !important
+    padding-right: 2.5rem !important
   h2
     display: flex
     justify-content: space-between
     align-items: center
     margin-bottom: 0
     padding-bottom: 2rem
+    +media-breakpoint-only(xs)
+      flex-direction: column
+      .btn
+        width: 100%
   .container > .row
     margin-bottom: 3rem
   .row
