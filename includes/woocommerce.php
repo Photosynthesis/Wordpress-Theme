@@ -649,7 +649,7 @@ HTML;
 
   /* Hide the Products on the Shop's Homepage */
   public static function hide_products_on_homepage($query) {
-    if (is_shop()) {
+    if (is_shop() && !is_search()) {
       $tax_query = (array) $query->get('tax_query');
       $tax_query[] = array(
         'taxonomy' => 'product_cat',
