@@ -1005,7 +1005,11 @@ pagination route communityPagination =
             lastPage > 8
 
         firstNumbers =
-            if splitSections && not showMiddle then
+            if splitSections && not showMiddle && currentPage == 4 then
+                List.range 1 5
+                    |> List.map pageLink
+
+            else if splitSections && not showMiddle then
                 List.range 1 4
                     |> List.map pageLink
 
@@ -1026,7 +1030,11 @@ pagination route communityPagination =
                 []
 
         endNumbers =
-            if splitSections && not showMiddle then
+            if splitSections && not showMiddle && currentPage == lastPage - 3 then
+                List.range (lastPage - 4) lastPage
+                    |> List.map pageLink
+
+            else if splitSections && not showMiddle then
                 List.range (lastPage - 3) lastPage
                     |> List.map pageLink
 
