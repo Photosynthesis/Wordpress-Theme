@@ -291,6 +291,16 @@ CSS;
     return $can_use;
   }
 
+  /* Ignore stickiness of posts in the main blog loop. */
+  public static function unstick_posts($query) {
+    if (!$query->is_main_query()) {
+      return;
+    }
+    if (is_home()) {
+      $query->set('ignore_sticky_posts', 1);
+    }
+  }
+
   /* Generate the Recent Posts Section of the Home Page */
   public static function recent_posts() {
     $pinned_posts = wp_get_recent_posts(array(
@@ -810,6 +820,7 @@ add_filter('user_can_richedit', array('ThemeGeneral', 'remove_richtext_editor'))
 add_shortcode('homepage_recent_posts_widget', array('ThemeGeneral', 'recent_posts'));
 add_filter('category_description', 'do_shortcode');
 add_filter('upload_mimes', array('ThemeGeneral', 'allow_ebook_mimes'));
+add_action('pre_get_posts', array('ThemeGeneral', 'unstick_posts'));
 add_shortcode('elm_board_staff', array('ThemeGeneral', 'render_board_and_staff'));
 add_shortcode('fic_partners', array('ThemeGeneral', 'render_partners_block'));
 add_shortcode('fic_new_arrivals', array('ThemeGeneral', 'render_new_arrivals'));
