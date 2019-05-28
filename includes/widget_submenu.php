@@ -107,11 +107,32 @@ class SubMenu_Widget extends WP_Widget
   }
 
   private static function render_blog_menu() {
+    echo "<div class='widget tabbed-submenu-wrapper'>";
+
+    // Render the tabs
+    echo <<<HTML
+<ul class="nav nav-tabs" role="tablist">
+  <li class='nav-item'>
+    <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#popular-posts" aria-controls="popular-posts" aria-selected="true">
+      POPULAR POSTS
+    </a>
+  </li>
+  <li class='nav-item'>
+    <a class='nav-link' id='categories-tab' data-toggle='tab' href='#categories' aria-controls='categories' aria-selected='false'>
+      CATEGORIES
+    </a>
+  </li>
+</ul>
+HTML;
+
+    echo "<div class='tab-content' id='submenuContent'>";
+
+    // Render the posts
+    echo "<div class='tab-pane fade show active' id='popular-posts' role='tabpanel' aria-labelledby='posts-tab'>";
     $sticky_posts = new WP_Query(array(
       'post__in' => get_option('sticky_posts'),
     ));
     if (sizeof($sticky_posts) < 1) { return; }
-    echo "<div class='widget blogmenu-wrapper'>";
     foreach ($sticky_posts->posts as $post) {
       $name = $post->post_title;
       $categories = get_the_category($post->ID);
@@ -136,6 +157,13 @@ class SubMenu_Widget extends WP_Widget
 HTML;
     }
     echo "</div>";
+
+    // Render the categories
+    echo "<div class='tab-pane fade' id='categories' role='tabpanel' aria-labelledby='categories-tab'>";
+      wp_nav_menu(array('theme_location' => 'categories', 'depth' => 1));
+    echo "</div>";
+
+    echo "</div></div>";
   }
 }
 

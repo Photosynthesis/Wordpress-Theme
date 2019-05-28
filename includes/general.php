@@ -137,6 +137,7 @@ class ThemeGeneral
       'cmag' => __( 'CMag Sub-Menu', 'FIC Theme' ),
       'offers' => __( 'Offers Sub-Menu', 'FIC Theme' ),
       'bookstore' => __( 'Bookstore Sub-Menu', 'FIC Theme' ),
+      'categories' => __( 'Categories Sub-Menu', 'FIC Theme' ),
     ));
   }
 
