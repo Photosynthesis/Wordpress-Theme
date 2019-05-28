@@ -990,31 +990,35 @@ article#post-281687
 
 /** Support / Donate Page **/
 #post-255787
-  br
+  .membership
+    background-color: $gray-bg
+    padding-top: 3.125rem
+    padding-bottom: 4.375rem
+    margin-top: 5.5rem
+    margin-bottom: 6.75rem
+    img
+      margin-bottom: 3.75rem
+    p
+      margin-bottom: 3.5rem
+    .products.row
+      li
+        max-width: 100%
+        flex-basis: 50%
+  .giving-quote
+    margin-top: 7.125rem
+  .better-world-block
+    margin-top: 3.75rem
+    h2
+      margin-bottom: 1.75rem
+  .full-width-image
+    margin-bottom: 2.25rem
+  .ways-to-give
+    margin-bottom: 6.25rem
+  h2.ways-to-give
+    margin-bottom: 3.75rem
+  .donate-form
+    br
       display: none
-  .bg-success
-    background-color: $sage !important
-  .bg-info
-    background-color: lighten($blue, 40%) !important
-  .bg-primary
-    background-color: lighten($teal, 20%) !important
-  .donate-form .card
-    border: none
-    background-color: transparent
-  .donate-form .btn-group
-    +media-breakpoint-down(md)
-      button
-        padding: 0.75rem 0.5rem
-      input[type="number"]
-        max-width: 8rem !important
-    +media-breakpoint-only(xs)
-      flex-direction: column
-      button:first-of-type
-        border-bottom-left-radius: 0
-        border-top-right-radius: $border-radius-lg
-      button:last-of-type
-        border-top-right-radius: 0
-        border-bottom-left-radius: $border-radius-lg
 
 
 
