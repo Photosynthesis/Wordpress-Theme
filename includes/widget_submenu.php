@@ -114,7 +114,7 @@ class SubMenu_Widget extends WP_Widget
 <ul class="nav nav-tabs" role="tablist">
   <li class='nav-item'>
     <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#popular-posts" aria-controls="popular-posts" aria-selected="true">
-      POPULAR POSTS
+      POSTS
     </a>
   </li>
   <li class='nav-item'>
