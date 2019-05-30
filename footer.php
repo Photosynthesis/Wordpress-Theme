@@ -2,6 +2,7 @@
   <div class='container-fluid full-width'>
 
   <!-- Footer Support -->
+  <?php if ($post->post_name !== 'donate') { ?>
   <div id='footer-support'><div class='container'><div class='row'>
     <div class='col-sm-14'>
       <h3>Our work is made possible thanks to community lovers like you!</h3>
@@ -17,6 +18,7 @@
       </a>
     </div>
   </div></div></div>
+  <?php } ?>
 
 
   <!-- Footer Columns -->
