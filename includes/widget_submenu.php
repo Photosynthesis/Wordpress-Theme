@@ -64,7 +64,7 @@ class SubMenu_Widget extends WP_Widget
       switch ($post->post_name) {
         case "the-fellowship-for-intentional-community": case "board-staff":
         case "kozeny-communitarian-award": case "policies": case "contact-fic":
-        case "donate":
+        case "donate": case "about":
           $menu_slug = 'about';
           break;
         case "communities-magazine-home": case "contact-communities-magazine":
