@@ -21,7 +21,6 @@ class SubMenu_Widget extends WP_Widget
     $post = get_post();
     $post_name = $post->post_name;
     $post_type = $post->post_type;
-    $menu_title = 'LEARN MORE';
     if ($post_type === 'directory' || $post_name === 'directory') {
       // All Directory Posts
       $menu_slug = 'directory';
@@ -44,7 +43,6 @@ class SubMenu_Widget extends WP_Widget
         $menu_slug = 'directory';
       } else {
         $menu_slug = 'bookstore';
-        $menu_title = 'BOOKSTORE';
       }
     } else if ($post_type === 'tribe_events') {
       // Events Pages
@@ -82,7 +80,6 @@ class SubMenu_Widget extends WP_Widget
           break;
         case "wholesale": case "cart": case "checkout":
           $menu_slug = 'bookstore';
-          $menu_title = 'BOOKSTORE';
           break;
         default:
           $menu_slug = '';
@@ -90,14 +87,49 @@ class SubMenu_Widget extends WP_Widget
     }
 
     if ($menu_slug !== '' && $menu_slug !== false) {
-      echo '<div class="submenu-wrapper widget">';
-      echo "<h5>{$menu_title}</h5>";
-      wp_nav_menu(array(
-        'container_class' => 'submenu-widget',
-        'theme_location' => $menu_slug,
-        'depth' => 1,
-      ));
-      echo '</div>';
+      if ($menu_slug == 'directory') {
+        $tabs = array(
+          array('title' => 'EXPLORE', 'id' => 'explore', 'href' => 'explore'),
+          array('title' => 'COMMUNITY TYPES', 'id' => 'types', 'href' => 'types'),
+        );
+        $panes = array(
+          array('id' => 'explore', 'tab' => 'explore', 'menu' => 'directory'),
+          array('id' => 'types', 'tab' => 'types', 'menu' => 'directory-types'),
+        );
+
+        self::render_tabbed_menus($tabs, $panes);
+      } else if ($menu_slug == 'bookstore') {
+        $tabs = array(
+          array('title' => 'BOOKSTORE', 'id' => 'bookstore', 'href' => 'bookstore'),
+          array('title' => 'TOPICS', 'id' => 'topics', 'href' => 'topics'),
+        );
+        $panes = array(
+          array('id' => 'bookstore', 'tab' => 'bookstore', 'menu' => 'bookstore'),
+          array('id' => 'topics', 'tab' => 'topics', 'menu' => 'bookstore-topics'),
+
+        );
+        self::render_tabbed_menus($tabs, $panes);
+      } else if ($menu_slug == 'cmag') {
+        $tabs = array(
+          array('title' => 'LEARN MORE', 'id' => 'cmag', 'href' => 'cmag'),
+          array('title' => 'TOPICS', 'id' => 'topics', 'href' => 'topics'),
+        );
+        $panes = array(
+          array('id' => 'cmag', 'tab' => 'cmag', 'menu' => 'cmag'),
+          array('id' => 'topics', 'tab' => 'topics', 'menu' => 'cmag-topics'),
+
+        );
+        self::render_tabbed_menus($tabs, $panes);
+      } else {
+        echo '<div class="submenu-wrapper widget">';
+        echo "<h5>LEARN MORE</h5>";
+        wp_nav_menu(array(
+          'container_class' => 'submenu-widget',
+          'theme_location' => $menu_slug,
+          'depth' => 1,
+        ));
+        echo '</div>';
+      }
     } else if ($menu_slug !== false){
       self::render_blog_menu();
     } else {
@@ -106,24 +138,52 @@ class SubMenu_Widget extends WP_Widget
     }
   }
 
+  private static function render_tabbed_menus($tabs, $panes) {
+    echo "<div class='widget tabbed-submenu-wrapper'>";
+    self::render_tabs($tabs);
+    self::render_tab_panes($panes);
+    echo "</div>";
+  }
+
+  private static function render_tabs($tabs) {
+    echo "<ul class='nav nav-tabs' role='tablist'>";
+    foreach ($tabs as $i => $tab) {
+      $link_class = $i === 0 ? ' active' : '';
+      $aria_selected = $i === 0 ? 'true' : 'false';
+      echo <<<HTML
+<li class='nav-item'>
+  <a class='nav-link {$link_class}' id='{$tab["id"]}-tab' data-toggle='tab' href='#{$tab["href"]}' aria-controls='{$tab["href"]}' aria-selected='{$aria_selected}'>
+    {$tab["title"]}
+  </a>
+</li>
+HTML;
+    }
+    echo "</ul>";
+  }
+
+  // Render Tab Panes Containing Nav Menus
+  private static function render_tab_panes($panes) {
+    echo "<div class='tab-content' id='submenuContent'>";
+
+    foreach ($panes as $id => $pane) {
+      $pane_class = $id === 0 ? 'show active' : '';
+      echo "<div class='tab-pane fade {$pane_class}' id='{$pane['id']}' role='tabpanel' aria-labelledby='{$pane['tab']}-tab'>";
+      wp_nav_menu(array('theme_location' => $pane['menu'], 'depth' => 1));
+      echo "</div>";
+    }
+
+    echo "</div>";
+  }
+
   private static function render_blog_menu() {
     echo "<div class='widget tabbed-submenu-wrapper'>";
 
     // Render the tabs
-    echo <<<HTML
-<ul class="nav nav-tabs" role="tablist">
-  <li class='nav-item'>
-    <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#popular-posts" aria-controls="popular-posts" aria-selected="true">
-      POSTS
-    </a>
-  </li>
-  <li class='nav-item'>
-    <a class='nav-link' id='categories-tab' data-toggle='tab' href='#categories' aria-controls='categories' aria-selected='false'>
-      CATEGORIES
-    </a>
-  </li>
-</ul>
-HTML;
+    $tabs = array(
+      array('title' => 'POSTS', 'id' => 'posts', 'href' => 'popular-posts'),
+      array('title' => 'CATEGORIES', 'id' => 'categories', 'href' => 'categories'),
+    );
+    self::render_tabs($tabs);
 
     echo "<div class='tab-content' id='submenuContent'>";
 

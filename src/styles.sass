@@ -446,18 +446,9 @@ figure.wp-block-embed-youtube
   .submenu-widget
     ul
       list-style: none
-      padding-left: 0.5rem
+      padding-left: 1rem
       li
-        margin-bottom: 0.75rem
-        &:last-child()
-          margin-bottom: 0
-        &.current-menu-item a
-          color: $black
-          font-weight: 600
-          cursor: default
-          &:hover
-            color: $black
-            text-decoration: none
+        @extend %submenu-link-item
 
 .tabbed-submenu-wrapper
   ul.nav-tabs
@@ -473,13 +464,27 @@ figure.wp-block-embed-youtube
       &.active
         border: none
   #submenuContent.tab-content
-    #categories
+    .tab-pane
       ul
         list-style: none
         padding-left: 1rem
+        li
+          @extend %submenu-link-item
     #popular-posts
       > a > div
         margin-bottom: 1rem
+
+%submenu-link-item
+  margin-bottom: 0.75rem
+  &:last-child()
+    margin-bottom: 0
+  &.current-menu-item a
+    color: $black
+    font-weight: 600
+    cursor: default
+    &:hover
+      color: $black
+      text-decoration: none
 
 
 

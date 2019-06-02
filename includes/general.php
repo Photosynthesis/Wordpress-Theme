@@ -133,10 +133,13 @@ class ThemeGeneral
     register_nav_menus(array(
       'primary' => __( 'Primary Menu', 'FIC Theme'  ),
       'directory' => __( 'Directory Sub-Menu', 'FIC Theme'),
+      'directory-types' => __( 'Directory Types Sub-Menu', 'FIC Theme'),
       'about' => __( 'About Sub-Menu', 'FIC Theme' ),
       'cmag' => __( 'CMag Sub-Menu', 'FIC Theme' ),
+      'cmag-topics' => __( 'CMag Topics Sub-Menu', 'FIC Theme' ),
       'offers' => __( 'Offers Sub-Menu', 'FIC Theme' ),
       'bookstore' => __( 'Bookstore Sub-Menu', 'FIC Theme' ),
+      'bookstore-topics' => __( 'Bookstore Topics Sub-Menu', 'FIC Theme' ),
       'categories' => __( 'Categories Sub-Menu', 'FIC Theme' ),
     ));
   }
