@@ -139,18 +139,18 @@ HTML;
       array_shift($categories); // Pop off the 'All Blog Posts' Category
       $category = strtoupper($categories[0]->name);
       $image = get_the_post_thumbnail(
-        $post->ID, array(80, 80), array('class' => 'img-fluid')
+        $post->ID, array(80, 80), array('class' => 'img-fluid my-auto')
       );
       $link = get_permalink($post->ID);
       echo <<<HTML
 <a href='{$link}' class='pop-image'>
   <div class='row'>
-    <div class='col-8 p-0'>
+    <div class='col-8 p-0 d-flex'>
       {$image}
     </div>
-    <div class='col-16'>
-      <div class='muted-meta font-weight-normal'>{$category}</div>
-      <div>{$name}</div>
+    <div class='col-16 d-flex flex-column'>
+      <div class='muted-meta font-weight-normal mt-auto'>{$category}</div>
+      <div class='mb-auto'>{$name}</div>
     </div>
   </div>
 </a>
@@ -165,11 +165,6 @@ HTML;
 
     echo "</div></div>";
   }
-}
-
-class SubMenu_Walker extends Walker_Nav_Menu
-{
-
 }
 
 
