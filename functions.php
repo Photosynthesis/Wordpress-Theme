@@ -42,6 +42,8 @@ load_include('woocommerce.php');
 /* WPAdverts */
 load_include('wpadverts.php');
 load_include('widget_classifieds.php');
+/* WPGive */
+load_include('wpgive.php');
 
 
 /** REST API **/
