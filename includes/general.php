@@ -110,6 +110,14 @@ class ThemeGeneral
     }
   }
 
+  /* De-Queue the WP Give Scripts on the Place Ad Page */
+  public static function dequeue_wpgive_scripts() {
+    if (is_page(100)) {
+      wp_deregister_script('give_ffm_frontend');
+      wp_dequeue_script('give_ffm_frontend');
+    }
+  }
+
   /* Add Main & WooCommerce Left/Right Sidebars */
   public static function register_sidebars() {
     $sidebars = array(
@@ -807,6 +815,7 @@ ThemeGeneral::register_menu();
 add_action('wp_enqueue_scripts', array('ThemeGeneral', 'enqueue_assets'));
 add_action('admin_enqueue_scripts', array('ThemeGeneral', 'enqueue_admin_assets'));
 add_action('enqueue_block_editor_assets', array('ThemeGeneral', 'enqueue_editor_assets'));
+add_action('wp_print_scripts', array('ThemeGeneral', 'dequeue_wpgive_scripts'), 100);
 add_action('widgets_init', array('ThemeGeneral', 'register_sidebars'));
 add_action('login_head', array('ThemeGeneral', 'add_favicon'));
 add_action('admin_head', array('ThemeGeneral', 'add_favicon'));
