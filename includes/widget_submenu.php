@@ -60,7 +60,7 @@ class SubMenu_Widget extends WP_Widget
       $menu_slug = 'cmag';
     } else {
       switch ($post->post_name) {
-        case "the-fellowship-for-intentional-community": case "board-staff":
+        case "foundation-for-intentional-community": case "board-staff":
         case "kozeny-communitarian-award": case "policies": case "contact-fic":
         case "donate": case "about":
           $menu_slug = 'about';
