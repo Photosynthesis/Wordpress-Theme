@@ -102,8 +102,8 @@ if ($banner_content !== "") { ?>
       <div class="d-none d-sm-block">
         <span class='muted-meta'>New to ic.org?</span> <a class='meta' href='/start/'>Start here.</a>
       </div>
-      <div id="header-buttons" class="d-none d-sm-block">
-        <div class='d-inline-block meta'><?php
+      <div id="header-buttons" class="d-none d-sm-flex">
+        <div class='d-inline-flex align-items-center meta'><?php
           if (is_user_logged_in()) {
             echo '<a href="' . wp_logout_url('/') . '">Log Out</a>';
             echo '<a class="ml-2" href="/my-fic-account/"><i class="fa fa-2x fa-user"></i></a>';
