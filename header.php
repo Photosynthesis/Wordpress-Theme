@@ -109,6 +109,9 @@ if ($banner_content !== "") { ?>
             echo '<a class="ml-2" href="/my-fic-account/"><i class="fa fa-2x fa-user"></i></a>';
           } else {
             echo '<a href="' . wp_login_url('/my-fic-account/') . '">Log In</a>';
+          }
+          if (WC()->cart->get_cart_contents_count() > 0) {
+            echo '<a class="ml-2" href="/cart/"><i class="fa fa-2x fa-shopping-cart"></i></a>';
           } ?>
         </div>
         <a class="btn btn-sm btn-light ml-2" href='/communities-classifieds/place-ad'>ADS</a>
