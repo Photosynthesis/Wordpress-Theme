@@ -5,7 +5,7 @@ function load_include($path) {
 }
 
 /** Dependencies **/
-require_once(get_template_directory() . "/depends/stripe/init.php");
+//require_once(get_template_directory() . "/depends/stripe/init.php");
 
 /** Utility Functions **/
 load_include('utilities.php');
