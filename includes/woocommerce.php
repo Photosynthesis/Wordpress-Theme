@@ -660,6 +660,37 @@ HTML;
       $query->set('tax_query', $tax_query);
     }
   }
+
+  /* Sort the items in the My Account tab menu.
+   *
+   * Also adds the Donations Tab's Menu Item.
+   */
+  public static function sort_my_account_menu($menu_links) {
+    $menu_links = array(
+      '' => 'Dashboard',
+      'orders' => 'Orders',
+      'donations-tab' => 'Donations',
+      'subscriptions' => 'Subscriptions',
+      'downloads' => 'Downloads',
+      'gift-cards' => 'Gift Cards',
+      'edit-account' => 'Account Details',
+      'payment-methods' => 'Payment Methods',
+      'edit-addresses' => 'Addresses',
+      'customer-logout' => 'Logout',
+    );
+    return $menu_links;
+  }
+
+
+  /** Donations My Account Tab **/
+  /* Add tab permalink */
+  public static function donation_tab_permalink() {
+    add_rewrite_endpoint('donations-tab', EP_PAGES);
+  }
+  /* Render the tab's contents */
+  public static function render_donation_tab() {
+    echo do_shortcode('[donation_history]');
+  }
 }
 
 /* Move Cross Sells Below the Cart Totals */
@@ -702,5 +733,10 @@ add_filter('theme_store_resubscribe_button_text', array('ThemeWooCommerce', 'cus
 add_filter('woocommerce_order_button_text', array('ThemeWooCommerce', 'customize_place_order_button_text'), 11);
 add_action('woocommerce_thankyou', array('ThemeWooCommerce', 'google_adwords_tracking'));
 add_action('woocommerce_product_query', array('ThemeWooCommerce', 'hide_products_on_homepage'));
+add_filter('woocommerce_account_menu_items', array('ThemeWooCommerce', 'sort_my_account_menu'));
+
+/** My Account Tab **/
+add_action('init', array('ThemeWooCommerce', 'donation_tab_permalink'));
+add_action('woocommerce_account_donations-tab_endpoint', array('ThemeWooCommerce', 'render_donation_tab'));
 
 ?>
