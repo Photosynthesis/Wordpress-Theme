@@ -2,10 +2,10 @@
 
 /* Include Custom Styles & Bootstrap */
 require('./styles.sass');
-window.jQuery = require('../node_modules/jquery/dist/jquery.js');
+var jQuery = require('jquery');
 require('../node_modules/bootstrap/dist/js/bootstrap.bundle.js');
 
-var $ = window.jQuery;
+var $ = jQuery;
 $(document).ready(function() {
   /** Navbar **/
   /* Menu Touching */

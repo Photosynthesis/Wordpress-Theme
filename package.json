@@ -32,7 +32,7 @@
     "elm-webpack-loader": "^5.0.0",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.10.1",
-    "jquery": "1.12.4",
+    "jquery": "^3.4.1",
     "node-sass": "^4.11.0",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.2",
