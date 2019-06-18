@@ -354,7 +354,7 @@ figure.wp-block-embed-youtube
 
 #main-sidebar
   /* Social Sharing Widget */
-  .widget_inc_opt_widget
+  .widget_hustle_module_widget
     display: flex
     justify-content: space-between
     align-items: center
@@ -366,15 +366,18 @@ figure.wp-block-embed-youtube
       border: none
       margin: 0 0 0 1rem
     > div
+      margin: 0
       margin-right: 1rem
-      .wph-sshare--container
+      .hustle-social
+        padding: 0
+      li
         padding: 0
         > a
           margin: 0 0 0 0.2rem
-          svg.wph-social
+          i
             background-color: $black
             transition: all 0.3s ease-in-out
-          &:hover svg.wph-social
+          &:hover i
             background-color: $primary
   /* Newsletter Widget */
   .widget_mailpoet_form
