@@ -676,7 +676,7 @@ HTML;
       'gift-cards' => 'Gift Cards',
       'edit-account' => 'Account Details',
       'payment-methods' => 'Payment Methods',
-      'edit-addresses' => 'Addresses',
+      'edit-address' => 'Addresses',
       'customer-logout' => 'Logout',
     );
     return $menu_links;
