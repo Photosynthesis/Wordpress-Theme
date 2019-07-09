@@ -671,7 +671,7 @@ HTML;
       'orders' => 'Orders',
       'donations-tab' => 'Donations',
       'subscriptions' => 'Subscriptions',
-      'membership-tab' => 'Memberships',
+      'membership-tab' => 'Membership',
       'downloads' => 'Downloads',
       'gift-cards' => 'Gift Cards',
       'edit-account' => 'Account Details',
