@@ -670,7 +670,7 @@ HTML;
       '' => 'Dashboard',
       'orders' => 'Orders',
       'donations-tab' => 'Donations',
-      'subscriptions' => 'Subscriptions',
+      'subscriptions' => 'Subscription',
       'membership-tab' => 'Membership',
       'downloads' => 'Downloads',
       'gift-cards' => 'Gift Cards',
