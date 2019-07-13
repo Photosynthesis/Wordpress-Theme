@@ -228,7 +228,7 @@ class DirectoryMaps
     ));
 
     $directory_sql = "
-        SELECT * FROM " . $wpdb->prefix . "frm_items AS items
+        SELECT DISTINCT * FROM " . $wpdb->prefix . "frm_items AS items
         LEFT JOIN (SELECT meta_value AS address, item_id
                     FROM " . $wpdb->prefix . "frm_item_metas
                     WHERE field_id=425)
