@@ -214,132 +214,180 @@ class DirectoryMaps
   /** Create a new Mappress map, with each directory listing as a POI
    *
    * If a listing doesn't have a Latitude or Longitude, geocode the address and
-   * update the listing's Formidable value
+   * update the listing's Formidable value.
    *
    * @return string The HTML of the Map
    */
   private static function generate_new_directories_map() {
-      global $wpdb;
+    global $wpdb;
 
-      $map = new Mappress_Map(
-          array(
-              'width' => '99%', 'height' => 480, 'zoom' => '4',
-              'center' => array('lat' => 37.961523, 'lng' => -95.939942),
-              'poiList' => true, 'poiZoom' => '10',
-          )
-      );
+    $map = new Mappress_Map( array(
+      'width' => '99%', 'height' => 480, 'zoom' => '4',
+      'center' => array('lat' => 37.961523, 'lng' => -95.939942),
+      'poiList' => false, 'poiZoom' => '10',
+    ));
 
-      $directory_sql = "
-          SELECT * FROM " . $wpdb->prefix . "frm_items AS items
-          LEFT JOIN (SELECT meta_value AS address, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=425)
-                  AS add_metas ON items.id=add_metas.item_id
-          LEFT JOIN (SELECT meta_value AS address2, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=426)
-                  AS add2_metas ON items.id=add2_metas.item_id
-          LEFT JOIN (SELECT meta_value AS city, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=427)
-                  AS city_metas ON items.id=city_metas.item_id
-          LEFT JOIN (SELECT meta_value AS state, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=815)
-                  AS state_metas ON items.id=state_metas.item_id
-          LEFT JOIN (SELECT meta_value AS province, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=428)
-                  AS prov_metas ON items.id=prov_metas.item_id
-          LEFT JOIN (SELECT meta_value AS zipcode, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=429)
-                  AS zip_metas ON items.id=zip_metas.item_id
-          LEFT JOIN (SELECT meta_value AS country, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=424)
-                  AS country_metas ON items.id=country_metas.item_id
-          LEFT JOIN (SELECT meta_value AS latitude, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=684)
-                  AS latitude_metas ON items.id=latitude_metas.item_id
-          LEFT JOIN (SELECT meta_value AS longitude, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=685)
-                  AS longitude_metas ON items.id=longitude_metas.item_id
-          LEFT JOIN (SELECT meta_value AS public, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=218)
-                  AS public_metas ON items.id=public_metas.item_id
-          LEFT JOIN (SELECT meta_value AS add_public, item_id
-                     FROM " . $wpdb->prefix . "frm_item_metas
-                     WHERE field_id=285)
-                  AS add_public_metas ON items.id=add_public_metas.item_id
+    $directory_sql = "
+        SELECT * FROM " . $wpdb->prefix . "frm_items AS items
+        LEFT JOIN (SELECT meta_value AS address, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=425)
+                AS add_metas ON items.id=add_metas.item_id
+        LEFT JOIN (SELECT meta_value AS address2, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=426)
+                AS add2_metas ON items.id=add2_metas.item_id
+        LEFT JOIN (SELECT meta_value AS city, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=427)
+                AS city_metas ON items.id=city_metas.item_id
+        LEFT JOIN (SELECT meta_value AS state, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=815)
+                AS state_metas ON items.id=state_metas.item_id
+        LEFT JOIN (SELECT meta_value AS province, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=428)
+                AS prov_metas ON items.id=prov_metas.item_id
+        LEFT JOIN (SELECT meta_value AS zipcode, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=429)
+                AS zip_metas ON items.id=zip_metas.item_id
+        LEFT JOIN (SELECT meta_value AS country, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=424)
+                AS country_metas ON items.id=country_metas.item_id
+        LEFT JOIN (SELECT meta_value AS latitude, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=684)
+                AS latitude_metas ON items.id=latitude_metas.item_id
+        LEFT JOIN (SELECT meta_value AS longitude, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=685)
+                AS longitude_metas ON items.id=longitude_metas.item_id
+        LEFT JOIN (SELECT meta_value AS public, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=218)
+                AS public_metas ON items.id=public_metas.item_id
+        LEFT JOIN (SELECT meta_value AS addr_public, item_id
+                    FROM " . $wpdb->prefix . "frm_item_metas
+                    WHERE field_id=285)
+                AS addr_public_metas ON items.id=addr_public_metas.item_id
 
-          WHERE public_metas.public='Yes' AND add_public_metas.add_public='Public'
-          ";
-      $directory_listings = $wpdb->get_results($directory_sql);
+        WHERE public_metas.public='Yes' AND items.is_draft=0 AND items.form_id=2
+        ";
+    $directory_listings = $wpdb->get_results($directory_sql);
 
 
-      $excluded_points = array(
-          array(0, 0),
-          array(39.095963, -96.606447),
-      );
-      $pois = array();
-      $added_listings = array();
-      foreach ($directory_listings as $listing) {
-          if (isset($added_listings[$listing->item_id])) {
-            continue;
-          }
+    // array of latitude arrays containing array of longitude arrays
+    // containing array of PoI info.
+    $poi_matrix = array();
+    $excluded_points = array(
+      array(0, 0),
+      array(39.095963, -96.606447),
+    );
+    foreach ($directory_listings as $listing) {
+      $address = self::get_directory_listing_address($listing);
+      if (sizeof($address) == 0) {
+        continue;
+      }
+      $post_id = $listing->post_id;
+      $post_title = get_the_title($post_id);
+      $post_status = get_post_status($post_id);
 
-          $address = self::get_directory_listing_address($listing);
-          if (sizeof($address) == 0) {
-              continue;
-          }
-          $post_id = self::get_post_id_from_directory_id($listing->item_id);
-          $post_title = get_the_title($post_id);
-          $post_status = get_post_status($post_id);
-
-          if (is_null($post_id) || $post_title == '' || $post_status != 'publish') { continue; }
-
-          $poi_body = $address[0] . "<br />" . join(', ', array_slice($address, 1));
-          $poi_info = array(
-              'postid' => $post_id,
-              'body'   => $poi_body,
-              'title'  => '<a href="' . get_permalink($post_id) . '">' .
-                          $post_title .'</a>'
-          );
-
-
-          if (!is_null($listing->latitude) && !is_null($listing->longitude)) {
-              $poi_info['point'] = array('lat' => $listing->latitude,
-                                         'lng' => $listing->longitude);
-              $poi = new Mappress_Poi($poi_info);
-          } else {
-              $poi = self::get_best_poi_from_address($address, $poi_info);
-              self::set_directory_listings_latitude_longitude(
-                  $listing->item_id, $poi->point['lat'], $poi->point['lng']
-              );
-          }
-
-          $exclude_poi = false;
-          foreach ($excluded_points as $point) {
-              if ($poi->point['lat'] == $point[0] && $poi->point['lng'] == $point[1]) {
-                  $exclude_poi = true;
-                  break;
-              }
-          }
-
-          if (!$exclude_poi) {
-              array_push($pois, $poi);
-              $added_listings[$listing->item_id] = true;
-          }
+      if (is_null($post_id) || $post_id === 0 || $post_title == ''
+          || $post_status != 'publish') {
+        continue;
       }
 
-      $map->pois = $pois;
-      self::regenerate_map_cache($map);
+      $poi_body = $address[0] . "<br />" . join(', ', array_slice($address, 1));
+      $poi_info = array(
+        'postid' => $post_id,
+        'body'   => $poi_body,
+        'title'  => $post_title
+      );
 
-      return $map->display(array('directions' => 'none'));
+
+      if (!is_null($listing->latitude) && !is_null($listing->longitude)) {
+        $latitude = $listing->latitude;
+        $longitude = $listing->longitude;
+      } else {
+        $coordinates = self::get_best_coords_from_address($address);
+        if (is_null($coordinates)) {
+          continue;
+        }
+        $latitude = $coordinates['latitude'];
+        $longitude = $coordinates['longitude'];
+        self::set_directory_listings_latitude_longitude(
+          $listing->item_id, $latitude, $longitude
+        );
+      }
+
+      // Filter out (0,0) & default coordinates
+      $exclude_poi = false;
+      foreach ($excluded_points as $point) {
+        if ($latitude == $point[0] && $longitude == $point[1]) {
+          $exclude_poi = true;
+          break;
+        }
+      }
+      if ($exclude_poi === true) {
+        continue;
+      }
+
+      // Add to PoI Matrix
+      if (isset($poi_matrix[$latitude])) {
+        if (isset($poi_matrix[$latitude][$longitude])) {
+          $poi_matrix[$latitude][$longitude][] = $poi_info;
+        } else {
+          $poi_matrix[$latitude][$longitude] = array($poi_info);
+        }
+      } else {
+        $poi_matrix[$latitude] = array($longitude => array($poi_info));
+      }
+    }
+
+    // Turn Latitude/Longitude Matrix into Array of PoIs
+    $pois = array();
+    foreach ($poi_matrix as $latitude => $longitudes) {
+      foreach ($longitudes as $longitude => $coord_pois) {
+        if (sizeof($coord_pois) > 1) {
+          $body = "<br/>";
+          foreach ($coord_pois as $i => $poi_info) {
+            if ($i > 0) { $body .= "\n<br/><hr/><br/>\n"; }
+            $body .=
+              '<a href="' . get_permalink($poi_info['postid']) . '">' .
+                $poi_info['title'] .
+              "</a><br/>\n" . $poi_info['body'] . '<br/>';
+          }
+          $body .= "<br/>";
+
+          $poi_args = array(
+            'title' => sizeof($coord_pois) . ' Listings',
+            'body' => $body,
+            'point' => array('lat' => $latitude, 'lng' => $longitude),
+          );
+        } else if (sizeof($coord_pois) == 1) {
+          $poi_info = $coord_pois[0];
+          $poi_args = array(
+            'body' => $poi_info['body'],
+            'title' =>
+              '<a href="' . get_permalink($poi_info['postid']) . '">' .
+                $poi_info['title'] .
+              '</a>',
+            'point' => array('lat' => $latitude, 'lng' => $longitude),
+          );
+        } else {
+          continue;
+        }
+        $pois[] = new Mappress_Poi($poi_args);
+      }
+    }
+
+    $map->pois = $pois;
+    self::regenerate_map_cache($map);
+
+    return $map->display(array('directions' => 'none'));
   }
 
   /** Update the All Communities Map's Generation Time & ID
@@ -368,10 +416,10 @@ class DirectoryMaps
    */
   private static function get_directory_listing_address($listing) {
       $address = array();
-      if (!is_null($listing->address)) {
+      if (!is_null($listing->address) && $listing->addr_public == 'Public') {
           array_push($address, $listing->address);
       }
-      if (!is_null($listing->address2)) {
+      if (!is_null($listing->address2) && $listing->addr_public == 'Public') {
           array_push($address, $listing->address2);
       }
       if (!is_null($listing->city)) {
@@ -392,51 +440,31 @@ class DirectoryMaps
       return $address;
   }
 
-  /** Return the Post Id of the Directory Listing
-   *
-   *  @param int|string $listing_id The ID of the Listing's Formidable Entry
-   *
-   *  @return int
-   */
-  private static function get_post_id_from_directory_id($listing_id) {
-      global $wpdb;
-
-      $directory_query = "
-          SELECT post_id FROM " . $wpdb->prefix . "frm_items
-          WHERE id=" . $listing_id . ";";
-      $directory_listings = $wpdb->get_results($directory_query);
-
-      if (!empty($directory_listings)) {
-          return intval($directory_listings[0]->post_id);
-      } else {
-        return NULL;
-      }
-  }
-
-  /** Reduce the Address Until a Suitable Map PoI is Found
+  /** Reduce the Address Until Coordinates can be Geocoded from it
    *
    * @param array $address_array An Array Containing Parts of the Listing's
    *                             Address, Ordered from Most Specific to Least
    *                             Specific
-   * @param array $poi_info      An Array Containing the PoI's title/body/post
    *
-   * @return Mappress_Poi
+   * @return array|null An array containing sucessfully geocoded latitude &
+   *                    longitude keys.
    */
-  private static function get_best_poi_from_address($address_array, $poi_info) {
-      $address = join(', ', $address_array);
-      $poi_info['address'] = $address;
-      $poi = new Mappress_Poi($poi_info);
-      $poi->geocode();
+  private static function get_best_coords_from_address($address_array) {
+    $poi_info = array('address' => join(', ', $address_array));
+    $poi = new Mappress_Poi($poi_info);
+    $poi->geocode();
 
-      if (sizeof($address_array) == 0) {
-          return $poi;
+    $latitude = $poi->point['lat'];
+    $longitude = $po->point['lng'];
+    if ($latitude == 0 && $longitude == 0) {
+      array_shift($address_array);
+      if (empty($address_array)) {
+        return null;
       }
-      if ($poi->point['lat'] == 0 && $poi->point['lng'] == 0) {
-          array_shift($address_array);
-          return self::get_best_poi_from_address($address_array, $poi_info);
-      } else {
-          return $poi;
-      }
+      return self::get_best_coords_from_address($address_array);
+    } else {
+      return array('latitude' => $latitude, 'longitude' => $longitude);
+    }
   }
 
   /** Update or Set the Directory Listing's Latitude & Longitude
