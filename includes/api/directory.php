@@ -335,13 +335,6 @@ SQL;
         'zipCode' => $entry['zip_code'],
         'type' => $entry_type,
       );
-      if (!($entry['latitude'] == 0 && $entry['longitude'] == 0) &&
-          !($entry['latitude'] == "39.095963" && $entry['longitude'] == "-96.606447")) {
-        $entry['mapCoordinates'] = array(
-          'latitude' => (float) $entry['latitude'],
-          'longitude' => (float) $entry['longitude'],
-        );
-      }
     } else {
       $entry['contactAddress'] = null;
     }
@@ -350,6 +343,16 @@ SQL;
     unset($entry['address_one']);
     unset($entry['address_two']);
     unset($entry['zip_code']);
+
+    // Map Coordinates
+    if (isset($entry['latitude']) && isset($entry['longitude']) &&
+        !($entry['latitude'] == 0 && $entry['longitude'] == 0) &&
+        !($entry['latitude'] == "39.095963" && $entry['longitude'] == "-96.606447")) {
+      $entry['mapCoordinates'] = array(
+        'latitude' => (float) $entry['latitude'],
+        'longitude' => (float) $entry['longitude'],
+      );
+    }
     unset($entry['latitude']);
     unset($entry['longitude']);
 
