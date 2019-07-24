@@ -435,6 +435,13 @@ CSS;
         'link' => 'https://neweconomy.net/',
         'height' => 40,
       ),
+      array(
+        'name' => 'Search Tinyhouse Villages',
+        'tracking' => 'STV',
+        'image' => 'stv.jpg',
+        'link' => 'https://searchtinyhousevillages.com/',
+        'height' => 40,
+      ),
     );
     $sponsors = array(
       array(
