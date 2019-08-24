@@ -733,7 +733,7 @@ body.page-id-17
     form#directory-search
       margin: 0 auto 2.5rem
       div.input-group
-        margin-bottom: 0.6875rem
+        margin-bottom: 0.5rem
         .input-group-prepend
           display: flex
           align-items: center
@@ -759,6 +759,13 @@ body.page-id-17
             display: block !important
           span
             display: none
+      .btn-transparent
+        color: $black
+        border-color: $black
+        background-color: $white
+        margin-bottom: 0.1875rem
+        &:hover
+          background-color: rgba($black, 0.2)
       +media-breakpoint-up(md)
         width: 83%
 
