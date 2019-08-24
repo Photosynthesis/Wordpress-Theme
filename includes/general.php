@@ -440,7 +440,7 @@ CSS;
         'tracking' => 'STV',
         'image' => 'stv.jpg',
         'link' => 'https://searchtinyhousevillages.com/',
-        'height' => 40,
+        'height' => 75,
       ),
     );
     $sponsors = array(
