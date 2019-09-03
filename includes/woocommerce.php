@@ -671,7 +671,6 @@ HTML;
       'orders' => 'Orders',
       'donations-tab' => 'Donations',
       'subscriptions' => 'Subscription',
-      'membership-tab' => 'Membership',
       'downloads' => 'Downloads',
       'gift-cards' => 'Gift Cards',
       'edit-account' => 'Account Details',
@@ -687,14 +686,10 @@ HTML;
   /* Add tab permalink */
   public static function account_tab_permalinks() {
     add_rewrite_endpoint('donations-tab', EP_PAGES);
-    add_rewrite_endpoint('membership-tab', EP_PAGES);
   }
   /* Render the tab's contents */
   public static function render_donation_tab() {
-    echo do_shortcode('[donation_history]');
-  }
-  public static function render_membership_tab() {
-    echo do_shortcode('[give_subscriptions]');
+    echo do_shortcode('[donation_history][give_subscriptions]');
   }
 
 }
@@ -744,6 +739,5 @@ add_filter('woocommerce_account_menu_items', array('ThemeWooCommerce', 'sort_my_
 /** My Account Tabs **/
 add_action('init', array('ThemeWooCommerce', 'account_tab_permalinks'));
 add_action('woocommerce_account_donations-tab_endpoint', array('ThemeWooCommerce', 'render_donation_tab'));
-add_action('woocommerce_account_membership-tab_endpoint', array('ThemeWooCommerce', 'render_membership_tab'));
 
 ?>
