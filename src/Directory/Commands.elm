@@ -32,8 +32,18 @@ type WPNonce
 -}
 getCommunity : WPNonce -> String -> Cmd Msg
 getCommunity (WPNonce wpNonce) slug =
-    Http.get (String.join "" [ "/wp-json/v1/directory/entry/", "?slug=", slug, "&_wpnonce=", wpNonce ])
-        Decoders.communityDetails
+    let
+        params =
+            String.join "&" <|
+                [ "slug=" ++ slug ]
+                    ++ (if wpNonce /= "" then
+                            [ "_wpnonce=" ++ wpNonce ]
+
+                        else
+                            []
+                       )
+    in
+    Http.get ("/wp-json/v1/directory/entry/?" ++ params) Decoders.communityDetails
         |> RemoteData.sendRequest
         |> Cmd.map FetchCommunityDetails
 

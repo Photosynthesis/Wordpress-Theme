@@ -13,7 +13,7 @@ $(document).ready(function() {
     var app = Elm.Directory.Main.init({
       node: node,
       flags: {
-        nonce: themeRestConfig.nonce,
+        nonce: "themeRestConfig" in window ? themeRestConfig.nonce : "",
         location: location.href
       },
     });
