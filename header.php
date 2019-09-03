@@ -68,7 +68,7 @@ if ($banner_content !== "") { ?>
       </a>
     </div>
     <!-- Nav Menu -->
-    <div id="nav-menu" class="d-none d-lg-flex col-lg-11 col-xl-12 pl-0">
+    <div id="nav-menu" class="d-none d-lg-flex col-lg-15 col-xl-15 pl-0">
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="collapse navbar-collapse" id="navbar-header">
           <?php
@@ -98,7 +98,7 @@ if ($banner_content !== "") { ?>
       </nav>
     </div>
     <!-- Buttons/Links -->
-    <div class="col-auto col-sm col-lg-8 col-xl-7 text-right">
+    <div class="col-auto col-sm col-lg-5 col-xl-4 text-right">
       <div class="d-none d-sm-block">
         <span class='muted-meta'>New to ic.org?</span> <a class='meta' href='/start/'>Start here.</a>
       </div>
