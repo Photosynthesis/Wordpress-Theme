@@ -261,17 +261,17 @@ class DirectoryMaps
                     FROM " . $wpdb->prefix . "frm_item_metas
                     WHERE field_id=684)
                 AS latitude_metas ON items.id=latitude_metas.item_id
-        LEFT JOIN (SELECT meta_value AS longitude, item_id
+        LEFT JOIN (SELECT meta_value AS longitude, item_id, MIN(id)
                     FROM " . $wpdb->prefix . "frm_item_metas
-                    WHERE field_id=685)
+                    WHERE field_id=685 GROUP BY item_id)
                 AS longitude_metas ON items.id=longitude_metas.item_id
-        LEFT JOIN (SELECT meta_value AS public, item_id
+        LEFT JOIN (SELECT meta_value AS public, item_id, MIN(id)
                     FROM " . $wpdb->prefix . "frm_item_metas
-                    WHERE field_id=218)
+                    WHERE field_id=218 GROUP BY item_id)
                 AS public_metas ON items.id=public_metas.item_id
-        LEFT JOIN (SELECT meta_value AS addr_public, item_id
+        LEFT JOIN (SELECT meta_value AS addr_public, item_id, MIN(id)
                     FROM " . $wpdb->prefix . "frm_item_metas
-                    WHERE field_id=285)
+                    WHERE field_id=285 GROUP BY item_id)
                 AS addr_public_metas ON items.id=addr_public_metas.item_id
 
         WHERE public_metas.public='Yes' AND items.is_draft=0 AND items.form_id=2
