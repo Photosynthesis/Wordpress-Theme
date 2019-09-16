@@ -257,9 +257,9 @@ class DirectoryMaps
                     FROM " . $wpdb->prefix . "frm_item_metas
                     WHERE field_id=424)
                 AS country_metas ON items.id=country_metas.item_id
-        LEFT JOIN (SELECT meta_value AS latitude, item_id
+        LEFT JOIN (SELECT meta_value AS latitude, item_id, MIN(id)
                     FROM " . $wpdb->prefix . "frm_item_metas
-                    WHERE field_id=684)
+                    WHERE field_id=684 GROUP BY item_id)
                 AS latitude_metas ON items.id=latitude_metas.item_id
         LEFT JOIN (SELECT meta_value AS longitude, item_id, MIN(id)
                     FROM " . $wpdb->prefix . "frm_item_metas
