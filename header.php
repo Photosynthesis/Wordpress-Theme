@@ -145,7 +145,7 @@ if ($banner_content !== "") { ?>
           <ul class='navbar-nav d-sm-none'>
             <?php
               $links = array(
-                array('title' => 'CLASSIFIEDS', 'link' => '/communities-classifieds/place-ad/'),
+                array('title' => 'PLACE AD', 'link' => '/communities-classifieds/place-ad/'),
                 array('title' => 'SHOP', 'link' => '/communities-bookstore/'),
                 array('title' => 'DONATE', 'link' => '/donate/'),
               );
