@@ -559,6 +559,7 @@ CSS;
 
   public static function render_upcoming_events() {
     $events = tribe_get_events(array('posts_per_page' => 4, 'start_date' => 'now'));
+    if (empty($events)) { return ""; }
     $output =
       "<div id='home-upcoming-events' class='row justify-content-md-center'>" .
         "<div class='col-24'>" .
