@@ -731,7 +731,6 @@ HTML;
   </a>
   <div class='tagline-author d-block d-xl-flex'>
     <div class='tagline'>{$tagline}</div>
-    <div class='author'>{$author}</div>
   </div>
 </div>
 HTML;
@@ -775,7 +774,6 @@ HTML;
   <div class='col-sm-10 col-md-11 col-lg-12'>
     <h5><a href='{$link}'>{$title}</a></h5>
     <div class='tagline'>{$tagline}</div>
-    <div class='author'>{$author}</div>
   </div>
 </div>
 HTML;
