@@ -137,13 +137,18 @@ function send_notification_email($item) {
     "Thank You!";
 
   $headers = array('Reply-To: directory@ic.org');
+  $backup_email = DirectoryDB::get_item_meta_value(
+    DirectoryDB::$backup_email_field_id, $item['id']);
+  if ($backup_email) {
+    $headers[] = 'Cc: ' . $backup_email;
+  }
+  $editor = DirectoryDB::get_item_meta_value(430, $item['id']);
+  if ($editor) {
+    $headers[] = 'Cc: ' . get_userdata($editor)->user_email;
+  }
+
   if ($email_type === 'third') {
     $headers[] = 'Cc: directory@ic.org';
-    $backup_email = DirectoryDB::get_item_meta_value(
-      DirectoryDB::$backup_email_field_id, $item['id']);
-    if ($backup_email) {
-      $headers[] = 'Cc: ' . $backup_email;
-    }
   }
 
   wp_mail($contact_email, $subject, $message, $headers);
