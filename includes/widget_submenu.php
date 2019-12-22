@@ -72,8 +72,8 @@ class SubMenu_Widget extends WP_Widget
         case "community-with-opening": case "seeking-community":
         case "consultants-educators-professional": case "retreats-classes-workshops":
         case "opportunities-jobs-internships-businesses":
-        case "crafts-gifts-products-services":
-        case "cohousing-openings-and-real-estate":
+        case "crafts-gifts-products-services": case "events":
+        case "cohousing-openings-and-real-estate": case "jobs-opportunities":
           $menu_slug = 'offers';
           break;
         case "donate": case "contact-fic":
