@@ -1,0 +1,37 @@
+{
+
+"conditions":[
+ ["2-a-cmty-forming","includes","Established"],
+ ["fic-member","doesNotInclude","Yes"],
+ ["1-adr-country","includes","United States"],
+ ["post_status","equals","publish"]
+],
+
+"match_type":"AND",
+
+"include_fields": [
+  "title",
+  "user_email",
+  "1-h-contact-email",
+  "1-k-alt-email",
+  "post_status",
+  "1-j-contact-name",
+  "full_address",
+  "2-a-cmty-forming",
+  "1-adr-country",
+  "1-adr-city2",
+  "1-adr-city",
+  "1-adr-state",
+  "1-adr-zip-code",
+  "1-adr-street1",
+  "1-adr-street2",
+  "fic-member"
+],
+
+"mode":"export",
+
+"callbacks":{
+  "full_address":"full_address"
+}
+
+}
