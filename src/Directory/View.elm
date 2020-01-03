@@ -32,7 +32,7 @@ import Directory.Model exposing (Model)
 import Directory.Pagination as Pagination exposing (Pagination)
 import Directory.Routing as Routing exposing (FilterParam(..), ListingsRoute(..), Route(..), reverse)
 import Gallery
-import Html exposing (Html, text)
+import Html exposing (Html, img, text)
 import Html.Attributes exposing (alt, checked, class, height, href, id, name, src, target, title, type_, value, width)
 import Html.Events exposing (onClick, onInput, onSubmit, preventDefaultOn)
 import Html.Keyed as Keyed
@@ -80,18 +80,23 @@ view model =
             listingsView model.communities model.searchString model.currentDate listingsRoute
 
         DetailsRoute _ ->
-            detailsView model.currentDate model.community model.communityGallery model.communityValidation
+            detailsView model.showDetailsMap
+                model.currentDate
+                model.community
+                model.communityGallery
+                model.communityValidation
 
 
 {-| Render a Details Page.
 -}
 detailsView :
-    Maybe ( Posix, Zone )
+    Bool
+    -> Maybe ( Posix, Zone )
     -> WebData CommunityDetails
     -> Gallery.Model ImageData
     -> WebData Bool
     -> Html Msg
-detailsView currentDate community gallery validation =
+detailsView showMap currentDate community gallery validation =
     case community of
         RemoteData.NotAsked ->
             Html.div [ class "text-danger text-center my-4" ]
@@ -112,7 +117,7 @@ detailsView currentDate community gallery validation =
                 ]
 
         RemoteData.Success details ->
-            communityDetails currentDate details gallery validation
+            communityDetails showMap currentDate details gallery validation
 
 
 loadingBar : Html msg
@@ -124,8 +129,8 @@ loadingBar =
         ]
 
 
-communityDetails : Maybe ( Posix, Zone ) -> CommunityDetails -> Gallery.Model ImageData -> WebData Bool -> Html Msg
-communityDetails maybeCurrentDate community communityGallery communityValidation =
+communityDetails : Bool -> Maybe ( Posix, Zone ) -> CommunityDetails -> Gallery.Model ImageData -> WebData Bool -> Html Msg
+communityDetails showMap maybeCurrentDate community communityGallery communityValidation =
     let
         area =
             [ community.city, community.state, community.country ]
@@ -287,7 +292,7 @@ communityDetails maybeCurrentDate community communityGallery communityValidation
         [ header
         , Html.div [ class "row mb-2" ]
             [ leftColumn
-            , detailRightColumn community
+            , detailRightColumn showMap community
             ]
         , detailInfoBlocks community
         , renderMaybeString community.additionalComments <|
@@ -344,8 +349,8 @@ renderIf condition html =
         text ""
 
 
-detailRightColumn : CommunityDetails -> Html msg
-detailRightColumn community =
+detailRightColumn : Bool -> CommunityDetails -> Html Msg
+detailRightColumn showMap community =
     let
         rightColumn =
             [ boldLabel "Status" <| renderStatus community.status
@@ -386,7 +391,7 @@ detailRightColumn community =
                 \coords ->
                     Html.li []
                         [ Html.h3 [ class "text-center" ] [ text "Location" ]
-                        , Map.render <| googleMap coords
+                        , map coords
                         ]
             ]
 
@@ -439,6 +444,19 @@ detailRightColumn community =
                     , renderNonEmpty info.info <| \i -> Html.p [] [ text i ]
                     ]
                 ]
+
+        map coords =
+            if showMap then
+                Map.render <| googleMap coords
+
+            else
+                img
+                    [ onClick ShowMap
+                    , src "/wp-content/themes/fic-theme/img/directory-map-placeholder.png?v=1"
+                    , alt "Directory Map Placeholder"
+                    , class "img-fluid"
+                    ]
+                    []
 
         googleMap coords =
             { center = Just coords

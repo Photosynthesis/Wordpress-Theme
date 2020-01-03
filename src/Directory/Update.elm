@@ -90,6 +90,7 @@ detailsUpdateUrl slug model =
         , community = RemoteData.Loading
         , communityGallery = Gallery.initial
         , communityValidation = RemoteData.NotAsked
+        , showDetailsMap = False
       }
     , Commands.getCommunity model.wpNonce slug
     )
@@ -190,6 +191,9 @@ update msg model =
 
         ValidateCommunity isValid ->
             ( { model | communityValidation = isValid }, Cmd.none )
+
+        ShowMap ->
+            ( { model | showDetailsMap = True }, Cmd.none )
 
         GalleryMsg subMsg ->
             let

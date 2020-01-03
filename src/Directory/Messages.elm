@@ -21,3 +21,4 @@ type Msg
     | GalleryMsg (Gallery.Msg ImageData)
     | VerifyCommunityClicked
     | ValidateCommunity (WebData Bool)
+    | ShowMap
