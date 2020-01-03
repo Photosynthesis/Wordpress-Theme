@@ -97,6 +97,12 @@ if ($banner_content !== "") { ?>
         </div>
       </nav>
     </div>
+    <!-- Mobile Cart Button -->
+    <div class="col-auto p-0 d-md-none">
+      <div class="cart-mobile-header-link">
+        <a href="/cart/"><i class="fa fa-2x fa-shopping-cart"></i></a>
+      </div>
+    </div>
     <!-- Buttons/Links -->
     <div class="col-auto col-sm col-lg-5 col-xl-4 text-right">
       <div class="d-none d-sm-block">
@@ -145,7 +151,7 @@ if ($banner_content !== "") { ?>
           <ul class='navbar-nav d-sm-none'>
             <?php
               $links = array(
-                array('title' => 'CLASSIFIEDS', 'link' => '/communities-classifieds/place-ad/'),
+                array('title' => 'PLACE AD', 'link' => '/communities-classifieds/place-ad/'),
                 array('title' => 'SHOP', 'link' => '/communities-bookstore/'),
                 array('title' => 'DONATE', 'link' => '/donate/'),
               );

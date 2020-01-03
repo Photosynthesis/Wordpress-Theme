@@ -611,23 +611,6 @@ SQL;
     }
   }
 
-  /* Customize the Place Order text on the Checkout Page */
-  public static function customize_place_order_button_text($button_text) {
-    if (WC_Subscriptions_Cart::cart_contains_subscription()) {
-      foreach (WC()->cart->cart_contents as $cart_item) {
-        $product = $cart_item['data'];
-        $product_id = $product->is_type('variable') || $product->is_type('subscription_variation')
-          ? $product->get_parent_id() : $product->get_id();
-        if ($product_id === self::membership_product_id) {
-          return "Join";
-        } else if ($product_id === self::general_donation_product_id) {
-          return "Donate";
-        }
-      }
-    }
-    return $button_text;
-  }
-
   public static function google_adwords_tracking($order_id) {
     $order = wc_get_order($order_id);
     $order_total = $order->get_total();
@@ -731,7 +714,6 @@ add_shortcode('product_new_page', array('ThemeWooCommerce', 'product_new_page'))
 add_filter('theme_store_variation_button_text', array('ThemeWooCommerce', 'customize_variation_cart_button_text'), 10, 2);
 add_filter('woocommerce_available_variation', array('ThemeWooCommerce', 'customize_nyp_variation_add_to_cart_text'), 11, 3);
 add_filter('theme_store_resubscribe_button_text', array('ThemeWooCommerce', 'customize_resubscribe_cart_button_text'));
-add_filter('woocommerce_order_button_text', array('ThemeWooCommerce', 'customize_place_order_button_text'), 11);
 add_action('woocommerce_thankyou', array('ThemeWooCommerce', 'google_adwords_tracking'));
 add_action('woocommerce_product_query', array('ThemeWooCommerce', 'hide_products_on_homepage'));
 add_filter('woocommerce_account_menu_items', array('ThemeWooCommerce', 'sort_my_account_menu'));
