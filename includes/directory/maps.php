@@ -113,15 +113,19 @@ class DirectoryMaps
         $map_id = get_option("communities_map_id");
         $maps = new Mappress_Map();
         $map = $maps->get($map_id);
-        $map->options->update(
-          array(
-            'width' => '99%', 'height' => 480, 'zoom' => '4',
-            'center' => array('lat' => 37.961523, 'lng' => -95.939942),
-            'poiList' => false, 'poiZoom' => '10',
-          )
-        );
-        $map->prepare();
-        return $map->display(array('directions' => 'none'));
+        if ($map->options !== null) {
+          $map->options->update(
+            array(
+              'width' => '99%', 'height' => 480, 'zoom' => '4',
+              'center' => array('lat' => 37.961523, 'lng' => -95.939942),
+              'poiList' => false, 'poiZoom' => '10',
+            )
+          );
+          $map->prepare();
+          return $map->display(array('directions' => 'none'));
+        } else {
+          return self::generate_new_directories_map();
+        }
       }
     }
     return self::generate_new_directories_map();
