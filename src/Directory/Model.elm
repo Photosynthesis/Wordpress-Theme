@@ -17,6 +17,7 @@ type alias Model =
     , community : WebData CommunityDetails
     , communityGallery : Gallery.Model ImageData
     , communityValidation : WebData Bool
+    , showDetailsMap : Bool
     , searchString : String
     , currentDate : Maybe ( Posix, Zone )
     , route : Route
@@ -37,6 +38,7 @@ initial route nonce =
       , community = community
       , communityGallery = Gallery.initial
       , communityValidation = RemoteData.NotAsked
+      , showDetailsMap = False
       , searchString = searchString
       , currentDate = Nothing
       , route = route
