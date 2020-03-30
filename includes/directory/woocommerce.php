@@ -18,7 +18,7 @@ class DirectoryWooCommerce
    */
   public static function activate_directory_listing_membership($subscription) {
     global $wpdb;
-    $notification_email = 'fic.virginia@gmail.com';
+    $notification_email = 'directory@ic.org';
 
     foreach ($subscription->get_items() as $item) {
       if ($item['product_id'] == DirectoryWooCommerce::$membership_product_id &&
