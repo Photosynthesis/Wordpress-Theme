@@ -22,7 +22,7 @@ Written For The FIC by Pavan Rikhi<pavan@ic.org> on 8/17/2014.
 import datetime
 import re
 
-from .db import get_cursor
+from db import get_cursor
 
 # The Regular Expression Used to Validate Email Addresses
 EMAIL_REGEX = re.compile(r'[^@]+@[^@]+\.[^@]+')
@@ -44,6 +44,8 @@ LISTING_CREATED_FIELD_ID = 725
 
 LISTING_TYPE_FIELD_ID = 262
 
+FIC_MEMBERSHIP_FIELD_ID = 933
+
 # Whether or not to include all emails of a community, or just one
 INCLUDE_ALL_EMAILS = True
 
@@ -60,7 +62,7 @@ FILTER_LAST_UPDATED_AFTER = None
 FILTER_LAST_UPDATED_BEFORE = None
 
 # Filter out communities that not of this type.
-FILTER_COMMUNITY_TYPE = 'ecovillage'
+FILTER_COMMUNITY_TYPE = None
 
 
 def main():
@@ -74,7 +76,7 @@ def get_listing_contact_rows():
     """Retrieve the Listing Contacts Query Result."""
     listing_contacts_query = """
         SELECT * FROM
-                  (SELECT form_id, id, post_id, user_id, updated_at
+                  (SELECT form_id, id, post_id, user_id, updated_at, is_draft
                    FROM 3uOgy46w_frm_items AS items
                    WHERE items.form_id={0}) AS items
         LEFT JOIN (SELECT meta_value AS contact_email, item_id
@@ -92,19 +94,25 @@ def get_listing_contact_rows():
         LEFT JOIN (SELECT meta_value AS backup_email, item_id
                    FROM 3uOgy46w_frm_item_metas
                    WHERE field_id={4})
+             AS backup_emails ON items.id=backup_emails.item_id
         LEFT JOIN (SELECT meta_value AS community_type, item_id
                    FROM 3uOgy46w_frm_item_metas
                    WHERE field_id={5})
              AS community_types ON items.id=community_types.item_id
-        LEFT JOIN (SELECT post_title, post_author, ID FROM 3uOgy46w_posts)
+        LEFT JOIN (SELECT meta_value AS is_member, item_id
+                   FROM 3uOgy46w_frm_item_metas
+                   WHERE field_id={6})
+             AS is_member ON items.id=is_member.item_id
+        RIGHT JOIN (SELECT post_title, post_author, ID, post_type, post_status FROM 3uOgy46w_posts WHERE post_type='directory' AND post_status='publish')
              AS posts ON items.post_id=posts.ID
         LEFT JOIN (SELECT user_email, display_name, ID FROM 3uOgy46w_users)
             AS users ON users.ID=posts.post_author
-        WHERE items.form_id={0}""".format(FORM_ID, CONTACT_EMAIL_FIELD_ID,
+        WHERE items.form_id={0} AND items.is_draft=0""".format(FORM_ID, CONTACT_EMAIL_FIELD_ID,
                                           CONTACT_NAME_FIELD_ID,
                                           LISTING_CREATED_FIELD_ID,
                                           BACKUP_EMAIL_FIELD_ID,
-                                          LISTING_TYPE_FIELD_ID)
+                                          LISTING_TYPE_FIELD_ID,
+                                          FIC_MEMBERSHIP_FIELD_ID)
     cursor = get_cursor()
     cursor.execute(listing_contacts_query)
     listing_rows = cursor.fetchall()
@@ -115,8 +123,8 @@ def make_unique_csv_lines(rows):
     """Make CSV Lines from Listing Rows."""
     filtered_rows = filter_listing_rows(rows)
     csv_rows = []
-    [csv_rows.extend(make_csv_lines(row).split('\n')) for row in filtered_rows]
-    return [u'{0}\n'.format(row) for row in ensure_unique_emails(csv_rows)]
+    [csv_rows.extend(make_csv_lines(row)) for row in filtered_rows]
+    return [u'{0}'.format(row) for row in ensure_unique_emails(csv_rows)]
 
 
 def filter_listing_rows(rows):
@@ -134,31 +142,38 @@ def filter_listing_rows(rows):
 
 def make_csv_lines(listing_row):
     """Create CSV lines of `email,community name,role` from a Listing row."""
-    output = ""
+    output = []
     community_name = clean(listing_row["post_title"])
+    if community_name is None:
+        return output
     created_years = clean(clean_date(listing_row["created_date"]))
+
+    if listing_row["is_member"] is None:
+        is_member = "no"
+    else:
+        is_member = "yes" if listing_row["is_member"] == "Yes" else "no"
 
     contact_email = clean(listing_row["contact_email"])
     if is_valid_email(contact_email):
         contact_name = clean(clean_name(listing_row["contact_name"]))
-        output += create_csv_line(contact_email, contact_name, created_years,
-                                  community_name, 'contact')
+        output.append(create_csv_line(contact_email, contact_name, created_years,
+                                  community_name, 'contact', is_member))
     if contact_email in [None, ''] or INCLUDE_ALL_EMAILS:
         editor_email = clean(listing_row["user_email"])
         if is_valid_email(editor_email) and editor_email != contact_email:
             editor_name = (clean(clean_name(listing_row["display_name"]))
                            if not INCLUDE_ALL_EMAILS else '')
-            output += create_csv_line(editor_email, editor_name, created_years,
-                                      community_name, 'editor')
+            output.append(create_csv_line(editor_email, editor_name, created_years,
+                                      community_name, 'editor', is_member))
         if not is_valid_email(editor_email) or INCLUDE_ALL_EMAILS:
             backup_email = clean(listing_row["backup_email"])
             backup_name = (clean(clean_name(listing_row["display_name"]))
                            if not INCLUDE_ALL_EMAILS else '')
             if (is_valid_email(backup_email) and backup_email not in
                     [contact_email, editor_email]):
-                output += create_csv_line(
+                output.append(create_csv_line(
                     backup_email, backup_name, created_years, community_name,
-                    'backup')
+                    'backup', is_member))
     return output
 
 
@@ -201,13 +216,13 @@ def clean_name(name):
         return name
 
 
-def create_csv_line(email, name, years, community, role):
+def create_csv_line(email, name, years, community, role, is_member):
     """Create a CSV line from an email/community."""
     if INCLUDE_YEARS_SINCE_CREATED:
-        return u'{0},{1},{2},{3},{4}\n'.format(
-            email, name, years, community, role)
+        return u'{0},{1},{2},{3},{4},{5}'.format(
+            email, name, years, community, role, is_member)
     else:
-        return u'{0},{1},{2},{3}\n'.format(email, name, community, role)
+        return u'{0},{1},{2},{3},{4}'.format(email, name, community, role, is_member)
 
 
 def ensure_unique_emails(csv_lines):
@@ -226,8 +241,14 @@ def ensure_unique_emails(csv_lines):
 
 def write_csv_file(csv_lines):
     """Write the Lines to ``export.csv`` in the Current Working Directory."""
-    with open('./export.csv', 'w', encoding='utf-8') as output_file:
-        output_file.writelines(csv_lines)
+    for l in csv_lines:
+        print l.encode('utf-8')
+    #with open('./export.csv', 'w') as output_file:
+        #if INCLUDE_YEARS_SINCE_CREATED:
+        #    output_file.write("email,name,years since created,community,role,is member\n")
+        #else:
+        #    output_file.write("email,name,community,role,is member\n")
+        #output_file.writelines(csv_lines)
 
 
 if __name__ == "__main__":
