@@ -60,7 +60,7 @@
       <p class='font-weight-normal'>Community movement news in your inbox!</p>
       <?php echo do_shortcode('[mailpoet_form id="2"]'); ?>
       <div class='text-right icons'>
-        <a href='https://www.facebook.com/FellowshipForIntentionalCommunity/' target='_blank'>
+        <a href='https://www.facebook.com/FoundationForIntentionalCommunity/' target='_blank'>
           <i class='fab fa-2x fa-facebook-square'></i>
         </a>
         <a href='https://www.youtube.com/channel/UC_bjpd6qhVcA1SuuF8pLRIg' target='_blank'>
