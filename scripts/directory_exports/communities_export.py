@@ -3,7 +3,7 @@
 
 import csv
 
-from .db import get_cursor, WP_PREFIX
+from db import get_cursor, WP_PREFIX
 
 
 # Formidable Details
@@ -29,10 +29,26 @@ def get_community_ids_to_export(cursor):
 
     """
     with open('./communities_export_data.csv') as input_file:
-        community_names = input_file.readlines()
-    ids = [get_id_from_name(name.strip(), cursor) for name in community_names]
+        ids = input_file.readlines()
+    ids = [get_name_from_id(cid.strip(), cursor) for cid in ids]
     return [community_id for community_id in ids if community_id is not None]
 
+def get_name_from_id(cid, cursor):
+    """Retrieve a Community's name given it's id."""
+    name_query = """
+        SELECT posts.post_title as name
+        FROM {0}posts as posts
+        INNER JOIN (
+            SELECT post_id
+            FROM {0}frm_items
+            WHERE id='{1}'
+            ) AS items ON items.post_id=posts.ID
+    """.format(WP_PREFIX, cid)
+    cursor.execute(name_query)
+    result = cursor.fetchone()
+    if result:
+        return (result['name'], cid)
+    return None
 
 def get_id_from_name(community_name, cursor):
     """Retrieve a Community's id given it's name."""

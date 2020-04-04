@@ -193,7 +193,7 @@ HTML;
     $sticky_posts = new WP_Query(array(
       'post__in' => get_option('sticky_posts'),
     ));
-    if (sizeof($sticky_posts) < 1) { return; }
+    if ($sticky_posts->found_posts < 1) { return; }
     foreach ($sticky_posts->posts as $post) {
       $name = $post->post_title;
       $categories = get_the_category($post->ID);

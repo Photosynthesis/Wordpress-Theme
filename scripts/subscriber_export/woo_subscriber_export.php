@@ -11,6 +11,7 @@ if(!current_user_can('manage_options')) {
   die("Permission denied");
 }
 
+
 $possible_statuses = array(
   "on-hold",
   "active",
@@ -90,7 +91,6 @@ foreach ($product_ids as $product_id) {
       'product_id'=>$product_id
   ));
 
-//echo "<pre>";
 
   foreach ($subs as $sub) {
     $sub_data = null;

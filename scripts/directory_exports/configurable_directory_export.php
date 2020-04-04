@@ -162,7 +162,7 @@ foreach ($posts as $key => $community) {
   AND fields.ID = metas.field_id
   ";
 
-  $frm_data = $wpdb->get_results( $form_sql, ARRAY_A );
+  $frm_data = $wpdb->get_results($form_sql, ARRAY_A);
 
   // Reorganize for accessibility
   $frm_data_2 = array();
@@ -174,6 +174,13 @@ foreach ($posts as $key => $community) {
   foreach ($frm_data as $key => $row) {
     $frm_data_2[$row['field_key']] = $row['value'];
   }
+
+  // Turns out the form item is where the actual update date is stored...
+  $frm_item_data = $wpdb->get_results("SELECT * FROM {$pfx}frm_items WHERE post_id = '{$community['post_id']}'", ARRAY_A);
+
+  $frm_item_data = $frm_item_data[0];
+
+  $frm_data_2['item_updated_at'] = $frm_item_data['updated_at'];
 
   $communities[] = array_merge($community,$frm_data_2);
 

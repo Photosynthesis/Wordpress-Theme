@@ -819,7 +819,7 @@ SQL;
       }
     }
 
-    $entries = array_map(array(self, 'clean_list_entry'), $entries);
+    $entries = array_map('self::clean_list_entry', $entries);
 
     // Get Total Listing Count for the specified Query Parameters
     $total_count_query = <<<SQL
