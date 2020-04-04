@@ -602,9 +602,9 @@ CSS;
       "<div id='home-community-offers' class='{$container_classes}'>" .
         ($a['full_width'] ? "<div class='container'><div class='row justify-content-md-center'>" : '') .
         "<div class='col-24'>" .
-          "<h5 class='clearfix'><a href='/community-classifieds/'>COMMUNITY OFFERS</a>" .
+          "<h5 class='clearfix'><a href='/community-classifieds/'>CLASSIFIEDS</a>" .
             "<a href='/community-classifieds/place-ad/' class='btn btn-sm btn-primary'>" .
-              "<i class='fas fa-plus'></i> POST OFFER" .
+              "<i class='fas fa-plus'></i> POST AD" .
             "</a>" .
           "</h5>" .
         "</div>";
