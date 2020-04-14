@@ -5,6 +5,7 @@ $black: black
 $teal: #579C87
 $blue: #233D4D
 $sage: #A1C181
+$sagedark: #81B171
 $yellow: #FCCA46
 $white: white
 $gray-bg: #F6F5F3
@@ -290,6 +291,12 @@ table.gssb_c table.gsc-completion-container
     justify-content: flex-end
     a.btn
       padding: 0.2rem 0.5rem
+    /* Shop button */
+    a.btn-navy
+      background-color: #233d4d
+      color: #fff
+      &:hover
+        background-color: #536d7d
   .google-search-div
     width: 60%
     margin-left: auto
@@ -388,7 +395,7 @@ table.gssb_c table.gsc-completion-container
   /* Newsletter Widget */
   .widget_mailpoet_form
     color: $white
-    background-color: $sage
+    background-color: $sagedark
     padding: 1rem 0.5rem
     margin: 1rem 0
     box-shadow: 0 0 8px 0 rgba(black, 0.2)
@@ -500,7 +507,7 @@ table.gssb_c table.gsc-completion-container
 .center-column
   /* Style the Vertical Border */
   +media-breakpoint-up(sm)
-    border-right: solid 1px darken($gray-100, 5%)
+    border-right: 0
   /* Push Vertical Borders Out */
   padding: 0 2.25rem 0 15px
   +media-breakpoint-up(sm)
@@ -698,26 +705,42 @@ body.home
       @media (min-width: 1750px)
         width: 30%
       form.directory-search-input
-        color: $white
-        background-color: rgba($black, 0.7)
+        color: $black
+        background-color: rgba($white, 0.7)
         display: flex
         justify-content: space-between
         align-items: center
         padding: 0.5rem 0.75rem
         border-radius: $border-radius-lg
-        border: 1px solid $white
+        border: 0
         box-shadow: 0 0 4px 4px rgba($black, 0.2)
         i
           padding: 0.5rem
         input[type='text']
-          color: $white
+          color: #111
           background-color: rgba($black, 0)
           display: inline-block
           border: none
+          font-size: 1.2rem
+          padding: 0 .75rem
+          font-weight: 600
+          height: inherit
           &::placeholder
-            color: $white
+            color: #444
           &:focus
             box-shadow: none
+        .btn-home-search
+          height: 55px
+          margin-top: -0.5rem
+          margin-bottom: -0.5rem
+          margin-right: -0.75rem
+          border-top-left-radius: 0
+          border-bottom-left-radius: 0
+          border: 0
+          font-size: 1.2rem
+          font-weight: 600
+          padding: 0 1.5rem
+
       a
         color: $white
         border-color: $white
@@ -1102,7 +1125,7 @@ article#post-281687
 /* Get Involved + Newsletter Signup Section */
 #get-involved-block
   color: $white
-  background-color: $sage
+  background-color: $sagedark
   margin-top: 7rem
   margin-bottom: 7.5rem
   box-shadow: 0 0 8px 3px rgba($black, 0.2)
@@ -1796,14 +1819,18 @@ body.single-advert
   display: none !important
 
 /* Darken the Background of Featured Classifieds */
-.list-group-item.list-group-item-action.featured-classified
+/* .list-group-item.list-group-item-action.featured-classified
   background-color: lighten($teal, 40%)
   &:hover, &:active, &:focus
-    background-color: lighten($teal, 35%)
+    background-color: lighten($teal, 35%) */
 
 /* Fix the Height of the Image Carousel */
 #advert-carousel .carousel-item > img
   height: 350px
+
+/* Make the carousel BG light grey */
+#advert-carousel .bg-primary
+  background-color: #ddd !important
 
 /* Fix Spacing Between Message Button, Contact Form, & Ad Body */
 #adverts-send-message-button, #adverts-phone-number-button, .adverts-contact-box
@@ -1819,6 +1846,11 @@ body.single-advert
 /* Add Spacing Below Map */
 #wpadverts-mal-map-single
   @extend .mb-3
+
+/* Change icon color on classifieds index */
+.adverts-flexbox-icon
+  color: #fcca46 !important
+
 
 /* Style Payment Options */
 .adverts-pricings-list
