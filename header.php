@@ -120,7 +120,7 @@ if ($banner_content !== "") { ?>
             echo '<a class="ml-2" href="/cart/"><i class="fa fa-2x fa-shopping-cart"></i></a>';
           } ?>
         </div>
-        <a class="btn btn-sm btn-light mx-2" href='/communities-bookstore/'>SHOP</a>
+        <a class="btn btn-sm btn-navy mx-2" href='/communities-bookstore/'>SHOP</a>
         <a class="btn btn-sm btn-primary donate-button" href='/donate/'>DONATE</a>
       </div>
       <!-- Mobile Menu Button -->
