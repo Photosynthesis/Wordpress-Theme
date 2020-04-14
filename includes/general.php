@@ -637,7 +637,7 @@ CSS;
         "<form action='/directory/listings/' class='directory-search-input'>" .
           "<i class='fas fa-search'></i>" .
           "<input type='text' class='form-control' name='search' placeholder=\"Try searching for 'California' or 'Cohousing'\" />" .
-          "<input type='submit' class='btn btn-primary btn-sm' value='SEARCH' />" .
+          "<input type='submit' class='btn btn-primary btn-sm btn-home-search' value='SEARCH' />" .
         "</form>" .
         "<a href='/directory/search/' class='btn btn-sm btn-transparent'>ADVANCED SEARCH</a>" .
       "</div>";
