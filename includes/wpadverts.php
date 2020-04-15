@@ -52,7 +52,9 @@ class ThemeWPAdverts
     return $form;
   }
 
-  /* Allow Using Hidden Products as Ad Plans */
+  /* Allow Using Hidden Products as Ad Plans
+  Appears to be obsolete and causing some product not to show up.
+  Keeping as backup pending further testing (2020-04-14)
   public static function allow_hidden_products($args) {
     $args["meta_query"] = array(array(
       'key' => '_visibility',
@@ -61,6 +63,7 @@ class ThemeWPAdverts
     ));
     return $args;
   }
+  */
 
   /* Customize the email sent when an Ad is responded to. */
   public static function customize_contact_email($mail, $post_id, $form) {
@@ -95,8 +98,12 @@ add_action('init', array('ThemeWPAdverts', 'disable_css'), 100);
 add_filter('admin_url', array('ThemeWPAdverts', 'fix_ajax_url'));
 add_action('adverts_register_taxonomy', array('ThemeWPAdverts', 'customize_taxonomy'));
 add_filter('adverts_form_load', array('ThemeWPAdverts', 'hide_price'));
+/*
+These appear to be obsolete, but retaining for now until we've done further testing
+(2020-04-14)
 add_filter('adext_wc_payments_products_new', array('ThemeWPAdverts', 'allow_hidden_products'));
 add_filter('adext_wc_payments_products_renew', array('ThemeWPAdverts', 'allow_hidden_products'));
+*/
 add_filter('adverts_contact_form_email', array('ThemeWPAdverts', 'customize_contact_email'), 10, 3);
 
 ?>
